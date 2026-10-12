@@ -1,0 +1,249 @@
+\chapter{模型的求解}
+
+\begin{quote}\small
+\textit{本章摘要。}本章解释神经网络如何把损失函数转化为参数更新。叙事依次经过计算图、梯度优化、曲率与尺度、初始化和正则化，最后回到训练故障诊断。这样读者能够把“训练不稳定”定位到目标函数、梯度传播、数值尺度或数据管线，而不是把问题简单归咎于模型容量。
+\end{quote}
+
+前一章已经固定样本、信息边界和评价规则，本章在这些条件不变的前提下研究求解。我们暂时不问模型能否应对新设备，而先问：损失是否被正确求导，参数是否沿着有效方向移动，信号是否在多层网络中保持可计算的尺度。把这些问题分开，才能避免用增加模型容量掩盖错误梯度，或用延长训练掩盖数值发散。
+
+选好优化器以后，训练仍可能出问题。例如，同一批误差取总和还是取平均，会改变梯度的大小；初始权重过大，信号经过多层后可能迅速放大。下面先推导一步更新什么时候能降低损失，再分析随机梯度、曲率、初始化和归一化怎样影响训练。章末把这些推导用于排查故障，帮助读者决定该查数据、梯度还是学习率。
+
+\section{目标、梯度与参数更新}
+
+% auxiliary-resource-guide
+本章末的“辅助学习材料”列出与核心方法对应的讲解和实践入口，可在阅读相关推导后，按所列小节对照学习。
+
+随机近似奠定了含噪更新的基础，Adam 则将梯度一阶与二阶矩估计用于自适应更新\cite{robbins1951stochastic,kingma2015adam}。算法的更新规则、初始化和偏差校正应一起理解，不能只比较默认学习率。
+\paragraph{从目标函数到计算图。}
+计算图把一次预测拆成乘法、加法和激活函数等小步骤，再用箭头记录依赖。激活是某层算出的中间表示；激活函数给加权和加入非线性，例如ReLU（修正线性单元）把负数置零、正数原样保留：$\phi(a)=\max(0,a)$。没有非线性时，多层线性变换的复合仍是一个线性变换；若含偏置，则复合后仍只是一个仿射变换，即一次加权和加偏置。因此增加层数本身不能替代激活函数带来的非线性表达。反向传播只负责求导，优化器才负责用导数更新权重，二者不能混称为同一个算法。
+训练目标常写成$J(\theta)=\frac1n\sum_i\ell_i(\theta)$。神经网络把它实现为多层复合函数，计算过程可以表示为有向无环图（依赖箭头不形成回路）。前向传播计算预测值，反向传播按照拓扑逆序（先处理依赖者、再处理其输入）计算每个节点对损失的梯度。自动微分系统保存中间激活，因此显存消耗和计算图结构密切相关。
+
+\paragraph{一个两层网络的完整反向传播。}
+取单样本$x\in\R^d$，隐藏宽度$m$，标量标签$y$。令
+\begin{equation}
+ a=W_1x+b_1\in\R^m,\quad h=\phi(a)\in\R^m,\quad
+ \hat y=w_2^{\mathsf T}h+b_2,\quad \ell=\tfrac12(\hat y-y)^2,
+\end{equation}
+其中$W_1\in\R^{m\times d}$，$b_1,w_2\in\R^m$，$b_2\in\R$，$\phi$逐元素作用。先求输出误差$\delta_2=\partial\ell/\partial\hat y=\hat y-y$，然后逐层应用链式法则：
+\begin{align}
+ \nabla_{w_2}\ell&=\delta_2h,&\quad \partial\ell/\partial b_2&=\delta_2,\\
+ \delta_1=\nabla_a\ell&=(w_2\delta_2)\odot\phi'(a),&
+ \nabla_{W_1}\ell&=\delta_1x^{\mathsf T},\qquad \nabla_{b_1}\ell=\delta_1.
+\end{align}
+这里$\delta_1\in\R^m$，外积$\delta_1x^{\mathsf T}$恰为$m\times d$，各项梯度与对应参数形状一致。若同一个中间变量流向多个分支，反向传播必须把各分支贡献相加；这正是计算图反向累积的作用。Rectified Linear Unit (ReLU)在零点不可微，实际实现选择约定的次梯度，通常取零。
+
+小批量损失取平均时，上述梯度也按样本平均；若误用求和，更新尺度会随批量线性增大。可在小型平滑测试网络上用中心差分$[J(\theta+\epsilon v)-J(\theta-\epsilon v)]/(2\epsilon)$核对$\nabla J^{\mathsf T}v$，但应避开不可微点并固定随机屏蔽，以免把随机性误判为梯度错误。
+
+\paragraph{沿一条计算链手算。}
+取一个输入、一个隐藏单元，$x=2,y=1,W_1=1,b_1=0,w_2=1,b_2=0$，激活用ReLU。前向依次得到$a=2,h=2,\hat y=2,\ell=1/2$。反向先得$\delta_2=1$，所以输出权重梯度为$2$、输出偏置梯度为$1$；再得$\delta_1=1$，输入权重梯度为$2$、隐藏偏置梯度为$1$。符号$\odot$表示对应位置相乘，不作求和。用步长$0.1$同时更新后，$W_1=w_2=0.8$、$b_1=b_2=-0.1$，新预测为$0.8(0.8\times2-0.1)-0.1=1.1$，新损失为$0.005$。所有梯度必须用更新前的同一套参数算完，不能改完后一层权重才计算前一层的梯度。
+
+\paragraph{一阶优化。}
+一阶方法主要使用梯度；二阶方法还使用描述梯度变化的曲率。随机梯度下降（SGD）每步用随机样本或小批量估计梯度；一次更新叫一个训练步，完整遍历训练集一次叫一个训练轮次（epoch）。批量为$B$、样本数为$n$时，通常每轮约有$\lceil n/B\rceil$步，最后一个小批量可能较小。
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=1cm,y=0.8cm]
+ \draw[->] (-0.2,0)--(6.0,0) node[right] {$\theta_1$};
+ \draw[->] (0,-0.2)--(0,3.6) node[above] {$\theta_2$};
+ \draw[gray!45] (0.9,0.5) ellipse (2.6cm and 1.2cm);
+ \draw[gray!45] (1.7,1.0) ellipse (1.8cm and 0.8cm);
+ \draw[gray!45] (2.4,1.45) ellipse (1.0cm and 0.42cm);
+ \fill (4.9,3.0) circle (1.5pt) node[above right,font=\scriptsize]{初始点};
+ \fill (4.0,2.5) circle (1.5pt); \fill (3.25,2.0) circle (1.5pt);
+ \fill (2.55,1.55) circle (1.5pt); \fill (2.4,1.45) circle (1.8pt) node[below right,font=\scriptsize]{极小值附近};
+ \draw[idi arrow] (4.9,3.0)--(4.0,2.5); \draw[idi arrow] (4.0,2.5)--(3.25,2.0);
+ \draw[idi arrow] (3.25,2.0)--(2.55,1.55); \draw[idi arrow] (2.55,1.55)--(2.4,1.45);
+\end{tikzpicture}
+\caption{梯度更新沿目标函数的局部下降方向移动；等高线的狭长形状会造成不同参数方向上的尺度差异。}
+\label{fig:optimization-descent-path}
+\end{figure}
+图\ref{fig:optimization-descent-path}用等高线和更新箭头对照目标的局部形状与参数轨迹，说明不同方向的尺度会影响步长选择。梯度下降、随机梯度下降和小批量梯度下降的差别在于梯度估计的精度和更新频率。若小批量梯度$\hat g_t$满足$\mathbb{E}[\hat g_t\mid\theta_t]=\nabla J(\theta_t)$，它虽然带有噪声，却能降低每次更新的计算成本。这里鞍点指梯度为零、任意足够小邻域内都既有更高也有更低函数值的点，例如$u^2-v^2$在原点沿两个坐标方向分别上升和下降。噪声若能扰动到下降方向，可能帮助离开鞍点附近，但无偏性本身并不保证这种逃离。
+
+带动量的更新从$t=0$开始，取$v_0=0$、$0\leq\beta<1$：
+\begin{align}
+ v_{t+1}&=\beta v_t+\hat g_t,\\
+ \theta_{t+1}&=\theta_t-\eta v_{t+1}.
+\end{align}
+Adam（自适应矩估计）维护近期梯度的平均方向，以及平方大小的平均值；指数移动平均给较早的观测以几何衰减的权重。下面改用$t=1,2,\ldots$编号Adam更新，$\hat g_t$在当前$\theta_t$处计算，初始参数为$\theta_1$，矩状态从$m_0=s_0=0$开始：
+\begin{align}
+ m_t&=\beta_1m_{t-1}+(1-\beta_1)\hat g_t,\\
+ s_t&=\beta_2s_{t-1}+(1-\beta_2)\hat g_t\odot\hat g_t,\\
+ \theta_{t+1}&=\theta_t-\eta\frac{m_t/(1-\beta_1^t)}{\sqrt{s_t/(1-\beta_2^t)}+\epsilon}.
+\end{align}
+其中$m_0=s_0=\mathbf0$，$0\leq\beta_1,\beta_2<1$，分式、平方根和加法均按元素进行；符号$\odot$也表示对应坐标相乘，且$\epsilon>0$为数值稳定常数。自适应学习率不等同于自动选择超参数，学习率、权重衰减和批量大小仍需验证。
+
+\paragraph{用一维抛物线看步长。}
+对$J(\theta)=\theta^2/2$，梯度为$\theta$，一步更新为$\theta^+=(1-\eta)\theta$。从$\theta=1$出发，$\eta=0.5$把损失从$0.5$降到$0.125$；$\eta=2$使参数变成$-1$，损失不变；$\eta=3$使参数变成$-2$，损失升到$2$。下降方向正确，并不意味着步子多大都行。
+
+\paragraph{单步下降需要怎样的学习率。}
+下面的光滑条件限制“斜率变化有多快”，常数$L$越大，允许可靠使用的步长通常越小。
+假设$J$可微且梯度为$L$-Lipschitz，其中$L>0$，即$\|\nabla J(u)-\nabla J(v)\|_2\leq L\|u-v\|_2$。沿线段积分，令$\Delta=v-u$，则
+\begin{align}
+ J(u+\Delta)-J(u)
+ &=\int_0^1\nabla J(u+s\Delta)^{\mathsf T}\Delta\,ds\\
+ &\leq\nabla J(u)^{\mathsf T}\Delta+\frac L2\|\Delta\|_2^2.\label{eq:optimization-descent-lemma}
+\end{align}
+上界来自柯西不等式：梯度差与$\Delta$的内积至多为$Ls\|\Delta\|_2^2$，对$s\in[0,1]$积分便得到$L/2$。在式\eqref{eq:optimization-descent-lemma}中代入$\Delta=-\eta g$、$g=\nabla J(u)$，得到
+\begin{equation}
+ J(u-\eta g)\leq J(u)-\eta(1-L\eta/2)\|g\|_2^2.
+\end{equation}
+所以$0<\eta<2/L$且$g\ne0$时可以保证下降；常取$\eta\leq1/L$留出余量。若$J$下有界于$J_{\inf}$，取固定$\eta=1/L$，对正整数$T$步求和，得到
+\begin{equation}
+ \min_{0\leq t<T}\|\nabla J(\theta_t)\|_2^2
+ \leq\frac{2L(J(\theta_0)-J_{\inf})}{T}.
+\end{equation}
+这是到近似驻点的保证，不是非凸情形下到全局最优的保证。ReLU网络并不处处满足这里的光滑假设，因此该证明是理解步长的基准，而不能未经检查直接套用到全部网络。
+
+\paragraph{随机梯度下为何不能要求每步下降。}
+对当前参数条件化，假设$\E[\hat g_t\mid\theta_t]=g_t$、$\E[\|\hat g_t-g_t\|^2\mid\theta_t]\leq\sigma^2/B$。因为交叉项的条件期望为零，$\E[\|\hat g_t\|^2\mid\theta_t]\leq\|g_t\|^2+\sigma^2/B$。将随机更新代入式\eqref{eq:optimization-descent-lemma}并取条件期望，得到
+\begin{equation}
+ \E[J(\theta_{t+1})\mid\theta_t]
+ \leq J(\theta_t)-\eta(1-L\eta/2)\|g_t\|^2
+       +\frac{L\eta^2\sigma^2}{2B}.
+\end{equation}
+噪声增加了一个正项：接近驻点时下降项很小，固定步长可能在邻域内波动。减小步长或增大批量可以减小这一项，但各有时间和计算代价。无偏性依赖抽样方式；非均匀采样若不做相应权重修正，实际优化的目标可能已经改变。
+
+\paragraph{动量与Adam校正项的来源。}
+从$v_0=0$展开动量得$v_{t+1}=\sum_{k=0}^t\beta^{t-k}\hat g_k$。若梯度恒定为$g$，则$v_{t+1}\to g/(1-\beta)$，说明本章未乘$(1-\beta)$的动量约定会改变有效更新尺度，不能与归一化约定共用学习率而不加说明。
+
+同理，$m_t=(1-\beta_1)\sum_{k=1}^t\beta_1^{t-k}\hat g_k$。若各步梯度具有同一均值$\mu$，则$\E[m_t]=(1-\beta_1^t)\mu$，所以除以$1-\beta_1^t$可消除零初始化导致的偏低；$s_t$的二阶矩校正同理。训练中梯度分布持续变化，校正并不使整个比值成为某个无偏梯度，也不自动给出收敛保证。$s_t$估计的是逐坐标二阶原点矩，而非中心化方差或Hessian。
+
+\paragraph{二阶信息与曲率。}
+二阶泰勒展开为
+\begin{equation}
+ J(\theta+\Delta)\approx J(\theta)+g^{\mathsf T}\Delta+\frac12\Delta^{\mathsf T}H\Delta.
+\end{equation}
+若 Hessian 正定，Newton 步为$\Delta=-H^{-1}g$。它在接近极小点时可能快速收敛，但大模型中显式存储和求逆 Hessian 代价过高。拟牛顿法、自然梯度和共轭梯度通过近似曲率获得折中。
+
+\paragraph{Newton步和条件数。}
+对二次近似$q(\Delta)=J+g^{\mathsf T}\Delta+\tfrac12\Delta^{\mathsf T}H\Delta$求导，得到$\nabla_\Delta q=g+H\Delta$；若$H$正定，唯一最小点满足$H\Delta=-g$，实现上应解线性方程而非显式形成逆矩阵。若$H$不定，二次近似可能无下界，Newton方向也不一定下降；加阻尼$H+\lambda I$使其正定，或使用信赖域限制步幅，是处理这一问题的思路。
+
+对严格凸二次函数$J(\theta)=\tfrac12\theta^{\mathsf T}H\theta-b^{\mathsf T}\theta$，其中$\theta,b\in\R^d$且$H\in\R^{d\times d}$对称正定，记误差$e_t=\theta_t-\theta_*$。梯度下降给出$e_{t+1}=(I-\eta H)e_t$。在$H$的第$j$个特征方向上，误差乘以$1-\eta\lambda_j$，所以所有方向稳定要求$0<\eta<2/\lambda_{\max}$。当$\kappa=\lambda_{\max}/\lambda_{\min}$很大时，为陡峭方向选的小步长会使平缓方向收敛很慢。这就是标准化与预条件可能加速训练的几何原因。
+
+\section{尺度、信号传播与正则化}
+\paragraph{学习率与尺度。}
+学习率过大导致损失震荡或发散，过小则训练缓慢。预热（warm-up）可在训练初期逐步增大学习率，余弦退火则使学习率平滑下降。不同层的梯度尺度可能相差很大，归一化、残差连接和合理初始化帮助维持稳定的信号传播。
+
+\paragraph{初始化与信号传播。}
+若网络层的权重方差过大，前向激活和反向梯度会指数放大；若过小，则会逐层衰减。Xavier初始化试图保持线性层输入输出方差相近，He初始化适用于 ReLU 激活。ReLU为$\max(0,a)$，计算简单且正区间梯度稳定，但可能产生永久不激活单元。
+
+\paragraph{正则化技术。}
+Dropout在训练时随机屏蔽部分激活，相当于在许多子网络上进行参数共享。Batch Normalization对小批量激活进行标准化，Layer Normalization则在单个样本的特征维度上归一化，后者更适合序列模型。早停把验证集性能作为停止信号，实质上限制了有效训练时间。
+
+\paragraph{先区分几种尺度操作。}
+初始化只设置训练开始时的权重，输入标准化使用训练数据拟合的尺度，网络归一化作用于内部激活，权重衰减直接限制参数大小。它们操作的对象不同，不能用其中一种代替其他所有操作。比如一层有$100$个输入，He初始化给权重方差$2/100=0.02$，若用零均值正态分布抽样，应传入标准差$\sqrt{0.02}\approx0.141$，不能把方差直接当标准差。
+
+\paragraph{Dropout的期望保持与噪声代价。}
+若某激活为$4$、保留概率为$1/2$，训练时各以一半概率输出$0$或$8$，平均仍为$4$；推理时输出$4$。若保留概率记为$q$，丢弃概率就是$1-q$，不同接口可能使用相反的参数名称。
+训练时采用保留概率$q\in(0,1]$，令独立屏蔽变量$m_j\sim\operatorname{Bernoulli}(q)$，倒置Dropout输出$\tilde h_j=m_jh_j/q$。条件于激活$h_j$，
+\begin{equation}
+ \E[\tilde h_j\mid h_j]=h_j,\qquad
+ \Var(\tilde h_j\mid h_j)=h_j^2(1-q)/q.
+\end{equation}
+因此推理时可以直接使用$h_j$而无需再缩放。但对非线性网络，先求平均再计算输出，一般不等于先计算输出再求平均，即一般不能写成
+\[
+ \E[f(\tilde h)]=f(\E\tilde h).
+\]
+所以不能将推理网络称为所有子网络输出的精确平均。保留概率过小会显著增加噪声，是否改善泛化仍须验证。
+
+\paragraph{归一化到底沿哪个维度进行。}
+以单个通道的一批激活$a_1,\ldots,a_B$为例，Batch Normalization计算
+\begin{equation}
+ \mu_B=B^{-1}\sum_i a_i,\quad
+ v_B=B^{-1}\sum_i(a_i-\mu_B)^2,\quad
+ z_i=\gamma\frac{a_i-\mu_B}{\sqrt{v_B+\epsilon}}+\beta.
+\end{equation}
+标准化部分的批均值为零，批方差为$v_B/(v_B+\epsilon)$，并非严格等于一；$\gamma,\beta$恢复可学习的尺度和平移。训练输出依赖同批其他样本，推理通常改用训练阶段累计统计量，因而必须切换模式并防止测试数据更新这些统计量。Layer Normalization对一个样本的指定特征轴求均值与方差，不依赖批内其他样本；但选择哪些轴仍取决于张量结构。归一化不是保证泛化的定理，也不能替代输入单位审计。
+
+\section{训练诊断与实验解释}
+\paragraph{训练故障诊断。}
+先在固定的极小数据集上关闭随机增强和Dropout，检查一个足够有表达力的模型能否显著降低训练损失；若不能，优先核查标签对应、梯度和更新实现，而不是立即搜大型结构。这只是排错试验：拟合少量样本既不证明泛化，也不排除测试泄漏。比较训练和验证损失时，还要统一损失定义，区分是否包含正则项，以及是否启用了随机屏蔽。
+训练损失不下降时，优先检查标签、损失实现、输入范围、学习率和梯度是否为零。训练损失下降但验证损失上升，通常意味着过拟合或训练测试分布不一致。训练与验证都很差，可能是欠拟合、标签噪声、特征不充分或优化尚未稳定。梯度范数、激活均值和预测熵是有用的中间诊断量。
+
+\paragraph{算法框。}
+\begin{algorithm}
+\caption{小批量梯度训练的基本流程}
+\begin{algorithmic}[1]
+\Require 非空训练集$\mathcal{D}$与验证集$\mathcal V$，初始参数$\theta$，学习率$\eta>0$，步数$T\geq1$
+\State 设最佳验证损失为$+\infty$，最佳模型状态为空
+\For{$t=1,\ldots,T$}
+  \State 切换训练模式，从$\mathcal{D}$抽取小批量$B_t$，清空上一轮梯度
+  \State 计算$J_t=|B_t|^{-1}\sum_{i\in B_t}\ell_i(\theta)$
+  \State 通过反向传播计算$g_t=\nabla_\theta J_t$
+  \State 更新$\theta\leftarrow\theta-\eta g_t$
+  \State 切换评价模式，关闭梯度记录，在$\mathcal V$计算未加正则项的平均损失
+  \If{验证损失小于已记录的最佳值}
+    \State 更新最佳值，复制保存参数及归一化运行统计量
+  \EndIf
+\EndFor
+\State \Return 保存的最佳模型状态
+\end{algorithmic}
+\end{algorithm}
+
+算法中小批量必须非空；训练损失、梯度、更新后参数或验证损失出现非有限值时应中止并报告数值失败，而不是返回空状态或把旧检查点冒充本次成功结果。正常结束后，推理前须加载所保存的最佳状态并切换评价模式。
+
+本算法为清楚起见每步验证；实际可预先约定每轮或每隔若干步验证一次，但不能用测试表现选择频率或检查点。保存必须是状态的独立副本，否则后续更新可能把所谓“最佳参数”覆盖。清空梯度适用于不打算跨批累积的情形；需要累积时必须明确累计多少批及其归一化方式。
+
+\paragraph{损失景观与可辨识性。}
+参数空间中的不同点可能实现同一个函数。例如隐藏单元交换顺序不会改变网络输出，因而神经网络损失景观存在大量等价参数化。优化器并不是在寻找唯一“真实参数”，而是在这些等价表示中找到一个训练和泛化都可接受的解。观察训练损失下降时，还应检查参数范数、梯度范数和验证性能是否同步改善。
+
+\paragraph{批量大小与梯度噪声。}
+固定当前参数，设均匀抽取的单样本梯度为$g_i$，总体均值为$\bar g$，协方差为$\Sigma$。独立有放回抽取$B$个梯度时，
+\begin{equation}
+ \operatorname{Cov}\left(B^{-1}\sum_{b=1}^Bg_{i_b}\right)
+ =B^{-2}\sum_{b=1}^B\operatorname{Cov}(g_{i_b})=\Sigma/B.
+\end{equation}
+若从$n>1$个固定样本无放回抽取，且$\Sigma=n^{-1}\sum_i(g_i-\bar g)(g_i-\bar g)^{\mathsf T}$，则结果为$(n-B)\Sigma/[B(n-1)]$，$B=n$时方差为零。这些推导都依赖当前参数下的抽样规则，相关窗口或有偏抽样需要重新计算。增大批量会降低估计噪声并提高并行效率，却可能减少单位样本带来的更新次数。批量大小改变时，学习率、正则化强度和训练步数也应重新校准；不能只替换 batch size 再比较结果。
+
+\paragraph{动量、Adam 与权重衰减。}
+动量保留历史方向，能减弱狭长谷底中的来回振荡。Adam 对不同坐标使用自适应尺度，适合稀疏梯度和初期训练，但其自适应归一化不等同于解耦权重衰减。实际实现中应区分把$L_2$项加到梯度里的正则化和直接衰减参数的 AdamW 式更新，因为二者在自适应优化器下并不完全相同。
+
+对普通Stochastic Gradient Descent (SGD)，把$\lambda\|\theta\|^2/2$加入目标产生更新$\theta^+=(1-\eta\lambda)\theta-\eta g$，恰好等于直接衰减。若优化器当前的坐标预条件矩阵为对角阵$D_t$，把正则项加入梯度则得到$\theta^+=\theta-\eta D_tg-\eta\lambda D_t\theta$；解耦衰减则为$\theta^+=(1-\eta\lambda)\theta-\eta D_tg$。前者的收缩强度随坐标尺度变化，后者不随$D_t$变化；在Adam中正则项还会进入历史矩估计，差异更进一步。应同时记录衰减公式及哪些参数被排除，如偏置和归一化参数。
+
+\paragraph{反向传播的内存占用。}
+反向传播需要用到前向计算中的输入、激活和部分中间结果，训练时通常要把它们保存在显存里。激活检查点只保存其中一部分，其余在反向传播时重新计算，代价是多花计算时间。混合精度利用低精度运算提高吞吐，常配合高精度参数副本；是否需要损失缩放（loss scaling），还取决于所用数值格式。部署预测通常只做前向计算，因此训练时占用的显存不能直接当作推理需求。
+
+\paragraph{初始化的方差推导。}
+令预激活$a=\sum_{j=1}^{n_{in}}w_jx_j$，偏置初始为零。假设权重彼此独立、均值为零、方差为$\sigma_w^2$，并独立于输入；输入各坐标具有相同二阶矩$q_x=\E[x_j^2]$。交叉项因$\E[w_jw_k]=0$消失，故
+\begin{equation}
+ \E[a]=0,\qquad \Var(a)=\E[a^2]
+ =\sum_j\E[w_j^2]\E[x_j^2]=n_{in}\sigma_w^2q_x.
+\end{equation}
+只有输入均值为零时$q_x$才等于$\Var(x_j)$。若$a$关于零对称且$h=\max(0,a)$，则对称性给出$\E[h^2]=\tfrac12\E[a^2]$。为逐层保持激活二阶矩，要求$n_{in}\sigma_w^2/2=1$，于是得到He方差$\sigma_w^2=2/n_{in}$。这里保持的是二阶矩，不是ReLU输出的方差，因为$\E[h]$通常大于零。
+
+对近似线性的激活，前向保持尺度要求$n_{in}\sigma_w^2\approx1$；反向传播在类似独立近似下要求$n_{out}\sigma_w^2\approx1$。当输入输出宽度不同，不能同时精确满足，Xavier取折中值$\sigma_w^2=2/(n_{in}+n_{out})$。训练后权重与激活会相关，因此这是初始化阶段的尺度分析，不是整个训练期的保证。
+
+多层网络的反向梯度含有Jacobian乘积$J_1^{\mathsf T}\cdots J_L^{\mathsf T}$，其范数上界由$\prod_l\|J_l\|_2$控制，解释了逐层放大或衰减的风险。残差映射$h_{l+1}=h_l+F_l(h_l)$的Jacobian为$I+DF_l$，提供直接传播通路，但并不保证所有奇异值都接近一。初始化、残差和归一化需要共同检验，不能各自被当作梯度稳定性的充分条件。
+
+\paragraph{训练曲线的诊断矩阵。}
+若训练和验证损失都高，先检查标签、输入尺度和模型是否欠拟合；若训练损失低而验证损失高，检查正则化、数据切分和分布偏移；若损失下降但任务指标不变，检查指标阈值、标签定义和类别不平衡；若梯度为 NaN，检查学习率、混合精度和数值范围。每种曲线形态对应不同假设，不能用统一的“再训练久一点”处理。
+
+\section{可复现训练设置}
+检查点不只是参数文件。若要接着训练，应保存优化器的动量或Adam矩估计、学习率调度位置、训练步数以及随机数状态；只有预测时才通常不需要这些优化器状态。随机种子确定伪随机序列的起点，但不同硬件、并行算子和软件版本仍可能带来差异，因此“用了同一个种子”不等于任意平台逐位相同。
+
+一次训练应固定数据版本、切分文件、模型配置、随机种子、优化器版本和停止规则。保存最佳验证检查点时要记录选择指标和选择时刻，否则重新加载的模型可能不是报告结果对应的模型。多次运行应报告均值和波动，尤其是小数据和元学习任务。
+
+反向传播、自动微分和训练循环可借助下面两份官方教程对照实现，阅读时把代码步骤对应回本章的梯度推导。
+\section*{辅助学习材料}
+\begingroup
+\emergencystretch=3em
+\begin{itemize}
+\item \textbf{Introduction to PyTorch}；作者/平台：PyTorch 官方教程；英文；视频与教程。依次阅读 Tensors、Autograd、Building Models 和 Training Models，帮助理解计算图、反向传播、优化器与复现设置。\href{https://docs.pytorch.org/tutorials/beginner/introyt/introyt1\_tutorial.html}{在线阅读}。
+\item \textbf{Training a Classifier}；作者/平台：PyTorch 官方教程；英文；代码教程。重点看数据加载、损失、优化器、训练/测试循环和保存模型，帮助把本章的 SGD、批训练和验证步骤落到可运行流程。\href{https://docs.pytorch.org/tutorials/beginner/blitz/cifar10\_tutorial.html}{在线阅读}。
+\item \textbf{深度学习 | 反向传播详解}；知乎；中文解说。沿计算图手算链式法则，再核对自动微分；标题与主题据必应索引，原页受限。\href{https://zhuanlan.zhihu.com/p/115571464}{在线阅读}。
+\item \textbf{“反向传播算法”过程及公式推导（索引标题节选）}；CSDN；中文博客。阅读三层网络的前向与反向图示，区分梯度计算和参数更新；已读取公开页面的定义与图示说明，完整标题未核实。\href{https://blog.csdn.net/ft\_sunshine/article/details/90221691}{在线阅读}。
+\item \textbf{(选修)To Learn More - 反向传播(Backpropagation)}；李宏毅；bilibili；中文课程。选看第14集，对照本章计算图与链式法则。2026年10月4日官方公开元数据显示整套课程累计播放约299.5万，并非本分集播放量；已核对目录与计数，未逐帧观看。\href{https://www.bilibili.com/video/BV1Wv411h7kN/?p=14}{观看分集}。
+\end{itemize}
+\endgroup
+\section{自测与参考答案}
+\begin{enumerate}
+\item 两个单样本梯度为$2,6$，批平均梯度是多少？若程序误用求和呢？\textbf{答：}平均为$4$，求和为$8$；相同学习率下后者步幅加倍。梯度累积也要核对最终归一化。
+\item Adam第一步梯度为$2$，$\beta_1=0.9,\beta_2=0.999$，校正后两矩是什么？\textbf{答：}$m_1=0.2,s_1=0.004$，除以$0.1,0.001$后分别为$2,4$；因此更新量为$\eta\,2/(2+\epsilon)$，约为$\eta$，不是$2\eta$。
+\item 为什么不能只关掉梯度计算就当作进入推理模式？\textbf{答：}梯度记录与网络模式是两回事；Dropout还需停止屏蔽，Batch Normalization通常还需切换到训练累计统计量。评价时既不更新参数，也不让测试数据更新运行统计量。
+\end{enumerate}
+
+\section{本章小结}
+优化是把目标函数转化为参数更新的过程，训练工程则负责让这个过程数值稳定、可诊断、可复现。学习率、批量、初始化、归一化和精度共同决定优化轨迹；它们不能被当作互相独立的旋钮。
+
+从推导看，反向传播回答的是梯度怎样计算，下降引理回答的是在光滑假设下步长何时有效，随机梯度分析回答的是噪声为何留下波动，而初始化分析回答的是多层信号为何会改变尺度。这些结论各有条件：求到驻点不等于全局最优，优化器运行稳定也不等于学到了可迁移的规律。
+
+训练损失已经稳定下降，换一台设备后却可能预测不准。下一章讨论这种泛化问题，分别检查模型复杂度、正则化和数据分布变化。本章让参数更新尽量正确有效；下一章要检验更新得到的模型在未见数据上是否仍然有用。

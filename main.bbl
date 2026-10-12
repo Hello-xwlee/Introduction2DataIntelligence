@@ -240,11 +240,6 @@ George~Em Karniadakis, Ioannis~G. Kevrekidis, Lu~Lu, Paris Perdikaris, Sifan Wan
 \newblock Physics-informed machine learning.
 \newblock {\em Nature Reviews Physics}, 3:422--440, 2021.
 
-\bibitem{kaufman2012leakage}
-Shachar Kaufman, Saharon Rosset, Claudia Perlich, and Ori Stitelman.
-\newblock Leakage in data mining: Formulation, detection, and avoidance.
-\newblock {\em ACM Transactions on Knowledge Discovery from Data}, 6(4):15:1--15:21, 2012.
-
 \bibitem{kharazmi2021hpvpinn}
 Ehsan Kharazmi, Zhongqiang Zhang, and George~Em Karniadakis.
 \newblock {hp-VPINNs}: Variational physics-informed neural networks with domain decomposition.
@@ -409,11 +404,6 @@ Aravind Rajeswaran, Chelsea Finn, Sham~M. Kakade, and Sergey Levine.
 Sylvestre-Alvise Rebuffi, Alexander Kolesnikov, Georg Sperl, and Christoph~H. Lampert.
 \newblock {iCaRL}: Incremental classifier and representation learning.
 \newblock In {\em IEEE Conference on Computer Vision and Pattern Recognition}, 2017.
-
-\bibitem{robbins1951stochastic}
-Herbert Robbins and Sutton Monro.
-\newblock A stochastic approximation method.
-\newblock {\em The Annals of Mathematical Statistics}, 22(3):400--407, 1951.
 
 \bibitem{rombach2022latent}
 Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Bj{\"o}rn Ommer.

@@ -1,4 +1,4 @@
-\documentclass[a4paper,UTF8,zihao=-4,openany]{ctexbook}
+﻿\documentclass[a4paper,UTF8,zihao=-4,openany]{ctexbook}
 \input{preamble}
 
 \title{工业数据智能入门指南 \\ Introduction to Industrial Data Intelligence}
@@ -47,11 +47,11 @@
 
 \mainmatter
 \part{机器学习的基本语言与完整流程}
-本部分先补齐后文要用的数学语言，再依次回答八个问题：公式里的向量和概率怎样读；机器学习究竟学什么；简单模型怎样计算；一次学习实验怎样组织；参数怎样一步步更新；为什么训练成绩不能代表新数据上的成绩；有限数据能支持多强的结论；原始记录怎样变成预测时刻确实可用的输入。这里的“泛化”指模型在未见数据上的表现，“优化”指按目标调整参数，“部署”指把训练好的系统放到实际流程中使用。读者应看到，机器学习不是一条训练命令，而是一个完整的流程：先明确问题，再选择模型，最后验证结果。
+本部分先补齐后文要用的数学语言，再依次回答八个问题：公式里的向量和概率怎样读；机器学习究竟学什么；简单模型怎样计算；一次学习实验怎样组织；模型中的参数和条件分布怎样求解；为什么训练成绩不能代表新数据上的成绩；有限数据能支持多强的结论；原始记录怎样变成预测时刻确实可用的输入。这里的“泛化”指模型在未见数据上的表现，“模型求解”包括参数计算、优化与分布推断，“部署”指把训练好的系统放到实际流程中使用。读者应看到，机器学习不是一条训练命令，而是一个完整的流程：先明确问题，再选择模型，最后验证结果。
 \include{chapters/01-mathematical-preliminaries}
 \include{chapters/02-foundations}
 \include{chapters/03-linear-models}
-\include{chapters/04-learning-pipeline}
+\include{chapters/04-objectives-and-metrics}
 \include{chapters/05-optimization-training}
 \include{chapters/06-statistical-learning}
 

@@ -11,36 +11,58 @@
 \newlabel{eq:linear-basis-function-model}{{3.5}{23}{基函数：先表示输入，再在线性空间中学习。}{equation.3.5}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.2}第一种视角：确定性判别模型}{24}{section.3.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}线性回归：直接输出一个数}{24}{subsection.3.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{用两个样本求一个权重。}{24}{paragraph*.29}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{从手算到矩阵。}{24}{paragraph*.30}\protected@file@percent }
-\newlabel{eq:linear-least-squares}{{3.8}{24}{从手算到矩阵。}{equation.3.8}{}}
-\newlabel{eq:linear-normal-equation}{{3.9}{24}{从手算到矩阵。}{equation.3.9}{}}
+\@writefile{toc}{\contentsline {paragraph}{一个简单的手算例子。}{24}{paragraph*.29}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{线性回归最小二乘的矩阵表示——正规方程。}{24}{paragraph*.30}\protected@file@percent }
+\newlabel{eq:linear-least-squares}{{3.8}{24}{线性回归最小二乘的矩阵表示——正规方程。}{equation.3.8}{}}
+\newlabel{eq:linear-normal-equation}{{3.9}{24}{线性回归最小二乘的矩阵表示——正规方程。}{equation.3.9}{}}
 \@writefile{toc}{\contentsline {paragraph}{不可逆与病态：解是否唯一，与解是否稳定。}{25}{paragraph*.31}\protected@file@percent }
 \newlabel{eq:linear-ill-conditioned-perturbation}{{3.13}{25}{不可逆与病态：解是否唯一，与解是否稳定。}{equation.3.13}{}}
 \@writefile{toc}{\contentsline {paragraph}{为什么正规方程也是正交投影条件。}{25}{paragraph*.32}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}实际计算：用矩阵分解解方程，而不是求逆}{26}{subsection.3.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Cholesky：适合已经形成的正规方程。}{26}{paragraph*.33}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{QR：通常的最小二乘默认方法。}{26}{paragraph*.34}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{SVD：处理病态或秩不足问题。}{26}{paragraph*.35}\protected@file@percent }
 \citation{hoerl1970ridge}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}正则化：在拟合之外加入偏好}{26}{subsection.3.2.2}\protected@file@percent }
-\newlabel{eq:linear-ridge-objective}{{3.16}{26}{正则化：在拟合之外加入偏好}{equation.3.16}{}}
+\@writefile{toc}{\contentsline {paragraph}{大规模问题：迭代法。}{27}{paragraph*.36}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{岭回归的数值实现。}{27}{paragraph*.37}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.3}正则化：在拟合之外加入偏好}{27}{subsection.3.2.3}\protected@file@percent }
+\newlabel{eq:linear-ridge-objective}{{3.26}{27}{正则化：在拟合之外加入偏好}{equation.3.26}{}}
+\@writefile{toc}{\contentsline {paragraph}{Lasso：用$\ell _1$惩罚实现变量选择。}{28}{paragraph*.38}\protected@file@percent }
+\newlabel{eq:linear-lasso-objective}{{3.28}{28}{Lasso：用$\ell _1$惩罚实现变量选择。}{equation.3.28}{}}
+\@writefile{toc}{\contentsline {paragraph}{Elastic Net：在稀疏与稳定之间折中。}{28}{paragraph*.39}\protected@file@percent }
+\newlabel{eq:linear-elastic-net-objective}{{3.29}{28}{Elastic Net：在稀疏与稳定之间折中。}{equation.3.29}{}}
+\@writefile{toc}{\contentsline {paragraph}{Group Lasso：按组进行结构化选择。}{28}{paragraph*.40}\protected@file@percent }
+\newlabel{eq:linear-group-lasso-objective}{{3.30}{28}{Group Lasso：按组进行结构化选择。}{equation.3.30}{}}
+\@writefile{toc}{\contentsline {paragraph}{非凸惩罚：减少过度收缩。}{28}{paragraph*.41}\protected@file@percent }
+\newlabel{eq:linear-nonconvex-penalty}{{3.31}{29}{非凸惩罚：减少过度收缩。}{equation.3.31}{}}
+\@writefile{toc}{\contentsline {paragraph}{约束式正则化与早停。}{29}{paragraph*.42}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}第二种视角：输出有分布，参数取一个确定值}{30}{section.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}概率回归：把线性输出作为均值}{30}{subsection.3.3.1}\protected@file@percent }
+\newlabel{eq:linear-single-observation-density}{{3.34}{30}{概率回归：把线性输出作为均值}{equation.3.34}{}}
+\newlabel{eq:linear-likelihood-expanded}{{3.37}{30}{概率回归：把线性输出作为均值}{equation.3.37}{}}
+\newlabel{eq:linear-negative-log-likelihood}{{3.43}{31}{概率回归：把线性输出作为均值}{equation.3.43}{}}
+\newlabel{eq:linear-noise-variance-mle}{{3.50}{31}{概率回归：把线性输出作为均值}{equation.3.50}{}}
 \citation{bishop2006pattern}
 \citation{murphy2022pml}
-\@writefile{toc}{\contentsline {section}{\numberline {3.3}第二种视角：输出有分布，参数取一个确定值}{27}{section.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}概率回归：把线性输出作为均值}{27}{subsection.3.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.4}第三种视角：参数也用分布表示}{27}{section.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.1}先验与后验：不再只选一组权重}{27}{subsection.3.4.1}\protected@file@percent }
-\newlabel{eq:linear-gaussian-likelihood}{{3.22}{28}{先验与后验：不再只选一组权重}{equation.3.22}{}}
-\newlabel{eq:linear-gaussian-prior-density}{{3.23}{28}{先验与后验：不再只选一组权重}{equation.3.23}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.2}最大后验估计：从后验中选一个点}{28}{subsection.3.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.3}完整后验：均值与方差都保留}{28}{subsection.3.4.3}\protected@file@percent }
-\newlabel{eq:linear-posterior-completing-square}{{3.30}{29}{完整后验：均值与方差都保留}{equation.3.30}{}}
-\newlabel{eq:linear-gaussian-posterior-density}{{3.31}{29}{完整后验：均值与方差都保留}{equation.3.31}{}}
-\@writefile{toc}{\contentsline {paragraph}{新数据怎样更新已有后验。}{29}{paragraph*.33}\protected@file@percent }
-\newlabel{eq:linear-sequential-posterior-precision}{{3.32}{29}{新数据怎样更新已有后验。}{equation.3.32}{}}
-\newlabel{eq:linear-sequential-posterior-mean}{{3.33}{29}{新数据怎样更新已有后验。}{equation.3.33}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.4}后验预测：把参数不确定性带到新样本}{29}{subsection.3.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.5}把上一章的概念逐项放回例子}{30}{section.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{$\sigma $的无偏估计}{32}{paragraph*.43}\protected@file@percent }
+\newlabel{eq:linear-residual-sum-expectation}{{3.57}{32}{$\sigma $的无偏估计}{equation.3.57}{}}
+\newlabel{eq:linear-noise-variance-unbiased}{{3.58}{32}{$\sigma $的无偏估计}{equation.3.58}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}第三种视角：参数也用分布表示}{32}{section.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.1}先验与后验：不再只选一组权重}{32}{subsection.3.4.1}\protected@file@percent }
+\newlabel{eq:linear-gaussian-likelihood}{{3.60}{33}{先验与后验：不再只选一组权重}{equation.3.60}{}}
+\newlabel{eq:linear-gaussian-prior-density}{{3.61}{33}{先验与后验：不再只选一组权重}{equation.3.61}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.2}最大后验估计：从后验中选一个点}{33}{subsection.3.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.3}完整后验：均值与方差都保留}{34}{subsection.3.4.3}\protected@file@percent }
+\newlabel{eq:linear-posterior-completing-square}{{3.68}{34}{完整后验：均值与方差都保留}{equation.3.68}{}}
+\newlabel{eq:linear-gaussian-posterior-density}{{3.69}{34}{完整后验：均值与方差都保留}{equation.3.69}{}}
+\@writefile{toc}{\contentsline {paragraph}{新数据怎样更新已有后验。}{34}{paragraph*.44}\protected@file@percent }
+\newlabel{eq:linear-sequential-posterior-precision}{{3.70}{34}{新数据怎样更新已有后验。}{equation.3.70}{}}
+\newlabel{eq:linear-sequential-posterior-mean}{{3.71}{34}{新数据怎样更新已有后验。}{equation.3.71}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.4}后验预测：把参数不确定性带到新样本}{35}{subsection.3.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.5}把上一章的概念逐项放回例子}{35}{section.3.5}\protected@file@percent }
 \@setckpt{chapters/03-linear-models}{
-\setcounter{page}{32}
-\setcounter{equation}{36}
+\setcounter{page}{37}
+\setcounter{equation}{74}
 \setcounter{enumi}{3}
 \setcounter{enumii}{0}
 \setcounter{enumiii}{0}

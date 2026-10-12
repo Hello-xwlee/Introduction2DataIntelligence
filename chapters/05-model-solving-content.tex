@@ -1,0 +1,199 @@
+\chapter{模型的求解}
+\label{chap:model-solving}
+
+\begin{quote}\small
+\textit{本章摘要。}给定数据、任务、模型结构和训练目标以后，还需要确定模型中的未知量。本章把这一过程称为模型求解。对于确定性参数模型，先检查能否直接计算闭式解；不能直接计算时，常用基于梯度的方法或不依赖梯度的启发式方法搜索参数。对于随机参数模型，求解的对象是隐变量或参数的条件分布。含隐变量的极大似然估计可由期望最大化算法处理，参数后验没有解析形式时可用变分推断构造近似后验。
+\end{quote}
+
+上一章已经说明训练目标规定模型希望减少哪类错误，评价指标规定模型在新数据上如何被检验。本章回答第二章中遗留的一个问题：目标已经写出以后，模型中应该被怎样求解为最优状态。这里的“求解”比“优化”更宽。最小二乘回归可以解线性方程；极大似然中的隐变量可以通过求条件期望处理；贝叶斯学习需要计算参数后验。而优化是其中一类求解模型的手段，我们应该带着更大的视角去看待模型的求解。
+
+设训练数据为$\mathcal D=\{(\bm x_i,y_i)\}_{i=1}^n$。确定性参数模型用一个固定向量$\theta$给出预测$f_\theta(\bm x)$，常通过
+\begin{equation}
+ \hat\theta=\argmin_\theta J(\theta)
+ \label{eq:solving-deterministic-objective}
+\end{equation}
+确定参数。随机参数模型把$\theta$或未观测变量$\bm z$视为随机变量，求解结果可以是点估计，也可以是$p(\theta\mid\mathcal D)$或$p(\bm z\mid\mathcal D)$。两类模型都应先区分目标对象，再选择计算方法。
+
+\section{确定性参数模型：从目标到参数值}
+
+\subsection{先判断是否存在直接解}
+以第三章的线性回归为例，平方损失目标为
+\begin{equation}
+ J(\bm w)=\frac12\|X\bm w-\bm y\|_2^2.
+ \label{eq:solving-least-squares}
+\end{equation}
+其中$X\in\R^{n\times d}$是设计矩阵，$\bm y\in\R^n$是标签向量，$\bm w\in\R^d$是待定参数。令梯度为零，得到正规方程
+\begin{equation}
+ X^{\mathsf T}X\hat{\bm w}=X^{\mathsf T}\bm y.
+ \label{eq:solving-normal-equation}
+\end{equation}
+当$X$列满秩时，$X^{\mathsf T}X$可逆，唯一解为$\hat{\bm w}=(X^{\mathsf T}X)^{-1}X^{\mathsf T}\bm y$。实际计算应使用QR分解或奇异值分解求解式\eqref{eq:solving-normal-equation}，不应显式计算逆矩阵。若特征共线，解可能不唯一或对数据扰动敏感，需要正则化或改变模型，而不是把数值求解器的输出误作稳定结论。
+
+直接解只适用于结构简单且规模适中的问题。深度网络、含复杂约束的模型以及多数非线性损失通常没有可用的闭式解。此时需要在参数空间中逐步构造更好的候选解。
+
+\subsection{梯度怎样给出局部改进方向}
+若$J$在当前参数$\theta_t$处可微，梯度$\nabla J(\theta_t)$指向局部上升最快的方向。因此，梯度下降使用反方向更新：
+\begin{equation}
+ \theta_{t+1}=\theta_t-\eta_t\nabla J(\theta_t),
+ \label{eq:solving-gradient-descent}
+\end{equation}
+其中$\eta_t>0$是学习率。对一维目标$J(\theta)=\theta^2/2$，更新变为$\theta_{t+1}=(1-\eta_t)\theta_t$。当$0<\eta_t<2$时，参数绝对值下降；$\eta_t=2$时损失不变；$\eta_t>2$时更新发散。下降方向正确不表示任意步长都能降低目标。
+
+更一般地，若$J$的梯度满足$L$-Lipschitz条件，即
+\begin{equation}
+ \|\nabla J(\bm u)-\nabla J(\bm v)\|_2\leq L\|\bm u-\bm v\|_2,
+\end{equation}
+则有
+\begin{equation}
+ J(\theta_t-\eta\nabla J(\theta_t))
+ \leq J(\theta_t)-\eta\left(1-\frac{L\eta}{2}\right)
+ \|\nabla J(\theta_t)\|_2^2.
+ \label{eq:solving-descent-bound}
+\end{equation}
+所以$0<\eta<2/L$且梯度非零时，式\eqref{eq:solving-gradient-descent}保证这一步下降。该结论要求目标可微且梯度光滑。它说明步长为何需要受曲率限制，但不保证非凸目标到达全局最优。
+
+神经网络的目标通常是复合函数。反向传播按照链式法则计算$\nabla_\theta J$，自动微分系统据此完成求导；参数怎样移动仍由式\eqref{eq:solving-gradient-descent}或其他更新规则决定。反向传播是求导方法，不是优化方法。
+
+\subsection{随机梯度、动量与自适应尺度}
+对大数据集，完整计算$\nabla J(\theta_t)$代价很高。随机梯度下降（Stochastic Gradient Descent，SGD）从训练集抽取小批量$B_t$，以
+\begin{equation}
+ \hat{\bm g}_t=\frac{1}{|B_t|}\sum_{i\in B_t}\nabla_\theta\ell_i(\theta_t),
+ \qquad \theta_{t+1}=\theta_t-\eta_t\hat{\bm g}_t
+ \label{eq:solving-sgd}
+\end{equation}
+替代完整梯度。均匀抽样且小批量损失取平均时，$\hat{\bm g}_t$是完整梯度的无偏估计。它有噪声，因而单步损失未必下降；其优点是每一步计算较少，能够频繁更新参数。批量损失若误用求和，梯度尺度会随批量大小变化，学习率也就失去原来的含义。
+
+动量把近期梯度累积为速度：
+\begin{align}
+ \bm v_t&=\beta\bm v_{t-1}+(1-\beta)\hat{\bm g}_t,\\
+ \theta_{t+1}&=\theta_t-\eta_t\bm v_t,
+\end{align}
+其中$0\leq\beta<1$。在持续下降的方向上，历史梯度会使更新更稳定；在来回震荡的方向上，正负梯度会部分抵消。
+
+Adam以梯度的一阶矩和逐坐标二阶原点矩调整步长\cite{kingma2015adam}：
+\begin{align}
+ \bm m_t&=\beta_1\bm m_{t-1}+(1-\beta_1)\hat{\bm g}_t,\\
+ \bm s_t&=\beta_2\bm s_{t-1}+(1-\beta_2)\hat{\bm g}_t\odot\hat{\bm g}_t,\\
+ \theta_{t+1}&=\theta_t-\eta_t\frac{\bm m_t/(1-\beta_1^t)}{\sqrt{\bm s_t/(1-\beta_2^t)}+\epsilon}.
+ \label{eq:solving-adam}
+\end{align}
+初始时$\bm m_0=\bm s_0=\bm0$，$\epsilon>0$避免除零，所有除法和平方根逐坐标进行。偏差校正补偿零初始化造成的早期偏小。Adam的二阶矩不是Hessian，也不自动选择合适的学习率、批量大小或训练步数。
+
+\subsection{何时使用启发式搜索}
+基于梯度的方法要求目标可微，或至少能取得有意义的次梯度。有些模型包含离散结构、仿真程序或不可微评价规则，此时梯度难以获得。启发式优化只比较候选参数的目标值，不要求导数。它不改变训练目标；它改变的是在参数空间中产生候选解的方式。
+
+遗传算法维护一组候选参数，称为种群。每一轮先计算每个候选的目标值，再选择较优候选作为父代，随后对参数片段进行交叉，并以小概率随机变异，形成下一代。交叉可以组合两个规则系统中不同位置的有效部分，变异提供未出现过的候选。种群大小、选择压力、交叉率和变异率决定搜索范围与计算成本。选择压力过强会使种群过早集中，变异过大又会使已经获得的结构难以保留。
+
+模拟退火维护单个当前候选$\theta_t$，并从邻域中提出$\theta'$。令$\Delta=J(\theta')-J(\theta_t)$，最小化问题中，当$\Delta\leq0$时接受$\theta'$；当$\Delta>0$时，以
+\begin{equation}
+ \Pr(\text{接受 }\theta')=\exp(-\Delta/T_t)
+ \label{eq:solving-simulated-annealing}
+\end{equation}
+接受，其中$T_t>0$是温度。温度较高时，较差候选仍可能被接受，搜索可以跨过局部障碍；温度逐渐降低后，算法更偏向改进目标。降温过快会过早固定在局部区域，降温过慢则会增加计算时间。式\eqref{eq:solving-simulated-annealing}依赖候选生成规则和温度序列，不能单独保证找到全局最优。
+
+这类方法适合结构搜索、规则组合和昂贵黑盒模型的低维调参。它们通常需要大量目标函数计算，且没有一般性的有限步最优保证。若目标可微、单次梯度计算成本可控，梯度方法通常更适合高维连续参数。启发式方法不依赖导数，不等于它给出的结果更可靠；仍需用验证集比较候选，并将搜索过程与最终测试严格分开。
+
+\section{随机参数模型：隐变量与极大似然}
+
+随机参数模型首先需要说明哪些量没有被观测。设观测数据为$\bm x$，隐变量为$\bm z$，参数为$\theta$。联合模型$p(\bm x,\bm z\mid\theta)$给出后，观测数据的似然为
+\begin{equation}
+ p(\bm x\mid\theta)=\int p(\bm x,\bm z\mid\theta)\,d\bm z.
+ \label{eq:solving-marginal-likelihood}
+\end{equation}
+离散隐变量时积分改为求和。极大似然估计希望最大化$\log p(\bm x\mid\theta)$。困难在于，对数外的积分通常不能直接计算，也不能把$\log\int$错误地改写为$\int\log$。
+
+\subsection{EM如何处理不可见的变量}
+期望最大化（Expectation-Maximization，EM）算法在当前参数$\theta^{(t)}$下计算隐变量后验
+\begin{equation}
+ q_t(\bm z)=p(\bm z\mid\bm x,\theta^{(t)}),
+\end{equation}
+然后构造完整数据对数似然的条件期望
+\begin{equation}
+ Q(\theta\mid\theta^{(t)})=
+ \mathbb E_{q_t}[\log p(\bm x,\bm z\mid\theta)].
+ \label{eq:solving-em-q}
+\end{equation}
+E步计算$q_t$和式\eqref{eq:solving-em-q}，M步更新
+\begin{equation}
+ \theta^{(t+1)}=\argmax_\theta Q(\theta\mid\theta^{(t)}).
+ \label{eq:solving-em-m}
+\end{equation}
+E步不是把隐变量猜成一个固定标签，而是保留它在当前模型下的条件不确定性。M步也未必有闭式解；若$Q$复杂，仍可在M步使用梯度法，这称为广义EM。
+
+EM的单调性来自恒等式
+\begin{equation}
+ \log p(\bm x\mid\theta)=Q(\theta\mid\theta^{(t)})+
+ H(q_t)+\KL\left(q_t(\bm z)\|p(\bm z\mid\bm x,\theta)\right),
+ \label{eq:solving-em-decomposition}
+\end{equation}
+其中$H(q_t)=-\mathbb E_{q_t}\log q_t(\bm z)$。在$\theta=\theta^{(t)}$时KL散度为零。M步提高$Q$，便不会降低观测数据对数似然。该性质只保证到达驻点；混合模型可能有多个局部极值，初始值仍会影响最终结果。
+
+例如，高斯混合模型用$z_i\in\{1,\ldots,K\}$表示样本来自哪个成分。E步计算责任度$r_{ik}=P(z_i=k\mid x_i,\theta^{(t)})$。M步用$r_{ik}$作为软计数更新混合权重、均值和协方差。它比先硬性分组再分别拟合更合理，因为成分归属本来未知；但成分数、协方差结构和初始值仍是模型假设，需要用验证或模型比较检查。
+
+\section{随机参数模型：后验与变分推断}
+
+在贝叶斯学习中，先验$p(\theta)$与似然$p(\mathcal D\mid\theta)$结合为
+\begin{equation}
+ p(\theta\mid\mathcal D)=\frac{p(\mathcal D\mid\theta)p(\theta)}{p(\mathcal D)},
+ \qquad p(\mathcal D)=\int p(\mathcal D\mid\theta)p(\theta)\,d\theta.
+ \label{eq:solving-posterior}
+\end{equation}
+求解对象是完整后验，不是使后验密度最大的单个参数。共轭模型中，积分可以解析完成；复杂模型中，证据$p(\mathcal D)$和预测所需积分往往不可计算。变分推断用可处理的分布族$q_\phi(\theta)$近似后验，其中$\phi$是变分参数。
+
+\subsection{从后验近似到ELBO}
+变分推断选择$q_\phi$，最小化
+\begin{equation}
+ \KL\left(q_\phi(\theta)\|p(\theta\mid\mathcal D)\right).
+ \label{eq:solving-vi-kl}
+\end{equation}
+将Bayes公式代入式\eqref{eq:solving-vi-kl}，得到
+\begin{equation}
+ \log p(\mathcal D)=\mathcal L(\phi)+
+ \KL\left(q_\phi(\theta)\|p(\theta\mid\mathcal D)\right),
+\end{equation}
+其中证据下界（Evidence Lower Bound，ELBO）为
+\begin{equation}
+ \mathcal L(\phi)=\mathbb E_{q_\phi}[\log p(\mathcal D\mid\theta)]
+ -\KL(q_\phi(\theta)\|p(\theta)).
+ \label{eq:solving-elbo}
+\end{equation}
+KL散度非负，因此最大化ELBO等价于在指定的$q_\phi$分布族内最小化式\eqref{eq:solving-vi-kl}。第一项要求近似后验中的参数能解释数据，第二项限制它偏离先验的程度。ELBO是对数证据的下界，不是预测准确率的下界。
+
+均值场变分近似常写为$q_\phi(\theta)=\prod_jq_{\phi_j}(\theta_j)$。它降低了计算难度，却强制参数相互独立。当真实后验具有强相关、多峰或厚尾时，这个限制可能低估方差。提高ELBO只说明在所选近似族内更接近目标后验，不能证明近似分布已经准确表达真实不确定性。
+
+\subsection{怎样计算变分目标的梯度}
+若$q_\phi$是高斯分布，可令
+\begin{equation}
+ \theta=\mu_\phi+\bm s_\phi\odot\epsilon,
+ \qquad \epsilon\sim\mathcal N(\bm0,I),
+ \label{eq:solving-reparameterization}
+\end{equation}
+其中$\bm s_\phi$逐坐标为正。式\eqref{eq:solving-reparameterization}将随机性放入与$\phi$无关的$\epsilon$，于是可用采样近似期望，再通过自动微分计算$\mathcal L(\phi)$对$\mu_\phi$和$\bm s_\phi$的梯度。变分推断因此常使用与确定性模型相同的随机梯度工具，但优化的变量是近似分布的参数，结果也是一个分布。
+
+重参数化适合连续变量。离散隐变量没有直接的可微重参数化时，可先检查能否精确求和；不能时可使用得分函数估计、连续松弛或针对模型结构的推断算法。不同估计器的偏差和方差不同，不能只因都称为“变分推断”就认为它们给出同样的近似质量。
+
+\section{选择求解方法时应问的问题}
+
+模型求解前，应依次确认四件事。第一，待确定的是一个固定参数、隐变量的条件分布，还是参数后验。第二，目标或积分是否具有闭式解。第三，目标能否稳定地求导。第四，近似误差、计算成本和需要报告的不确定性是否匹配任务。
+
+确定性参数模型若有可靠闭式解，应优先直接计算；无闭式解且可微时，可用梯度法；不可微的低维或组合问题可考虑启发式搜索。含隐变量的极大似然问题在E步可计算时适合EM。贝叶斯后验不可解析时，变分推断提供可扩展的近似，但必须说明近似分布族及其局限。训练集上的目标值、似然或ELBO提高，都不能替代下一章的泛化验证。
+
+\section*{辅助学习材料}
+\begin{itemize}
+\item \textbf{Mathematics for Machine Learning}；Deisenroth、Faisal 与 Ong；英文教材。可结合线性代数与微积分章节阅读最小二乘、梯度法和数值计算。\cite{deisenroth2020mml}
+\item \textbf{Probabilistic Machine Learning: An Introduction}；Murphy；英文教材。可阅读混合模型、EM和变分推断的统一概率表述。\cite{murphy2022pml}
+\item \textbf{Pattern Recognition and Machine Learning}；Bishop；英文教材。可阅读第九章的混合模型与EM，以及第十章的变分推断。\cite{bishop2006pattern}
+\end{itemize}
+
+\section{自测与参考答案}
+\begin{enumerate}
+\item 对$J(\theta)=\theta^2/2$，从$\theta_0=1$出发，学习率$\eta=3$时下一步参数和损失是什么？\textbf{答：}$\theta_1=-2$，损失为$2$，高于初始损失$0.5$。
+\item EM的E步和M步各计算什么？\textbf{答：}E步在当前参数下计算隐变量的条件分布，并形成完整数据对数似然的条件期望；M步提高该期望，得到新的参数。
+\item ELBO提高是否证明后验近似准确？\textbf{答：}不证明。它只说明所选$q_\phi$分布族中的目标提高；分布族无法表示的相关性、多峰和尾部仍可能造成系统近似误差。
+\end{enumerate}
+
+\section{本章小结}
+
+模型求解的对象由建模假设决定。确定性参数模型通常求一个参数值，可以使用闭式解、梯度方法或启发式搜索。随机参数模型需要处理条件分布：EM通过交替计算隐变量后验和更新参数处理含隐变量的极大似然，变分推断通过ELBO得到可计算的后验近似。
+
+这些方法给出的是模型假设下的解或近似解。闭式解不保证模型合适，目标下降不保证泛化，似然或ELBO增加也不保证概率已校准。下一章讨论怎样用独立数据和统计学习观点检验所得模型是否能用于未见样本。

@@ -638,15 +638,6 @@ $\tfrac12((\Sigma^{-1})_{jj}-1/v_j)=0$，所以$v_1=v_2=1-\rho^2$。真实边际
 \item \textbf{Pattern Recognition and Machine Learning}；Bishop；英文教材。第九章介绍混合模型与EM，第十章介绍变分推断。\cite{bishop2006pattern}
 \end{itemize}
 
-\section{自测与参考答案}
-\begin{enumerate}
-\item 对$J(\theta)=\theta^2/2$，从$\theta_0=1$出发，学习率$\eta=3$时下一步参数和损失是什么？\textbf{答：}$\theta_1=-2$，损失为$2$，高于初始损失$0.5$。
-\item 随机梯度下降是否要求把模型参数视为随机变量？\textbf{答：}不要求。算法抽样与参数的概率建模是两个问题，SGD可以求固定参数的点估计。
-\item EM能否直接解决任意不可计算的隐变量积分？\textbf{答：}不能。EM要求E步的条件期望可以计算；否则还需要近似推断或采样，精确EM的单调性也不能直接套用。
-\item 模拟退火中目标增加$2$、温度为$1$，对称提议下的接受概率是多少？\textbf{答：}$e^{-2}\approx0.135$。
-\item ELBO提高是否证明后验近似准确？\textbf{答：}不证明。分布族无法表达的相关性、多峰和尾部仍可能造成近似误差。
-\end{enumerate}
-
 \section{本章小结}
 
 模型求解首先需要明确未知量。固定参数可以通过闭式计算、梯度方法或启发式搜索获得点估计。含隐变量的极大似然估计利用EM交替计算条件期望和更新参数。随机参数模型需要后验分布，变分推断通过优化ELBO得到可计算的近似。

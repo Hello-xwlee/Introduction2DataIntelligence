@@ -185,13 +185,6 @@ KL散度非负，因此最大化ELBO等价于在指定的$q_\phi$分布族内最
 \item \textbf{Pattern Recognition and Machine Learning}；Bishop；英文教材。可阅读第九章的混合模型与EM，以及第十章的变分推断。\cite{bishop2006pattern}
 \end{itemize}
 
-\section{自测与参考答案}
-\begin{enumerate}
-\item 对$J(\theta)=\theta^2/2$，从$\theta_0=1$出发，学习率$\eta=3$时下一步参数和损失是什么？\textbf{答：}$\theta_1=-2$，损失为$2$，高于初始损失$0.5$。
-\item EM的E步和M步各计算什么？\textbf{答：}E步在当前参数下计算隐变量的条件分布，并形成完整数据对数似然的条件期望；M步提高该期望，得到新的参数。
-\item ELBO提高是否证明后验近似准确？\textbf{答：}不证明。它只说明所选$q_\phi$分布族中的目标提高；分布族无法表示的相关性、多峰和尾部仍可能造成系统近似误差。
-\end{enumerate}
-
 \section{本章小结}
 
 模型求解的对象由建模假设决定。确定性参数模型通常求一个参数值，可以使用闭式解、梯度方法或启发式搜索。随机参数模型需要处理条件分布：EM通过交替计算隐变量后验和更新参数处理含隐变量的极大似然，变分推断通过ELBO得到可计算的后验近似。

@@ -1,61 +1,60 @@
 \relax 
 \providecommand\hyper@newdestlabel[2]{}
-\@writefile{toc}{\contentsline {chapter}{\numberline {第十五章\hspace  {.3em}}视觉模型}{193}{chapter.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {第十五章\hspace  {.3em}}视觉模型}{191}{chapter.15}\protected@file@percent }
 \@writefile{lof}{\addvspace {10.0pt}}
 \@writefile{lot}{\addvspace {10.0pt}}
-\@writefile{toc}{\contentsline {section}{\numberline {15.1}先确定任务：类别、位置还是边界}{193}{section.15.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {15.1}{\ignorespaces 视觉系统先由卷积或 Transformer 骨干提取表示，再按标签粒度输出分类、检测或分割结果。}}{194}{figure.caption.170}\protected@file@percent }
-\newlabel{fig:vision-output-granularity}{{15.1}{194}{视觉系统先由卷积或 Transformer 骨干提取表示，再按标签粒度输出分类、检测或分割结果。}{figure.caption.170}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {15.2}图像分类：从局部卷积到 ResNet}{194}{section.15.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.2.1}卷积如何从像素中提取特征}{194}{subsection.15.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{一个窗口怎样变成一个输出。}{195}{paragraph*.171}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{卷积的索引、参数与等变性。}{195}{paragraph*.172}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.2.2}多层卷积如何形成整幅图的判断}{196}{subsection.15.2.2}\protected@file@percent }
-\newlabel{eq:vision-receptive-field}{{15.3}{196}{多层卷积如何形成整幅图的判断}{equation.15.3}{}}
-\newlabel{eq:vision-classification}{{15.4}{196}{多层卷积如何形成整幅图的判断}{equation.15.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {15.1}先确定任务：类别、位置还是边界}{191}{section.15.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {15.1}{\ignorespaces 视觉系统先由卷积或 Transformer 骨干提取表示，再按标签粒度输出分类、检测或分割结果。}}{192}{figure.caption.165}\protected@file@percent }
+\newlabel{fig:vision-output-granularity}{{15.1}{192}{视觉系统先由卷积或 Transformer 骨干提取表示，再按标签粒度输出分类、检测或分割结果。}{figure.caption.165}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {15.2}图像分类：从局部卷积到 ResNet}{192}{section.15.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.2.1}卷积如何从像素中提取特征}{192}{subsection.15.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{一个窗口怎样变成一个输出。}{193}{paragraph*.166}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{卷积的索引、参数与等变性。}{193}{paragraph*.167}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.2.2}多层卷积如何形成整幅图的判断}{194}{subsection.15.2.2}\protected@file@percent }
+\newlabel{eq:vision-receptive-field}{{15.3}{194}{多层卷积如何形成整幅图的判断}{equation.15.3}{}}
+\newlabel{eq:vision-classification}{{15.4}{194}{多层卷积如何形成整幅图的判断}{equation.15.4}{}}
 \citation{he2016resnet}
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.2.3}ResNet：网络加深以后怎样训练}{197}{subsection.15.2.3}\protected@file@percent }
-\newlabel{eq:vision-residual}{{15.5}{197}{ResNet：网络加深以后怎样训练}{equation.15.5}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {15.2}{\ignorespaces 同尺寸残差块的计算路径。捷径传递输入，分支学习修正量，二者逐元素相加。图中省略了具体实现可能在相加后使用的激活。}}{197}{figure.caption.173}\protected@file@percent }
-\newlabel{fig:vision-residual-block}{{15.2}{197}{同尺寸残差块的计算路径。捷径传递输入，分支学习修正量，二者逐元素相加。图中省略了具体实现可能在相加后使用的激活。}{figure.caption.173}{}}
-\@writefile{toc}{\contentsline {paragraph}{残差梯度不再只有单一路径。}{197}{paragraph*.174}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.2.3}ResNet：网络加深以后怎样训练}{195}{subsection.15.2.3}\protected@file@percent }
+\newlabel{eq:vision-residual}{{15.5}{195}{ResNet：网络加深以后怎样训练}{equation.15.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15.2}{\ignorespaces 同尺寸残差块的计算路径。捷径传递输入，分支学习修正量，二者逐元素相加。图中省略了具体实现可能在相加后使用的激活。}}{195}{figure.caption.168}\protected@file@percent }
+\newlabel{fig:vision-residual-block}{{15.2}{195}{同尺寸残差块的计算路径。捷径传递输入，分支学习修正量，二者逐元素相加。图中省略了具体实现可能在相加后使用的激活。}{figure.caption.168}{}}
+\@writefile{toc}{\contentsline {paragraph}{残差梯度不再只有单一路径。}{195}{paragraph*.169}\protected@file@percent }
 \citation{dosovitskiy2021vit}
-\@writefile{toc}{\contentsline {paragraph}{相加要求尺寸一致。}{198}{paragraph*.175}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.2.4}从基本块到瓶颈块与轻量卷积}{198}{subsection.15.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {15.3}ViT：用注意力联系不同图像区域}{198}{section.15.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.3.1}从图像块到类别预测}{198}{subsection.15.3.1}\protected@file@percent }
-\newlabel{eq:vision-patch-embedding}{{15.9}{199}{从图像块到类别预测}{equation.15.9}{}}
-\newlabel{eq:vision-attention}{{15.10}{199}{从图像块到类别预测}{equation.15.10}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.3.2}为什么引入窗口注意力与层级表示}{199}{subsection.15.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {15.4}目标检测：以 Faster R-CNN 解释框级定位}{200}{section.15.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.4.1}为什么先提议区域，再分类和修正位置}{200}{subsection.15.4.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {15.3}{\ignorespaces Faster R-CNN 的两阶段计算。区域提议给出在哪里读取，共享特征提供读取内容，第二阶段进行区域分类与框修正。}}{201}{figure.caption.176}\protected@file@percent }
-\newlabel{fig:vision-faster-rcnn}{{15.3}{201}{Faster R-CNN 的两阶段计算。区域提议给出在哪里读取，共享特征提供读取内容，第二阶段进行区域分类与框修正。}{figure.caption.176}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.4.2}框怎样匹配标签并参与训练}{201}{subsection.15.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{从几何框到可训练的回归目标。}{201}{paragraph*.177}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.4.3}推理怎样得到数量不固定的检测结果}{202}{subsection.15.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.4.4}从两阶段到单阶段：省去逐候选识别}{203}{subsection.15.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{焦点损失怎样改变梯度。}{203}{paragraph*.178}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{相加要求尺寸一致。}{196}{paragraph*.170}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.2.4}从基本块到瓶颈块与轻量卷积}{196}{subsection.15.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.3}ViT：用注意力联系不同图像区域}{196}{section.15.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.3.1}从图像块到类别预测}{196}{subsection.15.3.1}\protected@file@percent }
+\newlabel{eq:vision-patch-embedding}{{15.9}{197}{从图像块到类别预测}{equation.15.9}{}}
+\newlabel{eq:vision-attention}{{15.10}{197}{从图像块到类别预测}{equation.15.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.3.2}为什么引入窗口注意力与层级表示}{197}{subsection.15.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.4}目标检测：以 Faster R-CNN 解释框级定位}{198}{section.15.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.4.1}为什么先提议区域，再分类和修正位置}{198}{subsection.15.4.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {15.3}{\ignorespaces Faster R-CNN 的两阶段计算。区域提议给出在哪里读取，共享特征提供读取内容，第二阶段进行区域分类与框修正。}}{199}{figure.caption.171}\protected@file@percent }
+\newlabel{fig:vision-faster-rcnn}{{15.3}{199}{Faster R-CNN 的两阶段计算。区域提议给出在哪里读取，共享特征提供读取内容，第二阶段进行区域分类与框修正。}{figure.caption.171}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.4.2}框怎样匹配标签并参与训练}{199}{subsection.15.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{从几何框到可训练的回归目标。}{199}{paragraph*.172}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.4.3}推理怎样得到数量不固定的检测结果}{200}{subsection.15.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.4.4}从两阶段到单阶段：省去逐候选识别}{201}{subsection.15.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{焦点损失怎样改变梯度。}{201}{paragraph*.173}\protected@file@percent }
 \citation{lin2017fpn}
 \citation{ronneberger2015unet}
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.4.5}FPN：让不同大小的缺陷使用不同尺度的特征}{204}{subsection.15.4.5}\protected@file@percent }
-\newlabel{eq:vision-fpn}{{15.18}{204}{FPN：让不同大小的缺陷使用不同尺度的特征}{equation.15.18}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {15.5}图像分割：以 U-Net 解释像素级预测}{204}{section.15.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.5.1}为什么解码器需要编码器的细节}{204}{subsection.15.5.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {15.4}{\ignorespaces 采用尺寸保持卷积的简化 U-Net。实线表示下采样或解码计算，虚线把编码特征送到同尺度解码层。尺寸为教学设置，未逐层复现原论文配置。}}{205}{figure.caption.179}\protected@file@percent }
-\newlabel{fig:vision-unet}{{15.4}{205}{采用尺寸保持卷积的简化 U-Net。实线表示下采样或解码计算，虚线把编码特征送到同尺度解码层。尺寸为教学设置，未逐层复现原论文配置。}{figure.caption.179}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.5.2}从概率图到掩码与训练损失}{205}{subsection.15.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{像素似然、Dice与稀疏前景。}{206}{paragraph*.180}\protected@file@percent }
-\newlabel{eq:vision-soft-dice}{{15.22}{206}{像素似然、Dice与稀疏前景。}{equation.15.22}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.4.5}FPN：让不同大小的缺陷使用不同尺度的特征}{202}{subsection.15.4.5}\protected@file@percent }
+\newlabel{eq:vision-fpn}{{15.18}{202}{FPN：让不同大小的缺陷使用不同尺度的特征}{equation.15.18}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {15.5}图像分割：以 U-Net 解释像素级预测}{202}{section.15.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.5.1}为什么解码器需要编码器的细节}{202}{subsection.15.5.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {15.4}{\ignorespaces 采用尺寸保持卷积的简化 U-Net。实线表示下采样或解码计算，虚线把编码特征送到同尺度解码层。尺寸为教学设置，未逐层复现原论文配置。}}{203}{figure.caption.174}\protected@file@percent }
+\newlabel{fig:vision-unet}{{15.4}{203}{采用尺寸保持卷积的简化 U-Net。实线表示下采样或解码计算，虚线把编码特征送到同尺度解码层。尺寸为教学设置，未逐层复现原论文配置。}{figure.caption.174}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.5.2}从概率图到掩码与训练损失}{203}{subsection.15.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{像素似然、Dice与稀疏前景。}{204}{paragraph*.175}\protected@file@percent }
+\newlabel{eq:vision-soft-dice}{{15.22}{204}{像素似然、Dice与稀疏前景。}{equation.15.22}{}}
 \citation{he2017mask}
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.5.3}U-Net 的改进与 Mask R-CNN 的实例输出}{207}{subsection.15.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {15.6}回到质检任务：模型能解决什么，怎样验证}{207}{section.15.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.6.1}细小缺陷与有限标注}{207}{subsection.15.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {15.6.2}用独立数据检查类别、位置和边界}{208}{subsection.15.6.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{自测与参考答案。}{210}{paragraph*.182}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{本章小结。}{210}{paragraph*.183}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.5.3}U-Net 的改进与 Mask R-CNN 的实例输出}{205}{subsection.15.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {15.6}回到质检任务：模型能解决什么，怎样验证}{205}{section.15.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.6.1}细小缺陷与有限标注}{205}{subsection.15.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {15.6.2}用独立数据检查类别、位置和边界}{206}{subsection.15.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{本章小结。}{208}{paragraph*.177}\protected@file@percent }
 \@setckpt{chapters/10-vision}{
-\setcounter{page}{212}
+\setcounter{page}{209}
 \setcounter{equation}{23}
 \setcounter{enumi}{5}
 \setcounter{enumii}{0}
@@ -74,10 +73,10 @@
 \setcounter{table}{0}
 \setcounter{parentequation}{0}
 \setcounter{section@level}{0}
-\setcounter{Item}{22}
+\setcounter{Item}{8}
 \setcounter{Hfootnote}{0}
 \setcounter{Hy@AnnotLevel}{0}
-\setcounter{bookmark@seq@number}{121}
+\setcounter{bookmark@seq@number}{117}
 \setcounter{caption@flags}{2}
 \setcounter{continuedfloat}{0}
 \setcounter{float@type}{16}

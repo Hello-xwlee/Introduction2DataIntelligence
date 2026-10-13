@@ -1,274 +1,210 @@
-﻿\chapter{深度生成模型}
+\chapter{深度生成模型}
 \begin{quote}\small
-\textit{本章摘要。}本章从“学习数据分布而非只学习标签”出发，依次解释变分自编码器、对抗生成、可逆密度建模、扩散模型及其条件控制，再比较生成质量、覆盖性、可控性和计算代价。ELBO、噪声反演和物理约束把抽象生成目标连接到工业仿真、数据增强和异常样本分析。
-\end{quote}
-在贯穿案例中，生成模型不能通过制造合成故障来改变真实测试集或故障定义。它只回答数据稀缺时能否补充候选样本、恢复缺失观测或模拟退化轨迹；最终价值仍由未见设备上的真实故障召回、误报、校准和物理约束违反率决定。
+\textit{本章摘要。}本章围绕一个问题展开：如何让模型生成符合数据规律、又能用于具体任务的新样本？先区分采样、补全、去噪和条件生成，再以变分自编码器（VAE）、生成对抗网络（GAN）和扩散模型为里程碑，说明它们的生成机制、训练目标和典型失效方式。最后讨论任务选择、样本验证和工业使用边界。
+\end{quote}
 
-本章先说明要学习怎样的联合分布或条件分布，再推导相应的训练目标。接下来检查生成样本是否遗漏某些故障类型、是否符合指定工况，以及采样误差有多大。合成样本可以用于训练，但收益要在保持独立的真实设备测试集上检验。生成的裂纹看起来逼真，也不代表现场出现过这种裂纹；真实故障很少时，模型尤其容易把已有猜测反复复制出来。因此每种方法都要说明哪些性质能够从目标函数得到，哪些仍需观测和验证。
+生成模型不能替真实观测，也不能凭空证明罕见故障确实存在。它可以在数据稀缺时产生候选样本，补全缺失观测，或在给定工况下模拟可能的退化轨迹。合成数据是否有用，要在未参与训练和模型选择的真实数据上检验。
 
-阅读本章需要用到条件概率、期望和反向传播；遇到潜变量积分时，先把它理解为对所有可能的隐藏原因求和（连续情形为积分）。各模型共同要回答的是：没有现成输入样本时，从哪里开始随机抽样，又怎样把随机数变成具有数据结构的输出？
+\section{生成任务与概率建模目标}
 
-\section{生成建模的目标}
+\subsection{先确定要生成什么}
 
-% auxiliary-resource-guide
-本章末的“辅助学习材料”列出与核心方法对应的讲解和实践入口，可在阅读相关推导后，按所列小节对照学习。
+假设$x\in\R^D$是一个振动窗口，$c$是转速、负载或故障类别等条件。深度生成模型常完成四类任务：
+\begin{enumerate}
+  \item \textbf{无条件采样：}从学习到的分布中产生新的$x$，例如模拟正常振动窗口。
+  \item \textbf{条件生成：}给定$c$产生$x$，例如在指定转速下生成可能的波形。条件通常允许多个结果，不要求给定条件后输出唯一样本。
+  \item \textbf{补全与去噪：}给定部分观测、带噪观测或掩码，生成与已知信息一致的完整结果。
+  \item \textbf{表示学习：}把高维样本压缩为较低维的潜变量，供可视化、聚类或下游预测使用。
+\end{enumerate}
 
-生成模型学习数据分布$p_{\mathrm{data}}(x)$或其条件分布$p(x\mid c)$，目标是支持采样、补全或去噪；是否能直接计算似然，还取决于模型结构。判别模型关注$p(y\mid x)$或决策边界，生成模型还试图描述输入本身的结构。
+这些任务的共同对象是分布。若模型学习$p_{\theta}(x)$，就可以从该分布采样；若学习$p_{\theta}(x\mid c)$，就可以在条件$c$下采样。训练集是有限观测，不等于真实分布$p_{\mathrm{data}}$。连续变量的$p_{\theta}(x)$是密度，某个区域的概率需要对密度积分。把所有样本都替换成均值，只能描述平均位置，不能再现波动、相关性和少数模式。
 
-\paragraph{分布不是一张平均样本。}
-把一个含$D$个采样值的振动窗口写成$x\in\R^D$，随机变量$X$表示尚未取得的窗口，$x$表示它的一次具体取值。分布描述各种窗口出现的相对可能性；模型参数$\theta$则决定学习到的分布$p_\theta$。训练集只是有限观测，并不是已知的真实分布。$\E_{x\sim p_{\mathrm{data}}}$在训练中通常用一个批次的样本平均近似。对连续数据，$p_\theta(x)$是密度而非单点概率，某一区域的概率要对密度积分；似然是把已观测$x$固定后，考察不同参数对它赋予的密度。
+生成目标与判别目标不同。判别模型通常学习$p(y\mid x)$或直接学习决策边界，生成模型还要描述$x$本身的变化。生成模型的训练损失也不自动等于任务评价指标。重构误差较小，不代表裂纹位置正确；样本看起来逼真，也不代表它覆盖了真实故障类型。
 
-例如只记录离散的冲击次数$X\in\{0,1,2\}$，三个值的概率为$(0.5,0.3,0.2)$。均值为$0\times0.5+1\times0.3+2\times0.2=0.7$，但每次都输出$0.7$既不合法，也没有再现分布。采样应让多次输出的频率逐渐接近这三个概率。条件$c$可以是转速或故障类别，$p(x\mid c)$描述固定条件下仍存在的变化；不是给定$c$就必须产生唯一的$x$。GAN 通常只提供采样机制而不直接提供密度，VAE 给出似然下界，Flow 才能在其结构假设下直接计算密度。
+\subsection{潜变量把随机性变成可采样结构}
 
-\paragraph{先把潜变量的生成方向写清楚。}
-潜变量又称隐变量，是未直接观测、由模型引入的内部变量。令$z\in\R^d$，通常$d<D$；它可以组织波形的变化因素，但某一坐标不一定天然等于转速或损伤程度。生成时先从先验$p(z)$抽取$z$，再从$p_\theta(x\mid z)$抽取$x$。例如$z\sim\mathcal N(0,1)$、$x\mid z\sim\mathcal N((z,2z)^\top,\sigma_x^2I_2)$会使两个观测分量相关；潜变量是它们共享的随机来源。看见$x$后反推哪些$z$更可能产生它，才是后验推断。普通自编码器只学重构映射，没有自动规定从哪里抽取新编码；VAE 用先验和概率解码器补齐了这个生成机制。
+潜变量$z$是模型引入、但数据中没有直接观测的变量。一个常见生成方向是
+\[
+z\sim p(z),\qquad x\sim p_{\theta}(x\mid z).
+\]
+先抽取简单先验中的$z$，再由解码器把它变成样本$x$。例如，若$z\sim\mathcal N(0,1)$且$x\mid z\sim\mathcal N((z,2z)^{\mathsf T},\sigma_x^2I)$，两个观测分量会因共享$z$而相关。观察到$x$后反推$z$，对应后验$p_{\theta}(z\mid x)$。
 
-\paragraph{变分自编码器。}
-Variational Autoencoder (VAE)引入潜变量$z$，生成模型为$p_\theta(x,z)=p(z)p_\theta(x\mid z)$\cite{kingma2014vae}。后验$p_\theta(z\mid x)$通常难以计算，以$q_\phi(z\mid x)$近似。由 KL 分解可得
+普通自编码器只要求编码器和解码器互相重构。它没有规定新样本应该从编码空间的哪里抽取。变分自编码器把潜变量先验、概率解码器和近似后验放在同一个目标中，从而得到可采样的表示。
+
+\section{VAE：用潜变量获得稳定采样}
+
+\subsection{为什么需要变分近似}
+
+变分自编码器（Variational Autoencoder，VAE）用潜变量模型表示联合分布：
 \begin{equation}
- \log p_\theta(x)=\mathcal{L}(x)+\KL(q_\phi(z\mid x)\|p_\theta(z\mid x)),
+p_{\theta}(x,z)=p(z)p_{\theta}(x\mid z).
 \end{equation}
-其中证据下界（ELBO）为
+给定$x$后，真实后验满足
+\[
+p_{\theta}(z\mid x)=\frac{p_{\theta}(x\mid z)p(z)}{p_{\theta}(x)},\qquad
+p_{\theta}(x)=\int p_{\theta}(x\mid z)p(z)\,\mathrm dz.
+\]
+分母通常无法解析计算。VAE 用编码器给出的$q_{\phi}(z\mid x)$近似该后验，并最大化证据下界（Evidence Lower Bound，ELBO）：
 \begin{equation}
- \mathcal{L}(x)=\E_{q_\phi(z\mid x)}[\log p_\theta(x\mid z)]-\KL(q_\phi(z\mid x)\|p(z)).\label{eq:generative-vae-elbo}
+\mathcal L(x)=\E_{q_{\phi}(z\mid x)}[\log p_{\theta}(x\mid z)]-\KL(q_{\phi}(z\mid x)\|p(z)).
+\label{eq:generative-vae-elbo}
 \end{equation}
-式\eqref{eq:generative-vae-elbo}右端的第一项重构输入，第二项使潜变量分布接近先验。若$q_\phi(z\mid x)=\mathcal{N}(\mu_\phi(x),\diag(\sigma_\phi^2(x)))$，可用重参数化$z=\mu_\phi(x)+\sigma_\phi(x)\odot\epsilon$、$\epsilon\sim\mathcal{N}(0,I)$进行反向传播。
+第一项要求抽到的$z$能够重构$x$。第二项要求不同样本使用的潜变量仍接近先验，以便生成时直接从$p(z)$抽样。
 
-这里$\theta$是解码器参数，$\phi$是编码器参数。编码器输出$\mu_\phi(x),\sigma_\phi(x)\in\R^d$，$\sigma_j>0$；$I_d$为$d$阶单位矩阵，$\odot$表示对应元素相乘。训练时已知$x$，从$q_\phi(z\mid x)$抽样以计算重构项；生成新样本时没有输入$x$，改从$p(z)$抽样。贝叶斯公式给出$p_\theta(z\mid x)=p_\theta(x\mid z)p(z)/p_\theta(x)$，困难在分母$p_\theta(x)=\int p_\theta(x\mid z)p(z)\,dz$通常无法解析积分，故需要近似后验。
-
-KL 散度的定义为$\KL(q\|p)=\E_q[\log q-\log p]\geq0$，衡量两分布不一致，但一般不对称，不是欧氏距离。ELBO 中的 KL 比较后验与先验，等式中的缺口则比较近似后验与真实后验，不要混为一项。最大化下界在代码中通常实现为最小化它的相反数，即负重构对数似然加 KL。
-
-这个下界可以从 Jensen 不等式直接得到：
+由 Jensen 不等式，
 \begin{align}
- \log p_\theta(x)
- &=\log\int q_\phi(z\mid x)\frac{p_\theta(x,z)}{q_\phi(z\mid x)}\,dz\\
- &\geq\mathbb E_{q_\phi}[\log p_\theta(x,z)-\log q_\phi(z\mid x)].
+\log p_{\theta}(x)
+&=\log\int q_{\phi}(z\mid x)\frac{p_{\theta}(x,z)}{q_{\phi}(z\mid x)}\,\mathrm dz\\
+&\geq \E_{q_{\phi}}[\log p_{\theta}(x,z)-\log q_{\phi}(z\mid x)]
+=\mathcal L(x).
 \end{align}
-将联合分布拆为$p_\theta(x\mid z)p(z)$，就得到重构项减去先验正则项。更完整地说，ELBO的缺口正是后验近似误差：
-\begin{align}
-\log p_\theta(x)-\mathcal L(x)
-&=\KL\bigl(q_\phi(z\mid x)\|p_\theta(z\mid x)\bigr)\geq0.
-\end{align}
-这个等式要分清哪些参数固定：固定$\theta$时，$\log p_\theta(x)$不变，提高 ELBO 就等价于缩小近似后验与真实后验之间的 KL 缺口；联合更新$\theta,\phi$时，似然和缺口都在变化，下界上升不保证似然逐步上升、缺口逐步缩小。它也不保证重构误差与工业风险完全一致。若$x\in\mathbb R^D$采用独立高斯解码器$p_\theta(x\mid z)=\mathcal N(\mu_\theta(z),\sigma_x^2I)$，则
-\[
--\log p_\theta(x\mid z)=\frac{1}{2\sigma_x^2}\|x-\mu_\theta(z)\|_2^2+\frac D2\log(2\pi\sigma_x^2),
-\]
-所以常见均方重构项隐含了同方差、条件独立噪声假设。若裂纹像素、高频冲击或少数故障模式更重要，应显式改变观测模型或评价权重，而不能仅增加潜变量维度。
-
-编码器提供近似后验，解码器给出生成机制，两者通过同一个下界联合训练。对高斯后验和标准正态先验，KL 项可解析计算：
+更精确的关系是
 \begin{equation}
- \KL(q\|p)=\frac12\sum_{j=1}^{d}(\mu_j^2+\sigma_j^2-\log\sigma_j^2-1).
+\log p_{\theta}(x)-\mathcal L(x)=\KL\bigl(q_{\phi}(z\mid x)\|p_{\theta}(z\mid x)\bigr)\geq0.
 \end{equation}
-可手算一个一维例子：$\mu=1,\sigma=1$时，KL 为$(1+1-0-1)/2=0.5$；若$\mu=0,\sigma=1$则为零，但这不代表重构一定准确。重参数化把随机性放入与参数无关的$\epsilon$，固定一次抽到的$\epsilon$后，$\partial z/\partial\mu=1$、$\partial z/\partial\sigma=\epsilon$，重构梯度便可沿$z$传回编码器。它并非取消随机性，而是让随机抽样后的计算路径可求导。
+这里的两个 KL 项用途不同。式\eqref{eq:generative-vae-elbo}中的 KL 比较近似后验与先验，最后一个等式中的 KL 衡量后验近似误差。KL 散度非负但通常不对称，也不是欧氏距离。
 
-若解码器能绕过潜变量解释数据，或 KL 约束过强，近似后验可能接近先验而不再携带输入信息，这称为后验坍缩。KL annealing 指逐渐增大 KL 权重，free bits 则在一定阈值内不继续惩罚小 KL；它们改变训练折中，不保证潜变量具有可解释含义。仍需检查潜变量是否保留故障模式，不能只观察总损失。
+\subsection{如何训练和采样}
 
-\section{对抗学习与可逆密度建模}
-Generative Adversarial Network (GAN) 的原始对抗目标与可逆密度模型的变量替换目标具有不同的训练信号\cite{goodfellow2014gan,dinh2017realnvp}。本节比较二者如何定义生成分布，而不把样本锐利程度等同于似然质量。
-VAE 以可计算的下界换取潜变量推断的便利。若主要目标是采样，可以改用判别器提供训练信号；若需要显式密度，则可以限制变换结构以换取精确的变量替换计算。这两种选择分别引出 GAN 和 Normalizing Flow。
-
-GAN 中$G:\R^d\to\R^D$把噪声向量变成样本，$D:\R^D\to(0,1)$输出样本来自真实训练数据的判别概率。这里$D$作为函数名表示判别器，作为维度时表示数据长度。训练一个批次时，先固定$G$，让$D$区分真实$x$和合成$G(z)$；再固定$D$的参数，让$G$产生更难被识别的样本。更新$G$仍需通过$D$对输入的导数传递梯度，“固定判别器”不是切断这条路径。采样时仅需$G$，不需要判别器。
-
-GAN 通过生成器$G$和判别器$D$进行极小极大优化：
+常用的近似后验为
+\[
+q_{\phi}(z\mid x)=\mathcal N\bigl(\mu_{\phi}(x),\diag(\sigma_{\phi}^2(x))\bigr).
+\]
+直接抽样会阻断对编码器参数的普通反向传播。重参数化把随机性移到与参数无关的$\epsilon$：
 \begin{equation}
- \min_G\max_D\;\mathbb{E}_{x\sim p_{data}}\log D(x)+\mathbb{E}_{z\sim p(z)}\log(1-D(G(z))).
+z=\mu_{\phi}(x)+\sigma_{\phi}(x)\odot\epsilon,
+\qquad \epsilon\sim\mathcal N(0,I_d).
 \end{equation}
-在理想最优判别器下，目标与真实分布和生成分布之间的 Jensen--\allowbreak Shannon 散度相关，其英文名称为 Jensen--\allowbreak Shannon Divergence，简称 JSD。
+因此固定一次$\epsilon$时，梯度可以通过$z$传回编码器。训练阶段给定$x$，从$q_{\phi}(z\mid x)$抽样并计算重构项。生成阶段没有$x$，改为从$p(z)$抽样，再交给解码器$p_{\theta}(x\mid z)$。
 
-固定生成分布$p_g$，并假设判别器可以逐点优化。对每个$x$，记
+若解码器采用$p_{\theta}(x\mid z)=\mathcal N(\mu_{\theta}(z),\sigma_x^2I)$，则
 \[
- a=p_{\mathrm{data}}(x),\qquad b=p_g(x).
+-\log p_{\theta}(x\mid z)=\frac{1}{2\sigma_x^2}\|x-\mu_{\theta}(z)\|_2^2+\frac D2\log(2\pi\sigma_x^2).
 \]
-需最大化的目标及其关于判别输出$D$的一阶导数分别为
+所以均方重构项隐含了条件独立、同方差高斯噪声假设。它不一定适合少数但重要的冲击或裂纹像素。
+
+当$q_{\phi}$是对角高斯、$p(z)=\mathcal N(0,I)$时，KL 项为
 \[
- v(D)=a\log D+b\log(1-D),\qquad
- v'(D)=\frac aD-\frac b{1-D}.
+\KL(q\|p)=\frac12\sum_{j=1}^{d}(\mu_j^2+\sigma_j^2-\log\sigma_j^2-1).
 \]
-当$a,b>0$时令导数为零，得到
+例如一维情况下$\mu=1,\sigma=1$时，KL 为$0.5$。$\mu=0,\sigma=1$时 KL 为零，但这只说明两个分布相同，不说明重构准确。
+
+\subsection{VAE 的变体与典型问题}
+
+VAE 的主要折中是重构准确性与潜变量规整性。KL 权重过强时，编码器可能令$q_{\phi}(z\mid x)$接近先验，潜变量几乎不再携带输入信息，这称为后验坍缩。KL annealing 逐渐增加 KL 权重，free bits 在小 KL 区间内减弱惩罚。它们改变优化折中，却不保证潜变量对应可解释的物理因素。
+
+条件 VAE 将条件加入编码器和解码器，学习$p_{\theta}(x\mid z,c)$。它适合需要连续潜在表示和条件采样的任务。VAE 往往生成较平滑的结果，因为重构目标会偏向条件平均。若细节和少数模式重要，应检查模式覆盖，而不能只增加潜变量维度。
+
+\section{GAN：追求逼真样本的对抗训练}
+
+\subsection{判别器如何提供训练信号}
+
+生成对抗网络（Generative Adversarial Network，GAN）把采样器和判别器分开。生成器$G:\R^d\to\R^D$把噪声$z$变成$G(z)$，判别器$D:\R^D\to(0,1)$估计输入来自真实数据的概率。训练时交替更新：判别器区分真实样本与合成样本，生成器则使合成样本更难被判别。采样时只需要生成器。
+
+原始 GAN 目标为
+\begin{equation}
+\min_G\max_D\;\E_{x\sim p_{\mathrm{data}}}\log D(x)+\E_{z\sim p(z)}\log(1-D(G(z))).
+\label{eq:generative-gan}
+\end{equation}
+固定生成分布$p_g$时，逐点最优判别器为
 \[
 D^*(x)=\frac{p_{\mathrm{data}}(x)}{p_{\mathrm{data}}(x)+p_g(x)}.
 \]
-若$a+b>0$但其中一个为零，该式给出边界最优值$0$或$1$；对输出严格在$(0,1)$的判别器，只能以极限逼近。若$a=b=0$，该点不贡献目标，判别输出可任取。
-为看清这里的散度，令混合分布$M=(P+Q)/2$，定义
+代回式\eqref{eq:generative-gan}，理想情况下目标与
 \[
- \operatorname{JSD}(P\|Q)=\tfrac12\KL(P\|M)+\tfrac12\KL(Q\|M).
+\operatorname{JSD}(p_{\mathrm{data}}\|p_g)
 \]
-它比较两分布各自偏离共同中点的程度；采用自然对数时取值在$0$与$\log2$之间，相同分布时为零。代回目标并利用 Jensen--Shannon 散度可得
+相关，分布相同时达到最优。这个结论依赖判别器足够强、训练达到平衡以及分布可比较。有限数据和不充分优化会破坏这些条件。
+
+\subsection{逼真与覆盖为何会冲突}
+
+GAN 不需要显式计算$p_g(x)$，因此可以把容量用于生成清晰样本。它的困难来自两个网络的交替博弈。判别器过强时，生成器获得的梯度可能饱和。不同噪声被映射到相似样本时，称为模式坍塌。生成结果可能很逼真，却遗漏罕见故障或某些工况。条件 GAN 可以把类别、工况或部分观测输入生成器和判别器，但条件一致性仍需单独验证。
+
+GAN 适合采样速度要求高、且有足够样本支持目标分布的任务。它不提供像 VAE 那样直接的后验编码，也不直接给出可比较的显式似然。训练稳定性、模式覆盖和条件满足率应与样本质量一起报告。
+
+\section{扩散模型：逐步去噪成为当前主线}
+
+\subsection{从一次生成改为多步恢复}
+
+扩散模型把困难的生成映射分成许多局部去噪任务。前向过程逐步破坏真实样本，反向网络学习在每个噪声尺度恢复结构。设$x_0\sim p_{\mathrm{data}}$，$t=1,\ldots,T$，并令$0<\beta_t<1$：
+\begin{equation}
+q(x_t\mid x_{t-1})=\mathcal N(\sqrt{1-\beta_t}x_{t-1},\beta_tI).
+\end{equation}
+记$\alpha_t=1-\beta_t$、$\bar\alpha_t=\prod_{s=1}^t\alpha_s$，可直接得到
+\begin{equation}
+x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon,
+\qquad \epsilon\sim\mathcal N(0,I).
+\label{eq:generative-direct-noising}
+\end{equation}
+这里$t$是人为设定的噪声步，不是设备运行时间。训练时随机选$t$和$\epsilon$，所以不必真的执行完整的前向链。
+
+例如$x_0=2$、$\bar\alpha_t=0.64$且$\epsilon=1$时，$x_t=0.8\times2+0.6\times1=2.2$。网络看到$x_t$和$t$，不知道$x_0$。它要学习的是在给定噪声状态下最有用的恢复方向。
+
+\subsection{噪声预测与反向采样}
+
+噪声预测网络记为$\epsilon_{\theta}(x_t,t)$，常用训练目标为
+\begin{equation}
+\mathcal L_{\mathrm{simple}}=\E_{t,x_0,\epsilon}\left[\|\epsilon-\epsilon_{\theta}(x_t,t)\|_2^2\right].
+\end{equation}
+平方损失的最优函数是条件均值：
 \[
-V(D^*,G)=-\log4+2\operatorname{JSD}(p_{\mathrm{data}}\|p_g),
+\epsilon_{\theta}^*(x_t,t)=\E[\epsilon\mid x_t,t].
 \]
-因此理想博弈的全局最优要求$p_g=p_{\mathrm{data}}$。这一步依赖判别器足够强、分布可比较和优化达到平衡；有限样本和有限判别器会使经验目标偏离理想散度；支撑集几乎不相交时，JSD 本身仍有定义，却可能接近饱和值而难以给出有用的生成器梯度。实际交替训练中，判别器过强可能使原始生成器目标的梯度饱和，模式崩溃则使不同噪声产生相似样本。对工业故障而言，少数典型样本逼真却遗漏罕见模式，仍不足以支持数据增强。
-
-流模型使用可微可逆变换$z=f_\theta(x)$把数据映射到简单先验。这里$x,z\in\R^d$，$J_{f_\theta}(x)$的第$(i,j)$项为$\partial f_{\theta,i}(x)/\partial x_j$，且其行列式非零：
-\begin{equation}
- \log p_X(x)=\log p_Z(f_\theta(x))+\log\bigl|\det J_{f_\theta}(x)\bigr|.
-\end{equation}
-推导来自微分体积变换：若$z=f_\theta(x)$，则$d z=|\det J_f(x)|d x$，而概率守恒给出$p_X(x)dx=p_Z(z)dz$，故$p_X(x)=p_Z(f(x))|\det J_f(x)|$。例如逐维仿射耦合层保持一部分坐标不变，并令另一部分$y_b=x_b\odot\exp s(x_a)+t(x_a)$，其雅可比为三角矩阵，因而$\log|\det J|=\sum_k s_k(x_a)$，同时逆变换可显式计算。可逆性和可计算的 Jacobian 行列式限制了网络设计，也使密度计算无需 VAE 的变分下界。采样时使用逆变换。精确似然只表示对模型分布的精确计算，并不保证该分布符合真实故障机制，更不保证高似然等同于低风险。
-
-用一维变换可检查行列式因子的方向。设$z=x/2$且$z\sim\mathcal N(0,1)$，则$p_X(x)=p_Z(x/2)/2$，因此$x\sim\mathcal N(0,4)$。区间$x\in[0,2]$对应$z\in[0,1]$，两者概率相同，但前者区间宽一倍，所以密度需减半；漏掉$1/2$会使总概率变成$2$。采样方向则相反：先抽$z$，再令$x=2z$。这也说明可逆 Flow 通常保持维数，不能把有信息损失的普通压缩编码器直接当作 Flow。
-
-表\ref{tab:generative-model-routes}比较的关键是目标与代价是否匹配。需要连续表示时检查 VAE 的压缩损失，需要快速采样时检查 GAN 的模式覆盖，需要密度时检查 Flow 的结构限制。扩散模型则把复杂生成映射分解为多步去噪，后文再推导其训练过程。
-
-\begin{table}[htbp]
-\centering
-\caption{生成模型路线与工业应用边界}
-\label{tab:generative-model-routes}
-\scriptsize
-\setlength{\tabcolsep}{3pt}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{p{2.5cm}p{3.7cm}p{3.7cm}p{4.0cm}}
-\hline
-模型路线 & 学习对象 & 主要优点 & 工业使用时的关键检查 \\
-\hline
-VAE & 潜变量分布与重构似然 & 潜空间连续、采样稳定 & 重构是否抹平细裂纹，潜变量是否保留工况 \\
-GAN & 生成器与判别器的对抗平衡 & 样本锐利、条件生成直接 & 模式崩溃、训练不稳定、类别覆盖 \\
-Flow & 可逆变换与精确似然 & 可计算密度、逆向映射清晰 & 可逆结构限制、显存和表达能力 \\
-Denoising Diffusion Probabilistic Model (DDPM)/Denoising Diffusion Implicit Model (DDIM) & 逐步加噪与反向去噪 & 条件控制强、覆盖较好 & 采样步数、异常细节和条件一致性 \\
-潜空间扩散 & 压缩空间中的扩散过程 & 高分辨率成本较低 & 编码器压缩损失和生成细节可信度 \\
-\hline
-\end{tabular}}
-\end{table}
-
-\section{扩散过程与条件控制}
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[node distance=0.55cm and 0.45cm]
- \node[idi output, minimum width=1.35cm] (x0) {$x_0$};
- \node[idi process, right=of x0, minimum width=1.35cm] (x1) {$x_1$};
- \node[idi process, right=of x1, minimum width=1.35cm] (x2) {$x_2$};
- \node[idi process, right=of x2, minimum width=1.35cm] (dots) {$\cdots$};
- \node[idi input, right=of dots, minimum width=1.35cm] (xt) {$x_T$};
- \draw[idi arrow] (x0)--node[above,font=\scriptsize]{$+\epsilon$}(x1);
- \draw[idi arrow] (x1)--node[above,font=\scriptsize]{$+\epsilon$}(x2);
- \draw[idi arrow] (x2)--(dots); \draw[idi arrow] (dots)--(xt);
- \draw[idi feedback] (xt.south) .. controls +(0,-0.45) and +(0,-0.45) .. node[below,font=\scriptsize]{学习反向去噪 $\epsilon_\theta$} (x0.south);
-\end{tikzpicture}
-\caption{扩散模型的时间轴：前向过程逐步破坏结构，反向网络学习在每个噪声尺度恢复结构。}
-\label{fig:generative-diffusion-time}
-\end{figure}
-图\ref{fig:generative-diffusion-time}的实线沿时间增加噪声，反馈箭头则概括学习到的反向恢复路径；训练需覆盖多个噪声尺度，而不是只拟合从末端噪声到样本的一次映射。
-扩散模型通过逐步加噪和反向去噪构造生成过程\cite{ho2020ddpm}。前向过程逐步加入高斯噪声：
-\begin{equation}
- q(x_t\mid x_{t-1})=\mathcal{N}(\sqrt{1-\beta_t}x_{t-1},\beta_tI).
-\end{equation}
-这里$t=1,\ldots,T$为扩散步，$0<\beta_t<1$为噪声日程，$x_0\sim p_{\mathrm{data}}$。记$\alpha_t=1-\beta_t$、$\bar\alpha_t=\prod_{s=1}^{t}\alpha_s$，则可直接采样
-\begin{equation}
- x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon,
- \qquad \epsilon\sim\mathcal{N}(0,I).\label{eq:generative-direct-noising}
-\end{equation}
-所有$x_t$与$\epsilon$都在$\R^D$中；下标$t$是人工设置的加噪步，不是设备运行时间。两步递推可以检查直接采样公式的来源：$x_2=\sqrt{\alpha_2\alpha_1}x_0+\sqrt{\alpha_2\beta_1}\epsilon_1+\sqrt{\beta_2}\epsilon_2$。两个独立标准高斯噪声的加权和仍为高斯，其方差为$\alpha_2\beta_1+\beta_2=1-\alpha_1\alpha_2$；继续递推就得到$1-\bar\alpha_t$。因此训练时不必真的依次执行前面所有加噪步骤。
-
-例如一维$x_0=2$、$\bar\alpha_t=0.64$，本次抽得$\epsilon=1$，则$x_t=0.8\times2+0.6\times1=2.2$。训练程序知道自己加入的噪声，所以不需要人工给噪声打标签；网络却只看$x_t,t$，不能偷看$x_0$。同一个$x_t$可能由多种$x_0,\epsilon$组合产生，故网络通常无法逐样本精确找回本次噪声，而是在平方损失下估计条件平均。
-
-反向网络$\epsilon_\theta(x_t,t)$预测噪声，常用简化目标
-\begin{equation}
- \mathcal{L}_{\mathrm{simple}}=\E_{t,x_0,\epsilon}\left[\|\epsilon-\epsilon_\theta(x_t,t)\|_2^2\right].
-\end{equation}
-此处独立采样$t\sim\operatorname{Uniform}\{1,\ldots,T\}$、$x_0\sim p_{\mathrm{data}}$和$\epsilon\sim\mathcal N(0,I)$，再由式\eqref{eq:generative-direct-noising}构造$x_t$。由条件期望的最小均方性质，若网络容量和优化均理想，则
+由式\eqref{eq:generative-direct-noising}，可以得到干净样本估计
 \[
-\epsilon_\theta^*(x_t,t)=\mathbb E[\epsilon\mid x_t,t].
+\widehat x_0=\frac{x_t-\sqrt{1-\bar\alpha_t}\epsilon_{\theta}(x_t,t)}{\sqrt{\bar\alpha_t}}.
 \]
-又因$x_t=\sqrt{\bar\alpha_t}x_0+\sqrt{1-\bar\alpha_t}\epsilon$，可由噪声预测得到干净样本估计
-\[
-\widehat x_0=\frac{x_t-\sqrt{1-\bar\alpha_t}\,\epsilon_\theta(x_t,t)}{\sqrt{\bar\alpha_t}}.
-\]
-当$\bar\alpha_t$很小时，这个反演会放大预测误差，说明末端高噪声阶段对模型校准和采样数值稳定性尤其敏感。
+当$\bar\alpha_t$很小时，噪声预测误差会被放大。这说明高噪声阶段影响采样稳定性。
 
-采样时从高斯噪声开始，按反向时间步逐渐去噪。直观上，模型学习的不是一次性画出样本，而是学习一系列局部的“如何去掉一点噪声”。这里还缺一个从预测到采样的步骤：一种常用 DDPM 参数化为
-\[
- \mu_\theta(x_t,t)=\frac1{\sqrt{\alpha_t}}
- \left(x_t-\frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\epsilon_\theta(x_t,t)\right),\qquad
- x_{t-1}=\mu_\theta(x_t,t)+\sqrt{\tilde\beta_t}\,\zeta_t,
-\]
-其中$t\geq2$，$\zeta_t\sim\mathcal N(0,I_D)$是本次反向步骤新抽取的噪声，不是训练时那一个$\epsilon$；$\tilde\beta_t$在下文推导。先抽$x_T\sim\mathcal N(0,I_D)$，再依次计算$t=T,\ldots,2$，最后通常以$t=1$的均值作为连续数据输出而不再加噪。起点近似成立需要日程使$\bar\alpha_T$足够小且数据尺度适当。只把一次$\widehat x_0$当成最终样本，不等于执行这条反向链；多步中的随机项用于表达仍未确定的可能性。
-
-\paragraph{扩散模型的后验。}
-由于前向过程是高斯马尔可夫链，给定$x_0,x_t$的后验仍为高斯：
-\begin{equation}
- q(x_{t-1}\mid x_t,x_0)=\mathcal{N}(\tilde\mu_t(x_t,x_0),\tilde\beta_tI).
-\end{equation}
-对$t=2,\ldots,T$，其参数为
+采样从$x_T\sim\mathcal N(0,I)$开始，再按$t=T,T-1,\ldots,1$反向计算。以去噪扩散概率模型（Denoising Diffusion Probabilistic Model，DDPM）的一种参数化为例，
 \begin{align}
- \tilde\mu_t(x_t,x_0)&=\frac{\sqrt{\bar\alpha_{t-1}}\beta_t}{1-\bar\alpha_t}x_0
- +\frac{\sqrt{\alpha_t}(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}x_t,\label{eq:generative-posterior-mean}\\
- \tilde\beta_t&=\frac{1-\bar\alpha_{t-1}}{1-\bar\alpha_t}\beta_t.
+\mu_{\theta}(x_t,t)&=\frac1{\sqrt{\alpha_t}}
+\left(x_t-\frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\epsilon_{\theta}(x_t,t)\right),\\
+x_{t-1}&=\mu_{\theta}(x_t,t)+\sqrt{\widetilde\beta_t}\,\zeta_t,
 \end{align}
-其推导只需把两个高斯因子相乘。由
-$q(x_t\mid x_{t-1})\propto\exp[-\|x_t-\sqrt{\alpha_t}x_{t-1}\|^2/(2\beta_t)]$
-以及
-$q(x_{t-1}\mid x_0)=\mathcal N(\sqrt{\bar\alpha_{t-1}}x_0,(1-\bar\alpha_{t-1})I)$，收集关于$x_{t-1}$的二次项，精度为
-$\alpha_t/\beta_t+(1-\bar\alpha_{t-1})^{-1}=(1-\bar\alpha_t)/[\beta_t(1-\bar\alpha_{t-1})]$，所以方差是其倒数$\tilde\beta_t$；再收集一次项并乘以该方差，就得到式\eqref{eq:generative-posterior-mean}的均值。这说明后验同时利用当前噪声状态$x_t$和原始状态$x_0$。采样时$x_0$未知，网络必须先由$x_t$估计它或等价地估计噪声，不能把该后验公式误当作可直接使用的生成器。
-约定$\bar\alpha_0=1$，则$t=1$时方差为零，条件后验退化到已知$x_0$，不作为非退化高斯参与上述 KL 计算。
-对$t\geq2$，扩散模型的变分目标包含上述后验与反向模型$p_\theta(x_{t-1}\mid x_t)$之间的 KL 项。固定反向方差并采用噪声预测参数化后，这些项可写为带时间步权重的噪声预测误差；常用简化目标改变了这些权重，不能与完整变分目标直接等同。噪声预测、$x_0$预测和速度预测是不同参数化，改变梯度尺度与采样表现，但共享逐步去噪框架。
+其中$\zeta_t\sim\mathcal N(0,I)$是反向步骤重新抽取的噪声。多步随机性使模型能够表达多个可能结果。一次计算$\widehat x_0$不等于执行完整反向采样。
 
-\paragraph{条件扩散与引导。}
-若有条件$c$，网络写为$\epsilon_\theta(x_t,t,c)$。分类器引导使用带噪样本分类器的梯度调整生成方向；无分类器引导通过训练时随机丢弃条件，使网络同时学习条件与无条件预测，再组合为
+完整的变分目标包含前向后验与反向转移之间的 KL 项。常用的噪声均方误差是经过参数化和权重处理后的简化目标，不能与完整变分目标逐项等同。噪声预测、$x_0$预测和速度预测改变梯度尺度与采样表现，但共享逐步去噪框架。
+
+\subsection{条件控制与扩散模型的变体}
+
+给定条件$c$时，网络写成$\epsilon_{\theta}(x_t,t,c)$。无分类器引导让同一网络同时学习有条件和无条件预测，并组合为
 \begin{equation}
- \hat\epsilon=\epsilon_\theta(x_t,t,\varnothing)
- +w[\epsilon_\theta(x_t,t,c)-\epsilon_\theta(x_t,t,\varnothing)].
+\widehat\epsilon=\epsilon_{\theta}(x_t,t,\varnothing)+w\left[\epsilon_{\theta}(x_t,t,c)-\epsilon_{\theta}(x_t,t,\varnothing)\right].
 \end{equation}
-$w=0$对应无条件预测，$w=1$对应原始条件预测，$w>1$进一步加强条件方向。更强引导可能损害多样性或产生伪影，应在固定采样预算下比较条件满足率和缺陷覆盖。ControlNet 等条件分支可接收边缘、深度或几何信息，但条件输入并不自动保证生成结果满足物理约束。
+$w$越大，条件方向通常越强，但多样性可能下降并产生伪影。边缘、深度、掩码或几何信息也可以作为条件输入。条件输入不自动保证物理可行性。
 
-\paragraph{得分匹配（Score Matching）。}
-以下$p_t(x_t)=\int q(x_t\mid x_0)p_{\mathrm{data}}(x_0)\,dx_0$表示前向带噪边缘密度，不是反向模型的转移密度。
-扩散模型也可从各噪声时刻的 score $\nabla_{x_t}\log p_t(x_t)$理解。去噪 score matching 估计带噪分布的对数密度梯度，而不直接计算归一化常数。高斯加噪下，噪声预测对应的 score 估计为$-\epsilon_\theta(x_t,t)/\sqrt{1-\bar\alpha_t}$。这一估计需与噪声日程共同构成反向随机过程，或对应的概率流常微分方程，才能用于分布采样；单纯沿密度梯度上升会趋向局部高密度区域，并不保证恢复目标分布的模式比例。这个观点连接了扩散模型、能量模型和随机微分方程。
+去噪扩散隐式模型（Denoising Diffusion Implicit Model，DDIM）使用不同的反向轨迹减少采样步数。潜空间扩散先把数据压缩到潜空间，再在潜空间进行扩散，降低高分辨率任务的计算量。这些变体改变采样速度或计算位置，没有消除条件一致性和压缩损失的验证要求。
 
-\section{采样、约束与工业可信度}
-DDIM 在与 DDPM 相关的训练目标下改变采样轨迹，潜空间扩散通过压缩表示降低高分辨率生成成本\cite{song2021ddim,rombach2022latent}。无分类器引导与 ControlNet 分别提供条件强度组合和结构条件分支\cite{ho2022cfg,zhang2023controlnet}，两者均不能自动保证物理可行性。
-有了可采样模型，还不能直接把生成样本当成维护数据。只用正常数据训练的模型可以模仿正常模式，却没有凭据知道故障长什么样。若要按故障标签或严重度生成，应有真实故障样本、经过验证的仿真机制，或能够核查的领域约束。不同用途也要分别验收：补足少数类别要检查模式是否被覆盖，模拟退化要检查时间顺序和工况，指定位置的缺陷图像要检查位置与标注是否一致。
+\section{任务选择与验证边界}
 
-\paragraph{DDIM 与采样加速。}
-DDPM 使用随机反向过程，需要较多时间步。DDIM 可以构造非马尔可夫的确定性或弱随机采样轨迹，在保留训练目标的同时减少采样步数。步数减少会降低延迟，却可能损害细节和条件一致性，因此应绘制质量--延迟曲线，而不是只报告单一采样配置。
+VAE、GAN 和扩散模型解决的是不同的计算折中。需要连续潜变量、补全或稳定编码时，VAE 的后验结构较直接。需要快速采样且主要关注视觉或波形逼真度时，可以考虑 GAN，但必须检查模式坍塌。需要复杂条件控制、较好的覆盖性和高质量样本时，扩散模型通常更合适，但采样成本较高。若任务要求显式似然、可逆映射或异常分数，还需要单独评估其他密度建模方法，不能从上述模型的采样质量推断得到。
 
-\paragraph{潜空间扩散。}
-直接在高维像素或原始波形空间扩散成本很高。潜空间扩散先用编码器把输入压缩到$z$，在潜空间去噪，再由解码器重构。压缩比例过大可能删除细微裂纹、冲击脉冲或高频异常，因此工业应用必须比较原空间频谱、边缘和峰值统计，而不能只看重构图像的主观质量。
+工业应用至少要检查四类性质：
+\begin{enumerate}
+  \item \textbf{真实性：}边缘分布、相关性、频谱或缺陷几何是否接近真实数据。
+  \item \textbf{覆盖性：}不同设备、工况和故障类型是否都出现，而不是重复少数模板。
+  \item \textbf{条件与物理一致性：}生成结果是否符合输入条件、守恒关系、边界条件和状态转移约束。
+  \item \textbf{下游价值：}加入合成数据后，独立真实测试集上的召回、误报和校准是否改善。
+\end{enumerate}
 
-\begin{figure}[htbp]
-\centering
-\begin{tikzpicture}[>=Latex, node distance=1.15cm, every node/.style={font=\small}]
- \node[draw, rounded corners, fill=blue!10, minimum width=2.3cm] (x) {$x_0$：真实样本};
- \node[draw, rounded corners, fill=orange!12, right=of x, minimum width=2.5cm] (noise) {\shortstack{前向加噪\\$q(x_t|x_0)$}};
- \node[draw, rounded corners, fill=gray!15, right=of noise, minimum width=2.3cm] (xt) {$x_T$：近似噪声};
- \draw[->, thick] (x)--(noise); \draw[->, thick] (noise)--(xt);
- \draw[->, thick, dashed] (xt.north) .. controls +(0,0.65) and +(0,0.65) .. node[above,font=\scriptsize]{学习反向去噪} (x.north);
- \node[draw, rounded corners, fill=green!12, below=1.1cm of noise, minimum width=3cm] (net) {$\epsilon_\theta(x_t,t,c)$};
- \draw[->] (noise.south)--(net.north);
-\end{tikzpicture}
-\caption{扩散模型把生成拆为前向加噪和学习反向去噪。}
-\label{fig:generative-denoising-network}
-\end{figure}
-图\ref{fig:generative-denoising-network}把预设加噪机制与可训练的噪声预测网络分开；网络读取带噪状态、时间和条件，采样时再由这些预测逐步恢复样本。
-
-\paragraph{物理约束生成。}
-工业生成样本必须满足守恒、边界、单调性、频率范围或设备状态转移约束。可以在损失中加入残差惩罚
+约束可以加入生成损失，例如
 \begin{equation}
- \mathcal{L}=\mathcal{L}_{gen}+\lambda_{phys}\mathbb{E}[\|r(x,c)\|_2^2],
+\mathcal L=\mathcal L_{\mathrm{gen}}+\lambda_{\mathrm{phys}}\E[\|r(x,c)\|_2^2],
 \end{equation}
-也可以在采样后投影到可行域。惩罚过弱会产生不可能样本，过强则可能牺牲数据多样性；因此应分别报告真实性、多样性和约束违反率。
+其中$r$是物理残差。惩罚过弱会产生不可行样本，过强则可能损害分布覆盖。应分别报告真实性、多样性和约束违反率。
 
-以非负总量约束为例，$x=(x_1,x_2)$应满足$x_1,x_2\geq0$及$x_1+x_2=1$。可取$r(x)=x_1+x_2-1$，候选$(0.8,0.5)$的平方残差为$0.09$；等距投影到该直线得到$(0.65,0.35)$，恰好也满足非负约束。一般候选应投影到非负约束与该直线的交集，而不能只校正总量。但投影改变了样本分布，多个候选还可能被压到同一边界，不能把约束满足率上升等同于分布恢复正确。物理残差具体作用于干净样本还是带噪状态也必须写明，带噪中间量通常不必满足干净数据的守恒关系。
+生成数据还可能记住训练集中的罕见记录，或改变真实故障的先验比例。测试集必须保持真实、独立，并且不能参与生成模型训练或选择。评价时应与“只用真实数据”的基线比较，匹配训练预算，并在不同随机种子、设备和故障类型上重复。生成样本的数量增加、训练损失下降或单张图片更清晰，都不能单独证明下游收益。
 
-\paragraph{记忆、隐私与生成数据。}
-生成模型可能记住训练集中的罕见记录，尤其在数据量小、重复度高或模型过拟合时。近邻距离、成员推断和重复片段检测可用于筛查记忆风险。差分隐私训练可以降低单个样本的影响，但通常带来质量--隐私权衡。生成数据用于发布或跨机构共享前，应进行去标识、相似样本审计和下游泄漏测试。
-
-\paragraph{生成模型的实验流程。}
-完整实验应包含训练数据分布、采样配置、随机种子、生成数量、重复检测、专家评价、统计检验和下游任务。对故障生成尤其应使用未参与生成训练的真实故障测试集；否则增强后的模型可能只是在适应合成数据的风格。最有说服力的结论是：在不同随机种子、不同设备和不同故障类型上，真实测试性能都获得稳定改善。
-
-评价应先检查边缘分布、相关性、频谱与缺陷几何，再检查物理约束和条件一致性，最后比较真实数据上的下游结果。Fréchet Inception Distance (FID) 或主观逼真度只覆盖部分属性。对照应至少包括仅真实数据与真实加合成数据，并匹配训练预算；重采样基线可以区分数量效应，打乱合成标签则可作为诊断对照，不能替代有效基线。
-
-新增样本可能复制设备身份和批次标记，也可能改变故障先验比例。因此测试集须保持真实、独立且未参与生成器训练与选择，报告召回、误报和校准，而不只看训练损失。若训练指标上升而真实测试性能下降，应检查覆盖不足、生成伪影和先验变化，不能继续用更多合成数据掩盖问题。
-
-VAE、GAN、Flow 与扩散模型的联系和差异可用下列教程按模型族复习，阅读时特别对照训练目标与采样过程。
 \section*{辅助学习材料}
 \begingroup
 \emergencystretch=3em
 \begin{itemize}
-\item \textbf{What are Diffusion Models?}；作者/平台：Lilian Weng；英文；技术教程。阅读前向扩散、反向去噪、训练目标、classifier-free guidance 和 latent diffusion，核对本章的噪声预测与条件采样。\href{https://lilianweng.github.io/posts/2021-07-11-diffusion-models/}{在线阅读}。
-\item \textbf{From Autoencoder to Beta-VAE}；作者/平台：Lilian Weng；英文；技术教程。阅读变分自编码器、ELBO、重参数化和 Beta-VAE 部分，理解重建误差与潜变量先验之间的权衡。\href{https://lilianweng.github.io/posts/2018-08-12-vae/}{在线阅读}。
-\item \textbf{超详细的扩散模型（Diffusion Models）原理+代码}；知乎；中文解说。对照前向加噪与反向去噪，核对噪声预测目标；标题与主题据必应索引，原页受限。\href{https://zhuanlan.zhihu.com/p/624221952}{在线阅读}。
-\item \textbf{扩散模型详解：从DDPM到Stable Diffusion再到DiT的技术演进}；CSDN；中文博客。比较采样过程和模型结构，生成质量不能代替真实数据上的下游评价；标题与主题据必应索引，原页受限。\href{https://blog.csdn.net/weixin\_67327688/article/details/155781843}{在线阅读}。
-\item \textbf{第六节 2021 - 生成式对抗网络(GAN) (一) – 基本概念介紹}；李宏毅；bilibili；中文课程。选看第58集的基本概念讲解，对照本章对抗目标；该分集不是扩散模型教程。2026年10月4日官方公开元数据显示整套课程累计播放约299.5万，并非本分集播放量；已核对目录与计数，未逐帧观看。\href{https://www.bilibili.com/video/BV1Wv411h7kN/?p=58}{观看分集}。
+\item \textbf{What are Diffusion Models?}；作者/平台：Lilian Weng；英文技术教程。可对照前向加噪、反向去噪、条件引导和潜空间扩散。\href{https://lilianweng.github.io/posts/2021-07-11-diffusion-models/}{在线阅读}。
+\item \textbf{From Autoencoder to Beta-VAE}；作者/平台：Lilian Weng；英文技术教程。可对照 VAE、ELBO 和重参数化。\href{https://lilianweng.github.io/posts/2018-08-12-vae/}{在线阅读}。
+\item \textbf{第六节 2021--生成式对抗网络}；作者/平台：李宏毅；中文课程。可对照 GAN 的生成器、判别器和训练过程。\href{https://www.bilibili.com/video/BV1Wv411h7kN/?p=58}{观看分集}。
 \end{itemize}
 \endgroup
+
 \paragraph{本章小结。}
-VAE 借助潜空间生成，GAN 通过对抗判别训练，flow 使用可逆变换计算似然，diffusion 逐步去噪得到样本。它们的计算方式不同，生成结果都仍需检查。用于工业任务时，既看样本是否逼真、是否覆盖需要的故障，也检查是否违背物理规律、是否泄露训练记录，最后用独立的真实数据检验下游收益。
+生成任务首先要明确输出分布和条件。VAE 通过潜变量和 ELBO 获得可采样表示，GAN 通过判别器追求逼真但容易训练不稳定和模式坍塌，扩散模型通过多步去噪处理复杂分布并提供条件控制。模型选择不能只看样本外观。真实性、覆盖性、条件与物理一致性，以及独立真实数据上的下游结果共同决定生成模型是否适用。

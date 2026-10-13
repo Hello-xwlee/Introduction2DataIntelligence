@@ -52,7 +52,7 @@
 
 两本源 PDF 已用 `pdftotext -layout -enc UTF-8` 转为本地可检索文本：[MML 文字版](./session-files/book-text/mml-book.txt)、[贝叶斯与优化机器学习文字版](./session-files/book-text/bayesian-optimization.txt)。文本保留换页符，对应的 [MML 页码索引](./session-files/book-text/mml-book-pages.csv) 与 [机器学习页码索引](./session-files/book-text/bayesian-optimization-pages.csv) 记录 PDF 页码和文本起始行。公式的上下标、希腊字母和多栏排版可能丢失，文字版用于定位，数学表达需结合原 PDF 核对。这些全文仅作为本地参考，不随教材发布。
 
-所给网页也保留了 [HTML](./session-files/book-text/kernel-article.html) 和 [可检索文字](./session-files/book-text/kernel-article.txt)。各新章的“阅读依据与练习”记录对应书内节号与页码，并使用独立的中文解释和教学算例。
+所给网页也保留了 [HTML](./session-files/book-text/kernel-article.html) 和 [可检索文字](./session-files/book-text/kernel-article.txt)。各新章的“阅读依据”记录对应书内节号与页码，并使用独立的中文解释和教学算例。全书不设置独立的习题、自测及答案环节，正文中的教学算例和辅助学习材料予以保留。
 
 ### 第四部分：深度学习模型
 

@@ -2,133 +2,128 @@
 \providecommand\hyper@newdestlabel[2]{}
 \citation{bishop2006pattern}
 \citation{murphy2022pml}
-\@writefile{toc}{\contentsline {chapter}{\numberline {第六章\hspace  {.3em}}概率图模型}{90}{chapter.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {第六章\hspace  {.3em}}概率图模型}{89}{chapter.6}\protected@file@percent }
 \@writefile{lof}{\addvspace {10.0pt}}
 \@writefile{lot}{\addvspace {10.0pt}}
-\newlabel{chap:graphical-models}{{六}{90}{概率图模型}{chapter.6}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.1}从朴素贝叶斯理解有向图}{91}{section.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.1}类别如何把多个观测联系起来}{91}{subsection.6.1.1}\protected@file@percent }
-\newlabel{eq:bayes-naive-joint}{{6.1}{91}{类别如何把多个观测联系起来}{equation.6.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces 朴素贝叶斯的有向图。类别是各特征的共同父节点，给定类别后特征条件独立。训练时类别通常已知，预测时需要根据特征推断类别。}}{91}{figure.caption.81}\protected@file@percent }
-\newlabel{fig:bayes-naive-structure}{{6.1}{91}{朴素贝叶斯的有向图。类别是各特征的共同父节点，给定类别后特征条件独立。训练时类别通常已知，预测时需要根据特征推断类别。}{figure.caption.81}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.2}有向无环图怎样定义分布}{92}{subsection.6.1.2}\protected@file@percent }
-\newlabel{eq:bayes-dag-factorization}{{6.6}{92}{有向无环图怎样定义分布}{equation.6.6}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces 从有向图读取分解。每个节点贡献一个给定父节点的因子；$B,C$共同作为$D$的条件。}}{92}{figure.caption.82}\protected@file@percent }
-\newlabel{fig:bayes-dag-factorization}{{6.2}{92}{从有向图读取分解。每个节点贡献一个给定父节点的因子；$B,C$共同作为$D$的条件。}{figure.caption.82}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.3}用d-分离判断条件独立}{93}{subsection.6.1.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces d-分离的三种基本路径结构。这里仅判断所画路径，假定端点不在条件集合中。存在其他路径时，还需逐条检查。}}{93}{figure.caption.83}\protected@file@percent }
-\newlabel{fig:bayes-d-separation}{{6.3}{93}{d-分离的三种基本路径结构。这里仅判断所画路径，假定端点不在条件集合中。存在其他路径时，还需逐条检查。}{figure.caption.83}{}}
-\@writefile{toc}{\contentsline {paragraph}{为什么观察碰撞节点会引入依赖。}{94}{paragraph*.84}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{为什么必须检查所有路径。}{94}{paragraph*.85}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6.2}从已知类别到单个隐变量：高斯混合模型}{94}{section.6.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.1}把类别变成需要推断的变量}{94}{subsection.6.2.1}\protected@file@percent }
-\newlabel{eq:bayes-gmm-marginal}{{6.10}{95}{把类别变成需要推断的变量}{equation.6.10}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.4}{\ignorespaces GMM的图结构，以三个独立样本为例。白色为隐变量，蓝色为观测变量。各样本共享参数$\pi ,\mu _k,\Sigma _k$，图中参数视为给定，样本之间没有转移边。}}{95}{figure.caption.86}\protected@file@percent }
-\newlabel{fig:bayes-gmm-structure}{{6.4}{95}{GMM的图结构，以三个独立样本为例。白色为隐变量，蓝色为观测变量。各样本共享参数$\pi ,\mu _k,\Sigma _k$，图中参数视为给定，样本之间没有转移边。}{figure.caption.86}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.2}后验责任度与EM学习}{96}{subsection.6.2.2}\protected@file@percent }
-\newlabel{eq:bayes-gmm-responsibility}{{6.11}{96}{后验责任度与EM学习}{equation.6.11}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.3}从单个隐变量到状态序列}{96}{section.6.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.1}状态空间模型的结构假设}{96}{subsection.6.3.1}\protected@file@percent }
-\newlabel{eq:bayes-ssm-joint}{{6.17}{97}{状态空间模型的结构假设}{equation.6.17}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.5}{\ignorespaces 状态空间模型的局部链结构。白色状态节点可离散或连续，蓝色节点为观测。线性高斯模型和HMM具有相同的依赖结构，区别在于节点取值和局部分布。}}{97}{figure.caption.87}\protected@file@percent }
-\newlabel{fig:bayes-ssm-structure}{{6.5}{97}{状态空间模型的局部链结构。白色状态节点可离散或连续，蓝色节点为观测。线性高斯模型和HMM具有相同的依赖结构，区别在于节点取值和局部分布。}{figure.caption.87}{}}
+\newlabel{chap:graphical-models}{{六}{89}{概率图模型}{chapter.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}从朴素贝叶斯理解有向图}{90}{section.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.1}类别如何把多个观测联系起来}{90}{subsection.6.1.1}\protected@file@percent }
+\newlabel{eq:bayes-naive-joint}{{6.1}{90}{类别如何把多个观测联系起来}{equation.6.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.1}{\ignorespaces 朴素贝叶斯的有向图。类别是各特征的共同父节点，给定类别后特征条件独立。训练时类别通常已知，预测时需要根据特征推断类别。}}{90}{figure.caption.81}\protected@file@percent }
+\newlabel{fig:bayes-naive-structure}{{6.1}{90}{朴素贝叶斯的有向图。类别是各特征的共同父节点，给定类别后特征条件独立。训练时类别通常已知，预测时需要根据特征推断类别。}{figure.caption.81}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.2}有向无环图怎样定义分布}{91}{subsection.6.1.2}\protected@file@percent }
+\newlabel{eq:bayes-dag-factorization}{{6.6}{91}{有向无环图怎样定义分布}{equation.6.6}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.2}{\ignorespaces 从有向图读取分解。每个节点贡献一个给定父节点的因子；$B,C$共同作为$D$的条件。}}{91}{figure.caption.82}\protected@file@percent }
+\newlabel{fig:bayes-dag-factorization}{{6.2}{91}{从有向图读取分解。每个节点贡献一个给定父节点的因子；$B,C$共同作为$D$的条件。}{figure.caption.82}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1.3}用d-分离判断条件独立}{92}{subsection.6.1.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.3}{\ignorespaces d-分离的三种基本路径结构。这里仅判断所画路径，假定端点不在条件集合中。存在其他路径时，还需逐条检查。}}{92}{figure.caption.83}\protected@file@percent }
+\newlabel{fig:bayes-d-separation}{{6.3}{92}{d-分离的三种基本路径结构。这里仅判断所画路径，假定端点不在条件集合中。存在其他路径时，还需逐条检查。}{figure.caption.83}{}}
+\@writefile{toc}{\contentsline {paragraph}{为什么观察碰撞节点会引入依赖。}{93}{paragraph*.84}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{为什么必须检查所有路径。}{93}{paragraph*.85}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}从已知类别到单个隐变量：高斯混合模型}{93}{section.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.1}把类别变成需要推断的变量}{93}{subsection.6.2.1}\protected@file@percent }
+\newlabel{eq:bayes-gmm-marginal}{{6.10}{94}{把类别变成需要推断的变量}{equation.6.10}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.4}{\ignorespaces GMM的图结构，以三个独立样本为例。白色为隐变量，蓝色为观测变量。各样本共享参数$\pi ,\mu _k,\Sigma _k$，图中参数视为给定，样本之间没有转移边。}}{94}{figure.caption.86}\protected@file@percent }
+\newlabel{fig:bayes-gmm-structure}{{6.4}{94}{GMM的图结构，以三个独立样本为例。白色为隐变量，蓝色为观测变量。各样本共享参数$\pi ,\mu _k,\Sigma _k$，图中参数视为给定，样本之间没有转移边。}{figure.caption.86}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.2}后验责任度与EM学习}{95}{subsection.6.2.2}\protected@file@percent }
+\newlabel{eq:bayes-gmm-responsibility}{{6.11}{95}{后验责任度与EM学习}{equation.6.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.3}从单个隐变量到状态序列}{95}{section.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.1}状态空间模型的结构假设}{95}{subsection.6.3.1}\protected@file@percent }
+\newlabel{eq:bayes-ssm-joint}{{6.17}{96}{状态空间模型的结构假设}{equation.6.17}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.5}{\ignorespaces 状态空间模型的局部链结构。白色状态节点可离散或连续，蓝色节点为观测。线性高斯模型和HMM具有相同的依赖结构，区别在于节点取值和局部分布。}}{96}{figure.caption.87}\protected@file@percent }
+\newlabel{fig:bayes-ssm-structure}{{6.5}{96}{状态空间模型的局部链结构。白色状态节点可离散或连续，蓝色节点为观测。线性高斯模型和HMM具有相同的依赖结构，区别在于节点取值和局部分布。}{figure.caption.87}{}}
 \citation{kalman1960filter}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.2}链结构怎样支持递归推断}{98}{subsection.6.3.2}\protected@file@percent }
-\newlabel{eq:bayes-filter-recursion}{{6.19}{98}{链结构怎样支持递归推断}{equation.6.19}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.3}线性高斯模型与卡尔曼滤波}{98}{subsection.6.3.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.6}{\ignorespaces 卡尔曼滤波的计算流程。状态空间图仍如图\ref {fig:bayes-ssm-structure}，这里的方框表示分布与计算步骤，箭头表示计算次序。线性高斯条件使预测与更新后的分布始终保持高斯形式。}}{99}{figure.caption.88}\protected@file@percent }
-\newlabel{fig:bayes-kalman-recursion}{{6.6}{99}{卡尔曼滤波的计算流程。状态空间图仍如图\ref {fig:bayes-ssm-structure}，这里的方框表示分布与计算步骤，箭头表示计算次序。线性高斯条件使预测与更新后的分布始终保持高斯形式。}{figure.caption.88}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.4}非线性、非高斯模型与粒子滤波}{99}{subsection.6.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.2}链结构怎样支持递归推断}{97}{subsection.6.3.2}\protected@file@percent }
+\newlabel{eq:bayes-filter-recursion}{{6.19}{97}{链结构怎样支持递归推断}{equation.6.19}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.3}线性高斯模型与卡尔曼滤波}{97}{subsection.6.3.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.6}{\ignorespaces 卡尔曼滤波的计算流程。状态空间图仍如图\ref {fig:bayes-ssm-structure}，这里的方框表示分布与计算步骤，箭头表示计算次序。线性高斯条件使预测与更新后的分布始终保持高斯形式。}}{98}{figure.caption.88}\protected@file@percent }
+\newlabel{fig:bayes-kalman-recursion}{{6.6}{98}{卡尔曼滤波的计算流程。状态空间图仍如图\ref {fig:bayes-ssm-structure}，这里的方框表示分布与计算步骤，箭头表示计算次序。线性高斯条件使预测与更新后的分布始终保持高斯形式。}{figure.caption.88}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.4}非线性、非高斯模型与粒子滤波}{98}{subsection.6.3.4}\protected@file@percent }
 \citation{rabiner1989hmm}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.7}{\ignorespaces 粒子滤波的一维状态示意。观测似然改变权重；图示一次可能的重采样结果，高权重粒子被复制，低权重粒子可能消失。右侧同位置的三个粒子竖向错开以便显示，实际状态相同。重采样不是每步必须执行的操作。}}{100}{figure.caption.89}\protected@file@percent }
-\newlabel{fig:bayes-particle-filter}{{6.7}{100}{粒子滤波的一维状态示意。观测似然改变权重；图示一次可能的重采样结果，高权重粒子被复制，低权重粒子可能消失。右侧同位置的三个粒子竖向错开以便显示，实际状态相同。重采样不是每步必须执行的操作。}{figure.caption.89}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.5}有限离散状态与隐马尔可夫模型}{100}{subsection.6.3.5}\protected@file@percent }
-\newlabel{eq:bayes-hmm-joint}{{6.29}{101}{有限离散状态与隐马尔可夫模型}{equation.6.29}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.8}{\ignorespaces HMM 的有向图结构（以四个时刻为例）。白色圆为隐状态，蓝色圆为已观测变量；横向箭头表示状态转移，向下箭头表示观测生成。箭头表示概率分解关系，不自动代表因果关系。}}{101}{figure.caption.90}\protected@file@percent }
-\newlabel{fig:bayes-hmm-structure}{{6.8}{101}{HMM 的有向图结构（以四个时刻为例）。白色圆为隐状态，蓝色圆为已观测变量；横向箭头表示状态转移，向下箭头表示观测生成。箭头表示概率分解关系，不自动代表因果关系。}{figure.caption.90}{}}
-\@writefile{toc}{\contentsline {paragraph}{过滤、平滑与最优路径。}{101}{paragraph*.91}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{两状态、两时刻的过滤手算。}{102}{paragraph*.92}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{前向后向递推的推导与稳定实现。}{103}{paragraph*.93}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{从隐状态推断到参数学习。}{103}{paragraph*.94}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{EM为什么得到期望计数比。}{104}{paragraph*.95}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.7}{\ignorespaces 粒子滤波的一维状态示意。观测似然改变权重；图示一次可能的重采样结果，高权重粒子被复制，低权重粒子可能消失。右侧同位置的三个粒子竖向错开以便显示，实际状态相同。重采样不是每步必须执行的操作。}}{99}{figure.caption.89}\protected@file@percent }
+\newlabel{fig:bayes-particle-filter}{{6.7}{99}{粒子滤波的一维状态示意。观测似然改变权重；图示一次可能的重采样结果，高权重粒子被复制，低权重粒子可能消失。右侧同位置的三个粒子竖向错开以便显示，实际状态相同。重采样不是每步必须执行的操作。}{figure.caption.89}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.5}有限离散状态与隐马尔可夫模型}{99}{subsection.6.3.5}\protected@file@percent }
+\newlabel{eq:bayes-hmm-joint}{{6.29}{100}{有限离散状态与隐马尔可夫模型}{equation.6.29}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.8}{\ignorespaces HMM 的有向图结构（以四个时刻为例）。白色圆为隐状态，蓝色圆为已观测变量；横向箭头表示状态转移，向下箭头表示观测生成。箭头表示概率分解关系，不自动代表因果关系。}}{100}{figure.caption.90}\protected@file@percent }
+\newlabel{fig:bayes-hmm-structure}{{6.8}{100}{HMM 的有向图结构（以四个时刻为例）。白色圆为隐状态，蓝色圆为已观测变量；横向箭头表示状态转移，向下箭头表示观测生成。箭头表示概率分解关系，不自动代表因果关系。}{figure.caption.90}{}}
+\@writefile{toc}{\contentsline {paragraph}{过滤、平滑与最优路径。}{100}{paragraph*.91}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{两状态、两时刻的过滤手算。}{101}{paragraph*.92}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{前向后向递推的推导与稳定实现。}{102}{paragraph*.93}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{从隐状态推断到参数学习。}{102}{paragraph*.94}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{EM为什么得到期望计数比。}{103}{paragraph*.95}\protected@file@percent }
 \citation{mccallum2000memm}
-\@writefile{toc}{\contentsline {section}{\numberline {6.4}从生成模型到局部条件模型：MEMM}{105}{section.6.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4.1}为什么直接建模标签的条件分布}{105}{subsection.6.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{最大熵为何导出softmax。}{105}{paragraph*.97}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.9}{\ignorespaces MEMM 的条件有向结构。灰色节点为固定起始状态，观测同时参与各步局部分类；与 HMM 相比，模型不再使用由状态指向观测的生成边。}}{106}{figure.caption.96}\protected@file@percent }
-\newlabel{fig:bayes-memm-structure}{{6.9}{106}{MEMM 的条件有向结构。灰色节点为固定起始状态，观测同时参与各步局部分类；与 HMM 相比，模型不再使用由状态指向观测的生成边。}{figure.caption.96}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.5}无向图：分离、团分解与条件随机场}{106}{section.6.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.1}无向图怎样表达条件独立}{106}{subsection.6.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.4}从生成模型到局部条件模型：MEMM}{104}{section.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4.1}为什么直接建模标签的条件分布}{104}{subsection.6.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{最大熵为何导出softmax。}{104}{paragraph*.97}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.9}{\ignorespaces MEMM 的条件有向结构。灰色节点为固定起始状态，观测同时参与各步局部分类；与 HMM 相比，模型不再使用由状态指向观测的生成边。}}{105}{figure.caption.96}\protected@file@percent }
+\newlabel{fig:bayes-memm-structure}{{6.9}{105}{MEMM 的条件有向结构。灰色节点为固定起始状态，观测同时参与各步局部分类；与 HMM 相比，模型不再使用由状态指向观测的生成边。}{figure.caption.96}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.5}无向图：分离、团分解与条件随机场}{105}{section.6.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.1}无向图怎样表达条件独立}{105}{subsection.6.5.1}\protected@file@percent }
 \citation{lafferty2001crf}
-\newlabel{eq:bayes-undirected-separation}{{6.46}{107}{无向图怎样表达条件独立}{equation.6.46}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.2}从团与势函数构造联合分布}{107}{subsection.6.5.2}\protected@file@percent }
-\newlabel{eq:bayes-undirected-factorization}{{6.47}{107}{从团与势函数构造联合分布}{equation.6.47}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6.10}{\ignorespaces 无向图的分离与团分解。链中的橙色节点表示所给条件；三角形的极大团包含全部三个节点，不能仅凭有三条边就假定只有二元相互作用。两种模型各有自己的配分函数$Z$。}}{108}{figure.caption.98}\protected@file@percent }
-\newlabel{fig:bayes-clique-factorization}{{6.10}{108}{无向图的分离与团分解。链中的橙色节点表示所给条件；三角形的极大团包含全部三个节点，不能仅凭有三条边就假定只有二元相互作用。两种模型各有自己的配分函数$Z$。}{figure.caption.98}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.3}从局部归一化改为全局归一化}{108}{subsection.6.5.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.11}{\ignorespaces 线性链 CRF 的因子图。圆形表示标签，方形表示相邻标签的势函数；实线无方向，表示变量参与因子。蓝色虚线仅表示势函数依赖已给定观测，不是标签图中的随机变量边或生成箭头。}}{109}{figure.caption.99}\protected@file@percent }
-\newlabel{fig:bayes-crf-structure}{{6.11}{109}{线性链 CRF 的因子图。圆形表示标签，方形表示相邻标签的势函数；实线无方向，表示变量参与因子。蓝色虚线仅表示势函数依赖已给定观测，不是标签图中的随机变量边或生成箭头。}{figure.caption.99}{}}
-\@writefile{toc}{\contentsline {paragraph}{两条路径怎样体现全局归一化。}{110}{paragraph*.100}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{配分函数、边缘概率与梯度的完整联系。}{110}{paragraph*.101}\protected@file@percent }
+\newlabel{eq:bayes-undirected-separation}{{6.46}{106}{无向图怎样表达条件独立}{equation.6.46}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.2}从团与势函数构造联合分布}{106}{subsection.6.5.2}\protected@file@percent }
+\newlabel{eq:bayes-undirected-factorization}{{6.47}{106}{从团与势函数构造联合分布}{equation.6.47}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6.10}{\ignorespaces 无向图的分离与团分解。链中的橙色节点表示所给条件；三角形的极大团包含全部三个节点，不能仅凭有三条边就假定只有二元相互作用。两种模型各有自己的配分函数$Z$。}}{107}{figure.caption.98}\protected@file@percent }
+\newlabel{fig:bayes-clique-factorization}{{6.10}{107}{无向图的分离与团分解。链中的橙色节点表示所给条件；三角形的极大团包含全部三个节点，不能仅凭有三条边就假定只有二元相互作用。两种模型各有自己的配分函数$Z$。}{figure.caption.98}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.3}从局部归一化改为全局归一化}{107}{subsection.6.5.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.11}{\ignorespaces 线性链 CRF 的因子图。圆形表示标签，方形表示相邻标签的势函数；实线无方向，表示变量参与因子。蓝色虚线仅表示势函数依赖已给定观测，不是标签图中的随机变量边或生成箭头。}}{108}{figure.caption.99}\protected@file@percent }
+\newlabel{fig:bayes-crf-structure}{{6.11}{108}{线性链 CRF 的因子图。圆形表示标签，方形表示相邻标签的势函数；实线无方向，表示变量参与因子。蓝色虚线仅表示势函数依赖已给定观测，不是标签图中的随机变量边或生成箭头。}{figure.caption.99}{}}
+\@writefile{toc}{\contentsline {paragraph}{两条路径怎样体现全局归一化。}{109}{paragraph*.100}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{配分函数、边缘概率与梯度的完整联系。}{109}{paragraph*.101}\protected@file@percent }
 \citation{geman1984mrf}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.4}从链到网格：空间相互作用}{111}{subsection.6.5.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.12}{\ignorespaces 四邻域网格上的成对 MRF。每个节点对应一个像素或区域标签，每条无向边对应一个二元势；不存在箭头，并不表示各标签独立，而是表示相互作用不采用有向生成分解。}}{111}{figure.caption.102}\protected@file@percent }
-\newlabel{fig:bayes-mrf-structure}{{6.12}{111}{四邻域网格上的成对 MRF。每个节点对应一个像素或区域标签，每条无向边对应一个二元势；不存在箭头，并不表示各标签独立，而是表示相互作用不采用有向生成分解。}{figure.caption.102}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {6.1}{\ignorespaces 链式与无向图模型的建模对象和计算边界。}}{113}{table.caption.103}\protected@file@percent }
-\newlabel{tab:bayes-graph-models}{{6.1}{113}{链式与无向图模型的建模对象和计算边界。}{table.caption.103}{}}
-\@writefile{toc}{\contentsline {paragraph}{MRF的局部更新与均值场。}{113}{paragraph*.104}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{两个像素的能量可以全部列完。}{114}{paragraph*.105}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{把图结构带回维护任务。}{114}{paragraph*.106}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.4}从链到网格：空间相互作用}{110}{subsection.6.5.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.12}{\ignorespaces 四邻域网格上的成对 MRF。每个节点对应一个像素或区域标签，每条无向边对应一个二元势；不存在箭头，并不表示各标签独立，而是表示相互作用不采用有向生成分解。}}{110}{figure.caption.102}\protected@file@percent }
+\newlabel{fig:bayes-mrf-structure}{{6.12}{110}{四邻域网格上的成对 MRF。每个节点对应一个像素或区域标签，每条无向边对应一个二元势；不存在箭头，并不表示各标签独立，而是表示相互作用不采用有向生成分解。}{figure.caption.102}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {6.1}{\ignorespaces 链式与无向图模型的建模对象和计算边界。}}{112}{table.caption.103}\protected@file@percent }
+\newlabel{tab:bayes-graph-models}{{6.1}{112}{链式与无向图模型的建模对象和计算边界。}{table.caption.103}{}}
+\@writefile{toc}{\contentsline {paragraph}{MRF的局部更新与均值场。}{112}{paragraph*.104}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{两个像素的能量可以全部列完。}{113}{paragraph*.105}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{把图结构带回维护任务。}{113}{paragraph*.106}\protected@file@percent }
 \citation{bishop2006pattern}
-\@writefile{toc}{\contentsline {section}{\numberline {6.6}无向图中的隐变量：玻尔兹曼机与RBM}{115}{section.6.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.1}能量形式与指数族参数化}{115}{subsection.6.6.1}\protected@file@percent }
-\newlabel{eq:bayes-gibbs-energy}{{6.65}{115}{能量形式与指数族参数化}{equation.6.65}{}}
-\newlabel{eq:bayes-exponential-family}{{6.66}{115}{能量形式与指数族参数化}{equation.6.66}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.2}玻尔兹曼机怎样引入隐变量}{115}{subsection.6.6.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.13}{\ignorespaces 一般玻尔兹曼机的无向图。节点为二元随机变量，边表示成对相互作用。隐节点之间及同一层可见节点之间的连边，使条件分布通常不再逐节点独立。}}{116}{figure.caption.107}\protected@file@percent }
-\newlabel{fig:bayes-bm-structure}{{6.13}{116}{一般玻尔兹曼机的无向图。节点为二元随机变量，边表示成对相互作用。隐节点之间及同一层可见节点之间的连边，使条件分布通常不再逐节点独立。}{figure.caption.107}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.3}受限玻尔兹曼机的二部图与能量}{116}{subsection.6.6.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.14}{\ignorespaces RBM的二部无向图。图示为全连接的两层结构，也可以删去部分跨层边。每层内部无边，给定另一层后本层节点条件独立。}}{117}{figure.caption.108}\protected@file@percent }
-\newlabel{fig:bayes-rbm-structure}{{6.14}{117}{RBM的二部无向图。图示为全连接的两层结构，也可以删去部分跨层边。每层内部无边，给定另一层后本层节点条件独立。}{figure.caption.108}{}}
-\newlabel{eq:bayes-rbm-joint}{{6.70}{117}{受限玻尔兹曼机的二部图与能量}{equation.6.70}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.4}为什么两层的条件分布容易计算}{117}{subsection.6.6.4}\protected@file@percent }
-\newlabel{eq:bayes-rbm-conditionals}{{6.73}{117}{为什么两层的条件分布容易计算}{equation.6.73}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.5}可见分布与一个可枚举的例子}{118}{subsection.6.6.5}\protected@file@percent }
-\newlabel{eq:bayes-rbm-free-energy}{{6.75}{118}{可见分布与一个可枚举的例子}{equation.6.75}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.6}最大似然为什么需要两类期望}{118}{subsection.6.6.6}\protected@file@percent }
-\newlabel{eq:bayes-rbm-gradient}{{6.77}{118}{最大似然为什么需要两类期望}{equation.6.77}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.7}连续观测与适用边界}{119}{subsection.6.6.7}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.15}{\ignorespaces 高斯--伯努利RBM。椭圆强调连续可见节点，圆形表示二元隐节点。节点取值改变，二部图的条件独立结构保持不变。}}{120}{figure.caption.109}\protected@file@percent }
-\newlabel{fig:bayes-gaussian-rbm}{{6.15}{120}{高斯--伯努利RBM。椭圆强调连续可见节点，圆形表示二元隐节点。节点取值改变，二部图的条件独立结构保持不变。}{figure.caption.109}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.7}用五个方面比较概率图模型}{120}{section.6.7}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6.2}{\ignorespaces 主要图模型的结构、节点与推断对象。}}{121}{table.caption.110}\protected@file@percent }
-\newlabel{tab:bayes-model-assumptions}{{6.2}{121}{主要图模型的结构、节点与推断对象。}{table.caption.110}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.7.1}因子图与消息传递的共同计算方式}{121}{subsection.6.7.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6.16}{\ignorespaces 树形因子图及向$X_2$汇总的消息。圆形是变量，方形是因子；黑色边只表示变量参与因子，蓝色箭头表示计算消息的方向。两侧分支先对$X_1,X_3$求和，消息相乘并归一化后得到$X_2$的边缘分布。}}{122}{figure.caption.111}\protected@file@percent }
-\newlabel{fig:bayes-factor-messages}{{6.16}{122}{树形因子图及向$X_2$汇总的消息。圆形是变量，方形是因子；黑色边只表示变量参与因子，蓝色箭头表示计算消息的方向。两侧分支先对$X_1,X_3$求和，消息相乘并归一化后得到$X_2$的边缘分布。}{figure.caption.111}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.7.2}图模型与贝叶斯参数学习的区别}{122}{subsection.6.7.2}\protected@file@percent }
-\newlabel{eq:bayes-predictive-integral}{{6.84}{122}{图模型与贝叶斯参数学习的区别}{equation.6.84}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {6.8}自测：从图结构回到概率计算}{123}{section.6.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{有向图的条件独立。}{123}{paragraph*.112}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{无向图的因子分解。}{123}{paragraph*.113}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{RBM的条件概率与联合归一化。}{123}{paragraph*.114}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{不确定性的分解与校准。}{123}{paragraph*.116}\protected@file@percent }
-\newlabel{eq:bayes-predictive-variance}{{6.85}{123}{不确定性的分解与校准。}{equation.6.85}{}}
-\@writefile{toc}{\contentsline {paragraph}{全方差公式的推导与估计。}{124}{paragraph*.117}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{参数抽样与观测抽样要分两层。}{124}{paragraph*.118}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{贝叶斯方法的常见误用。}{124}{paragraph*.119}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{预测分布的蒙特卡洛近似。}{125}{paragraph*.120}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{采样诊断。}{125}{paragraph*.121}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Effective Sample Size (ESS)是针对哪个估计量。}{125}{paragraph*.122}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{先验敏感性分析。}{125}{paragraph*.123}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{校准、覆盖率与风险。}{126}{paragraph*.124}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{小样本故障率的后验决策。}{126}{paragraph*.125}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{回归预测区间的覆盖实验。}{126}{paragraph*.126}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{自测：把数据更新与模拟分开。}{127}{paragraph*.127}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{后验预测检查的操作步骤。}{127}{paragraph*.128}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{本章小结。}{128}{paragraph*.130}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.6}无向图中的隐变量：玻尔兹曼机与RBM}{114}{section.6.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.1}能量形式与指数族参数化}{114}{subsection.6.6.1}\protected@file@percent }
+\newlabel{eq:bayes-gibbs-energy}{{6.65}{114}{能量形式与指数族参数化}{equation.6.65}{}}
+\newlabel{eq:bayes-exponential-family}{{6.66}{114}{能量形式与指数族参数化}{equation.6.66}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.2}玻尔兹曼机怎样引入隐变量}{114}{subsection.6.6.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.13}{\ignorespaces 一般玻尔兹曼机的无向图。节点为二元随机变量，边表示成对相互作用。隐节点之间及同一层可见节点之间的连边，使条件分布通常不再逐节点独立。}}{115}{figure.caption.107}\protected@file@percent }
+\newlabel{fig:bayes-bm-structure}{{6.13}{115}{一般玻尔兹曼机的无向图。节点为二元随机变量，边表示成对相互作用。隐节点之间及同一层可见节点之间的连边，使条件分布通常不再逐节点独立。}{figure.caption.107}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.3}受限玻尔兹曼机的二部图与能量}{115}{subsection.6.6.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.14}{\ignorespaces RBM的二部无向图。图示为全连接的两层结构，也可以删去部分跨层边。每层内部无边，给定另一层后本层节点条件独立。}}{116}{figure.caption.108}\protected@file@percent }
+\newlabel{fig:bayes-rbm-structure}{{6.14}{116}{RBM的二部无向图。图示为全连接的两层结构，也可以删去部分跨层边。每层内部无边，给定另一层后本层节点条件独立。}{figure.caption.108}{}}
+\newlabel{eq:bayes-rbm-joint}{{6.70}{116}{受限玻尔兹曼机的二部图与能量}{equation.6.70}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.4}为什么两层的条件分布容易计算}{116}{subsection.6.6.4}\protected@file@percent }
+\newlabel{eq:bayes-rbm-conditionals}{{6.73}{116}{为什么两层的条件分布容易计算}{equation.6.73}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.5}可见分布与一个可枚举的例子}{117}{subsection.6.6.5}\protected@file@percent }
+\newlabel{eq:bayes-rbm-free-energy}{{6.75}{117}{可见分布与一个可枚举的例子}{equation.6.75}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.6}最大似然为什么需要两类期望}{117}{subsection.6.6.6}\protected@file@percent }
+\newlabel{eq:bayes-rbm-gradient}{{6.77}{117}{最大似然为什么需要两类期望}{equation.6.77}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.7}连续观测与适用边界}{118}{subsection.6.6.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.15}{\ignorespaces 高斯--伯努利RBM。椭圆强调连续可见节点，圆形表示二元隐节点。节点取值改变，二部图的条件独立结构保持不变。}}{119}{figure.caption.109}\protected@file@percent }
+\newlabel{fig:bayes-gaussian-rbm}{{6.15}{119}{高斯--伯努利RBM。椭圆强调连续可见节点，圆形表示二元隐节点。节点取值改变，二部图的条件独立结构保持不变。}{figure.caption.109}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.7}用五个方面比较概率图模型}{119}{section.6.7}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6.2}{\ignorespaces 主要图模型的结构、节点与推断对象。}}{120}{table.caption.110}\protected@file@percent }
+\newlabel{tab:bayes-model-assumptions}{{6.2}{120}{主要图模型的结构、节点与推断对象。}{table.caption.110}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.7.1}因子图与消息传递的共同计算方式}{120}{subsection.6.7.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6.16}{\ignorespaces 树形因子图及向$X_2$汇总的消息。圆形是变量，方形是因子；黑色边只表示变量参与因子，蓝色箭头表示计算消息的方向。两侧分支先对$X_1,X_3$求和，消息相乘并归一化后得到$X_2$的边缘分布。}}{121}{figure.caption.111}\protected@file@percent }
+\newlabel{fig:bayes-factor-messages}{{6.16}{121}{树形因子图及向$X_2$汇总的消息。圆形是变量，方形是因子；黑色边只表示变量参与因子，蓝色箭头表示计算消息的方向。两侧分支先对$X_1,X_3$求和，消息相乘并归一化后得到$X_2$的边缘分布。}{figure.caption.111}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.7.2}图模型与贝叶斯参数学习的区别}{121}{subsection.6.7.2}\protected@file@percent }
+\newlabel{eq:bayes-predictive-integral}{{6.84}{121}{图模型与贝叶斯参数学习的区别}{equation.6.84}{}}
+\@writefile{toc}{\contentsline {paragraph}{不确定性的分解与校准。}{122}{paragraph*.113}\protected@file@percent }
+\newlabel{eq:bayes-predictive-variance}{{6.85}{122}{不确定性的分解与校准。}{equation.6.85}{}}
+\@writefile{toc}{\contentsline {paragraph}{全方差公式的推导与估计。}{122}{paragraph*.114}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{参数抽样与观测抽样要分两层。}{122}{paragraph*.115}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{贝叶斯方法的常见误用。}{123}{paragraph*.116}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{预测分布的蒙特卡洛近似。}{123}{paragraph*.117}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{采样诊断。}{123}{paragraph*.118}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Effective Sample Size (ESS)是针对哪个估计量。}{124}{paragraph*.119}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{先验敏感性分析。}{124}{paragraph*.120}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{校准、覆盖率与风险。}{124}{paragraph*.121}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{小样本故障率的后验决策。}{124}{paragraph*.122}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{回归预测区间的覆盖实验。}{125}{paragraph*.123}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{后验预测检查的操作步骤。}{125}{paragraph*.124}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{本章小结。}{126}{paragraph*.126}\protected@file@percent }
 \@setckpt{chapters/07-bayesian}{
-\setcounter{page}{129}
+\setcounter{page}{127}
 \setcounter{equation}{90}
 \setcounter{enumi}{5}
 \setcounter{enumii}{0}
@@ -138,8 +133,8 @@
 \setcounter{mpfootnote}{0}
 \setcounter{part}{2}
 \setcounter{chapter}{6}
-\setcounter{section}{8}
-\setcounter{subsection}{0}
+\setcounter{section}{7}
+\setcounter{subsection}{2}
 \setcounter{subsubsection}{0}
 \setcounter{paragraph}{0}
 \setcounter{subparagraph}{0}
@@ -147,10 +142,10 @@
 \setcounter{table}{2}
 \setcounter{parentequation}{0}
 \setcounter{section@level}{0}
-\setcounter{Item}{22}
+\setcounter{Item}{8}
 \setcounter{Hfootnote}{0}
 \setcounter{Hy@AnnotLevel}{0}
-\setcounter{bookmark@seq@number}{49}
+\setcounter{bookmark@seq@number}{45}
 \setcounter{caption@flags}{2}
 \setcounter{continuedfloat}{0}
 \setcounter{float@type}{16}

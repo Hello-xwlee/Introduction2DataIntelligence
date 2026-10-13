@@ -1,44 +1,30 @@
 \relax 
 \providecommand\hyper@newdestlabel[2]{}
-\@writefile{toc}{\contentsline {chapter}{\numberline {第十九章\hspace  {.3em}}深度生成模型}{258}{chapter.19}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {第十九章\hspace  {.3em}}深度生成模型}{259}{chapter.19}\protected@file@percent }
 \@writefile{lof}{\addvspace {10.0pt}}
 \@writefile{lot}{\addvspace {10.0pt}}
-\@writefile{toc}{\contentsline {section}{\numberline {19.1}生成建模的目标}{258}{section.19.1}\protected@file@percent }
-\citation{kingma2014vae}
-\@writefile{toc}{\contentsline {paragraph}{分布不是一张平均样本。}{259}{paragraph*.240}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{先把潜变量的生成方向写清楚。}{259}{paragraph*.241}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{变分自编码器。}{259}{paragraph*.242}\protected@file@percent }
-\newlabel{eq:generative-vae-elbo}{{19.2}{259}{变分自编码器。}{equation.19.2}{}}
-\citation{goodfellow2014gan}
-\citation{dinh2017realnvp}
-\@writefile{toc}{\contentsline {section}{\numberline {19.2}对抗学习与可逆密度建模}{261}{section.19.2}\protected@file@percent }
-\citation{ho2020ddpm}
-\@writefile{lot}{\contentsline {table}{\numberline {19.1}{\ignorespaces 生成模型路线与工业应用边界}}{263}{table.caption.243}\protected@file@percent }
-\newlabel{tab:generative-model-routes}{{19.1}{263}{生成模型路线与工业应用边界}{table.caption.243}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {19.3}扩散过程与条件控制}{263}{section.19.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {19.1}{\ignorespaces 扩散模型的时间轴：前向过程逐步破坏结构，反向网络学习在每个噪声尺度恢复结构。}}{264}{figure.caption.244}\protected@file@percent }
-\newlabel{fig:generative-diffusion-time}{{19.1}{264}{扩散模型的时间轴：前向过程逐步破坏结构，反向网络学习在每个噪声尺度恢复结构。}{figure.caption.244}{}}
-\newlabel{eq:generative-direct-noising}{{19.10}{264}{扩散过程与条件控制}{equation.19.10}{}}
-\@writefile{toc}{\contentsline {paragraph}{扩散模型的后验。}{265}{paragraph*.245}\protected@file@percent }
-\newlabel{eq:generative-posterior-mean}{{19.13}{265}{扩散模型的后验。}{equation.19.13}{}}
-\citation{song2021ddim}
-\citation{rombach2022latent}
-\citation{ho2022cfg}
-\citation{zhang2023controlnet}
-\@writefile{toc}{\contentsline {paragraph}{条件扩散与引导。}{266}{paragraph*.246}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{得分匹配（Score Matching）。}{266}{paragraph*.247}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {19.4}采样、约束与工业可信度}{266}{section.19.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{DDIM 与采样加速。}{266}{paragraph*.248}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{潜空间扩散。}{267}{paragraph*.249}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {19.2}{\ignorespaces 扩散模型把生成拆为前向加噪和学习反向去噪。}}{267}{figure.caption.250}\protected@file@percent }
-\newlabel{fig:generative-denoising-network}{{19.2}{267}{扩散模型把生成拆为前向加噪和学习反向去噪。}{figure.caption.250}{}}
-\@writefile{toc}{\contentsline {paragraph}{物理约束生成。}{267}{paragraph*.251}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{记忆、隐私与生成数据。}{268}{paragraph*.252}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{生成模型的实验流程。}{268}{paragraph*.253}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{本章小结。}{269}{paragraph*.255}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {19.1}生成任务与概率建模目标}{259}{section.19.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {19.1.1}先确定要生成什么}{259}{subsection.19.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {19.1.2}潜变量把随机性变成可采样结构}{260}{subsection.19.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {19.2}VAE：用潜变量获得稳定采样}{260}{section.19.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {19.2.1}为什么需要变分近似}{260}{subsection.19.2.1}\protected@file@percent }
+\newlabel{eq:generative-vae-elbo}{{19.2}{260}{为什么需要变分近似}{equation.19.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {19.2.2}如何训练和采样}{261}{subsection.19.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {19.2.3}VAE 的变体与典型问题}{262}{subsection.19.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {19.3}GAN：追求逼真样本的对抗训练}{262}{section.19.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {19.3.1}判别器如何提供训练信号}{262}{subsection.19.3.1}\protected@file@percent }
+\newlabel{eq:generative-gan}{{19.7}{262}{判别器如何提供训练信号}{equation.19.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {19.3.2}逼真与覆盖为何会冲突}{263}{subsection.19.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {19.4}扩散模型：逐步去噪成为当前主线}{263}{section.19.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {19.4.1}从一次生成改为多步恢复}{263}{subsection.19.4.1}\protected@file@percent }
+\newlabel{eq:generative-direct-noising}{{19.9}{263}{从一次生成改为多步恢复}{equation.19.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {19.4.2}噪声预测与反向采样}{263}{subsection.19.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {19.4.3}条件控制与扩散模型的变体}{264}{subsection.19.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {19.5}任务选择与验证边界}{265}{section.19.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{本章小结。}{266}{paragraph*.223}\protected@file@percent }
 \@setckpt{chapters/13-generative}{
-\setcounter{page}{270}
-\setcounter{equation}{16}
+\setcounter{page}{267}
+\setcounter{equation}{14}
 \setcounter{enumi}{4}
 \setcounter{enumii}{0}
 \setcounter{enumiii}{0}
@@ -47,19 +33,19 @@
 \setcounter{mpfootnote}{0}
 \setcounter{part}{4}
 \setcounter{chapter}{19}
-\setcounter{section}{4}
+\setcounter{section}{5}
 \setcounter{subsection}{0}
 \setcounter{subsubsection}{0}
 \setcounter{paragraph}{0}
 \setcounter{subparagraph}{0}
-\setcounter{figure}{2}
-\setcounter{table}{1}
+\setcounter{figure}{0}
+\setcounter{table}{0}
 \setcounter{parentequation}{0}
 \setcounter{section@level}{0}
-\setcounter{Item}{26}
+\setcounter{Item}{16}
 \setcounter{Hfootnote}{0}
 \setcounter{Hy@AnnotLevel}{0}
-\setcounter{bookmark@seq@number}{143}
+\setcounter{bookmark@seq@number}{142}
 \setcounter{caption@flags}{2}
 \setcounter{continuedfloat}{0}
 \setcounter{float@type}{16}

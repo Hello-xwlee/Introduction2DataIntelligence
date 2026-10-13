@@ -1,6 +1,7 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.5.14)  13 OCT 2026 18:26
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.5.14)  13 OCT 2026 19:40
 entering extended mode
  restricted \write18 enabled.
+ file:line:error style messages enabled.
  %&-line parsing enabled.
 **main.tex
 (./main.tex
@@ -1241,7 +1242,7 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 LaTeX Font Info:    Font shape `TU/SimSun(0)/m/sl' in size <10.95> not availabl
 e
 (Font)              Font shape `TU/SimSun(0)/m/it' tried instead on input line 
-213.
+208.
 [2]
 
 [3]
@@ -1511,11 +1512,9 @@ Overfull \hbox (8.97185pt too wide) in paragraph at lines 376--385
 
 
 
-[60]
+[60])
 
-[61])
-
-[62]
+[61]
 \openout2 = `chapters/05-optimization-training.aux'.
 
  (./chapters/05-optimization-training.tex
@@ -1525,16 +1524,16 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[63
+[62
 
 
 
 
 ]
 
-[64]
+[63]
 
-[65]
+[64]
 Overfull \hbox (1.64789pt too wide) in paragraph at lines 116--118
 $\OML/cmm/m/it/10.95 ^^N[]$ \TU/SimSun(0)/m/n/10.95 表 示 预 测 值 发 生 微 小 变 化 时，|  
 损 失 的 一 阶 变 化 率。|  由 于 $\OML/cmm/m/it/10.95 @[]\OT1/cmr/m/n/10.95 /\OML/cmm/m/i
@@ -1544,6 +1543,8 @@ t/10.95 @w[] \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 h[]$ \TU/SimSun(0)/m/n/10
  []
 
 
+
+[65]
 
 [66]
 
@@ -1572,11 +1573,11 @@ t/10.95 @w[] \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 h[]$ \TU/SimSun(0)/m/n/10
 [78]
 
 [79]
-
-[80]
 Underfull \vbox (badness 4531) has occurred while \output is active []
 
 
+
+[80]
 
 [81]
 
@@ -1585,23 +1586,21 @@ Underfull \vbox (badness 4531) has occurred while \output is active []
 [83]
 
 [84]
-
-[85]
 Underfull \vbox (badness 1205) has occurred while \output is active []
 
 
 
-[86])
+[85])
 
-[87]
+[86]
 
-[88
+[87
 
 
 
 ]
 
-[89]
+[88]
 \openout2 = `chapters/07-bayesian.aux'.
 
  (./chapters/07-bayesian.tex
@@ -1611,48 +1610,48 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[90
+[89
 
 
 ]
 
+[90]
+
 [91]
 
 [92]
-
-[93]
 Underfull \vbox (badness 6428) has occurred while \output is active []
 
 
 
-[94]
+[93]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[95]
+[94]
 
-[96]
+[95]
 Underfull \vbox (badness 7012) has occurred while \output is active []
 
 
 
+[96]
+
 [97]
 
 [98]
-
-[99]
 Underfull \vbox (badness 1297) has occurred while \output is active []
 
 
+
+[99]
 
 [100]
 
 [101]
 
 [102]
-
-[103]
 Overfull \hbox (8.67447pt too wide) detected at line 436
 [][][]\OML/cmm/m/it/10.95 ^^V[] \OT1/cmr/m/n/10.95 = []\OML/cmm/m/it/10.95 ;  \
 OT1/cmr/m/n/10.95 ^^F[] = []\OML/cmm/m/it/10.95 ;  N[] \OT1/cmr/m/n/10.95 = [] 
@@ -1662,11 +1661,11 @@ OT1/cmr/m/n/10.95 ^^F[] = []\OML/cmm/m/it/10.95 ;  N[] \OT1/cmr/m/n/10.95 = []
 
 
 
+[103]
+
 [104]
 
 [105]
-
-[106]
 Overfull \hbox (28.74095pt too wide) in paragraph at lines 507--508
 []\TU/SimSun(0)/m/n/10.95 链 $\OML/cmm/m/it/10.95 A \OMS/cmsy/m/n/10.95 ^^@ \OML
 /cmm/m/it/10.95 B \OMS/cmsy/m/n/10.95 ^^@ \OML/cmm/m/it/10.95 C$ \TU/SimSun(0)/
@@ -1681,18 +1680,18 @@ t/10.95  []\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 a; b\OT1/cmr/m/n/10.95 )\OML
 
 
 
-[107]
+[106]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
+
+[107]
 
 [108]
 
 [109]
 
 [110]
-
-[111]
 Underfull \hbox (badness 4013) in paragraph at lines 671--672
 []|\TU/SimSun(0)/m/n/10 观 测 假 设 和 状 态 持 续 时 间
  []
@@ -1714,23 +1713,23 @@ Underfull \hbox (badness 4013) in paragraph at lines 674--675
 
 
 
+[111]
+
 [112]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 
 [113]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 
 [114]
-
-[115]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[116]
+[115]
 
-[117]
+[116]
 Overfull \hbox (25.42091pt too wide) in paragraph at lines 820--821
 []\TU/SimSun(0)/m/n/10.95 训 练 数 据 只 提 供 $\OML/cmm/m/it/10.95 v$\TU/SimSun(0)/m/
 n/10.95 。|  对 单 个 样 本 求 对 数 似 然 梯 度，|  利 用 $\OML/cmm/m/it/10.95 @ [] Z[]\OT1/cm
@@ -1741,11 +1740,11 @@ r/m/n/10.95 /\OML/cmm/m/it/10.95 @W[] \OT1/cmr/m/n/10.95 = \U/msb/m/n/10.95 E[]
 
 
 
+[117]
+
 [118]
 
 [119]
-
-[120]
 Overfull \hbox (8.20222pt too wide) in paragraph at lines 877--878
 []\TU/SimSun(0)/b/n/10.95 分 布 参 数 化。|  \TU/SimSun(0)/m/n/10.95 指 数 族 用 固 定 统 计 
 量 和 自 然 参 数 表 达 概 率。|  高 斯 局 部 分 布、| \TU/lmr/m/n/10.95 MEMM
@@ -1758,6 +1757,8 @@ Underfull \hbox (badness 10000) in paragraph at lines 892--892
 
 
 
+[120]
+
 [121]
 
 [122]
@@ -1766,28 +1767,24 @@ Underfull \hbox (badness 10000) in paragraph at lines 892--892
 
 [124]
 
-[125]
+[125])
 
 [126]
 
-[127])
-
-[128]
-
-[129
+[127
 
 
 
 ]
 
-[130]
+[128]
 \openout2 = `chapters/08-kernel-functions.aux'.
 
  (./chapters/08-kernel-functions.tex
 第七章
 
 
-[131
+[129
 
 
 ]
@@ -1800,52 +1797,52 @@ T1/cmr/m/n/10.95 (\OMS/cmsy/m/n/10.95 ^^A\OML/cmm/m/it/10.95 ; \OML/cmm/b/it/10
 
 
 
-[132]
+[130]
 Underfull \vbox (badness 4556) has occurred while \output is active []
 
 
 
+[131]
+
+[132])
+
 [133]
-
-[134])
-
-[135]
 \openout2 = `chapters/09-svm.aux'.
 
  (./chapters/09-svm.tex
 第八章
 
 
-[136
+[134
 
 
 
 
 ]
 
+[135]
+
+[136]
+
 [137]
 
-[138]
+[138])
 
 [139]
-
-[140])
-
-[141]
 \openout2 = `chapters/09-pca.aux'.
 
  (./chapters/09-pca.tex
 第九章
 
 
-[142
+[140
 
 
 
 
 ]
 
-[143]
+[141]
 Overfull \hbox (2.15775pt too wide) in paragraph at lines 78--80
 \TU/SimSun(0)/m/n/10.95 投 影 到 $\OML/cmm/b/it/10.95 u[]$ \TU/SimSun(0)/m/n/10.95
  时，|  四 个 得 分 为 $\OT1/cmr/m/n/10.95 3/[]\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.9
@@ -1859,6 +1856,10 @@ OT1/cmr/m/n/10.95 5\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10.9
 
 
 
+[142]
+
+[143]
+
 [144]
 
 [145]
@@ -1867,31 +1868,27 @@ OT1/cmr/m/n/10.95 5\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10.9
 
 [147]
 
-[148]
+[148])
 
 [149]
-
-[150])
-
-[151]
 \openout2 = `chapters/09-krr.aux'.
 
  (./chapters/09-krr.tex
 第十章
 
 
-[152
+[150
 
 
 
 
 ]
 
+[151]
+
+[152])
+
 [153]
-
-[154])
-
-[155]
 \openout2 = `chapters/09-svr.aux'.
 
  (./chapters/09-svr.tex
@@ -1901,36 +1898,36 @@ Underfull \vbox (badness 3525) has occurred while \output is active []
 
 
 
-[156
+[154
 
 
 
 
 ]
 
+[155]
+
+[156])
+
 [157]
-
-[158])
-
-[159]
 \openout2 = `chapters/09-klms.aux'.
 
  (./chapters/09-klms.tex
 第十二章
 
 
-[160
+[158
 
 
 
 
 ]
 
+[159]
+
+[160])
+
 [161]
-
-[162])
-
-[163]
 \openout2 = `chapters/09-kernel-gp.aux'.
 
  (./chapters/09-kernel-gp.tex
@@ -1940,7 +1937,7 @@ Underfull \vbox (badness 1348) has occurred while \output is active []
 
 
 
-[164
+[162
 
 
 
@@ -1955,45 +1952,49 @@ n/10.95 96[]$
 
 
 
+[163]
+
+[164])
+
 [165]
 
-[166])
-
-[167]
-
-[168
+[166
 
 
 
 ]
 
-LaTeX Warning: Reference `chap:pipeline' on page 169 undefined on input line 72
+LaTeX Warning: Reference `chap:pipeline' on page 167 undefined on input line 72
 .
 
 
 
-[169]
+[167]
 \openout2 = `chapters/09-sequence.aux'.
 
  (./chapters/09-sequence.tex
 第十四章
 
 
-[170
+[168
 
 
 ]
 
+[169]
+
+[170]
+
 [171]
 
 [172]
+Underfull \vbox (badness 1210) has occurred while \output is active []
+
+
 
 [173]
 
 [174]
-Underfull \vbox (badness 1210) has occurred while \output is active []
-
-
 
 [175]
 
@@ -2006,17 +2007,13 @@ Underfull \vbox (badness 1210) has occurred while \output is active []
 [179]
 
 [180]
-
-[181]
-
-[182]
 Overfull \hbox (5.51125pt too wide) detected at line 349
 []
  []
 
 
 
-[183]
+[181]
 Overfull \hbox (13.25964pt too wide) in paragraph at lines 349--351
 \TU/SimSun(0)/m/n/10.95 这 里 $\OML/cmm/m/it/10.95 w[] \OMS/cmsy/m/n/10.95 2 \U/m
 sb/m/n/10.95 R[]$\TU/SimSun(0)/m/n/10.95 、| $\OML/cmm/m/it/10.95 W[]; W[] \OMS/
@@ -2027,9 +2024,9 @@ r/m/n/10.95 (\OML/cmm/m/it/10.95 s\OT1/cmr/m/n/10.95 ) =
 
 
 
-[184]
+[182]
 
-[185]
+[183]
 Overfull \hbox (1.42375pt too wide) in paragraph at lines 396--397
 []\TU/SimSun(0)/m/n/10.95 前 面 的 模 型 都 先 形 成 表 示，|  输 出 头 才 决 定 预 测 什 么。|  直 接 多
  步 预 测 用 $[] \OT1/cmr/m/n/10.95 =
@@ -2040,48 +2037,48 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[186]
+[184]
 
-[187]
+[185]
 Underfull \vbox (badness 1082) has occurred while \output is active []
 
 
 
-[188]
+[186]
 Underfull \vbox (badness 1142) has occurred while \output is active []
 
 
 
-[189]
+[187]
 Underfull \vbox (badness 3417) has occurred while \output is active []
 
 
 
+[188]
+
+[189])
+
 [190]
-
-[191])
-
-[192]
 \openout2 = `chapters/10-vision.aux'.
 
  (./chapters/10-vision.tex
 第十五章
 
 
-[193
+[191
 
 
 
 
 ]
 
+[192]
+
+[193]
+
 [194]
 
 [195]
-
-[196]
-
-[197]
 Overfull \hbox (0.4806pt too wide) in paragraph at lines 118--119
 []\TU/lmr/m/n/10.95 ResNet-18 \TU/SimSun(0)/m/n/10.95 和 \TU/lmr/m/n/10.95 ResNe
 t-34 \TU/SimSun(0)/m/n/10.95 主 要 使 用 由 两 个 $\OT1/cmr/m/n/10.95 3 \OMS/cmsy/m/n/
@@ -2090,6 +2087,10 @@ TU/lmr/m/n/10.95 ResNet-
  []
 
 
+
+[196]
+
+[197]
 
 [198]
 
@@ -2100,57 +2101,51 @@ TU/lmr/m/n/10.95 ResNet-
 [201]
 
 [202]
+Underfull \vbox (badness 2057) has occurred while \output is active []
+
+
 
 [203]
 
 [204]
-Underfull \vbox (badness 2057) has occurred while \output is active []
-
-
 
 [205]
 
 [206]
 
-[207]
+[207])
 
 [208]
-
-[209])
-
-[210]
-
-[211]
 \openout2 = `chapters/10-graph-neural-networks.aux'.
 
  (./chapters/10-graph-neural-networks.tex
 第十六章
 
 
-[212
+[209
 
 
 
 
 ]
 
-[213]
+[210]
 Underfull \vbox (badness 2119) has occurred while \output is active []
+
+
+
+[211]
+
+[212]
+
+[213]
+Underfull \vbox (badness 3780) has occurred while \output is active []
 
 
 
 [214]
 
 [215]
-
-[216]
-Underfull \vbox (badness 3780) has occurred while \output is active []
-
-
-
-[217]
-
-[218]
 Overfull \hbox (6.41336pt too wide) in paragraph at lines 199--201
 $\OML/cmm/m/it/10.95 L[]$ \TU/SimSun(0)/m/n/10.95 是 对 称 归 一 化 图 拉 普 拉 斯 矩 阵，| $
 \OML/cmm/m/it/10.95 U$ \TU/SimSun(0)/m/n/10.95 的 列 为 正 交 单 位 特 征 向 量，| $\OT1/cm
@@ -2160,9 +2155,9 @@ r/m/n/10.95 ^^C = [](\OML/cmm/m/it/10.95 ^^U[]; [] ; ^^U[]\OT1/cmr/m/n/10.95 )$
 
 
 
-[219]
+[216]
 
-[220]
+[217]
 Overfull \hbox (20.58899pt too wide) in paragraph at lines 267--269
 $\OML/cmm/m/it/10.95 B \OMS/cmsy/m/n/10.95 2 \U/msb/m/n/10.95 R[]$ \TU/SimSun(0
 )/m/n/10.95 与 $\OML/cmm/b/it/10.95 a \OMS/cmsy/m/n/10.95 2 \U/msb/m/n/10.95 R[]
@@ -2173,7 +2168,7 @@ u\OT1/cmr/m/n/10.95 ) =
 
 
 
-[221]
+[218]
 Overfull \hbox (44.7175pt too wide) detected at line 289
 [][][]\OT1/cmr/m/n/10.95 
  = [](\OML/cmm/m/it/10.95 ![]; [] ; ![]\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95 
@@ -2185,53 +2180,53 @@ Overfull \hbox (44.7175pt too wide) detected at line 289
 
 
 
-[222]
+[219]
 
-[223]
+[220]
 Underfull \vbox (badness 1629) has occurred while \output is active []
 
 
 
+[221]
+
+[222]
+
+[223]
+
 [224]
-
-[225]
-
-[226]
-
-[227]
-
-[228]
-Overfull \hbox (12.97362pt too wide) in paragraph at lines 485--486
+Overfull \hbox (12.97362pt too wide) in paragraph at lines 474--475
 []\TU/lmr/m/n/10.95 Hamilton \TU/SimSun(0)/m/n/10.95 等 的 \TU/lmr/m/it/10.95 Ind
 uctive Representation Learning on Large Graphs \TU/SimSun(0)/m/n/10.95 与 \TU/lm
 r/m/n/10.95 Veličković
  []
 
-)
 
-[229]
+
+[225])
+
+[226]
 \openout2 = `chapters/11-llm.aux'.
 
  (./chapters/11-llm.tex
 第十七章
 
 
-[230
+[227
 
 
 
 
 ]
 
+[228]
+
+[229]
+
+[230]
+
 [231]
 
 [232]
-
-[233]
-
-[234]
-
-[235]
 Underfull \hbox (badness 4013) in paragraph at lines 129--129
 []|\TU/lmr/m/n/8 BERT \TU/SimSun(0)/m/n/8 类 \TU/lmr/m/n/8 encoder-
  []
@@ -2248,6 +2243,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 129--129
 
 
 
+[233]
+
+[234]
+
+[235]
+
 [236]
 
 [237]
@@ -2258,120 +2259,114 @@ Underfull \hbox (badness 10000) in paragraph at lines 129--129
 
 [240]
 
-[241]
+[241])
 
 [242]
-
-[243]
-
-[244])
-
-[245]
-
-[246]
 \openout2 = `chapters/12-multimodal.aux'.
 
  (./chapters/12-multimodal.tex
 第十八章
 
 
-[247
+[243
 
 
 
 
 ]
 
+[244]
+
+[245]
+
+[246]
+
+[247]
+Overfull \hbox (19.56096pt too wide) in paragraph at lines 150--151
+[]\TU/SimSun(0)/m/n/10.95 第 二 代 视 觉 语 言 预 训 练 模 型 \TU/lmr/m/n/10.95 BLIP-2 |\TU
+/SimSun(0)/m/n/10.95 （\TU/lmr/m/n/10.95 Bootstrapping Language-Image Pre-traini
+ng\TU/SimSun(0)/m/n/10.95 ，|
+ []
+
+
+
 [248]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 
 [249]
 
 [250]
 
 [251]
+Overfull \hbox (14.30786pt too wide) in paragraph at lines 233--234
+[]\TU/SimSun(0)/m/n/10.95 这 沿 用 上 一 章 的 下 一 词 元 预 测。|  图 文 对 比 损 失 在 有 限 候 选 间 
+选 择 配 对，|  式[]在
+ []
+
+
 
 [252]
 
 [253]
 
 [254]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 
 [255]
 
-[256])
+[256]
 
-[257]
+[257])
+
+[258]
 \openout2 = `chapters/13-generative.aux'.
 
  (./chapters/13-generative.tex
 第十九章
 
 
-[258
+[259
 
 
 
 
 ]
-
-[259]
 
 [260]
 
 [261]
 
 [262]
-Underfull \hbox (badness 10000) in paragraph at lines 130--130
-[]|\TU/lmr/m/n/8 Denoising Dif-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 130--130
-\TU/lmr/m/n/8 fusion Proba-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 130--130
-\TU/lmr/m/n/8 bilistic Model
- []
-
-
-Overfull \hbox (1.54811pt too wide) in paragraph at lines 130--130
-\TU/lmr/m/n/8 (DDPM)/Denoising
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 130--130
-\TU/lmr/m/n/8 Diffusion Implicit
- []
-
-
 
 [263]
 
 [264]
 
-[265]
+[265])
 
 [266]
-
-[267]
-
-[268])
-
-[269]
 \openout2 = `chapters/14-pinn.aux'.
 
  (./chapters/14-pinn.tex
 第二十章
 
 
-[270
+[267
 
 
 
 
 ]
+
+[268]
+
+[269]
+
+[270]
 
 [271]
 
@@ -2382,35 +2377,29 @@ Underfull \hbox (badness 10000) in paragraph at lines 130--130
 [274]
 
 [275]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
+put line 237.
+
 
 [276]
 
 [277]
 
 [278]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 237.
-
 
 [279]
 
-[280]
+[280])
 
 [281]
 
-[282]
-
-[283])
-
-[284]
-
-[285
+[282
 
 
 
 ]
 
-[286]
+[283]
 \openout2 = `chapters/15-pretraining.aux'.
 
  (./chapters/15-pretraining.tex
@@ -2420,10 +2409,19 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[287
+[284
 
 
 ]
+
+[285]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+[286]
+
+[287]
 
 [288]
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -2433,45 +2431,36 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 [289]
 
 [290]
+Underfull \vbox (badness 1092) has occurred while \output is active []
+
+
 
 [291]
+
+[292]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[292]
-
 [293]
-Underfull \vbox (badness 1092) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
 [294]
 
 [295]
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
-
-[296]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
+[296])
 
 [297]
-
-[298]
-
-[299])
-
-[300]
 \openout2 = `chapters/16-transfer.aux'.
 
  (./chapters/16-transfer.tex
 第二十二章
 
 
-[301
+[298
 
 
 
@@ -2481,9 +2470,9 @@ Underfull \vbox (badness 1348) has occurred while \output is active []
 
 
 
-[302]
+[299]
 
-[303]
+[300]
 Overfull \hbox (16.55724pt too wide) in paragraph at lines 83--84
 \TU/lmr/bx/n/10.95 Maximum Mean Discrepancy (MMD) \TU/SimSun(0)/b/n/10.95 与 \TU
 /lmr/bx/n/10.95 Correlation Alignment (CORAL)\TU/SimSun(0)/b/n/10.95 。|
@@ -2491,58 +2480,56 @@ Overfull \hbox (16.55724pt too wide) in paragraph at lines 83--84
 
 
 
+[301]
+
+[302]
+
+[303]
+
 [304]
 
 [305]
 
 [306]
 
-[307]
+[307])
 
 [308]
-
-[309]
-
-[310])
-
-[311]
 \openout2 = `chapters/17-continual.aux'.
 
  (./chapters/17-continual.tex
 第二十三章
 
 
-[312
+[309
 
 
 
 
 ]
 
+[310]
+
+[311]
+
+[312]
+Underfull \vbox (badness 3302) has occurred while \output is active []
+
+
+
 [313]
 
 [314]
 
 [315]
-Underfull \vbox (badness 3302) has occurred while \output is active []
-
-
 
 [316]
 
 [317]
 
-[318]
+[318])
 
 [319]
-
-[320]
-
-[321])
-
-[322]
-
-[323]
 \openout2 = `chapters/18-active.aux'.
 
  (./chapters/18-active.tex
@@ -2552,20 +2539,20 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 
-[324
+[320
 
 
 
 
 ]
 
-[325]
+[321]
 
-[326]
+[322]
 
-[327]
+[323]
 
-[328]
+[324]
 Overfull \hbox (3.39157pt too wide) in paragraph at lines 126--128
 \TU/SimSun(0)/m/n/10.95 这 里 先 对 每 个 假 想 标 签 的 损 失 求 梯 度，|  再 用 当 前 概 率 加 权；|  不
  是 对 $[][] \OML/cmm/m/it/10.95 p[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 y \OM
@@ -2575,38 +2562,38 @@ S/cmsy/m/n/10.95 j \OML/cmm/m/it/10.95 x\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95
 
 
 
-[329]
+[325]
 
-[330]
+[326]
 
-[331]
+[327]
 Underfull \vbox (badness 3396) has occurred while \output is active []
 
 
 
-[332]
+[328]
 
-[333]
+[329]
 
-[334])
+[330])
 
-[335]
+[331]
 \openout2 = `chapters/19-federated.aux'.
 
  (./chapters/19-federated.tex
 第二十五章
 
 
-[336
+[332
 
 
 
 
 ]
 
-[337]
+[333]
 
-[338]
+[334]
 Underfull \hbox (badness 10000) in paragraph at lines 96--96
 []|\TU/SimSun(0)/m/n/8 安 全 聚 合 与 \TU/lmr/m/n/8 Dif-
  []
@@ -2618,7 +2605,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 96--96
 
 
 
-[339]
+[335]
 Overfull \hbox (6.81151pt too wide) in paragraph at lines 127--129
 \TU/SimSun(0)/m/n/10.95 当 $\OMS/cmsy/m/n/10.95 j\OT1/cmr/m/n/10.95 1 \OMS/cmsy/
 m/n/10.95 ^^@ \OML/cmm/m/it/10.95 ^^Qa[]\OMS/cmsy/m/n/10.95 j \OML/cmm/m/it/10.
@@ -2631,30 +2618,30 @@ p[]a[]b[]\OT1/cmr/m/n/10.95 / [][] \OML/cmm/m/it/10.95 p[]a[]$\TU/SimSun(0)/m/n
 
 
 
+[336]
+
+[337]
+
+[338]
+
+[339]
+
 [340]
 
 [341]
 
 [342]
 
-[343]
+[343])
 
 [344]
-
-[345]
-
-[346]
-
-[347])
-
-[348]
 \openout2 = `chapters/20-manifold.aux'.
 
  (./chapters/20-manifold.tex
 第二十六章
 
 
-[349
+[345
 
 
 
@@ -2663,6 +2650,14 @@ p[]a[]b[]\OT1/cmr/m/n/10.95 / [][] \OML/cmm/m/it/10.95 p[]a[]$\TU/SimSun(0)/m/n
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
+
+[346]
+
+[347]
+
+[348]
+
+[349]
 
 [350]
 
@@ -2676,29 +2671,29 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [355]
 
-[356]
+[356])
 
 [357]
-
-[358]
-
-[359]
-
-[360])
-
-[361]
 \openout2 = `chapters/21-meta.aux'.
 
  (./chapters/21-meta.tex
 第二十七章
 
 
-[362
+[358
 
 
 
 
 ]
+
+[359]
+
+[360]
+
+[361]
+
+[362]
 
 [363]
 
@@ -2707,14 +2702,6 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 [365]
 
 [366]
-
-[367]
-
-[368]
-
-[369]
-
-[370]
 Overfull \hbox (1.10052pt too wide) in paragraph at lines 233--234
 \TU/SimSun(0)/b/n/10.95 层 次 先 验 如 何 产 生 少 样 本 适 应。| [] \TU/SimSun(0)/m/n/10.95 
 一 个 可 明 确 计 算 的 概 率 元 学 习 模 型 是 $\OML/cmm/m/it/10.95 ^^R[] \OMS/cmsy/m/n/10.95 
@@ -2724,15 +2711,15 @@ r/m/n/10.95 )$\TU/SimSun(0)/m/n/10.95 、|
 
 
 
-[371]
+[367]
 Underfull \vbox (badness 2512) has occurred while \output is active []
 
 
 
-[372]
+[368]
 
-[373]
-Underfull \hbox (badness 1990) in paragraph at lines 298--299
+[369]
+Underfull \hbox (badness 1990) in paragraph at lines 295--296
 []\TU/lmr/bx/n/10.95 higher documentation: Top-Level Functions\TU/SimSun(0)/m/n
 /10.95 ；|  作 者\TU/lmr/m/n/10.95 /\TU/SimSun(0)/m/n/10.95 平 台：| \TU/lmr/m/n/10.9
 5 Face-
@@ -2740,28 +2727,42 @@ Underfull \hbox (badness 1990) in paragraph at lines 298--299
 
 
 
-[374])
+[370])
 
-[375]
+[371]
 
-[376
+[372
 
 
 
 
 ] (./main.bbl
 
-[377]
+[373]
 
-[378
+[374
 
 ]
+
+[375]
+
+[376]
+
+[377]
+
+[378]
 
 [379]
 
 [380]
 
 [381]
+Underfull \hbox (badness 6675) in paragraph at lines 459--464
+[]\TU/lmr/m/n/10.95 Sylvestre-Alvise Rebuffi, Alexander Kolesnikov, Georg Sperl
+, and
+ []
+
+
 
 [382]
 
@@ -2770,20 +2771,6 @@ Underfull \hbox (badness 1990) in paragraph at lines 298--299
 [384]
 
 [385]
-
-[386]
-Underfull \hbox (badness 6675) in paragraph at lines 485--490
-[]\TU/lmr/m/n/10.95 Sylvestre-Alvise Rebuffi, Alexander Kolesnikov, Georg Sperl
-, and
- []
-
-
-
-[387]
-
-[388]
-
-[389]
 
 Package fontspec Info: 
 (fontspec)             Could not resolve font "FangSong/BI" (it probably
@@ -2814,11 +2801,9 @@ Package fontspec Info:
 (fontspec)             - 'normal' (m/n) with NFSS spec.:
 (fontspec)             <->"FangSong/OT:script=hani;language=dflt;"
 
+)
 
-
-[390])
-
-[391] (./main.aux (./chapters/01-mathematical-preliminaries.aux)
+[386] (./main.aux (./chapters/01-mathematical-preliminaries.aux)
 (./chapters/02-foundations.aux) (./chapters/03-linear-models.aux)
 (./chapters/04-objectives-and-metrics.aux)
 (./chapters/05-optimization-training.aux) (./chapters/07-bayesian.aux)
@@ -2841,15 +2826,15 @@ L3 programming layer <2022/08/05>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 8F10435E70BA211AC1C3914B52DA67E9;27882.
+(rerunfilecheck)             Checksum: 2C1803E1C2BAFAF328A28D76D8A7E05A;28000.
  ) 
 Here is how much of TeX's memory you used:
- 38288 strings out of 473832
- 856346 string characters out of 5733158
- 1234840 words of memory out of 5000000
- 60531 multiletter control sequences out of 15000+600000
+ 38274 strings out of 473832
+ 856628 string characters out of 5733158
+ 1234743 words of memory out of 5000000
+ 60517 multiletter control sequences out of 15000+600000
  575751 words of font info for 152 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  93i,13n,111p,1001b,873s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.xdv (405 pages, 5593364 bytes).
+Output written on main.xdv (400 pages, 5490684 bytes).

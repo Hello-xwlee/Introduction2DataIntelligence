@@ -7,9 +7,11 @@ A level-1 auxiliary file: chapters/03-linear-models.aux
 A level-1 auxiliary file: chapters/04-objectives-and-metrics.aux
 A level-1 auxiliary file: chapters/05-optimization-training.aux
 A level-1 auxiliary file: chapters/07-bayesian.aux
-A level-1 auxiliary file: chapters/08-parametric-nonparametric.aux
+A level-1 auxiliary file: chapters/08-kernel-functions.aux
+A level-1 auxiliary file: chapters/09-kernel-algorithms.aux
 A level-1 auxiliary file: chapters/09-sequence.aux
 A level-1 auxiliary file: chapters/10-vision.aux
+A level-1 auxiliary file: chapters/10-graph-neural-networks.aux
 A level-1 auxiliary file: chapters/11-llm.aux
 A level-1 auxiliary file: chapters/12-multimodal.aux
 A level-1 auxiliary file: chapters/13-generative.aux
@@ -23,44 +25,44 @@ A level-1 auxiliary file: chapters/20-manifold.aux
 A level-1 auxiliary file: chapters/21-meta.aux
 The style file: plain.bst
 Database file #1: references.bib
-You've used 108 entries,
+You've used 114 entries,
             2118 wiz_defined-function locations,
-            986 strings with 21391 characters,
-and the built_in function-call counts, 35611 in all, are:
-= -- 3178
-> -- 2132
+            1004 strings with 22427 characters,
+and the built_in function-call counts, 37605 in all, are:
+= -- 3332
+> -- 2281
 < -- 1
-+ -- 846
-- -- 726
-* -- 2446
-:= -- 6101
-add.period$ -- 324
-call.type$ -- 108
-change.case$ -- 672
++ -- 904
+- -- 778
+* -- 2575
+:= -- 6444
+add.period$ -- 342
+call.type$ -- 114
+change.case$ -- 715
 chr.to.int$ -- 0
-cite$ -- 108
-duplicate$ -- 1361
-empty$ -- 2860
-format.name$ -- 726
-if$ -- 7277
+cite$ -- 114
+duplicate$ -- 1446
+empty$ -- 3024
+format.name$ -- 778
+if$ -- 7689
 int.to.chr$ -- 0
-int.to.str$ -- 108
-missing$ -- 110
-newline$ -- 543
-num.names$ -- 216
-pop$ -- 866
+int.to.str$ -- 114
+missing$ -- 117
+newline$ -- 573
+num.names$ -- 228
+pop$ -- 940
 preamble$ -- 1
-purify$ -- 567
+purify$ -- 605
 quote$ -- 0
-skip$ -- 798
+skip$ -- 840
 stack$ -- 0
-substring$ -- 1435
-swap$ -- 169
+substring$ -- 1440
+swap$ -- 181
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 426
+type$ -- 448
 warning$ -- 0
-while$ -- 279
-width$ -- 111
-write$ -- 1115
+while$ -- 289
+width$ -- 117
+write$ -- 1174

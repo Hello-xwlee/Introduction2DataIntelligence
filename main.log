@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.5.14)  13 OCT 2026 10:11
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.5.14)  13 OCT 2026 16:26
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -851,7 +851,7 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 24.
 \c@remark=\count387
 \c@theorem=\count388
 \c@lemma=\count389
-) (./main.aux (./chapters/01-mathematical-preliminaries.aux) (./chapters/02-foundations.aux) (./chapters/03-linear-models.aux) (./chapters/04-objectives-and-metrics.aux) (./chapters/05-optimization-training.aux) (./chapters/07-bayesian.aux) (./chapters/08-parametric-nonparametric.aux) (./chapters/09-sequence.aux) (./chapters/10-vision.aux) (./chapters/11-llm.aux) (./chapters/12-multimodal.aux) (./chapters/13-generative.aux) (./chapters/14-pinn.aux) (./chapters/15-pretraining.aux) (./chapters/16-transfer.aux) (./chapters/17-continual.aux) (./chapters/18-active.aux) (./chapters/19-federated.aux) (./chapters/20-manifold.aux) (./chapters/21-meta.aux))
+) (./main.aux (./chapters/01-mathematical-preliminaries.aux) (./chapters/02-foundations.aux) (./chapters/03-linear-models.aux) (./chapters/04-objectives-and-metrics.aux) (./chapters/05-optimization-training.aux) (./chapters/07-bayesian.aux) (./chapters/08-kernel-functions.aux) (./chapters/09-kernel-algorithms.aux) (./chapters/09-sequence.aux) (./chapters/10-vision.aux) (./chapters/10-graph-neural-networks.aux) (./chapters/11-llm.aux) (./chapters/12-multimodal.aux) (./chapters/13-generative.aux) (./chapters/14-pinn.aux) (./chapters/15-pretraining.aux) (./chapters/16-transfer.aux) (./chapters/17-continual.aux) (./chapters/18-active.aux) (./chapters/19-federated.aux) (./chapters/20-manifold.aux) (./chapters/21-meta.aux))
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
@@ -1020,30 +1020,29 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman (
 ]
 
 LaTeX Font Info:    Font shape `TU/SimSun(0)/m/sl' in size <12.045> not available
-(Font)              Font shape `TU/SimSun(0)/m/it' tried instead on input line 273.
+(Font)              Font shape `TU/SimSun(0)/m/it' tried instead on input line 223.
 [2]
 
-[3])
+[3]
+
+[4])
 \tf@toc=\write5
 \openout5 = `main.toc'.
 
 
 
-[4]
+[5]
 
-[5
+[6
 
 ]
-
-[6]
 
 [7]
 
-[8
-
-]
+[8]
 
 [1
+
 
 ]
 
@@ -1056,6 +1055,9 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmss' (encoding: TU).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
+
+Underfull \vbox (badness 2460) has occurred while \output is active []
+
 
 
 [3
@@ -1102,7 +1104,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 [17]
 
 [18]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 2744) has occurred while \output is active []
 
 
 
@@ -1123,9 +1125,6 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 ]
-Underfull \vbox (badness 1377) has occurred while \output is active []
-
-
 
 [23]
 Overfull \hbox (5.70674pt too wide) in paragraph at lines 65--66
@@ -1143,9 +1142,6 @@ Overfull \hbox (5.70674pt too wide) in paragraph at lines 65--66
 [27]
 
 [28]
-Underfull \vbox (badness 5133) has occurred while \output is active []
-
-
 
 [29]
 
@@ -1159,27 +1155,32 @@ Underfull \vbox (badness 5133) has occurred while \output is active []
 
 [34]
 
-[35])
+[35]
 
 [36]
+
+[37]
+
+[38])
+
+[39]
 \openout2 = `chapters/04-objectives-and-metrics.aux'.
 
  (./chapters/04-objectives-and-metrics.tex
 第四章
 
 
-[37
+[40
 
 
 
 
 ]
+Overfull \hbox (6.35384pt too wide) in paragraph at lines 73--74
+\TU/SimSun(0)/b/n/12.045 相 对 误 差 和 对 数 目 标。| [] \TU/SimSun(0)/m/n/12.045 平 均 绝 对 百 分 比 误 差  |（\TU/lmr/m/n/12.045 Mean Absolute Percentage Error\TU/SimSun(0)/m/n/12.045 ，| \TU/lmr/m/n/12.045 MAPE\TU/SimSun(0)/m/n/12.045 ）|
+ []
 
-[38]
 
-[39]
-
-[40]
 
 [41]
 
@@ -1190,50 +1191,50 @@ Underfull \vbox (badness 5133) has occurred while \output is active []
 [44]
 
 [45]
-Underfull \hbox (badness 10000) in paragraph at lines 377--377
+
+[46]
+
+[47]
+
+[48]
+
+[49]
+Underfull \hbox (badness 10000) in paragraph at lines 380--380
 []|\TU/lmr/m/n/12.045 MAE\TU/SimSun(0)/m/n/12.045 、| \TU/lmr/m/n/12.045 RMSE\TU/SimSun(0)/m/n/12.045 、| $\OML/cmm/m/it/12.045 R[]$\TU/SimSun(0)/m/n/12.045 、|
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 378--378
+Underfull \hbox (badness 10000) in paragraph at lines 381--381
 []|\TU/lmr/m/n/12.045 FPR\TU/SimSun(0)/m/n/12.045 、| \TU/lmr/m/n/12.045 FNR\TU/SimSun(0)/m/n/12.045 、| \TU/lmr/m/n/12.045 BAcc\TU/SimSun(0)/m/n/12.045 、|
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 378--378
+Underfull \hbox (badness 10000) in paragraph at lines 381--381
 \TU/lmr/m/n/12.045 Precision\TU/SimSun(0)/m/n/12.045 、| \TU/lmr/m/n/12.045 Recall\TU/SimSun(0)/m/n/12.045 、|
  []
 
 
-Overfull \hbox (3.3264pt too wide) in paragraph at lines 373--382
+Overfull \hbox (3.3264pt too wide) in paragraph at lines 376--385
  [][] 
  []
 
 
 
-[46]
+[50])
 
-[47])
-
-[48]
+[51]
 \openout2 = `chapters/05-optimization-training.aux'.
 
  (./chapters/05-optimization-training.tex
 第五章
 
 
-[49
+[52
 
 
 
 
 ]
-
-[50]
-
-[51]
-
-[52]
 
 [53]
 
@@ -1248,11 +1249,6 @@ Overfull \hbox (3.3264pt too wide) in paragraph at lines 373--382
 [58]
 
 [59]
-Overfull \hbox (2.37672pt too wide) in paragraph at lines 410--412
-\TU/SimSun(0)/m/n/12.045 均 值 公 式 来 自 $[][] \OML/cmm/m/it/12.045 r[]\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 x[] \OMS/cmsy/m/n/12.045 ^^@ \OML/cmm/m/it/12.045 ^^V[]\OT1/cmr/m/n/12.045 ) = 0$\TU/SimSun(0)/m/n/12.045 。|  方 差 公 式 来 自 对 $\OML/cmm/m/it/12.045 ^^[[]$ \TU/SimSun(0)/m/n/12.045 求 导 后 得 到 的 $\OML/cmm/m/it/12.045 N[]^^[[] \OT1/cmr/m/n/12.045 = [][] \OML/cmm/m/it/12.045 r[]\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 x[] \OMS/cmsy/m/n/12.045 ^^@
- []
-
-
 
 [60]
 
@@ -1261,8 +1257,8 @@ Overfull \hbox (2.37672pt too wide) in paragraph at lines 410--412
 [62]
 
 [63]
-Overfull \hbox (30.40962pt too wide) in paragraph at lines 524--527
-\TU/SimSun(0)/m/n/12.045 它 将 近 似 后 验 中 的 坐 标 设 为 独 立。|  固 定 除 第 $\OML/cmm/m/it/12.045 j$ \TU/SimSun(0)/m/n/12.045 个 因 子 以 外 的 $\OML/cmm/m/it/12.045 q[]$\TU/SimSun(0)/m/n/12.045 ，|  令 $\OML/cmm/m/it/12.045 A[]\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 ^^R[]\OT1/cmr/m/n/12.045 ) = \U/msb/m/n/12.045 E[]\OT1/cmr/m/n/12.045 [[] \OML/cmm/m/it/12.045 p\OT1/cmr/m/n/12.045 (\OMS/cmsy/m/n/12.045 D\OML/cmm/m/it/12.045 ; ^^R\OT1/cmr/m/n/12.045 )]$\TU/SimSun(0)/m/n/12.045 ，|
+Overfull \hbox (2.37672pt too wide) in paragraph at lines 412--414
+\TU/SimSun(0)/m/n/12.045 均 值 公 式 来 自 $[][] \OML/cmm/m/it/12.045 r[]\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 x[] \OMS/cmsy/m/n/12.045 ^^@ \OML/cmm/m/it/12.045 ^^V[]\OT1/cmr/m/n/12.045 ) = 0$\TU/SimSun(0)/m/n/12.045 。|  方 差 公 式 来 自 对 $\OML/cmm/m/it/12.045 ^^[[]$ \TU/SimSun(0)/m/n/12.045 求 导 后 得 到 的 $\OML/cmm/m/it/12.045 N[]^^[[] \OT1/cmr/m/n/12.045 = [][] \OML/cmm/m/it/12.045 r[]\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 x[] \OMS/cmsy/m/n/12.045 ^^@
  []
 
 
@@ -1270,38 +1266,46 @@ Overfull \hbox (30.40962pt too wide) in paragraph at lines 524--527
 [64]
 
 [65]
+Overfull \hbox (1.44466pt too wide) in paragraph at lines 488--489
+[]\TU/SimSun(0)/m/n/12.045 这 里 的 转 化 并 不 声 称 每 个 \TU/lmr/m/n/12.045 ELBO \TU/SimSun(0)/m/n/12.045 都 能 直 接 算 出。|  计 算 后 验 密 度 需 要 知 道 证 据 $\OML/cmm/m/it/12.045 p\OT1/cmr/m/n/12.045 (\OMS/cmsy/m/n/12.045 D\OT1/cmr/m/n/12.045 )$\TU/SimSun(0)/m/n/12.045 ，|
+ []
 
-[66])
+
+
+[66]
 
 [67]
 
-[68
+[68]
+
+[69]
+Underfull \vbox (badness 1484) has occurred while \output is active []
+
+
+
+[70]
+
+[71])
+
+[72]
+
+[73
 
 
 
 ]
 
-[69]
+[74]
 \openout2 = `chapters/07-bayesian.aux'.
 
  (./chapters/07-bayesian.tex
 第六章
 
 
-[70
+[75
 
 
 ]
-
-[71]
-
-[72]
-
-[73]
-
-[74]
-
-[75]
 
 [76]
 
@@ -1312,31 +1316,6 @@ Overfull \hbox (30.40962pt too wide) in paragraph at lines 524--527
 [79]
 
 [80]
-Underfull \hbox (badness 5260) in paragraph at lines 383--383
-[]|\TU/SimSun(0)/m/n/10.53937 转 移 与 观 测 局 部 归
- []
-
-
-Underfull \hbox (badness 5260) in paragraph at lines 384--384
-[]|\TU/SimSun(0)/m/n/10.53937 每 个 前 驱 状 态 局 部
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 385--385
-[]|\TU/SimSun(0)/m/n/10.53937 链 式
- []
-
-
-Underfull \hbox (badness 5260) in paragraph at lines 385--385
-[]|\TU/SimSun(0)/m/n/10.53937 所 有 标 签 路 径 全 局
- []
-
-
-Underfull \hbox (badness 5260) in paragraph at lines 386--386
-[]|\TU/SimSun(0)/m/n/10.53937 全 部 配 置 全 局 归 一
- []
-
-
 
 [81]
 
@@ -1351,6 +1330,11 @@ Underfull \hbox (badness 5260) in paragraph at lines 386--386
 [86]
 
 [87]
+Overfull \hbox (6.83762pt too wide) in paragraph at lines 507--508
+[]\TU/SimSun(0)/m/n/12.045 链 $\OML/cmm/m/it/12.045 A \OMS/cmsy/m/n/12.045 ^^@ \OML/cmm/m/it/12.045 B \OMS/cmsy/m/n/12.045 ^^@ \OML/cmm/m/it/12.045 C$ \TU/SimSun(0)/m/n/12.045 的 极 大 团 为 $\OMS/cmsy/m/n/12.045 f\OML/cmm/m/it/12.045 A; B\OMS/cmsy/m/n/12.045 g\OML/cmm/m/it/12.045 ; \OMS/cmsy/m/n/12.045 f\OML/cmm/m/it/12.045 B; C\OMS/cmsy/m/n/12.045 g$\TU/SimSun(0)/m/n/12.045 ，|  可 以 写 成 $\OML/cmm/m/it/12.045 p\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 a; b; c\OT1/cmr/m/n/12.045 ) = \OML/cmm/m/it/12.045  []\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 a; b\OT1/cmr/m/n/12.045 )\OML/cmm/m/it/12.045  []\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 b; c\OT1/cmr/m/n/12.045 )/\OML/cmm/m/it/12.045 Z$\TU/SimSun(0)/m/n/12.045 。|
+ []
+
+
 
 [88]
 
@@ -1358,88 +1342,151 @@ Underfull \hbox (badness 5260) in paragraph at lines 386--386
 
 [90]
 
-[91])
+[91]
+Underfull \hbox (badness 5260) in paragraph at lines 671--671
+[]|\TU/SimSun(0)/m/n/10.53937 转 移 与 观 测 局 部 归
+ []
+
+
+Underfull \hbox (badness 5260) in paragraph at lines 672--672
+[]|\TU/SimSun(0)/m/n/10.53937 每 个 前 驱 状 态 局 部
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 673--673
+[]|\TU/SimSun(0)/m/n/10.53937 链 式
+ []
+
+
+Underfull \hbox (badness 5260) in paragraph at lines 673--673
+[]|\TU/SimSun(0)/m/n/10.53937 所 有 标 签 路 径 全 局
+ []
+
+
+Underfull \hbox (badness 5260) in paragraph at lines 674--674
+[]|\TU/SimSun(0)/m/n/10.53937 全 部 配 置 全 局 归 一
+ []
+
+
 
 [92]
-\openout2 = `chapters/08-parametric-nonparametric.aux'.
 
- (./chapters/08-parametric-nonparametric.tex
-第七章
-
-
-[93
-
-
-
-
-]
+[93]
 
 [94]
+Underfull \vbox (badness 5189) has occurred while \output is active []
+
+
 
 [95]
 
 [96]
+Overfull \hbox (3.76138pt too wide) in paragraph at lines 820--821
+[]\TU/SimSun(0)/m/n/12.045 训 练 数 据 只 提 供 $\OML/cmm/m/it/12.045 v$\TU/SimSun(0)/m/n/12.045 。|  对 单 个 样 本 求 对 数 似 然 梯 度，|  利 用 $\OML/cmm/m/it/12.045 @ [] Z[]\OT1/cmr/m/n/12.045 /\OML/cmm/m/it/12.045 @W[] \OT1/cmr/m/n/12.045 = \U/msb/m/n/12.045 E[]\OT1/cmr/m/n/12.045 [\OML/cmm/m/it/12.045 v[]h[]\OT1/cmr/m/n/12.045 ]$\TU/SimSun(0)/m/n/12.045 ，|
+ []
+
+
+Underfull \vbox (badness 2111) has occurred while \output is active []
+
+
 
 [97]
 
 [98]
+Underfull \hbox (badness 10000) in paragraph at lines 890--890
+[]|\TU/SimSun(0)/m/n/10.53937 离 散 成 分、|
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 892--892
+[]|\TU/SimSun(0)/m/n/10.53937 线 性 高 斯
+ []
+
+
+Underfull \hbox (badness 1681) in paragraph at lines 892--893
+[]|\TU/SimSun(0)/m/n/10.53937 卡 尔 曼 过 滤 的 均 值 与 协
+ []
+
+
+Underfull \hbox (badness 1681) in paragraph at lines 893--894
+[]|\TU/SimSun(0)/m/n/10.53937 标 签 路 径 概 率 与 链 式 推
+ []
+
+
 
 [99]
 
-[100])
+[100]
 
 [101]
 
 [102]
 
-[103
+[103]
+
+[104])
+
+[105]
+
+[106
 
 
 
 ]
 
-LaTeX Warning: Reference `chap:pipeline' on page 104 undefined on input line 63.
+[107]
+\openout2 = `chapters/08-kernel-functions.aux'.
+
+ (./chapters/08-kernel-functions.tex
+第七章
 
 
+[108
 
-[104]
-\openout2 = `chapters/09-sequence.aux'.
 
- (./chapters/09-sequence.tex
+]
+
+[109])
+
+[110]
+\openout2 = `chapters/09-kernel-algorithms.aux'.
+
+ (./chapters/09-kernel-algorithms.tex
 第八章
 
 
-[105
+[111
+
+
 
 
 ]
 
-[106]
-
-[107]
-
-[108]
-
-[109]
-
-[110]
-
-[111]
-Underfull \hbox (badness 10000) in paragraph at lines 220--220
-[]|\TU/lmr/m/n/7.52812 PatchTST/
- []
-
-
-
-[112]
+[112])
 
 [113]
 
-[114]
+[114
+
+
+
+]
+
+LaTeX Warning: Reference `chap:pipeline' on page 115 undefined on input line 67.
+
+
 
 [115]
+\openout2 = `chapters/09-sequence.aux'.
 
-[116]
+ (./chapters/09-sequence.tex
+第九章
+
+
+[116
+
+
+]
 
 [117]
 
@@ -1447,33 +1494,20 @@ Underfull \hbox (badness 10000) in paragraph at lines 220--220
 
 [119]
 
-[120])
+[120]
 
 [121]
-\openout2 = `chapters/10-vision.aux'.
 
- (./chapters/10-vision.tex
-第九章
-
-
-[122
-
-
-
-
-]
-Underfull \vbox (badness 4060) has occurred while \output is active []
+[122]
+Underfull \hbox (badness 10000) in paragraph at lines 220--220
+[]|\TU/lmr/m/n/7.52812 PatchTST/
+ []
 
 
 
 [123]
 
 [124]
-Underfull \hbox (badness 10000) in paragraph at lines 87--87
-[]|\TU/lmr/m/n/7.52812 MobileNet/
- []
-
-
 
 [125]
 
@@ -1487,35 +1521,124 @@ Underfull \hbox (badness 10000) in paragraph at lines 87--87
 
 [130]
 
-[131]
+[131])
 
 [132]
+\openout2 = `chapters/10-vision.aux'.
 
-[133]
-
-[134]
-
-[135])
-
-[136]
-\openout2 = `chapters/11-llm.aux'.
-
- (./chapters/11-llm.tex
+ (./chapters/10-vision.tex
 第十章
 
 
-[137
+[133
 
 
 
 
 ]
+Underfull \vbox (badness 4060) has occurred while \output is active []
+
+
+
+[134]
+
+[135]
+Underfull \hbox (badness 10000) in paragraph at lines 87--87
+[]|\TU/lmr/m/n/7.52812 MobileNet/
+ []
+
+
+
+[136]
+
+[137]
 
 [138]
 
 [139]
 
 [140]
+
+[141]
+
+[142]
+
+[143]
+
+[144]
+
+[145]
+
+[146])
+
+[147]
+\openout2 = `chapters/10-graph-neural-networks.aux'.
+
+ (./chapters/10-graph-neural-networks.tex
+第十一章
+
+
+[148
+
+
+
+
+]
+
+[149]
+
+[150]
+
+[151]
+Underfull \vbox (badness 1484) has occurred while \output is active []
+
+
+
+[152]
+
+[153]
+
+[154]
+
+[155]
+Overfull \hbox (19.54863pt too wide) detected at line 289
+[][][]\OT1/cmr/m/n/12.045 
+ = [](\OML/cmm/m/it/12.045 ![]; [] ; ![]\OT1/cmr/m/n/12.045 )\OML/cmm/m/it/12.045 ;  ^^N[] \OT1/cmr/m/n/12.045 = [] \OML/cmm/m/it/12.045 C[];  d[] \OT1/cmr/m/n/12.045 = [] \OML/cmm/m/it/12.045 ![]C[];  D[] \OT1/cmr/m/n/12.045 = [](\OML/cmm/m/it/12.045 ^^N[]\OT1/cmr/m/n/12.045 )\OML/cmm/m/it/12.045 ;  D[] \OT1/cmr/m/n/12.045 = [](\OML/cmm/m/it/12.045 d[]\OT1/cmr/m/n/12.045 )\OML/cmm/m/it/12.045 :
+ []
+
+
+
+[156]
+
+[157]
+
+[158]
+
+[159]
+
+[160]
+
+[161])
+
+[162]
+\openout2 = `chapters/11-llm.aux'.
+
+ (./chapters/11-llm.tex
+第十二章
+
+
+[163
+
+
+
+
+]
+
+[164]
+
+[165]
+
+[166]
 Underfull \hbox (badness 10000) in paragraph at lines 129--129
 []|\TU/lmr/m/n/7.52812 BERT \TU/SimSun(0)/m/n/7.52812 类 \TU/lmr/m/n/7.52812 encoder-
  []
@@ -1532,58 +1655,58 @@ Underfull \hbox (badness 10000) in paragraph at lines 129--129
 
 
 
-[141]
+[167]
 
-[142]
+[168]
 
-[143]
+[169]
 
-[144]
+[170]
 
-[145]
+[171]
 
-[146]
+[172]
 
-[147]
+[173]
 
-[148])
+[174])
 
-[149]
+[175]
 \openout2 = `chapters/12-multimodal.aux'.
 
  (./chapters/12-multimodal.tex
-第十一章
+第十三章
 
 
-[150
+[176
 
 
 
 
 ]
 
-[151]
+[177]
 
-[152]
+[178]
 
-[153]
+[179]
 
-[154]
+[180]
 
-[155]
+[181]
 
-[156]
+[182]
 
-[157])
+[183])
 
-[158]
+[184]
 \openout2 = `chapters/13-generative.aux'.
 
  (./chapters/13-generative.tex
-第十二章
+第十四章
 
 
-[159
+[185
 
 
 
@@ -1595,11 +1718,11 @@ Overfull \hbox (73.4131pt too wide) in paragraph at lines 35--37
 
 
 
-[160]
+[186]
 
-[161]
+[187]
 
-[162]
+[188]
 Underfull \hbox (badness 1237) in paragraph at lines 130--130
 []|\TU/lmr/m/n/7.52812 Denoising Diffusion
  []
@@ -1616,105 +1739,29 @@ Underfull \hbox (badness 10000) in paragraph at lines 130--130
 
 
 
-[163]
-
-[164]
-
-[165]
-
-[166]
-
-[167])
-
-[168]
-\openout2 = `chapters/14-pinn.aux'.
-
- (./chapters/14-pinn.tex
-第十三章
-
-
-[169
-
-
-
-
-]
-
-[170]
-
-[171]
-
-[172]
-
-[173]
-
-[174]
-
-[175]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 237.
-
-
-[176]
-
-[177]
-
-[178]
-
-[179])
-
-[180]
-
-[181
-
-
-
-]
-
-[182]
-\openout2 = `chapters/15-pretraining.aux'.
-
- (./chapters/15-pretraining.tex
-第十四章
-
-
-[183
-
-
-]
-
-[184]
-
-[185]
-
-[186]
-
-[187]
-
-[188]
-
 [189]
 
 [190]
 
 [191]
 
-[192])
+[192]
 
-[193]
-\openout2 = `chapters/16-transfer.aux'.
+[193])
 
- (./chapters/16-transfer.tex
+[194]
+\openout2 = `chapters/14-pinn.aux'.
+
+ (./chapters/14-pinn.tex
 第十五章
 
 
-[194
+[195
 
 
 
 
 ]
-
-[195]
 
 [196]
 
@@ -1726,52 +1773,43 @@ Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on inp
 
 [200]
 
-[201])
+[201]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 237.
+
 
 [202]
-\openout2 = `chapters/17-continual.aux'.
 
- (./chapters/17-continual.tex
-第十六章
-
-
-[203
-
-
-
-
-]
+[203]
 
 [204]
 
-[205]
+[205])
 
 [206]
 
-[207]
-
-[208]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-[209]
-
-[210])
-
-[211]
-\openout2 = `chapters/18-active.aux'.
-
- (./chapters/18-active.tex
-第十七章
-
-
-[212
-
+[207
 
 
 
 ]
+
+[208]
+\openout2 = `chapters/15-pretraining.aux'.
+
+ (./chapters/15-pretraining.tex
+第十六章
+
+
+[209
+
+
+]
+
+[210]
+
+[211]
+
+[212]
 
 [213]
 
@@ -1782,31 +1820,26 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 [216]
 
 [217]
-Overfull \hbox (24.69923pt too wide) in paragraph at lines 167--168
-\TU/SimSun(0)/m/n/12.045 种 子 的 随 机 规 则 选 择。|  随 后 类 似 $\OML/cmm/m/it/12.045 k$\TU/lmr/m/n/12.045 -means++\TU/SimSun(0)/m/n/12.045 ，|  在 已 有 中 心 集 合 $\OML/cmm/m/it/12.045 S$ \TU/SimSun(0)/m/n/12.045 下，|  以 $\OML/cmm/m/it/12.045 D\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 x\OT1/cmr/m/n/12.045 )[]/ [][] \OML/cmm/m/it/12.045 D\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 u\OT1/cmr/m/n/12.045 )[]$
- []
+
+[218])
+
+[219]
+\openout2 = `chapters/16-transfer.aux'.
+
+ (./chapters/16-transfer.tex
+第十七章
 
 
-
-[218]
-
-[219])
-
-[220]
-
-[221]
-\openout2 = `chapters/19-federated.aux'.
-
- (./chapters/19-federated.tex
-第十八章
-
-
-[222
+[220
 
 
 
 
 ]
+
+[221]
+
+[222]
 
 [223]
 
@@ -1816,69 +1849,87 @@ Overfull \hbox (24.69923pt too wide) in paragraph at lines 167--168
 
 [226]
 
-[227]
+[227])
 
 [228]
+\openout2 = `chapters/17-continual.aux'.
 
-[229]
-
-[230]
-
-[231])
-
-[232]
-\openout2 = `chapters/20-manifold.aux'.
-
- (./chapters/20-manifold.tex
-第十九章
+ (./chapters/17-continual.tex
+第十八章
 
 
-[233
+[229
 
 
 
 
 ]
 
+[230]
+
+[231]
+
+[232]
+
+[233]
+
 [234]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 
 [235]
 
-[236]
+[236])
 
 [237]
+\openout2 = `chapters/18-active.aux'.
 
-[238]
+ (./chapters/18-active.tex
+第十九章
+
+
+[238
+
+
+
+
+]
 
 [239]
 
 [240]
 
-[241])
+[241]
 
 [242]
-\openout2 = `chapters/21-meta.aux'.
 
- (./chapters/21-meta.tex
+[243]
+Overfull \hbox (24.69923pt too wide) in paragraph at lines 167--168
+\TU/SimSun(0)/m/n/12.045 种 子 的 随 机 规 则 选 择。|  随 后 类 似 $\OML/cmm/m/it/12.045 k$\TU/lmr/m/n/12.045 -means++\TU/SimSun(0)/m/n/12.045 ，|  在 已 有 中 心 集 合 $\OML/cmm/m/it/12.045 S$ \TU/SimSun(0)/m/n/12.045 下，|  以 $\OML/cmm/m/it/12.045 D\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 x\OT1/cmr/m/n/12.045 )[]/ [][] \OML/cmm/m/it/12.045 D\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 u\OT1/cmr/m/n/12.045 )[]$
+ []
+
+
+
+[244]
+
+[245])
+
+[246]
+
+[247]
+\openout2 = `chapters/19-federated.aux'.
+
+ (./chapters/19-federated.tex
 第二十章
 
 
-[243
+[248
 
 
 
 
 ]
-
-[244]
-
-[245]
-
-[246]
-
-[247]
-
-[248]
 
 [249]
 
@@ -1886,48 +1937,122 @@ Overfull \hbox (24.69923pt too wide) in paragraph at lines 167--168
 
 [251]
 
-[252])
+[252]
 
-[253] (./main.bbl
+[253]
 
-[254
+[254]
 
-
-
-
-]
-
-[255
-
-]
+[255]
 
 [256]
 
-[257]
-Underfull \hbox (badness 1365) in paragraph at lines 199--202
+[257])
+
+[258]
+\openout2 = `chapters/20-manifold.aux'.
+
+ (./chapters/20-manifold.tex
+第二十一章
+
+
+[259
+
+
+
+
+]
+
+[260]
+
+[261]
+
+[262]
+
+[263]
+
+[264]
+
+[265]
+
+[266]
+
+[267])
+
+[268]
+\openout2 = `chapters/21-meta.aux'.
+
+ (./chapters/21-meta.tex
+第二十二章
+
+
+[269
+
+
+
+
+]
+
+[270]
+
+[271]
+
+[272]
+
+[273]
+
+[274]
+
+[275]
+
+[276]
+
+[277]
+
+[278])
+
+[279] (./main.bbl
+
+[280
+
+
+
+
+]
+
+[281
+
+]
+
+[282]
+
+[283]
+Underfull \hbox (badness 1365) in paragraph at lines 214--217
 \TU/lmr/m/n/12.045 active learning for classification and preference learning.  \TU/lmr/m/it/12.045 arXiv preprint
  []
 
 
 
-[258]
+[284]
 
-[259]
+[285]
 
-[260]
+[286]
 
-[261]
-Underfull \hbox (badness 2351) in paragraph at lines 419--422
+[287]
+Underfull \hbox (badness 2351) in paragraph at lines 444--447
 []\TU/lmr/m/n/12.045 Andrei A. Rusu et al.  Progressive neural networks.  \TU/lmr/m/it/12.045 arXiv preprint
  []
 
 
 
-[262]
+[288]
 
-[263])
+[289]
 
-[264] (./main.aux (./chapters/01-mathematical-preliminaries.aux) (./chapters/02-foundations.aux) (./chapters/03-linear-models.aux) (./chapters/04-objectives-and-metrics.aux) (./chapters/05-optimization-training.aux) (./chapters/07-bayesian.aux) (./chapters/08-parametric-nonparametric.aux) (./chapters/09-sequence.aux) (./chapters/10-vision.aux) (./chapters/11-llm.aux) (./chapters/12-multimodal.aux) (./chapters/13-generative.aux) (./chapters/14-pinn.aux) (./chapters/15-pretraining.aux) (./chapters/16-transfer.aux) (./chapters/17-continual.aux) (./chapters/18-active.aux) (./chapters/19-federated.aux) (./chapters/20-manifold.aux) (./chapters/21-meta.aux))
+[290])
+
+[291] (./main.aux (./chapters/01-mathematical-preliminaries.aux) (./chapters/02-foundations.aux) (./chapters/03-linear-models.aux) (./chapters/04-objectives-and-metrics.aux) (./chapters/05-optimization-training.aux) (./chapters/07-bayesian.aux) (./chapters/08-kernel-functions.aux) (./chapters/09-kernel-algorithms.aux) (./chapters/09-sequence.aux) (./chapters/10-vision.aux) (./chapters/10-graph-neural-networks.aux) (./chapters/11-llm.aux) (./chapters/12-multimodal.aux) (./chapters/13-generative.aux) (./chapters/14-pinn.aux) (./chapters/15-pretraining.aux) (./chapters/16-transfer.aux) (./chapters/17-continual.aux) (./chapters/18-active.aux) (./chapters/19-federated.aux) (./chapters/20-manifold.aux) (./chapters/21-meta.aux))
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2022/08/05>
@@ -1937,15 +2062,15 @@ L3 programming layer <2022/08/05>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 18CFA619B17CF55803743C9802A4C360;16659.
+(rerunfilecheck)             Checksum: A472D3E2367AB8DA9CFDD6FEEB5E0CFE;20088.
  ) 
 Here is how much of TeX's memory you used:
- 37670 strings out of 473832
- 849717 string characters out of 5733158
- 1221448 words of memory out of 5000000
- 59956 multiletter control sequences out of 15000+600000
+ 37986 strings out of 473832
+ 852554 string characters out of 5733158
+ 1229983 words of memory out of 5000000
+ 60258 multiletter control sequences out of 15000+600000
  581831 words of font info for 174 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  93i,13n,111p,1051b,856s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.xdv (274 pages, 4690928 bytes).
+Output written on main.xdv (301 pages, 5151700 bytes).

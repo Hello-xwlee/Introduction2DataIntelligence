@@ -66,7 +66,9 @@
  \leq J(\theta_t)-\eta\left(1-\frac{L\eta}{2}\right)\|\nabla J(\theta_t)\|_2^2.
  \label{eq:solving-descent-bound}
 \end{equation}
-当$0<\eta<2/L$且$\nabla J(\theta_t)\ne\bm0$时，上式右端减去的量严格为正。因此，更新后的训练目标值严格小于更新前的目标值，即$J(\theta_{t+1})<J(\theta_t)$。这个结论依赖光滑条件，不保证非凸目标达到全局最优。实际计算中，可以通过逐步缩小试探步长检查目标是否下降；这称为回溯线搜索。达到步数上限、目标变化很小或梯度很小时可以停止，但应报告停止条件。但是，即使目标函数拥有很好的光滑性质，完全按照梯度进行更新，也可能会陷入到局部最优，梯度很小的点也可能是鞍点。所以，如何跳出局部最优或鞍点，仍然是深度学习中一个活跃的研究方向。
+当$0<\eta<2/L$且$\nabla J(\theta_t)\ne\bm0$时，上式右端减去的量严格为正。因此，更新后的训练目标值严格小于更新前的目标值，即$J(\theta_{t+1})<J(\theta_t)$。这个结论依赖梯度的光滑性和步长范围，只保证当前更新降低目标。对于非凸目标，它不保证达到全局最优，梯度为零的点也可能是局部极小点或鞍点。
+
+实际计算中，可以从一个试探步长开始；如果更新没有满足预定的下降条件，就缩小步长后重新计算，这称为回溯线搜索。达到步数上限、目标变化很小或梯度很小时可以停止，但需要记录具体条件。停止只表示触发了计算规则，不能单独证明已经找到最优解。
 
 \subsection{链式法则与神经网络的梯度计算}
 
@@ -416,9 +418,9 @@ E步由Bayes公式计算责任度：
 
 以上各节主要讨论固定未知参数的求解，结果通常是一个点估计$\hat\theta$。随机参数模型则用概率分布表达对未知参数$\theta$的不确定性。这不要求真实参数在每次观测时重新变化。数据较少时，多个参数取值可能都能解释观测结果；只保留一个参数点，就无法描述这些取值之间的差异及其可信程度。因此，求解需要从参数值扩展到参数分布。
 
-\textbf{特别注意：} 引入随机参数并不意味着模型中没有需要优化的量。一个模型可以同时包含随机变量及其先验分布，也包含用于描述条件分布的确定性参数。例如，在概率图模型中，节点可表示随机变量，边所规定的条件分布可以由神经网络参数化。节点的随机状态及模型参数的后验分布需要进行概率推断；神经网络的权重等确定性参数则仍需根据数据估计，通常通过最大似然或相应的梯度目标优化。
+一个模型可以同时包含随机参数和固定未知参数。例如，可以用随机变量表示设备状态，用具有固定未知权重的神经网络表示状态与观测之间的条件分布。前者需要条件分布，后者需要参数估计；两类未知量可以通过交替计算或同一个目标下的联合优化求解。
 
-若随机变量的后验难以精确计算，可以先用\textbf{变分分布}近似后验，再优化变分目标来更新神经网络参数。也可以把两类未知量放入同一个目标中联合优化，或采用交替更新。具体做法取决于模型结构和目标函数；\textbf{变分推断}(Variational Inference, VI)负责近似难以计算的分布，梯度优化负责调整可学习的确定性参数，两者可以在同一求解过程中配合使用。我们在上面介绍EM算法的时候也介绍了当隐变量（潜变量）后验$p(\mathbf{z} \mid \mathbf{x})$难以计算时，可以使用变分EM（VEM）或者蒙特卡洛EM（MCEM），其中相关的概念在本节会详细叙述。
+后验难以精确计算时，变分推断（Variational Inference，VI）选择一个便于计算的分布来近似它，再优化这个分布的参数。这里的优化变量描述的是近似分布，求解结果仍是一个分布。前文的变分EM也使用这种思路近似隐变量后验；蒙特卡洛EM则用采样估计条件期望。下面先写出参数后验，再分别讨论变分近似与后验采样。
 
 \subsection{后验分布：数据怎样更新参数的不确定性}
 设观测数据为$\mathcal D$。先验分布$p(\theta)$表达观察当前数据之前对参数取值的判断；似然$p(\mathcal D\mid\theta)$表示给定参数时，模型赋予观测数据的概率或概率密度。观察数据后，贝叶斯公式将二者结合为后验分布（posterior distribution）：
@@ -426,7 +428,15 @@ E步由Bayes公式计算责任度：
  p(\theta\mid\mathcal D)=\frac{p(\mathcal D\mid\theta)p(\theta)}{p(\mathcal D)}.
  \label{eq:solving-posterior}
 \end{equation}
-后验回答：在已观察到这些数据的条件下，各种参数取值有多可信？分子把先验权重与数据提供的似然相乘，分母$p(\mathcal D)$是与$\theta$无关的归一化常数。连续参数时，$p(\theta\mid\mathcal D)$是密度，参数落在某一区间的概率需要对该区间积分。这个公式要求$p(\mathcal D)$正且有限。
+后验回答：在已观察到这些数据的条件下，各种参数取值有多可信？分子把先验权重与数据提供的似然相乘，分母$p(\mathcal D)$是归一化常数。它由联合分布对参数积分得到：
+\begin{equation}
+ p(\mathcal D)=\int p(\mathcal D,\theta)\,d\theta
+ =\int p(\mathcal D\mid\theta)p(\theta)\,d\theta.
+ \label{eq:solving-posterior-normalizer}
+\end{equation}
+当参数维度较高，或者似然与先验的形式较复杂时，这个积分通常没有解析形式；即使能够计算它，后验本身以及后验预测中的积分也可能仍然难以直接求出。因此，随机参数模型的核心计算问题，是近似后验分布，或者直接计算关于后验分布的期望。
+
+这产生了两条基本路线。一条是分布近似：选择一个可计算的分布族，用$q_\phi(\theta)$近似$p(\theta\mid\mathcal D)$，通过优化确定变分参数$\phi$。另一条是采样近似：构造以后验为目标分布的采样方法，用参数样本近似后验期望。前者给出一个显式的近似分布，后者未必写出后验的解析表达式，但可以用样本完成预测和其他期望计算。
 
 后验的重要性在于它保留了参数的不确定性。我们可以计算后验均值（或者最大后验估计）作为点估计，也可以计算参数区间的后验概率，说明数据支持的取值范围。预测新标签时，还可以让不同参数按其后验权重共同参与预测：
 \begin{equation}
@@ -444,85 +454,72 @@ E步由Bayes公式计算责任度：
 \end{equation}
 这个量称为边际似然（marginal likelihood），也称模型证据（model evidence）。这里的“边际”表示通过积分消去参数，只留下观测数据的分布；离散参数时，积分改为求和。它是似然在先验分布下的加权平均，表示在尚未用当前数据更新参数时，模型赋予这些数据的概率或概率密度。给定模型、先验和数据后，边际似然是一个数；后验则是参数取值的分布。
 
-边际似然首先保证后验归一化：将式\eqref{eq:solving-posterior}对$\theta$积分，分子的积分恰好是$p(\mathcal D)$，所以后验积分为$1$。它还可以用于比较不同的候选模型。
+边际似然首先保证后验归一化：将式\eqref{eq:solving-posterior}对$\theta$积分，分子的积分恰好是$p(\mathcal D)$，所以后验积分为$1$。在本章中，边际似然只作为后验的归一化常数出现。它的模型比较含义以及模型先验的设定，放在后续贝叶斯学习章节讨论。若模型还含有隐变量，计算边际分布时可能需要同时对隐变量和随机参数积分；这一积分通常也没有解析形式。
 
-设有有限个候选模型$M_1,\ldots,M_K$，用离散变量$M$表示选择其中哪一个。每个候选模型都规定了数据的生成关系及其参数先验。例如，根据输入$x$预测标签$y$时，可以考虑直线模型$M_1$和二次曲线模型$M_2$：
+\subsection{分布近似：从贝叶斯公式推导变分目标}
+面对难以解析计算的后验，可以选择一个归一化、便于计算的分布$q_\phi(\theta)$，用它近似$p(\theta\mid\mathcal D)$。例如，可以选择高斯分布，此时$\phi$包含均值和协方差参数。变分推断的任务是确定这些参数，使近似分布尽可能接近后验。下面假设$p(\mathcal D)$正且有限，$q_\phi$在后验为零的区域也为零，且涉及的期望和KL散度有限。
+
+从贝叶斯公式出发，取对数并整理，在后验密度为正的地方有
 \begin{equation}
- \begin{aligned}
- M_1:\quad &y=ax+b+\varepsilon,
- &\theta_1&=(a,b,\sigma^2),\\
- M_2:\quad &y=ax^2+bx+c+\varepsilon,
- &\theta_2&=(a,b,c,\sigma^2),
- \end{aligned}
- \qquad \varepsilon\sim\mathcal N(0,\sigma^2).
+ \log p(\mathcal D)=\log p(\mathcal D,\theta)-\log p(\theta\mid\mathcal D).
 \end{equation}
-$M$确定采用哪一种模型，$\theta$表示选定模型内部尚待估计的参数。不同模型的参数个数可以不同，下面用$\theta$统一表示相应模型的参数。给$M$赋予概率，表达的是对模型选择的不确定性。例如，$p(M_1)=p(M_2)=1/2$表示在观察当前数据之前，给予两个候选模型相同的权重。这里的$M$取值于有限的候选集合。
-
-模型先验$p(M)$需要根据观察当前数据之前的知识或建模约定指定。缺少倾向性信息时，可以令$p(M_k)=1/K$。若已有物理规律或以往研究更支持某种模型，也可以赋予它较高的先验概率。模型先验$p(M)$与参数先验$p(\theta\mid M)$处于两个层次：前者分配候选模型之间的权重，后者描述选定模型内部各个参数取值的权重。
-
-固定一个候选模型$M$，按其参数先验对$\theta$积分，得到该模型的边际似然：
+两边对$q_\phi(\theta)$求期望。左边与$\theta$无关，又因为$\int q_\phi(\theta)\,d\theta=1$，所以左边仍为$\log p(\mathcal D)$：
 \begin{equation}
- p(\mathcal D\mid M)=\int p(\mathcal D\mid\theta,M)p(\theta\mid M)\,d\theta.
- \label{eq:solving-model-comparison}
+ \log p(\mathcal D)=\E_{q_\phi}[\log p(\mathcal D,\theta)]
+ -\E_{q_\phi}[\log p(\theta\mid\mathcal D)].
 \end{equation}
-例如，计算$p(\mathcal D\mid M_1)$时，对直线模型的参数积分，计算$p(\mathcal D\mid M_2)$时，对二次曲线模型的参数积分。再将各个模型的边际似然与模型先验相乘，并在候选模型之间求和归一化：
-\begin{equation}
- p(M_k\mid\mathcal D)
- =\frac{p(\mathcal D\mid M_k)p(M_k)}
- {\sum_{j=1}^{K}p(\mathcal D\mid M_j)p(M_j)}.
-\end{equation}
-$p(M_k\mid\mathcal D)$表示观察数据后第$k$个候选模型的概率。这里对连续参数$\theta$积分，对离散模型$M$求和。模型先验相同时，各模型的后验概率与其边际似然成正比。
-
-边际似然是模型内部似然的先验加权平均。如果较好地解释数据的参数区域只有很小的先验概率，而其余区域的似然很低，这个平均值仍可能较小。因此，一个模型即使在最优参数处具有较高的似然，也未必具有较高的边际似然。比较结果依赖模型先验和参数先验，参数先验应为归一化的概率分布，各候选模型应对同一批数据采用一致的观测定义。模型比较还需要结合独立数据上的预测评价。
-
-前文式\eqref{eq:solving-marginal-likelihood}对隐变量$\bm z$积分，但仍保留待优化的固定参数$\theta$；这里则按参数先验对$\theta$积分，得到模型证据。两者消去的未知量不同。若模型还含隐变量，计算证据时通常需要同时消去隐变量和随机参数。普通EM更新固定参数，不能直接等同于参数后验推断；若另有待估计的超参数且条件期望可计算，则可以用EM优化相应的边际似然。
-
-\subsection{一个离散参数的计算例子}
-设设备的故障率只有两种可能取值$\theta\in\{0.1,0.5\}$，先验概率分别为$0.8$和$0.2$。一次试验观察到故障$Y=1$，其似然为$P(Y=1\mid\theta)=\theta$。边际似然为
-\begin{equation}
- P(Y=1)=0.1\times0.8+0.5\times0.2=0.18.
-\end{equation}
-它表示该模型在观察试验结果之前，赋予一次故障的概率。用它归一化，得到后验：
-\begin{equation}
- P(\theta=0.1\mid Y=1)=\frac{0.08}{0.18}=\frac49,
- \qquad
- P(\theta=0.5\mid Y=1)=\frac{0.10}{0.18}=\frac59.
-\end{equation}
-故障发生后，高故障率的权重从$0.2$增加到$5/9$，低故障率仍有$4/9$的后验概率。若下一次试验给定$\theta$后与本次独立，其故障概率为$(4/9)\times0.1+(5/9)\times0.5=29/90$。这个预测保留了两种参数解释；若只取后验概率较大的$\theta=0.5$，预测便会变成$0.5$。第七章进一步讨论这类贝叶斯更新与预测。
-
-\subsection{为什么还需要近似求解}
-上述例子只需有限求和。复杂模型中的参数可能有很多维，后验归一化与预测都涉及高维积分，往往没有解析形式。近似求解需要区分任务：近似后验用于参数推断和预测，估计边际似然用于证据计算和模型比较。
-
-马尔可夫链蒙特卡洛（Markov Chain Monte Carlo，MCMC）通过构造以后验为目标分布的马尔可夫链进行采样，在满足相应收敛条件并检查采样质量后，用样本近似后验期望。许多MCMC算法只需未归一化后验$p(\mathcal D\mid\theta)p(\theta)$，因此得到后验样本并不等于已经算出边际似然。变分推断（Variational Inference，VI）选择一个可计算的分布族$q_\phi(\theta)$来近似后验，其中$\phi$是变分参数，例如高斯分布的均值和尺度。接下来说明怎样通过优化证据下界求解这个近似分布。
-
-\subsection{从后验近似到证据下界}
-常见的变分推断最小化
-\begin{equation}
- \KL(q_\phi(\theta)\|p(\theta\mid\mathcal D)).
- \label{eq:solving-vi-kl}
-\end{equation}
-直接计算这个散度仍需要证据。代入式\eqref{eq:solving-posterior}并展开：
+在右边加上并减去$\E_{q_\phi}[\log q_\phi(\theta)]$，再将各项分组，得到
 \begin{align}
- \KL(q_\phi\|p(\theta\mid\mathcal D))
- &=\E_{q_\phi}[\log q_\phi(\theta)-\log p(\mathcal D,\theta)]+\log p(\mathcal D),\\
- \log p(\mathcal D)&=\mathcal L(\phi)+\KL(q_\phi\|p(\theta\mid\mathcal D)),
+ \log p(\mathcal D)
+ &=\E_{q_\phi}[\log p(\mathcal D,\theta)-\log q_\phi(\theta)]\notag\\
+ &\quad+\E_{q_\phi}[\log q_\phi(\theta)-\log p(\theta\mid\mathcal D)]\notag\\
+ &=\mathcal L(\phi)+\KL(q_\phi\|p(\theta\mid\mathcal D)).
+ \label{eq:solving-vi-kl}
 \end{align}
-其中证据下界（Evidence Lower Bound，ELBO）为
-\begin{equation}
- \mathcal L(\phi)=\E_{q_\phi}[\log p(\mathcal D,\theta)-\log q_\phi(\theta)]
- =\E_{q_\phi}[\log p(\mathcal D\mid\theta)]-\KL(q_\phi\|p(\theta)).
+第一项称为证据下界（Evidence Lower Bound，ELBO）：
+\begin{align}
+ \mathcal L(\phi)
+ &=\E_{q_\phi}[\log p(\mathcal D,\theta)-\log q_\phi(\theta)]\notag\\
+ &=\E_{q_\phi}[\log p(\mathcal D\mid\theta)]-\KL(q_\phi\|p(\theta)).
  \label{eq:solving-elbo}
-\end{equation}
-证据与$\phi$无关，所以最大化ELBO等价于最小化式\eqref{eq:solving-vi-kl}，优化时不必计算证据。第一项评价从$q_\phi$抽取的参数解释数据的程度，第二项衡量$q_\phi$与先验的差异。KL非负保证ELBO不超过对数证据，它与预测准确率没有这样的上下界关系。
+\end{align}
+第二项是近似分布与真实后验之间的KL散度。它非负，所以$\mathcal L(\phi)\leq\log p(\mathcal D)$，这解释了“下界”的名称。固定模型时，证据与$\phi$无关，最大化ELBO便等价于最小化这个KL散度。ELBO只涉及联合密度和近似分布，优化时无需计算难以求出的归一化积分。
 
-EM与变分推断使用了相同的下界恒等式。EM在每次E步计算精确隐变量后验，使下界与当前似然相等，再更新固定参数。变分推断将近似分布限制在可处理的族中，下界与对数证据之间通常仍有间隙。这里优化的是分布的参数，求解结果仍是一个分布。
+这里的转化并不声称每个ELBO都能直接算出。计算后验密度需要知道证据$p(\mathcal D)$，而ELBO的第一种写法
+\begin{equation}
+ \mathcal L(\phi)=\E_{q_\phi}
+ \left[\log p(\mathcal D,\theta)-\log q_\phi(\theta)\right]
+ \end{equation}
+不包含这个未知的归一化常数。只要能够计算给定参数下的联合密度$p(\mathcal D,\theta)=p(\mathcal D\mid\theta)p(\theta)$，并且能够计算或估计关于$q_\phi$的期望，就可以评价或优化ELBO。是否更容易计算，取决于联合密度、近似分布及其期望的具体形式。
+
+若先验KL散度有解析表达式，而对数似然期望难以积分，可以从$q_\phi$抽取样本$\theta^{(1)},\ldots,\theta^{(S)}$，使用
+\begin{equation}
+ \widehat{\mathcal L}(\phi)
+ =\frac1S\sum_{s=1}^S\log p(\mathcal D\mid\theta^{(s)})
+ -\KL(q_\phi\|p(\theta))
+ \end{equation}
+估计ELBO。若先验KL也没有解析形式，则可以使用第一种写法，同时对联合密度和$q_\phi$的对数密度进行蒙特卡洛估计。若某些项可以直接积分或精确计算，应保留解析计算，以减少采样误差。
+
+得到ELBO的数值或无偏（或近似无偏）的梯度估计后，就可以把$\phi$当作普通优化变量。每轮先从当前的$q_{\phi_t}$取样，计算ELBO或其梯度，再按梯度上升更新：
+\begin{equation}
+ \phi_{t+1}=\phi_t+\alpha_t\widehat{\nabla_\phi\mathcal L(\phi_t)}.
+\end{equation}
+反复迭代，直到目标变化、参数变化或梯度满足停止条件。求解结果是$q_{\hat\phi}(\theta)$，它是对真实后验的近似，而不是后验的解析表达式。后续的后验均值、区间概率和预测，也都使用这个近似分布计算。
+
+ELBO中的对数似然期望评价近似分布所支持的参数解释数据的程度，先验KL项衡量近似分布与先验的差异。即使优化充分，选定的分布族也可能无法表达真实后验的相关性或多个峰，因此结果仍是近似。这里称为确定性近似，是因为最终用一个确定的分布表达式$q_{\hat\phi}$表示后验；求解其参数时仍可以使用随机采样和随机梯度。
+
+EM算法与变分推断使用了相同的下界恒等式。EM在每次E步计算精确隐变量后验，使变分下界与当前参数下的对数似然相等，再更新固定参数。变分推断将近似分布限制在可处理的族中，下界与对数证据之间通常仍有间隙。这里优化的是分布的参数，求解结果仍是一个分布。
 
 \subsection{均值场近似怎样计算}
-均值场（mean-field）近似取
+均值场（mean-field）近似是变分推断中一种常用的确定性近似。先把参数分成$d$组，记为
+\begin{equation}
+ \theta=(\theta_1,\ldots,\theta_d),
+\end{equation}
+并假设各组参数在近似后验中相互独立，于是取变分分布为
 \begin{equation}
  q(\theta)=\prod_{j=1}^d q_j(\theta_j).
 \end{equation}
-它将近似后验中的坐标设为独立。固定除第$j$个因子以外的$q_{-j}$，令
+其中$q_j(\theta_j)$是只描述第$j$组参数的概率分布，称为一个变分因子；$q_{-j}$表示除$q_j$以外其他因子的乘积。为了求解这些因子，可以固定$q_{-j}$，只把$q_j$作为变量，最大化ELBO关于$q_j$的部分。这里把第$j$个因子看作一个待更新的方向，这种逐个固定其余因子、轮流更新单个因子的做法称为坐标上升变分推断。固定除第$j$个因子以外的$q_{-j}$，令
 $A_j(\theta_j)=\E_{q_{-j}}[\log p(\mathcal D,\theta)]$，ELBO中依赖$q_j$的部分为
 \begin{equation}
  \int q_j(\theta_j)A_j(\theta_j)\,d\theta_j
@@ -542,8 +539,13 @@ $A_j(\theta_j)=\E_{q_{-j}}[\log p(\mathcal D,\theta)]$，ELBO中依赖$q_j$的�
 取独立高斯近似$q=\mathcal N(\bm m,\operatorname{diag}(v_1,v_2))$，最小化$\KL(q\|p)$对均值的解是真实均值。对方差求导得到
 $\tfrac12((\Sigma^{-1})_{jj}-1/v_j)=0$，所以$v_1=v_2=1-\rho^2$。真实边际方差均为$1$，而$\rho=0.9$时近似方差只有$0.19$。该例展示了均值场近似可能低估不确定性的原因。增加ELBO表示该目标有所改进，仍需检查分布族能否表达任务所需的相关性、多峰或尾部。
 
-\subsection{怎样计算变分目标的梯度}
-复杂模型的坐标更新可能没有解析形式。对角高斯近似可以写成
+\subsection{蒙特卡洛变分推断与随机梯度优化}
+在均值场方法中，如果固定其他因子后，式\eqref{eq:solving-elbo}关于某个因子$q_j$的最优解可以直接写出，就能使用上面的坐标上升更新。复杂模型中，这个条件可能不满足：右端的期望难以计算，或者得到的函数难以归一化；即使能得到完整的最优分布，它也可能不属于预先选定的高斯等分布族。此时，不能直接写出$q_j$的更新式，通常改为把近似分布写成$q_\phi(\theta)$，再用数值优化确定其参数。此时ELBO中的期望也可能难以直接积分，可以从当前近似分布$q_\phi$抽取样本，用样本平均估计ELBO或其梯度。这种做法称为蒙特卡洛变分推断（Monte Carlo Variational Inference，MCVI）。待求的仍是近似分布的参数$\phi$，采样为优化提供可计算的估计。
+
+令$f_\phi(\theta)=\log p(\mathcal D,\theta)-\log q_\phi(\theta)$，则$\mathcal L(\phi)=\E_{q_\phi}[f_\phi(\theta)]$。固定当前$\phi$，独立抽取$\theta^{(s)}\sim q_\phi$，可用$S^{-1}\sum_{s=1}^S f_\phi(\theta^{(s)})$估计ELBO。在可积条件下，这个估计的期望等于真实ELBO。不过，$q_\phi$本身随$\phi$变化，计算梯度时也需要考虑采样分布的变化。如果把抽出的$\theta^{(s)}$直接视为与$\phi$无关的常数再求导，就会遗漏这部分影响。下面介绍两种常见的梯度估计方式。
+
+\paragraph{重参数化梯度}
+对角高斯近似可以写成
 \begin{equation}
  \theta=\bm\mu_\phi+\bm s_\phi\odot\epsilon,
  \qquad \epsilon\sim\mathcal N(\bm0,I),
@@ -554,11 +556,72 @@ $\tfrac12((\Sigma^{-1})_{jj}-1/v_j)=0$，所以$v_1=v_2=1-\rho^2$。真实边际
  \widehat{\mathcal L}(\phi)=\frac1S\sum_{s=1}^S
  [\log p(\mathcal D,\theta^{(s)})-\log q_\phi(\theta^{(s)})].
 \end{equation}
-在可微且允许交换求导与期望的条件下，对这个表达式自动微分可以估计ELBO梯度。随后进行梯度上升，或最小化负ELBO。高斯熵或先验KL若可解析计算，应直接计算这些项，以减少采样噪声。
+在可微且允许交换求导与期望的条件下，对这个重参数化后的表达式自动微分，可以得到ELBO梯度的蒙特卡洛估计。随后进行梯度上升，或最小化负ELBO。高斯熵或先验KL若可解析计算，应直接计算这些项，以减少采样噪声。
 
-完整流程是选择分布族、初始化变分参数、采样计算ELBO及梯度、更新变分参数，再检查目标变化与数值稳定性。大数据下可以用小批量估计对数似然总和，但要乘以$n/|B_t|$，不能同时重复放大先验项。采样目标有噪声，单次估计增加不表示真实ELBO必然增加。
+\paragraph{得分函数梯度}
+如果随机变量是离散的，或者难以写出重参数化表达式，可以使用恒等式
+\begin{equation}
+ \nabla_\phi\mathbb E_{q_\phi}[f(\theta)]
+ =\mathbb E_{q_\phi}\left[f(\theta)\nabla_\phi\log q_\phi(\theta)
+ +\nabla_\phi f(\theta)\right].
+ \label{eq:solving-score-function-gradient}
+\end{equation}
+这个恒等式要求分布的支持集不随$\phi$变化，并允许交换求导与积分（离散变量时为求和）。其中$\nabla_\phi\log q_\phi(\theta)$称为得分函数。对于ELBO中的$f_\phi$，固定生成模型时有$\nabla_\phi f_\phi=-\nabla_\phi\log q_\phi$，而得分函数的期望为零，因此
+\begin{equation}
+ \nabla_\phi\mathcal L(\phi)
+ =\E_{q_\phi}[f_\phi(\theta)\nabla_\phi\log q_\phi(\theta)].
+\end{equation}
+用独立样本替换期望，可得梯度估计
+\begin{equation}
+ \widehat{\bm g}(\phi)=\frac1S\sum_{s=1}^S
+ [f_\phi(\theta^{(s)})-b]\nabla_\phi\log q_\phi(\theta^{(s)}).
+\end{equation}
+这里$b$是与本次样本无关的基线，例如由以往迭代估计的常数。减去$b$不改变梯度估计的期望，因为$\E_{q_\phi}[b\nabla_\phi\log q_\phi]=0$，但合适的基线可以降低方差。在上述条件下，这个估计是无偏的。得分函数方法适用范围较广，方差却可能较大；重参数化梯度在许多可微模型中方差较小，但需要合适的可微采样表达式。
 
-离散变量通常没有上述直接可微的重参数化，应先检查能否精确求和，或采用适合模型结构的其他梯度估计。最终预测可以从$q_\phi$抽取参数，平均各次条件预测。这个平均仍包含后验近似误差与有限采样误差。第七章进一步讨论贝叶斯推断及其他后验近似方法。
+\paragraph{用随机梯度更新变分参数}
+将蒙特卡洛梯度估计用于优化，便得到随机梯度变分推断。第$t$次迭代从当前$q_{\phi_t}$重新采样，计算梯度估计$\widehat{\bm g}_t$，再按步长$\alpha_t$更新：
+\begin{equation}
+ \phi_{t+1}=\phi_t+\alpha_t\widehat{\bm g}_t.
+\end{equation}
+完整流程是选择分布族、初始化变分参数、采样计算ELBO及梯度、更新变分参数，再检查目标变化与数值稳定性。MCVI描述用蒙特卡洛方法计算变分目标或梯度，随机梯度变分推断描述利用这些梯度估计进行优化。即使使用全部训练数据，从$q_\phi$采样也会使梯度具有随机性。
+
+如果给定参数后各样本条件独立，大数据下还可以均匀随机抽取小批量$B_t$，用下面的量估计全数据的对数似然总和：
+\begin{equation}
+ \widehat\ell_{B_t}(\theta)
+ =\frac{n}{|B_t|}\sum_{i\in B_t}\log p(y_i\mid\bm x_i,\theta).
+\end{equation}
+这里缩放的是数据项，先验项和近似分布的熵项保持原有权重。参数采样和数据抽样是两种不同的随机来源。采样目标有噪声，单次估计增加不表示真实ELBO必然增加，优化收敛也仍依赖步长、梯度估计的性质和目标函数。
+
+离散变量通常没有上述直接可微的重参数化，应先检查能否精确求和，或采用适合模型结构的其他梯度估计。最终预测可以从$q_\phi$抽取参数，平均各次条件预测。这个平均仍包含后验近似误差与有限采样误差。
+
+若模型还包含确定性参数$\eta$，例如表示条件分布的神经网络权重，则联合密度写为$p_\eta(\mathcal D,\theta)$，变分目标也随之写为$\mathcal L(\phi,\eta)$。可以交替更新近似后验的参数$\phi$和神经网络参数$\eta$，也可以用梯度方法联合更新。在近似后验受限时，优化的是对数边际似然的下界；只有在近似分布等于对应的真实后验时，下界才与对数边际似然相等。
+
+\subsection{随机性近似：用后验样本计算期望}
+另一个求解角度是从最终需要计算的量出发。若关注参数均值、区间概率或预测，通常需要的是某个函数$h(\theta)$关于后验的期望：
+\begin{equation}
+ \E[h(\theta)\mid\mathcal D]
+ =\int h(\theta)p(\theta\mid\mathcal D)\,d\theta.
+\end{equation}
+例如，$h(\theta)=\theta$给出后验均值，$h(\theta)=\mathbf 1_{\{\theta\in A\}}$给出参数落在区域$A$内的后验概率。将$h(\theta)$取为条件预测概率或密度，还可以计算式\eqref{eq:solving-posterior-predictive}中的后验预测。以下要求所求期望存在。
+
+如果能够从后验分布抽取独立样本$\theta^{(1)},\ldots,\theta^{(S)}$，就可以用蒙特卡洛平均近似积分：
+\begin{equation}
+ \E[h(\theta)\mid\mathcal D]
+ \approx\frac1S\sum_{s=1}^S h(\theta^{(s)}).
+\end{equation}
+大数定律说明，在可积条件下，随着样本数增加，这个平均趋于目标期望。这样可以用同一批参数样本计算不同函数的期望，无需先写出后验的解析表达式。若样本来自变分分布$q_\phi$，平均对应的是$q_\phi$下的期望，仍会保留变分近似误差。
+
+难点在于，无法解析计算的后验通常也不能直接进行独立采样。马尔可夫链蒙特卡洛（Markov Chain Monte Carlo，MCMC）通过构造以后验为平稳分布的马尔可夫链来解决这一问题。以Metropolis--Hastings算法为例，令未归一化密度$\widetilde p(\theta)=p(\mathcal D\mid\theta)p(\theta)$。从当前状态$\theta$按提议密度$r(\theta'\mid\theta)$产生候选状态$\theta'$，以概率
+\begin{equation}
+ \alpha(\theta,\theta')=\min\left\{1,
+ \frac{\widetilde p(\theta')r(\theta\mid\theta')}
+ {\widetilde p(\theta)r(\theta'\mid\theta)}\right\}
+\end{equation}
+接受候选状态，否则保留当前状态。后验的归一化常数在比值中相消，因此不必先计算$p(\mathcal D)$。这一接受规则使后验满足详细平衡，从而成为链的平稳分布。在适当的不可约性、非周期性等条件下，链能够趋于目标后验，遍历平均可以近似后验期望。
+
+链的样本通常相关，有限运行也可能尚未充分探索后验。实际计算需要检查初始阶段的影响、多条链之间的一致性及有效样本量。增加迭代次数只有在链能够充分探索目标分布时才有意义，不能把迭代数直接当作独立样本数。后验采样用于估计后验期望，也不意味着已经求出了模型比较所需的边际似然。
+
+这里的后验采样称为蒙特卡洛推断，其中MCMC是一类常用方法。蒙特卡洛变分推断（Monte Carlo Variational Inference，MCVI）则用采样估计变分目标或其梯度，仍然是在优化近似分布$q_\phi$。两者使用采样的目的不同：前者用以后验为目标的样本近似期望，后者用采样辅助求解变分近似。后续贝叶斯学习章节将进一步讨论这些推断方法。
 
 \section{选择求解方法时应问的问题}
 
@@ -588,7 +651,7 @@ $\tfrac12((\Sigma^{-1})_{jj}-1/v_j)=0$，所以$v_1=v_2=1-\rho^2$。真实边际
 
 模型求解首先需要明确未知量。固定参数可以通过闭式计算、梯度方法或启发式搜索获得点估计。含隐变量的极大似然估计利用EM交替计算条件期望和更新参数。随机参数模型需要后验分布，变分推断通过优化ELBO得到可计算的近似。
 
-各方法的保证都有条件。梯度下降的单步保证依赖光滑性与步长，EM的单调性依赖E步和M步的计算，变分近似质量受分布族限制。下一章讨论怎样用独立数据和统计学习观点检验所得模型能否用于未见样本。
+各方法的保证都有条件。梯度下降的单步保证依赖光滑性与步长，EM的单调性依赖E步和M步的计算，变分近似质量受分布族限制。后续统计学习内容将讨论怎样用独立数据检验所得模型能否用于未见样本。
 
 
 

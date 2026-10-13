@@ -2,79 +2,79 @@
 \providecommand\hyper@newdestlabel[2]{}
 \citation{hochreiter1997lstm}
 \citation{kalman1960filter}
-\@writefile{toc}{\contentsline {chapter}{\numberline {第八章\hspace  {.3em}}序列建模模型}{105}{chapter.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {第九章\hspace  {.3em}}序列建模模型}{116}{chapter.9}\protected@file@percent }
 \@writefile{lof}{\addvspace {10.0pt}}
 \@writefile{lot}{\addvspace {10.0pt}}
-\@writefile{toc}{\contentsline {section}{\numberline {8.1}序列与状态}{105}{section.8.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {8.1}{\ignorespaces 递归序列模型把历史压缩为状态；状态维度和更新机制决定哪些信息能够持续保留。}}{106}{figure.caption.160}\protected@file@percent }
-\newlabel{fig:sequence-recurrent-state}{{8.1}{106}{递归序列模型把历史压缩为状态；状态维度和更新机制决定哪些信息能够持续保留。}{figure.caption.160}{}}
-\@writefile{toc}{\contentsline {paragraph}{先把一条序列送进模型。}{106}{paragraph*.161}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{递归状态与门控记忆。}{106}{paragraph*.162}\protected@file@percent }
-\newlabel{eq:sequence-lstm-input-forget}{{8.2}{106}{递归状态与门控记忆。}{equation.8.2}{}}
-\newlabel{eq:sequence-lstm-output-candidate}{{8.3}{106}{递归状态与门控记忆。}{equation.8.3}{}}
-\@writefile{toc}{\contentsline {paragraph}{从单步导数到跨时间反向传播。}{107}{paragraph*.163}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9.1}序列与状态}{116}{section.9.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9.1}{\ignorespaces 递归序列模型把历史压缩为状态；状态维度和更新机制决定哪些信息能够持续保留。}}{117}{figure.caption.131}\protected@file@percent }
+\newlabel{fig:sequence-recurrent-state}{{9.1}{117}{递归序列模型把历史压缩为状态；状态维度和更新机制决定哪些信息能够持续保留。}{figure.caption.131}{}}
+\@writefile{toc}{\contentsline {paragraph}{先把一条序列送进模型。}{117}{paragraph*.132}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{递归状态与门控记忆。}{117}{paragraph*.133}\protected@file@percent }
+\newlabel{eq:sequence-lstm-input-forget}{{9.2}{117}{递归状态与门控记忆。}{equation.9.2}{}}
+\newlabel{eq:sequence-lstm-output-candidate}{{9.3}{117}{递归状态与门控记忆。}{equation.9.3}{}}
+\@writefile{toc}{\contentsline {paragraph}{从单步导数到跨时间反向传播。}{118}{paragraph*.134}\protected@file@percent }
 \citation{vaswani2017attention}
-\@writefile{toc}{\contentsline {paragraph}{GRU 的参数化。}{108}{paragraph*.164}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8.2}注意力、Transformer 与长依赖}{108}{section.8.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {8.2}{\ignorespaces 注意力把“压缩全部历史”改为“按查询重新读取历史”，代价是保存和计算位置间的相互作用。}}{108}{figure.caption.165}\protected@file@percent }
-\newlabel{fig:sequence-attention-query}{{8.2}{108}{注意力把“压缩全部历史”改为“按查询重新读取历史”，代价是保存和计算位置间的相互作用。}{figure.caption.165}{}}
-\@writefile{toc}{\contentsline {paragraph}{注意力的逐位置解释。}{109}{paragraph*.166}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{一次可以手算的读取。}{109}{paragraph*.167}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{缩放、归一化与访问成本的推导。}{109}{paragraph*.168}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{位置编码与因果遮罩。}{110}{paragraph*.169}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8.3}时间序列预测与状态估计}{110}{section.8.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{未来窗口与分位数的具体含义。}{110}{paragraph*.170}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{多步误差为何会积累。}{110}{paragraph*.171}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{分位数损失为何学习分位数。}{111}{paragraph*.172}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{工艺参数异常预警。}{111}{paragraph*.173}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{状态空间模型与滤波。}{111}{paragraph*.174}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {8.1}{\ignorespaces 序列模型路线与工业选择}}{112}{table.caption.175}\protected@file@percent }
-\newlabel{tab:sequence-model-selection}{{8.1}{112}{序列模型路线与工业选择}{table.caption.175}{}}
-\@writefile{toc}{\contentsline {paragraph}{多头注意力的张量形状。}{112}{paragraph*.176}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {8.3}{\ignorespaces Transformer 编码块的主要信息流。}}{113}{figure.caption.177}\protected@file@percent }
-\newlabel{fig:sequence-transformer-flow}{{8.3}{113}{Transformer 编码块的主要信息流。}{figure.caption.177}{}}
-\@writefile{toc}{\contentsline {paragraph}{位置编码的选择。}{113}{paragraph*.178}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{时间序列中的非平稳性。}{113}{paragraph*.179}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8.4}训练、预测与工业告警}{113}{section.8.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{序列模型实验矩阵。}{113}{paragraph*.180}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{滤波、平滑与预测。}{114}{paragraph*.181}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{卡尔曼滤波的两步更新。}{114}{paragraph*.182}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{把滤波更新算成一个温度例子。}{114}{paragraph*.183}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{由高斯条件化推导滤波增益。}{114}{paragraph*.184}\protected@file@percent }
-\newlabel{eq:sequence-joseph-covariance}{{8.34}{115}{由高斯条件化推导滤波增益。}{equation.8.34}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.4.1}从固定状态空间到 Mamba 的选择性记忆}{115}{subsection.8.4.1}\protected@file@percent }
-\newlabel{sec:sequence-mamba}{{8.4.1}{115}{从固定状态空间到 Mamba 的选择性记忆}{subsection.8.4.1}{}}
-\@writefile{toc}{\contentsline {paragraph}{连续动力学怎样成为离散记忆。}{115}{paragraph*.185}\protected@file@percent }
-\newlabel{eq:sequence-ssm-continuous}{{8.35}{115}{连续动力学怎样成为离散记忆。}{equation.8.35}{}}
-\newlabel{eq:sequence-ssm-discrete}{{8.36}{115}{连续动力学怎样成为离散记忆。}{equation.8.36}{}}
-\newlabel{eq:sequence-ssm-zoh}{{8.37}{115}{连续动力学怎样成为离散记忆。}{equation.8.37}{}}
-\newlabel{eq:sequence-ssm-convolution}{{8.38}{116}{连续动力学怎样成为离散记忆。}{equation.8.38}{}}
-\@writefile{toc}{\contentsline {paragraph}{输入依赖的步长、写入与读取。}{116}{paragraph*.186}\protected@file@percent }
-\newlabel{eq:sequence-mamba-selection}{{8.39}{116}{输入依赖的步长、写入与读取。}{equation.8.39}{}}
-\newlabel{eq:sequence-mamba-zoh}{{8.40}{116}{输入依赖的步长、写入与读取。}{equation.8.40}{}}
-\newlabel{eq:sequence-mamba-recurrence}{{8.41}{116}{输入依赖的步长、写入与读取。}{equation.8.41}{}}
-\@writefile{toc}{\contentsline {paragraph}{先手算两步，再理解扫描。}{116}{paragraph*.187}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{为何能递推推理，也能并行训练。}{117}{paragraph*.188}\protected@file@percent }
-\newlabel{eq:sequence-mamba-scan}{{8.42}{117}{为何能递推推理，也能并行训练。}{equation.8.42}{}}
-\@writefile{toc}{\contentsline {paragraph}{从选择性 SSM 到 Mamba 模块。}{117}{paragraph*.189}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{与 Transformer 的计算和记忆取舍。}{117}{paragraph*.190}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{工业实例：保留冲击还是保留工况。}{118}{paragraph*.191}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{长序列的计算策略。}{118}{paragraph*.192}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{教师强制与部署解码。}{118}{paragraph*.193}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{非平稳序列的分层验证。}{118}{paragraph*.194}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{异常分数的选择。}{118}{paragraph*.195}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{序列模型的资源消耗。}{119}{paragraph*.196}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{滚动预测的完整设置。}{119}{paragraph*.197}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{从预测到异常告警。}{119}{paragraph*.198}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{在线部署检查表。}{119}{paragraph*.199}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{序列模型的基线与消融。}{119}{paragraph*.200}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{不规则采样与时间间隔。}{120}{paragraph*.201}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{多变量序列的因果边界。}{120}{paragraph*.202}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{概率预测的评价。}{120}{paragraph*.203}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{自测与参考答案。}{121}{paragraph*.205}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{本章小结。}{121}{paragraph*.206}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{GRU 的参数化。}{119}{paragraph*.135}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9.2}注意力、Transformer 与长依赖}{119}{section.9.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9.2}{\ignorespaces 注意力把“压缩全部历史”改为“按查询重新读取历史”，代价是保存和计算位置间的相互作用。}}{119}{figure.caption.136}\protected@file@percent }
+\newlabel{fig:sequence-attention-query}{{9.2}{119}{注意力把“压缩全部历史”改为“按查询重新读取历史”，代价是保存和计算位置间的相互作用。}{figure.caption.136}{}}
+\@writefile{toc}{\contentsline {paragraph}{注意力的逐位置解释。}{120}{paragraph*.137}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{一次可以手算的读取。}{120}{paragraph*.138}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{缩放、归一化与访问成本的推导。}{120}{paragraph*.139}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{位置编码与因果遮罩。}{121}{paragraph*.140}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9.3}时间序列预测与状态估计}{121}{section.9.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{未来窗口与分位数的具体含义。}{121}{paragraph*.141}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{多步误差为何会积累。}{121}{paragraph*.142}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{分位数损失为何学习分位数。}{122}{paragraph*.143}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{工艺参数异常预警。}{122}{paragraph*.144}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{状态空间模型与滤波。}{122}{paragraph*.145}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {9.1}{\ignorespaces 序列模型路线与工业选择}}{123}{table.caption.146}\protected@file@percent }
+\newlabel{tab:sequence-model-selection}{{9.1}{123}{序列模型路线与工业选择}{table.caption.146}{}}
+\@writefile{toc}{\contentsline {paragraph}{多头注意力的张量形状。}{123}{paragraph*.147}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9.3}{\ignorespaces Transformer 编码块的主要信息流。}}{124}{figure.caption.148}\protected@file@percent }
+\newlabel{fig:sequence-transformer-flow}{{9.3}{124}{Transformer 编码块的主要信息流。}{figure.caption.148}{}}
+\@writefile{toc}{\contentsline {paragraph}{位置编码的选择。}{124}{paragraph*.149}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{时间序列中的非平稳性。}{124}{paragraph*.150}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9.4}训练、预测与工业告警}{124}{section.9.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{序列模型实验矩阵。}{124}{paragraph*.151}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{滤波、平滑与预测。}{125}{paragraph*.152}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{卡尔曼滤波的两步更新。}{125}{paragraph*.153}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{把滤波更新算成一个温度例子。}{125}{paragraph*.154}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{由高斯条件化推导滤波增益。}{125}{paragraph*.155}\protected@file@percent }
+\newlabel{eq:sequence-joseph-covariance}{{9.34}{126}{由高斯条件化推导滤波增益。}{equation.9.34}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.4.1}从固定状态空间到 Mamba 的选择性记忆}{126}{subsection.9.4.1}\protected@file@percent }
+\newlabel{sec:sequence-mamba}{{9.4.1}{126}{从固定状态空间到 Mamba 的选择性记忆}{subsection.9.4.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{连续动力学怎样成为离散记忆。}{126}{paragraph*.156}\protected@file@percent }
+\newlabel{eq:sequence-ssm-continuous}{{9.35}{126}{连续动力学怎样成为离散记忆。}{equation.9.35}{}}
+\newlabel{eq:sequence-ssm-discrete}{{9.36}{126}{连续动力学怎样成为离散记忆。}{equation.9.36}{}}
+\newlabel{eq:sequence-ssm-zoh}{{9.37}{126}{连续动力学怎样成为离散记忆。}{equation.9.37}{}}
+\newlabel{eq:sequence-ssm-convolution}{{9.38}{127}{连续动力学怎样成为离散记忆。}{equation.9.38}{}}
+\@writefile{toc}{\contentsline {paragraph}{输入依赖的步长、写入与读取。}{127}{paragraph*.157}\protected@file@percent }
+\newlabel{eq:sequence-mamba-selection}{{9.39}{127}{输入依赖的步长、写入与读取。}{equation.9.39}{}}
+\newlabel{eq:sequence-mamba-zoh}{{9.40}{127}{输入依赖的步长、写入与读取。}{equation.9.40}{}}
+\newlabel{eq:sequence-mamba-recurrence}{{9.41}{127}{输入依赖的步长、写入与读取。}{equation.9.41}{}}
+\@writefile{toc}{\contentsline {paragraph}{先手算两步，再理解扫描。}{127}{paragraph*.158}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{为何能递推推理，也能并行训练。}{128}{paragraph*.159}\protected@file@percent }
+\newlabel{eq:sequence-mamba-scan}{{9.42}{128}{为何能递推推理，也能并行训练。}{equation.9.42}{}}
+\@writefile{toc}{\contentsline {paragraph}{从选择性 SSM 到 Mamba 模块。}{128}{paragraph*.160}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{与 Transformer 的计算和记忆取舍。}{128}{paragraph*.161}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{工业实例：保留冲击还是保留工况。}{129}{paragraph*.162}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{长序列的计算策略。}{129}{paragraph*.163}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{教师强制与部署解码。}{129}{paragraph*.164}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{非平稳序列的分层验证。}{129}{paragraph*.165}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{异常分数的选择。}{129}{paragraph*.166}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{序列模型的资源消耗。}{130}{paragraph*.167}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{滚动预测的完整设置。}{130}{paragraph*.168}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{从预测到异常告警。}{130}{paragraph*.169}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{在线部署检查表。}{130}{paragraph*.170}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{序列模型的基线与消融。}{130}{paragraph*.171}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{不规则采样与时间间隔。}{131}{paragraph*.172}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{多变量序列的因果边界。}{131}{paragraph*.173}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{概率预测的评价。}{131}{paragraph*.174}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{自测与参考答案。}{132}{paragraph*.176}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{本章小结。}{132}{paragraph*.177}\protected@file@percent }
 \@setckpt{chapters/09-sequence}{
-\setcounter{page}{122}
+\setcounter{page}{133}
 \setcounter{equation}{43}
 \setcounter{enumi}{5}
 \setcounter{enumii}{0}
@@ -82,8 +82,8 @@
 \setcounter{enumiv}{0}
 \setcounter{footnote}{0}
 \setcounter{mpfootnote}{0}
-\setcounter{part}{3}
-\setcounter{chapter}{8}
+\setcounter{part}{4}
+\setcounter{chapter}{9}
 \setcounter{section}{4}
 \setcounter{subsection}{1}
 \setcounter{subsubsection}{0}
@@ -93,10 +93,10 @@
 \setcounter{table}{1}
 \setcounter{parentequation}{0}
 \setcounter{section@level}{0}
-\setcounter{Item}{14}
+\setcounter{Item}{22}
 \setcounter{Hfootnote}{0}
 \setcounter{Hy@AnnotLevel}{0}
-\setcounter{bookmark@seq@number}{57}
+\setcounter{bookmark@seq@number}{69}
 \setcounter{caption@flags}{2}
 \setcounter{continuedfloat}{0}
 \setcounter{float@type}{16}

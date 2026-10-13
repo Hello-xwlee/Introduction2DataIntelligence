@@ -1,0 +1,83 @@
+\chapter{间隔、主成分与核化算法}
+\label{chap:kernel-algorithms}
+\begin{quote}\small
+\textit{本章摘要。}本章用核函数解决三类问题：通过最大间隔分类建立支持向量机；从确定性方差最大化和概率潜变量模型两种角度理解主成分分析；再将主成分分析推广到核特征空间。最后介绍核岭回归与高斯过程，说明相同核矩阵如何支持不同的目标与概率解释。
+\end{quote}
+
+上一章说明，核函数可计算特征空间内积。本章关注算法如何使用这些内积。支持向量机用边界间隔决定分类器，主成分分析用方差定义低维方向，核主成分分析把方差最大化转到非线性特征空间。三者虽然共享核矩阵，优化目标与输出含义并不相同。
+
+\section{支持向量机：由间隔确定分类边界}
+给定二分类样本$(\bm x_i,y_i)$，其中$y_i\in\{-1,+1\}$。线性分类器为$f(\bm x)=\bm w^{\mathsf T}\bm x+b$，以$f(\bm x)=0$作为决策边界。对正确分类样本，函数间隔为$y_i f(\bm x_i)$。由于同时缩放$\bm w,b$不会改变边界，需固定尺度。规范化后，几何间隔为$y_i f(\bm x_i)/\|\bm w\|_2$。
+
+当数据线性可分时，硬间隔支持向量机（Support Vector Machine，SVM）求解
+\begin{equation}
+ \min_{\bm w,b}\frac12\|\bm w\|_2^2
+ \quad\text{使得}\quad y_i(\bm w^{\mathsf T}\bm x_i+b)\geq1,\quad i=1,\ldots,n.
+ \label{eq:svm-hard-margin-primal}
+\end{equation}
+两个规范化边界$\bm w^{\mathsf T}\bm x+b=1$和$\bm w^{\mathsf T}\bm x+b=-1$之间的距离为$2/\|\bm w\|_2$，因此最小化范数等价于最大化间隔。若类别重叠，硬约束不可行，需要允许违反间隔。
+
+软间隔SVM引入松弛变量$\xi_i\geq0$，得到
+\begin{equation}
+ \min_{\bm w,b,\bm\xi}\frac12\|\bm w\|_2^2+C\sum_i\xi_i
+ \quad\text{使得}\quad y_i(\bm w^{\mathsf T}\bm x_i+b)\geq1-\xi_i.
+ \label{eq:svm-soft-margin-primal}
+\end{equation}
+$C>0$控制间隔复杂度与训练违约代价的权衡。该问题等价于使用合页损失$\max(0,1-y_if(\bm x_i))$的正则化经验风险最小化。$C$较大时违约更贵，训练样本的间隔约束更受重视；这不保证测试错误更低，应通过交叉验证选择。
+
+拉格朗日对偶形式为
+\begin{equation}
+ \max_{\bm\alpha}\sum_i\alpha_i-\frac12\sum_{i,j}\alpha_i\alpha_jy_iy_jk(\bm x_i,\bm x_j),
+ \quad 0\leq\alpha_i\leq C,\quad \sum_i\alpha_iy_i=0.
+ \label{eq:svm-dual}
+\end{equation}
+这里线性核时$k(\bm x_i,\bm x_j)=\bm x_i^{\mathsf T}\bm x_j$。对偶变量非零的样本称为支持向量，它们决定边界。将内积替换成有效核后，决策函数为
+\begin{equation}
+ f(\bm x)=\sum_i\alpha_i y_i k(\bm x_i,\bm x)+b.
+\end{equation}
+RBF核等选择可产生非线性边界。SVM的分数不是概率；如需概率输出，需另行校准并在独立数据上检验。
+
+\section{PCA：确定性方差最大化}
+主成分分析（Principal Component Analysis，PCA）把高维数据投影到较少维度，同时尽可能保留样本变化。设中心化后的观测为$\bm x_i\in\R^d$，样本协方差矩阵为$S=n^{-1}\sum_i\bm x_i\bm x_i^{\mathsf T}$。对单位方向$\bm u$，投影值$\bm u^{\mathsf T}\bm x_i$的样本方差为$\bm u^{\mathsf T}S\bm u$。因此第一主成分求解
+\begin{equation}
+ \max_{\|\bm u\|_2=1}\bm u^{\mathsf T}S\bm u.
+\end{equation}
+用拉格朗日乘子$\lambda$处理约束，驻点满足$S\bm u=\lambda\bm u$。最大化方差的方向是最大特征值对应的特征向量。后续主成分依次取正交约束下的下一大特征值方向。若$S=U\Lambda U^{\mathsf T}$，保留前$q$列$U_q$后，低维表示是$\bm z_i=U_q^{\mathsf T}\bm x_i$，重建为$\hat{\bm x}_i=U_q\bm z_i$。
+
+这个确定性推导也等价于最小化投影重建误差。令$P=U_qU_q^{\mathsf T}$，对中心化样本有$\|\bm x_i-P\bm x_i\|_2^2=\|\bm x_i\|_2^2-\|U_q^{\mathsf T}\bm x_i\|_2^2$。全体样本的总平方重建误差因此等于总平方长度减去保留方向上的投影平方和。最大化保留方差便最小化该误差。PCA不使用标签，不保证保留对预测最有用的方向；结果也受特征尺度影响。
+
+\section{PCA：概率潜变量解释}
+确定性PCA只描述投影与重建。概率 PCA（Probabilistic PCA，PPCA）进一步假设观测由低维高斯潜变量生成：
+\begin{equation}
+ \bm x=W\bm z+\bm\mu+\bm\epsilon,\qquad
+ \bm z\sim\mathcal N(\bm0,I_q),\quad
+ \bm\epsilon\sim\mathcal N(\bm0,\sigma^2I_d),
+ \label{eq:ppca-generative-model}
+\end{equation}
+其中$W\in\R^{d\times q}$，噪声与潜变量独立。积分掉$\bm z$后，$\bm x$服从$\mathcal N(\bm\mu,WW^{\mathsf T}+\sigma^2I_d)$。模型把观测协方差分成低秩结构$WW^{\mathsf T}$与各向同性噪声$\sigma^2I_d$。
+
+对中心化数据，协方差的前$q$个特征值记为$\lambda_1\geq\cdots\geq\lambda_q$，相应单位特征向量组成$U_q$。最大似然解的载荷矩阵可写成$W=U_q(\Lambda_q-\sigma^2I_q)^{1/2}R$，其中$R$为任意$q$维正交矩阵，且$\sigma^2$等于被舍弃特征值的平均值。因子$R$表明潜变量坐标可旋转，观测分布不变。令噪声方差趋近于零时，PPCA的主子空间与确定性PCA一致。有限噪声下，PPCA给出潜变量后验分布和重建不确定性；这依赖高斯线性生成假设，不能自动代表真实观测机制。
+
+\section{核 PCA：在非线性特征空间降维}
+若原空间的主要变化沿弯曲结构分布，线性投影可能无法保留结构。核 PCA在特征空间$\phi(\bm x)$中做PCA，但通过核矩阵计算。训练特征需中心化，对应中心化核矩阵
+\begin{equation}
+ K_c=HKH,\qquad H=I_n-\frac1n\bm1\bm1^{\mathsf T}.
+\end{equation}
+若$K_c\bm v=\lambda\bm v$且$\|\bm v\|_2=1$，对应的单位特征方向为$\bm u=\sum_i v_i\tilde\phi(\bm x_i)/\sqrt{\lambda}$，其中$\tilde\phi$是中心化特征映射。新样本的第$j$个主成分得分为$\sum_i v_i^{(j)}\tilde k(\bm x_i,\bm x)/\sqrt{\lambda_j}$，$\tilde k$表示按训练集均值中心化后的核值。
+
+核 PCA保留的是核诱导特征空间中的方差，不一定对应原始坐标中容易解释的方向。对一般核，逆映射$\phi^{-1}$未必存在，因此低维得分可计算而原空间重建可能困难。中心化均值只能由训练样本确定；测试样本必须使用训练集核均值，不能把测试样本加入中心化统计量。
+
+\section{两种核预测器：核岭与高斯过程}
+核岭回归（Kernel Ridge Regression，KRR）把平方损失与函数范数惩罚结合。对训练核矩阵$K$，其预测可写成
+\begin{equation}
+ \hat f(\bm x)=\bm k_{\bm x}^{\mathsf T}(K+n\lambda I)^{-1}\bm y,
+ \qquad \bm k_{\bm x}=[k(\bm x_1,\bm x),\ldots,k(\bm x_n,\bm x)]^{\mathsf T}.
+\end{equation}
+这里采用经验均方误差$n^{-1}\|\bm y-f(X)\|^2$及惩罚$\lambda\|f\|_{\mathcal H}^2$的约定。若改用损失总和，矩阵中的正则项相应变为$\lambda I$。KRR给出点预测，正则参数通过验证选择。
+
+高斯过程（Gaussian Process，GP）以同一核作为函数协方差先验。若观测噪声方差为$\sigma^2$，后验均值为$\bm k_{\bm x}^{\mathsf T}(K+\sigma^2I)^{-1}\bm y$，潜在函数后验方差为$k(\bm x,\bm x)-\bm k_{\bm x}^{\mathsf T}(K+\sigma^2I)^{-1}\bm k_{\bm x}$。当$\sigma^2=n\lambda$时，均值形式与上述KRR相同；GP还给出基于高斯先验和似然的预测分布。相同均值不表示相同训练目标或不确定性含义。
+
+\section{适用条件与计算边界}
+SVM适用于需要间隔分类且核相似性可信的任务；PCA适用于无监督线性降维，PPCA增加了高斯生成假设；核 PCA适合非线性结构明显且样本规模允许核矩阵计算的情况；KRR与GP用于回归，但前者主要给点预测，后者给出模型条件下的概率预测。核矩阵方法通常需要二次存储与立方级分解计算。样本量大时可考虑低秩近似或子集方法，但近似误差需单独评估。
+
+本章只选取核函数直接参与的代表算法。它们共用内积计算，却分别优化间隔、方差或平方误差，并采用不同的统计解释。模型选择应由任务目标、数据规模、特征尺度和验证结果决定。

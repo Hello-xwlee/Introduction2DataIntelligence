@@ -70,15 +70,15 @@ Ronald~R. Coifman and St{\'e}phane Lafon.
 \newblock Diffusion maps.
 \newblock {\em Applied and Computational Harmonic Analysis}, 21(1):5--30, 2006.
 
-\bibitem{cortes1995svm}
-Corinna Cortes and Vladimir Vapnik.
-\newblock Support-vector networks.
-\newblock {\em Machine Learning}, 20:273--297, 1995.
-
 \bibitem{delange2022continual}
 Matthias De~Lange et~al.
 \newblock A continual learning survey: Defying forgetting in classification tasks.
 \newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence}, 44(7):3366--3385, 2022.
+
+\bibitem{graphdefferrard2016chebnet}
+Micha{\"e}l Defferrard, Xavier Bresson, and Pierre Vandergheynst.
+\newblock Convolutional neural networks on graphs with fast localized spectral filtering.
+\newblock In {\em Advances in Neural Information Processing Systems}, 2016.
 
 \bibitem{deisenroth2020mml}
 Marc~Peter Deisenroth, A.~Aldo Faisal, and Cheng~Soon Ong.
@@ -105,6 +105,11 @@ Alexey Dosovitskiy et~al.
 \newblock An image is worth 16x16 words: Transformers for image recognition at scale.
 \newblock In {\em International Conference on Learning Representations}, 2021.
 
+\bibitem{graphfeng2019hgnn}
+Yifan Feng, Haoxuan You, Zizhao Zhang, Rongrong Ji, and Yue Gao.
+\newblock Hypergraph neural networks.
+\newblock In {\em AAAI Conference on Artificial Intelligence}, 2019.
+
 \bibitem{finn2017maml}
 Chelsea Finn, Pieter Abbeel, and Sergey Levine.
 \newblock Model-agnostic meta-learning for fast adaptation of deep networks.
@@ -130,6 +135,11 @@ Stuart Geman and Donald Geman.
 \newblock Stochastic relaxation, gibbs distributions, and the bayesian restoration of images.
 \newblock {\em IEEE Transactions on Pattern Analysis and Machine Intelligence}, PAMI-6(6):721--741, 1984.
 
+\bibitem{graphgilmer2017mpnn}
+Justin Gilmer, Samuel~S. Schoenholz, Patrick~F. Riley, Oriol Vinyals, and George~E. Dahl.
+\newblock Neural message passing for quantum chemistry.
+\newblock In {\em International Conference on Machine Learning}, 2017.
+
 \bibitem{goodfellow2014gan}
 Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sherjil Ozair, Aaron Courville, and Yoshua Bengio.
 \newblock Generative adversarial nets.
@@ -144,6 +154,11 @@ Jean-Bastien Grill et~al.
 Suchin Gururangan, Ana Marasovi{\'c}, Swabha Swayamdipta, Kyle Lo, Iz~Beltagy, Doug Downey, and Noah~A. Smith.
 \newblock Don't stop pretraining: Adapt language models to domains and tasks.
 \newblock In {\em Annual Meeting of the Association for Computational Linguistics}, 2020.
+
+\bibitem{graphhamilton2017sage}
+William~L. Hamilton, Rex Ying, and Jure Leskovec.
+\newblock Inductive representation learning on large graphs.
+\newblock In {\em Advances in Neural Information Processing Systems}, 2017.
 
 \bibitem{he2022mae}
 Kaiming He, Xinlei Chen, Saining Xie, Yanghao Li, Piotr Doll{\'a}r, and Ross Girshick.
@@ -249,6 +264,11 @@ Diederik~P. Kingma and Jimmy Ba.
 Diederik~P. Kingma and Max Welling.
 \newblock Auto-encoding variational bayes.
 \newblock {\em International Conference on Learning Representations}, 2014.
+
+\bibitem{graphkipf2017gcn}
+Thomas~N. Kipf and Max Welling.
+\newblock Semi-supervised classification with graph convolutional networks.
+\newblock In {\em International Conference on Learning Representations}, 2017.
 
 \bibitem{kirkpatrick2017ewc}
 James Kirkpatrick et~al.
@@ -390,6 +410,11 @@ Aravind Rajeswaran, Chelsea Finn, Sham~M. Kakade, and Sergey Levine.
 \newblock Meta-learning with implicit gradients.
 \newblock In {\em Advances in Neural Information Processing Systems}, 2019.
 
+\bibitem{rasmussen2006gpml}
+Carl~Edward Rasmussen and Christopher~K. Williams.
+\newblock {\em Gaussian Processes for Machine Learning}.
+\newblock MIT Press, 2006.
+
 \bibitem{rebuffi2017icarl}
 Sylvestre-Alvise Rebuffi, Alexander Kolesnikov, Georg Sperl, and Christoph~H. Lampert.
 \newblock {iCaRL}: Incremental classifier and representation learning.
@@ -480,11 +505,6 @@ Joshua~B. Tenenbaum, Vin de~Silva, and John~C. Langford.
 \newblock A global geometric framework for nonlinear dimensionality reduction.
 \newblock {\em Science}, 290(5500):2319--2323, 2000.
 
-\bibitem{titsias2009sparsegp}
-Michalis Titsias.
-\newblock Variational learning of inducing variables in sparse gaussian processes.
-\newblock In {\em International Conference on Artificial Intelligence and Statistics}, 2009.
-
 \bibitem{vandermaaten2008tsne}
 Laurens van~der Maaten and Geoffrey Hinton.
 \newblock Visualizing data using t-{SNE}.
@@ -499,6 +519,11 @@ Vladimir~N. Vapnik and Alexey~Ya. Chervonenkis.
 Ashish Vaswani et~al.
 \newblock Attention is all you need.
 \newblock {\em Advances in Neural Information Processing Systems}, 2017.
+
+\bibitem{graphvelickovic2018gat}
+Petar Veli{\v c}kovi{\'c}, Guillem Cucurull, Arantxa Casanova, Adriana Romero, Pietro Li{\`o}, and Yoshua Bengio.
+\newblock Graph attention networks.
+\newblock In {\em International Conference on Learning Representations}, 2018.
 
 \bibitem{vincent2008denoising}
 Pascal Vincent, Hugo Larochelle, Yoshua Bengio, and Pierre-Antoine Manzagol.
@@ -539,5 +564,10 @@ Lvmin Zhang, Anyi Rao, and Maneesh Agrawala.
 Zhenyue Zhang and Hongyuan Zha.
 \newblock Principal manifolds and nonlinear dimensionality reduction via tangent space alignment.
 \newblock {\em SIAM Journal on Scientific Computing}, 26(1):313--338, 2004.
+
+\bibitem{graphzhou2006hypergraph}
+Dengyong Zhou, Jiayuan Huang, and Bernhard Sch{\"o}lkopf.
+\newblock Learning with hypergraphs: Clustering, classification, and embedding.
+\newblock In {\em Advances in Neural Information Processing Systems}, 2006.
 
 \end{thebibliography}

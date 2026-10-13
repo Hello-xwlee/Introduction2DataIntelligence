@@ -1,0 +1,483 @@
+% !TeX program = xelatex
+% 编译：xelatex -interaction=nonstopmode -halt-on-error gcn_formula_explained.tex（运行两次）
+\documentclass[UTF8,a4paper,11pt,fontset=fandol]{ctexart}
+\usepackage[margin=2.4cm]{geometry}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[unicode,colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.3em}
+\setlist{itemsep=0.3em,topsep=0.4em}
+\allowdisplaybreaks
+\title{图卷积网络的公式、直观含义与卷积来源}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+图卷积网络的核心操作是：每个节点收集自己和邻居的特征，按照图结构加权汇总，再通过所有节点共享的参数变换，得到新的特征。本文以经典的 Kipf--Welling 图卷积网络（Graph Convolutional Network，GCN）为例，从矩阵维度、节点计算、归一化设计与数值示例出发，解释其层更新公式；随后通过图傅里叶变换与一阶谱滤波近似，说明它为什么可以被称为卷积。文中另设带权图专节，详细讨论加权度数、节点聚合、手算示例、两类归一化、自环尺度，以及有向边与负边权的适用边界，并讨论 GCN 与图像卷积的联系、区别和适用条件。
+\end{abstract}
+\tableofcontents
+\newpage
+
+\section{从普通卷积出发：为什么图上需要新的公式？}
+对于一维信号，深度学习中通常称为卷积的运算可以写成
+\begin{equation}
+y_i=\sum_{r=-R}^{R}w_r x_{i+r}.
+\end{equation}
+它表示：计算位置 $i$ 的输出时，取附近位置的输入，用同一组权重加权求和。图像中的二维卷积也是如此，只是邻域变成一个小窗口。严格来说，上式采用互相关的索引写法；数学卷积常写成 $\sum_r w_r x_{i-r}$。对于可训练核，两种约定可通过翻转核的索引互相对应，不影响这里对局部滤波的解释。
+
+普通卷积包含三个关键特点：
+\begin{itemize}
+\item \textbf{局部性}：只看附近的位置。
+\item \textbf{权重共享}：不同位置使用同一个卷积核。
+\item \textbf{根据相对位置组合信息}：左边、右边、上边等位置各有对应的权重。
+\end{itemize}
+图数据也有“附近”的概念，即节点的邻居。但一个节点可能有两个邻居，另一个有十个邻居，而且一般没有统一的“左边第一个邻居”或“右边第二个邻居”。因此，要把局部滤波推广到图上，需要\textbf{用边定义邻域，并用不依赖邻居排列顺序的方式组合信息}。
+
+\section{GCN 的完整公式与各个符号}
+经典 GCN 的一层写成
+\begin{equation}
+\boxed{
+H^{(\ell+1)}=\sigma\!\left(
+\widetilde D^{-1/2}\widetilde A\widetilde D^{-1/2}
+H^{(\ell)}W^{(\ell)}\right).
+}
+\label{eq:gcn}
+\end{equation}
+本文假设图具有 $n$ 个节点，是非负边权的无向图。其他图神经网络可能使用不同的聚合公式。
+
+\subsection{节点特征矩阵}
+$H^{(\ell)}\in\mathbb R^{n\times d_\ell}$ 是第 $\ell$ 层的节点特征矩阵：\textbf{一行对应一个节点，一列对应一种特征}。初始输入为 $H^{(0)}=X$，例如论文节点的词语特征或用户节点的属性。示意写法为
+\begin{equation}
+H^{(\ell)}=
+\begin{bmatrix}
+h_1^{(\ell)}\\h_2^{(\ell)}\\\vdots\\h_n^{(\ell)}
+\end{bmatrix},
+\end{equation}
+其中 $h_i^{(\ell)}$ 是节点 $i$ 的行向量表示。
+
+\subsection{邻接矩阵、自环和度数}
+$A\in\mathbb R^{n\times n}$ 是邻接矩阵。对于无权图，节点 $i,j$ 相连时 $A_{ij}=1$，否则为 $0$。定义
+\begin{equation}
+\widetilde A=A+I_n,
+\end{equation}
+即为每个节点添加一条连接到自己的边，称为\textbf{自环}。定义加自环后的度数及其对角矩阵：
+\begin{equation}
+\widetilde d_i=\sum_j\widetilde A_{ij},\qquad
+\widetilde D=\operatorname{diag}(\widetilde d_1,\ldots,\widetilde d_n).
+\end{equation}
+对于原本没有自环的无权图，$\widetilde d_i=d_i+1$。
+
+\subsection{可训练参数和非线性}
+$W^{(\ell)}\in\mathbb R^{d_\ell\times d_{\ell+1}}$ 是可训练参数，负责把输入特征转换为输出特征。$\sigma$ 是逐元素非线性函数，例如 $\operatorname{ReLU}(z)=\max(0,z)$。
+
+定义传播矩阵
+\begin{equation}
+S=\widetilde D^{-1/2}\widetilde A\widetilde D^{-1/2},
+\label{eq:S}
+\end{equation}
+则式~\eqref{eq:gcn} 可简写为
+\begin{equation}
+H^{(\ell+1)}=\sigma\!\left(SH^{(\ell)}W^{(\ell)}\right).
+\end{equation}
+维度关系为
+\begin{equation}
+\underbrace{S}_{n\times n}
+\underbrace{H^{(\ell)}}_{n\times d_\ell}
+\underbrace{W^{(\ell)}}_{d_\ell\times d_{\ell+1}}
+\quad\in\mathbb R^{n\times d_{\ell+1}}.
+\end{equation}
+$S$ 负责\textbf{在节点之间混合信息}，$W^{(\ell)}$ 负责\textbf{在特征维度之间转换信息}。
+
+\section{把矩阵公式展开：每个节点究竟在做什么？}
+对于无权图，节点更新可以写成
+\begin{equation}
+\boxed{
+h_i^{(\ell+1)}=\sigma\!\left(
+\sum_{j\in\mathcal N(i)\cup\{i\}}
+\frac{h_j^{(\ell)}W^{(\ell)}}{\sqrt{\widetilde d_i\widetilde d_j}}
+\right).
+}
+\label{eq:node}
+\end{equation}
+若有边权，则求和系数还要乘以 $\widetilde A_{ij}$。
+
+通俗地说，节点 $i$ 更新自己的表示时：
+\begin{enumerate}
+\item 收集自己和邻居的特征。
+\item 用共享的 $W^{(\ell)}$ 转换这些特征。
+\item 按图结构确定的系数加权求和。
+\item 通过非线性函数生成新表示。
+\end{enumerate}
+例如，判断一篇论文属于什么领域，可以参考它自己的内容，也参考与它相连的论文的内容。GCN 将这种利用关联信息的过程变成可训练的计算。若原始引用关系是有向的，而使用本文公式，需要先明确如何构造无向图。
+
+\textbf{最基本的 GCN 并不学习每条边的聚合权重。} 系数 $1/\sqrt{\widetilde d_i\widetilde d_j}$ 由图结构决定，学习的主要是 $W^{(\ell)}$。此外，由矩阵乘法结合律，
+\begin{equation}
+S(HW)=(SH)W.
+\end{equation}
+所以可以先变换特征再聚合，也可以先聚合再变换；当中间没有插入非线性等额外操作时，两种顺序等价。
+
+\section{为什么需要自环、归一化、参数矩阵和非线性？}
+\subsection{加自环：让节点也使用自己的信息}
+如果只使用 $AH$，节点的新表示只来自邻居。加入 $I_n$ 后，它自己的特征也进入求和。孤立节点也能正常更新，因为其加自环后的度数为 $1$，逆平方根有定义。
+
+不过，自环不保证原始特征完整保留：自己的信息仍会被缩放、变换并与邻居混合。自环与直接相加的残差连接是不同的操作。
+
+\subsection{对称归一化：调整传播尺度}
+直接相加时，拥有一百个邻居的节点通常比拥有两个邻居的节点累加更多信息。结果的大小可能主要反映邻居数量。GCN 使用
+\begin{equation}
+S_{ij}=\frac{\widetilde A_{ij}}{\sqrt{\widetilde d_i\widetilde d_j}}
+\end{equation}
+调整传播强度。这个系数同时考虑接收节点 $i$ 和发送节点 $j$ 的连接数量；固定边权时，两端度数越大，单条边的系数越小。
+
+两侧各使用一个逆平方根，使无向图的传播矩阵保持对称，并与对称归一化图拉普拉斯相对应。这是经典 GCN 的设计选择，不是唯一可能的归一化。
+
+\textbf{对称归一化一般不是普通的邻居平均。} 按行归一化的矩阵是
+\begin{equation}
+P_{\mathrm{rw}}=\widetilde D^{-1}\widetilde A,
+\end{equation}
+其每行之和为 $1$，可以解释为邻居平均或随机游走的一步转移概率。式~\eqref{eq:S} 的 $S$ 一般不具有行和为 $1$ 的性质。因此，说 GCN 做邻域平滑是合理的，说它严格做邻居算术平均则不准确。度数均相同等特殊情况下，两种归一化可以一致。
+
+\subsection{参数矩阵：学习任务需要的特征组合}
+图结构告诉网络哪些节点可以交换信息，却不能直接告诉它哪些信息有用。$W$ 学习输入特征到输出特征的转换，并在所有节点上共享。例如，若输入是多个词语的频次，$W$ 可以学习有助于辨别论文领域的词语组合。
+
+\subsection{非线性：增加表达能力}
+没有非线性时，两层计算变成
+\begin{equation}
+S(SXW^{(0)})W^{(1)}
+=S^2X\bigl(W^{(0)}W^{(1)}\bigr),
+\end{equation}
+整体仍是线性变换。加入非线性后，网络可以表达更复杂的特征关系。不同图神经网络还可以使用注意力权重、不同聚合函数或其他自环处理方式。
+
+\section{一个可以手算的例子}
+考虑三个节点构成的路径 $1-2-3$，每个节点只有一个特征：
+\begin{equation}
+H=\begin{bmatrix}1\\2\\3\end{bmatrix}.
+\end{equation}
+原始邻接矩阵与加自环后的邻接矩阵分别为
+\begin{equation}
+A=\begin{bmatrix}0&1&0\\1&0&1\\0&1&0\end{bmatrix},
+\qquad
+\widetilde A=\begin{bmatrix}1&1&0\\1&1&1\\0&1&1\end{bmatrix}.
+\end{equation}
+加自环后的度数为 $(2,3,2)$，所以
+\begin{equation}
+S=\begin{bmatrix}
+\frac12&\frac1{\sqrt6}&0\\[2pt]
+\frac1{\sqrt6}&\frac13&\frac1{\sqrt6}\\[2pt]
+0&\frac1{\sqrt6}&\frac12
+\end{bmatrix}.
+\end{equation}
+暂时取 $W=1$，并令 $\sigma(z)=z$，只观察传播：
+\begin{equation}
+H'=SH=
+\begin{bmatrix}
+\frac12+\frac2{\sqrt6}\\[3pt]
+\frac1{\sqrt6}+\frac23+\frac3{\sqrt6}\\[3pt]
+\frac2{\sqrt6}+\frac32
+\end{bmatrix}
+\approx\begin{bmatrix}1.3165\\2.2997\\2.3165\end{bmatrix}.
+\end{equation}
+例如，节点 $1$ 的更新为
+\begin{equation}
+h_1'=\frac12\times1+\frac1{\sqrt6}\times2\approx1.3165.
+\end{equation}
+它只使用自身和节点 $2$。节点 $3$ 的特征要在下一层经由节点 $2$ 才能影响节点 $1$。这说明\textbf{一层 GCN 使用一跳邻域，两层可以使用两跳邻域，更多层扩大可利用的图上范围}。
+
+第一行的系数和为 $1/2+1/\sqrt6\approx0.9082$，第二行的系数和为 $1/3+2/\sqrt6\approx1.1498$，再次说明对称归一化不是严格的平均。
+
+\section{为什么可以称为卷积：频率域的数学联系}
+仅说“聚合邻居”，不足以解释卷积这个名称。更严格的联系来自普通卷积的\textbf{卷积定理}。先明确式中的两个对象：$x$ 是待处理的输入信号，$k$ 是卷积核（kernel），也称滤波器。若 $x=(x_0,\ldots,x_{n-1})$，则 $x_i$ 是位置 $i$ 上的信号值；$k=(k_0,\ldots,k_{m-1})$ 则规定输入信号在局部范围内如何加权组合。符号 $k*x$ 表示用卷积核 $k$ 处理信号 $x$ 后得到的输出信号，符号 $*$ 表示卷积运算，不表示普通乘法。例如，在一维离散情形下，忽略边界处理时，某个位置的输出可写成
+\begin{equation}
+(k*x)_i=\sum_r k_r x_{i-r}.
+\end{equation}
+其中 $k_r$ 是相对位置 $r$ 的权重，$x_{i-r}$ 是输入信号在对应位置的值。因此，$k$ 决定“如何组合邻近信号”，$x$ 是“被组合的信号”。在深度学习的互相关写法中常见 $x_{i+r}$；两者只差卷积核索引是否翻转。
+
+对有限信号采用循环卷积时，卷积定理写为
+\begin{equation}
+\mathcal F(k*x)=\mathcal F(k)\,\mathcal F(x).
+\end{equation}
+这里 $\mathcal F(x)$ 和 $\mathcal F(k)$ 分别是输入信号与卷积核的傅里叶变换；右侧的乘法是对应频率分量之间的逐元素乘法。也就是说，空间域中的卷积等价于：把信号 $x$ 和卷积核 $k$ 变换到频率域，用 $\mathcal F(k)$ 给 $\mathcal F(x)$ 的每个频率分量加权，再变换回来。$\mathcal F(k)$ 因而描述了卷积核对不同频率的响应。离散有限信号采用循环卷积时，可直接用离散傅里叶变换表达这一关系。
+
+图没有普通坐标系，但可以通过\textbf{图拉普拉斯矩阵的特征向量}建立图上的频率表示。
+
+\subsection{图拉普拉斯与图频率}
+定义对称归一化拉普拉斯矩阵
+\begin{equation}
+L=I_n-D^{-1/2}AD^{-1/2}.
+\label{eq:laplacian}
+\end{equation}
+这里暂时使用加自环前的 $A,D$，并假设节点度数为正；孤立节点可以另行处理，最终 GCN 传播公式因加自环而不存在逆度数问题。由于 $L$ 是实对称矩阵，它可分解为
+\begin{equation}
+L=U\Lambda U^\top,
+\qquad U^\top U=I_n.
+\end{equation}
+$U$ 的列是正交特征向量，$\Lambda$ 的对角元素是特征值。这些特征向量构成图傅里叶基。
+
+为什么它们可以表示频率？对于标量节点信号 $x$，
+\begin{equation}
+x^\top Lx=\frac12\sum_{i,j}A_{ij}
+\left(\frac{x_i}{\sqrt{d_i}}-\frac{x_j}{\sqrt{d_j}}\right)^2.
+\end{equation}
+这个量衡量相连节点之间经过度数调整后的差异。对单位特征向量 $u_k$，有
+\begin{equation}
+u_k^\top Lu_k=\lambda_k.
+\end{equation}
+因此，小特征值对应沿边变化较缓的模式，大特征值对应变化较剧烈的模式，分别类似普通信号中的低频与高频。这里的平滑针对度数调整后的信号，并不总意味着原始数值处处相同。
+
+\subsection{谱图卷积的定义}
+图傅里叶变换及逆变换为
+\begin{equation}
+\widehat x=U^\top x,\qquad x=U\widehat x.
+\end{equation}
+谱图卷积定义为
+\begin{equation}
+\boxed{g_\theta *_G x=U g_\theta(\Lambda)U^\top x,}
+\label{eq:spectral}
+\end{equation}
+其中
+\begin{equation}
+g_\theta(\Lambda)=\operatorname{diag}
+\bigl(g_\theta(\lambda_1),\ldots,g_\theta(\lambda_n)\bigr).
+\end{equation}
+该运算对第 $k$ 个图频率乘以响应 $g_\theta(\lambda_k)$。它与普通卷积的频率域运算具有同样的结构：\textbf{变换、逐频率相乘、逆变换}。这是图卷积名称的数学基础。
+
+不过，这是把经典频率滤波推广到图上的定义，并不要求一般图具有普通的平移操作。任意谱滤波器也不一定局部；局部性需要进一步限制滤波器形式。
+
+\section{谱图卷积如何变成经典 GCN 公式？}
+\subsection{多项式近似带来局部性}
+直接计算整张图的特征分解通常代价较大。一种方法是用拉普拉斯矩阵的多项式近似滤波器，例如切比雪夫多项式：
+\begin{equation}
+g_\theta *_G x\approx
+\sum_{k=0}^{K}\theta_kT_k(\overline L)x,
+\qquad
+\overline L=\frac{2}{\lambda_{\max}}L-I_n.
+\end{equation}
+其中 $\lambda_{\max}$ 为 $L$ 的最大特征值，缩放将其谱映射到 $[-1,1]$。前两项为 $T_0(z)=1$、$T_1(z)=z$。
+
+多项式计算不需要显式求出 $U$。由于矩阵乘法沿边传播，$K$ 次矩阵多项式最多涉及 $K$ 跳范围的节点，因此可以实现局部滤波。
+
+\subsection{一阶近似与参数约束}
+取 $K=1$，得到
+\begin{equation}
+g_\theta *_G x\approx\theta_0x+\theta_1\overline Lx.
+\end{equation}
+归一化拉普拉斯的特征值位于 $[0,2]$。采用 $\lambda_{\max}\approx2$ 的简化后，
+\begin{equation}
+\overline L\approx L-I_n=-D^{-1/2}AD^{-1/2}.
+\end{equation}
+注意，最大特征值并不总恰好为 $2$，这里是简化而非一般恒等式。于是
+\begin{equation}
+g_\theta *_G x\approx
+\theta_0x-\theta_1D^{-1/2}AD^{-1/2}x.
+\end{equation}
+进一步约束 $\theta_0=\theta$、$\theta_1=-\theta$，得到
+\begin{equation}
+g_\theta *_G x\approx
+\theta\left(I_n+D^{-1/2}AD^{-1/2}\right)x.
+\label{eq:firstorder}
+\end{equation}
+这里出现了自身信息加上一跳邻居信息。这些近似和参数约束减少了计算与参数，同时限制了可以表达的滤波器类型。所谓一阶近似，并不保证精确表示任意谱滤波器。
+
+\subsection{重归一化是设计上的替换}
+经典 GCN 使用重归一化技巧，将传播矩阵替换为
+\begin{equation}
+I_n+D^{-1/2}AD^{-1/2}
+\quad\longrightarrow\quad
+\widetilde D^{-1/2}(A+I_n)\widetilde D^{-1/2}.
+\end{equation}
+\textbf{这里是设计上的替换，不是恒等变形。} 加自环后重新计算了度数，因此两边通常不相等，自身信息的系数也改变了。
+
+这样做有助于控制反复传播的尺度。$D^{-1/2}AD^{-1/2}$ 的特征值位于 $[-1,1]$，所以式~\eqref{eq:firstorder} 中的传播矩阵特征值可达到 $2$，反复应用可能放大某些方向。对于本文假设的非负边权无向图，重归一化后的对称矩阵 $S$ 的特征值绝对值不超过 $1$，欧氏算子范数为 $1$。
+
+这控制了图传播本身的放大效应，但不能保证包含可训练 $W$ 的整个网络始终稳定。最后，将标量信号推广到多维节点特征，加入通道变换 $W$ 与非线性 $\sigma$，就得到式~\eqref{eq:gcn}。
+
+因此，经典 GCN 同时具有两种解释：\textbf{在节点域，它是局部邻居聚合；从谱域来源看，它是经过简化和重归一化的图滤波。} 对最终的 $S$，也可以定义加自环图的归一化拉普拉斯 $\widetilde L=I_n-S$，于是 $S=I_n-\widetilde L$ 是该图拉普拉斯的一阶多项式滤波器。
+
+\section{带权邻接矩阵：卷积如何进行？}
+\label{sec:weighted}
+前文的矩阵公式已经允许非负边权。本节将带权情形单独展开，说明边权如何进入聚合、度数如何计算，以及权重尺度对结果的影响。首先假设图是无向图，原图没有自环，且 $a_{ij}=A_{ij}\geq0$、$a_{ij}=a_{ji}$。
+
+\subsection{边权的含义：强连接还是大距离？}
+无权图的邻接矩阵只表示两个节点是否相连；带权图还表示连接强度。若 $a_{ij}$ 表示相似度，较大的数值通常意味着应加强这条边上的信息传播。但若原始数值表示距离或成本，越大反而可能意味着关系越弱，不能直接将其当作相似度使用。例如，可以将距离转为
+\begin{equation}
+a_{ij}=\exp\!\left(-\frac{\operatorname{dist}(i,j)^2}{2s^2}\right),\qquad s>0.
+\end{equation}
+$s$ 控制距离衰减尺度；是否进一步截断为稀疏邻域，取决于建图方式。关键是先明确权重的语义：经典加权 GCN 使用非负权重来表示传播强度。
+
+\subsection{度数必须改为边权之和}
+允许自环权重为 $\alpha>0$，定义
+\begin{equation}
+\widetilde A=A+\alpha I_n,\qquad
+\widetilde d_i=\sum_j\widetilde A_{ij}
+=\alpha+\sum_{j\in\mathcal N(i)}a_{ij}.
+\label{eq:weighted-degree}
+\end{equation}
+标准选择是 $\alpha=1$。这里 $\widetilde d_i$ 是加权度数，也称节点强度。\textbf{它是边权之和，不是邻居数量。} 原始邻居数为
+\begin{equation}
+|\mathcal N(i)|=\sum_{j\ne i}\mathbf 1\{a_{ij}>0\},
+\end{equation}
+只有边权都等于 $1$ 时，边权之和才等于邻居数。
+
+若原图已有自环，$A+\alpha I_n$ 表示在已有自环上额外增加 $\alpha$，自身系数应按实际的 $\widetilde A_{ii}$ 计算，不能重复把已有自环忽略。
+
+\subsection{矩阵形式与节点形式}
+定义 $\widetilde D=\operatorname{diag}(\widetilde d_1,\ldots,\widetilde d_n)$，加权 GCN 为
+\begin{equation}
+\boxed{
+H^{(\ell+1)}=\sigma\!\left(
+\widetilde D^{-1/2}\widetilde A\widetilde D^{-1/2}
+H^{(\ell)}W^{(\ell)}\right).
+}
+\label{eq:weighted-gcn}
+\end{equation}
+它的外观与无权公式相同，但邻接矩阵的数值和度矩阵的数值都已改变。节点形式为
+\begin{equation}
+\begin{split}
+h_i^{(\ell+1)}=\sigma\!\Bigg(&
+\frac{\alpha}{\widetilde d_i}h_i^{(\ell)}W^{(\ell)}\\
+&+\sum_{j\in\mathcal N(i)}
+\frac{a_{ij}}{\sqrt{\widetilde d_i\widetilde d_j}}
+ h_j^{(\ell)}W^{(\ell)}\Bigg).
+\end{split}
+\label{eq:weighted-node}
+\end{equation}
+通俗理解是：$a_{ij}$ 表示连接强度；两端的加权度数调整传播尺度；$W$ 学习特征如何转换。真正用于邻居聚合的系数为
+\begin{equation}
+c_{ij}=\frac{a_{ij}}{\sqrt{\widetilde d_i\widetilde d_j}},
+\end{equation}
+而不是原始边权 $a_{ij}$。修改一条边的权重还会改变两端的度数，因此会影响与两端相连的其他传播系数。最终的信息贡献则是 $c_{ij}h_jW$，还取决于节点特征和可训练变换。
+
+\textbf{边权与参数矩阵是两类不同的权重。} 边权 $a_{ij}$ 控制节点之间的联系，$W$ 控制特征通道之间的变换。基本 GCN 中，给定的边权通常是固定输入，不会自动因训练 $W$ 而改变；若要学习边权，需要另行设计可训练建图或注意力机制。
+
+\subsection{完整的带权手算例子}
+三个节点构成路径 $1-2-3$，两条边的权重分别为 $2$ 和 $1$：
+\begin{equation}
+A=\begin{bmatrix}0&2&0\\2&0&1\\0&1&0\end{bmatrix}.
+\end{equation}
+取 $\alpha=1$，则
+\begin{equation}
+\widetilde A=\begin{bmatrix}1&2&0\\2&1&1\\0&1&1\end{bmatrix},
+\qquad \widetilde D=\operatorname{diag}(3,4,2).
+\end{equation}
+例如，节点 $2$ 的加权度数为 $2+1+1=4$，并非加自环后的邻居数量 $3$。归一化后，
+\begin{equation}
+S=\begin{bmatrix}
+\frac13&\frac2{\sqrt{12}}&0\\[2pt]
+\frac2{\sqrt{12}}&\frac14&\frac1{\sqrt8}\\[2pt]
+0&\frac1{\sqrt8}&\frac12
+\end{bmatrix}.
+\end{equation}
+仍取 $H=[1,2,3]^\top$、$W=1$ 和 $\sigma(z)=z$，得到
+\begin{equation}
+H'=SH=
+\begin{bmatrix}
+\frac13+\frac4{\sqrt{12}}\\[3pt]
+\frac2{\sqrt{12}}+\frac12+\frac3{\sqrt8}\\[3pt]
+\frac2{\sqrt8}+\frac32
+\end{bmatrix}
+\approx\begin{bmatrix}1.4880\\2.1380\\2.2071\end{bmatrix}.
+\end{equation}
+对节点 $2$，
+\begin{equation}
+h_2'=
+\underbrace{\frac2{\sqrt{12}}\times1}_{\text{节点 1 的信息}}
++\underbrace{\frac14\times2}_{\text{自己的信息}}
++\underbrace{\frac1{\sqrt8}\times3}_{\text{节点 3 的信息}}.
+\end{equation}
+节点 $1$ 的系数约为 $0.5774$，节点 $3$ 的系数约为 $0.3536$。前者的系数更大，但后者的特征值更大，所以节点 $3$ 的数值贡献反而更大。\textbf{不能只看边权大小判断最终贡献。}
+
+\subsection{若希望严格做加权平均}
+可以采用按行归一化，而不是对称归一化：
+\begin{equation}
+P_{\mathrm{rw}}=\widetilde D^{-1}\widetilde A,
+\qquad H'=\sigma(P_{\mathrm{rw}}HW).
+\end{equation}
+此时
+\begin{equation}
+h_i'=\sigma\!\left(\sum_j
+\frac{\widetilde A_{ij}}{\sum_k\widetilde A_{ik}}h_jW\right).
+\end{equation}
+每行系数之和为 $1$，因此非线性之前是变换后特征的加权平均。上述例子中，节点 $2$ 对三个节点的权重分别为 $2/4,1/4,1/4$，故
+\begin{equation}
+h_2'=\frac24\times1+\frac14\times2+\frac14\times3=1.75.
+\end{equation}
+它与对称归一化的 $2.1380$ 不同。两种都是图传播设计，但计算结果和解释不同，不能混用。
+
+\subsection{带权后为什么仍然是图卷积？}
+对于非负边权无向图，式~\eqref{eq:laplacian} 中的 $A$ 可以直接使用带权邻接矩阵，$D_{ii}=\sum_j a_{ij}$。在度数为正的节点上，加权归一化拉普拉斯仍是实对称矩阵，仍可定义图傅里叶变换和谱滤波。其平滑性表达式为
+\begin{equation}
+x^\top Lx=\frac12\sum_{i,j}a_{ij}
+\left(\frac{x_i}{\sqrt{d_i}}-\frac{x_j}{\sqrt{d_j}}\right)^2.
+\end{equation}
+每条边上的差异项由 $a_{ij}$ 加权。给定这些度数调整后的差异，较强的边在平滑性度量中占更大权重；实际修改边权时，度数也会同时变化。
+
+谱图卷积 $Ug_\theta(\Lambda)U^\top x$、多项式近似和一阶近似仍然适用。加入自环并重新归一化后，式~\eqref{eq:weighted-gcn} 就是加权图上的局部滤波。边权改变的是图上的传播强度和频率基，并没有使运算脱离图滤波框架。
+
+\subsection{边权尺度与自环权重的关系}
+若边权普遍很大，固定自环权重 $\alpha=1$ 时，自身系数 $\alpha/\widetilde d_i$ 可能很小；若边权普遍很小，自身信息则可能占主导。因此，应关注边权与自环权重的相对尺度。
+
+这个问题可以用整体缩放说明。若把\emph{包括自环在内}的全部权重乘以 $c>0$，则
+\begin{equation}
+(c\widetilde D)^{-1/2}(c\widetilde A)(c\widetilde D)^{-1/2}
+=\widetilde D^{-1/2}\widetilde A\widetilde D^{-1/2}.
+\end{equation}
+归一化传播不变。但若只将原始边权变成 $cA$，自环仍为 $\alpha I_n$，通常会改变传播，因为邻居与自身的相对权重改变了。$\alpha$ 可作为超参数选择；它不是对所有数据都必须固定为 $1$ 的数学要求。
+
+\subsection{有向边与负边权不能直接套用无向非负推导}
+\textbf{有向图：} 若 $A_{ij}\ne A_{ji}$，矩阵乘法仍可执行，但必须明确传播方向。本文按 $A_{ij}$ 表示节点 $j$ 向节点 $i$ 提供信息来解释 $(AH)_i=\sum_jA_{ij}h_j$。若数据将 $A_{ij}$ 定义为从 $i$ 到 $j$ 的边，要聚合入边信息，通常需要使用转置或另行定义传播矩阵。入边、出边或双向聚合可采用不同设计；无向图的实对称特征分解和谱稳定性结论不能原样照搬。
+
+\textbf{负边权：} 若直接用带符号边权之和作为度数，可能出现零或负数，使实数逆平方根无定义；即使度数为正，非负图的谱界与加权平均解释也不再自动成立。正负关系通常需要符号图模型，例如分别构造正边、负边传播通道，或使用专门的符号拉普拉斯，不能简单视为本节非负边权公式的常规情形。
+
+\textbf{实现要点：先确认边权语义，再添加自环，用边权之和计算度数，完成归一化，最后进行特征聚合与变换。} 将二值邻接矩阵换成带权矩阵却继续使用邻居数量归一化，不是这里定义的标准加权 GCN。
+
+\section{它与图像卷积的相似之处和区别}
+二者都在局部范围组合信息、共享参数，并通过叠加层扩大感受野。但普通图像卷积可以分别学习左边和右边的权重；经典 GCN 中，所有邻居使用同一个特征变换 $W$，差异主要来自边权与度数归一化。它通常不学习方向相关的卷积核，因此在网格图上也不自动等同于任意二维 CNN 卷积。
+
+图上没有一般意义的平移，但节点编号不应影响结果。GCN 满足\textbf{节点置换等变性}。若用置换矩阵 $P$ 重新排列节点，则
+\begin{equation}
+H\mapsto PH,\qquad S\mapsto PSP^\top,
+\end{equation}
+且
+\begin{equation}
+\sigma\!\left((PSP^\top)(PH)W\right)
+=P\,\sigma(SHW).
+\end{equation}
+即节点重新编号后，输出仅按相同方式重新排列。这保证网络依赖图结构和节点特征，而不是任意编号顺序。
+
+局部性、权重共享与置换等变性解释了它与普通卷积在结构上的联系；谱滤波推导进一步解释了名称的数学来源。不过，仅具备邻居聚合的任意图算子，不一定都等价于拉普拉斯谱卷积。
+
+\section{为什么这种操作有用，什么时候会受限制？}
+许多任务中，相连节点的属性具有相关性。例如，同一研究领域的论文往往互相引用。图传播可以帮助节点借助邻居的信息进行判断，这也是经典 GCN 的平滑倾向常常有效的原因。
+
+如果相邻节点经常属于不同类别，简单混合邻居特征则可能损害判别信息，需要更合适的传播或聚合设计。经典 GCN 对邻居采取共享变换，也限制了它对邻居角色、方向和差异的刻画能力。
+
+\subsection{层数不是越多越好：过平滑}
+忽略参数和非线性时，反复传播近似为
+\begin{equation}
+H^{(L)}=S^LX.
+\end{equation}
+对于连通、带正自环的图，反复传播会抑制许多变化模式，使表示趋向主特征向量控制的形式。定义
+\begin{equation}
+q_i=\frac{\sqrt{\widetilde d_i}}{\sqrt{\sum_j\widetilde d_j}},
+\end{equation}
+则 $Sq=q$，并在上述条件下有
+\begin{equation}
+\lim_{L\to\infty}S^L=qq^\top.
+\end{equation}
+因此，传播后的每个特征通道最终趋向同一个图结构方向。对于对称归一化，这个方向与 $\sqrt{\widetilde d_i}$ 有关，不一定是所有节点数值完全相等，但节点之间的可区分信息会明显减少。这是\textbf{过平滑}的基本机制。非连通图可在各连通分量内分别理解；实际网络的程度还受参数、非线性与残差连接等因素影响。
+
+\section{如何记住这条公式}
+可以抓住三个部分的分工：
+\begin{equation}
+\underbrace{\widetilde D^{-1/2}\widetilde A\widetilde D^{-1/2}}_{\text{决定节点之间如何传播}}
+\quad
+\underbrace{H}_{\text{提供节点特征}}
+\quad
+\underbrace{W}_{\text{学习特征如何转换}}.
+\end{equation}
+\textbf{图卷积利用图结构定义局部信息交换，利用共享参数学习特征变换。经典 GCN 的“卷积”名称，既体现局部滤波与参数共享，也具有从图傅里叶域滤波出发的数学来源。}
+
+\end{document}

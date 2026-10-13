@@ -33,31 +33,41 @@
 \@writefile{toc}{\contentsline {paragraph}{粒子群优化。}{56}{paragraph*.77}\protected@file@percent }
 \newlabel{eq:solving-pso-update}{{5.38}{56}{粒子群优化。}{equation.5.38}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.1.6}含隐变量的极大似然：EM算法}{57}{subsection.5.1.6}\protected@file@percent }
-\newlabel{eq:solving-marginal-likelihood}{{5.40}{57}{含隐变量的极大似然：EM算法}{equation.5.40}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.7}从条件分布到参数更新}{57}{subsection.5.1.7}\protected@file@percent }
-\newlabel{eq:solving-em-q}{{5.41}{57}{从条件分布到参数更新}{equation.5.41}{}}
-\newlabel{eq:solving-em-m}{{5.42}{58}{从条件分布到参数更新}{equation.5.42}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.8}EM算法的收敛性}{58}{subsection.5.1.8}\protected@file@percent }
-\newlabel{eq:solving-em-decomposition}{{5.45}{58}{EM算法的收敛性}{equation.5.45}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.9}例子：一维高斯混合模型}{58}{subsection.5.1.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.2}随机参数模型的求解}{59}{section.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.3}随机参数模型：后验与变分推断}{59}{section.5.3}\protected@file@percent }
-\newlabel{eq:solving-posterior}{{5.53}{59}{随机参数模型：后验与变分推断}{equation.5.53}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}从后验近似到证据下界}{60}{subsection.5.3.1}\protected@file@percent }
-\newlabel{eq:solving-vi-kl}{{5.55}{60}{从后验近似到证据下界}{equation.5.55}{}}
-\newlabel{eq:solving-elbo}{{5.58}{60}{从后验近似到证据下界}{equation.5.58}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}均值场近似怎样计算}{60}{subsection.5.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.6.1}为什么完整数据容易求解，观测数据却难求解}{57}{subsubsection.5.1.6.1}\protected@file@percent }
+\newlabel{eq:solving-marginal-likelihood}{{5.39}{57}{为什么完整数据容易求解，观测数据却难求解}{equation.5.39}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.6.2}怎样构造一个能逐步提高的下界}{57}{subsubsection.5.1.6.2}\protected@file@percent }
+\newlabel{eq:solving-em-jensen}{{5.42}{58}{怎样构造一个能逐步提高的下界}{equation.5.42}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.6.3}由下界推导E步和M步}{58}{subsubsection.5.1.6.3}\protected@file@percent }
+\newlabel{eq:solving-em-q}{{5.45}{58}{由下界推导E步和M步}{equation.5.45}{}}
+\newlabel{eq:solving-em-m}{{5.46}{58}{由下界推导E步和M步}{equation.5.46}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.6.4}为什么每轮更新不会降低观测似然}{59}{subsubsection.5.1.6.4}\protected@file@percent }
+\newlabel{eq:solving-em-decomposition}{{5.52}{59}{为什么每轮更新不会降低观测似然}{equation.5.52}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.6.5}哪些近似仍保留上述保证}{60}{subsubsection.5.1.6.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1.7}例子：一维高斯混合模型}{60}{subsection.5.1.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}随机参数模型的求解}{61}{section.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.1}后验分布：数据怎样更新参数的不确定性}{61}{subsection.5.2.1}\protected@file@percent }
+\newlabel{eq:solving-posterior}{{5.59}{61}{后验分布：数据怎样更新参数的不确定性}{equation.5.59}{}}
+\newlabel{eq:solving-posterior-predictive}{{5.60}{62}{后验分布：数据怎样更新参数的不确定性}{equation.5.60}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.2}边际似然：模型整体怎样支持观测数据}{62}{subsection.5.2.2}\protected@file@percent }
+\newlabel{eq:solving-model-evidence}{{5.61}{62}{边际似然：模型整体怎样支持观测数据}{equation.5.61}{}}
+\newlabel{eq:solving-model-comparison}{{5.63}{62}{边际似然：模型整体怎样支持观测数据}{equation.5.63}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.3}一个离散参数的计算例子}{63}{subsection.5.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.4}为什么还需要近似求解}{63}{subsection.5.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.5}从后验近似到证据下界}{64}{subsection.5.2.5}\protected@file@percent }
+\newlabel{eq:solving-vi-kl}{{5.67}{64}{从后验近似到证据下界}{equation.5.67}{}}
+\newlabel{eq:solving-elbo}{{5.70}{64}{从后验近似到证据下界}{equation.5.70}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.6}均值场近似怎样计算}{64}{subsection.5.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.7}怎样计算变分目标的梯度}{65}{subsection.5.2.7}\protected@file@percent }
+\newlabel{eq:solving-reparameterization}{{5.75}{65}{怎样计算变分目标的梯度}{equation.5.75}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}选择求解方法时应问的问题}{65}{section.5.3}\protected@file@percent }
 \citation{deisenroth2020mml}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.3}怎样计算变分目标的梯度}{61}{subsection.5.3.3}\protected@file@percent }
-\newlabel{eq:solving-reparameterization}{{5.63}{61}{怎样计算变分目标的梯度}{equation.5.63}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {5.4}选择求解方法时应问的问题}{61}{section.5.4}\protected@file@percent }
 \citation{murphy2022pml}
 \citation{bishop2006pattern}
-\@writefile{toc}{\contentsline {section}{\numberline {5.5}自测与参考答案}{62}{section.5.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5.6}本章小结}{62}{section.5.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}自测与参考答案}{66}{section.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.5}本章小结}{67}{section.5.5}\protected@file@percent }
 \@setckpt{chapters/05-optimization-training}{
-\setcounter{page}{63}
-\setcounter{equation}{64}
+\setcounter{page}{68}
+\setcounter{equation}{76}
 \setcounter{enumi}{5}
 \setcounter{enumii}{0}
 \setcounter{enumiii}{0}
@@ -66,7 +76,7 @@
 \setcounter{mpfootnote}{0}
 \setcounter{part}{1}
 \setcounter{chapter}{5}
-\setcounter{section}{6}
+\setcounter{section}{5}
 \setcounter{subsection}{0}
 \setcounter{subsubsection}{0}
 \setcounter{paragraph}{0}
@@ -78,7 +88,7 @@
 \setcounter{Item}{14}
 \setcounter{Hfootnote}{0}
 \setcounter{Hy@AnnotLevel}{0}
-\setcounter{bookmark@seq@number}{39}
+\setcounter{bookmark@seq@number}{38}
 \setcounter{caption@flags}{2}
 \setcounter{continuedfloat}{0}
 \setcounter{float@type}{16}

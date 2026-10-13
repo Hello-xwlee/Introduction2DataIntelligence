@@ -1,4 +1,4 @@
-This is BibTeX, Version 0.99e (TeX Live 2026)
+This is BibTeX, Version 0.99d (TeX Live 2025)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: main.aux
 A level-1 auxiliary file: chapters/01-mathematical-preliminaries.aux
@@ -6,7 +6,6 @@ A level-1 auxiliary file: chapters/02-foundations.aux
 A level-1 auxiliary file: chapters/03-linear-models.aux
 A level-1 auxiliary file: chapters/04-objectives-and-metrics.aux
 A level-1 auxiliary file: chapters/05-optimization-training.aux
-A level-1 auxiliary file: chapters/06-statistical-learning.aux
 A level-1 auxiliary file: chapters/07-bayesian.aux
 A level-1 auxiliary file: chapters/08-parametric-nonparametric.aux
 A level-1 auxiliary file: chapters/09-sequence.aux
@@ -24,44 +23,44 @@ A level-1 auxiliary file: chapters/20-manifold.aux
 A level-1 auxiliary file: chapters/21-meta.aux
 The style file: plain.bst
 Database file #1: references.bib
-You've used 110 entries,
+You've used 108 entries,
             2118 wiz_defined-function locations,
-            995 strings with 21713 characters,
-and the built_in function-call counts, 36291 in all, are:
-= -- 3242
-> -- 2168
+            986 strings with 21391 characters,
+and the built_in function-call counts, 35611 in all, are:
+= -- 3178
+> -- 2132
 < -- 1
-+ -- 860
-- -- 738
-* -- 2493
-:= -- 6215
-add.period$ -- 330
-call.type$ -- 110
-change.case$ -- 684
++ -- 846
+- -- 726
+* -- 2446
+:= -- 6101
+add.period$ -- 324
+call.type$ -- 108
+change.case$ -- 672
 chr.to.int$ -- 0
-cite$ -- 110
-duplicate$ -- 1386
-empty$ -- 2916
-format.name$ -- 738
-if$ -- 7417
+cite$ -- 108
+duplicate$ -- 1361
+empty$ -- 2860
+format.name$ -- 726
+if$ -- 7277
 int.to.chr$ -- 0
-int.to.str$ -- 110
-missing$ -- 112
-newline$ -- 553
-num.names$ -- 220
-pop$ -- 880
+int.to.str$ -- 108
+missing$ -- 110
+newline$ -- 543
+num.names$ -- 216
+pop$ -- 866
 preamble$ -- 1
-purify$ -- 577
+purify$ -- 567
 quote$ -- 0
-skip$ -- 813
+skip$ -- 798
 stack$ -- 0
-substring$ -- 1476
-swap$ -- 172
+substring$ -- 1435
+swap$ -- 169
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 434
+type$ -- 426
 warning$ -- 0
-while$ -- 285
-width$ -- 113
-write$ -- 1136
+while$ -- 279
+width$ -- 111
+write$ -- 1115

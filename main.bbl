@@ -45,11 +45,6 @@ Mathilde Caron, Hugo Touvron, Ishan Misra, Herv{\'e} J{\'e}gou, Julien Mairal, P
 \newblock Emerging properties in self-supervised vision transformers.
 \newblock In {\em IEEE/CVF International Conference on Computer Vision}, 2021.
 
-\bibitem{cawley2010selection}
-Gavin~C. Cawley and Nicola L.~C. Talbot.
-\newblock On over-fitting in model selection and subsequent selection bias in performance evaluation.
-\newblock {\em Journal of Machine Learning Research}, 11:2079--2107, 2010.
-
 \bibitem{chaudhry2019agem}
 Arslan Chaudhry, Marc'Aurelio Ranzato, Marcus Rohrbach, and Mohamed Elhoseiny.
 \newblock Efficient lifelong learning with {A-GEM}.
@@ -144,11 +139,6 @@ Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley, Sh
 Jean-Bastien Grill et~al.
 \newblock Bootstrap your own latent: A new approach to self-supervised learning.
 \newblock In {\em Advances in Neural Information Processing Systems}, 2020.
-
-\bibitem{guo2017calibration}
-Chuan Guo, Geoff Pleiss, Yu~Sun, and Kilian~Q. Weinberger.
-\newblock On calibration of modern neural networks.
-\newblock In {\em International Conference on Machine Learning}, 2017.
 
 \bibitem{gururangan2020dontstop}
 Suchin Gururangan, Ana Marasovi{\'c}, Swabha Swayamdipta, Kyle Lo, Iz~Beltagy, Doug Downey, and Noah~A. Smith.

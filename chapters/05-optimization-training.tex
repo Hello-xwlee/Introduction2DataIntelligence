@@ -12,7 +12,7 @@
  \hat\theta=\argmin_\theta J(\theta).
  \label{eq:solving-deterministic-objective}
 \end{equation}
-这里$J$是由损失和可能的正则项构成的训练目标。随机参数模型给$\theta$指定先验分布，求解对象是$p(\theta\mid\mathcal D)$。这一区分取决于怎样处理参数，与算法是否使用随机抽样无关。随机梯度下降仍可以用于确定性参数模型。
+这里$J$是由损失和可能的正则项构成的训练目标。随机参数模型给$\theta$指定先验分布，求解对象是$p(\theta\mid\mathcal D)$。需要注意，模型中同时存在随机参数和确定性参数是完全可能的。这一区分取决于怎样处理参数，与算法是否使用随机抽样无关；随机梯度下降仍可以用于确定性参数模型。
 
 隐变量$\bm z$是没有被观测、但参与数据生成的随机量。含隐变量的模型既可以用固定参数进行极大似然估计，也可以进行贝叶斯学习。因此，本章先讨论固定参数的直接计算与搜索，再讨论隐变量怎样影响极大似然求解，最后讨论随机参数的后验近似。
 
@@ -277,50 +277,109 @@ $\delta_2$表示预测值发生微小变化时，损失的一阶变化率。由�
 
 \subsection{含隐变量的极大似然：EM算法}
 
-固定参数的概率模型也可能难以直接优化。这里举一个简单的例子，在神经网络模型的隐藏层中，对于这些隐藏层神经元的取值并不能由数据直接观测得到，而是通过神经网络的前向计算从而确定的；而通过这样由输入到输出的“单次”计算，我们就可以得到包括所有未知中间“隐变量”的取值和最终的模型预测值。然而，这在概率建模中却有大概率行不通。在概率模型中同样会有一些并不能被直接观测到的变量存在于模型内，通常这类模型，我们称作含有“潜变量”（Latent Variables）的概率模型，其中非常典型的例子有：高斯混合模型、隐马尔可夫模型。我们想得到模型预测值y与输入$\mathbf{x}$之间的条件分布关系$p(y\mid \mathbf{x})$时（为什么要得到这个条件分布？因为有了这个分布就可以计算似然，构建目标函数了！），我们不得不对模型中未被观测的“潜变量$\mathbf{z}$”进行积分从而获得只关于目标变量y的边缘分布：
+\subsubsection{为什么完整数据容易求解，观测数据却难求解}
+确定性参数的概率模型也可能包含未被观测的随机变量，称为隐变量或潜变量（Latent Variables）。例如，高斯混合模型中，我们观察到了样本，却不知道每个样本来自哪个成分。如果成分归属也被观测到，就可以按成分分别估计均值和方差。缺少这部分信息以后，参数估计与成分归属判断相互依赖：需要知道归属才能方便地估计参数，又需要参数才能判断归属。
+
+神经网络中的隐藏层也没有被直接观测，但在普通前馈网络中，给定输入和参数就能确定隐藏层输出。概率隐变量则允许在同一观测条件下具有多种可能取值，计算观测概率时需要将这些可能性按概率汇总。因此，不能直接用一次前向计算得到的中间值替代隐变量的条件分布。
+
+为统一记号，以下用$\bm x$表示全部观测数据，$\bm z$表示全部隐变量，$\theta$仍是固定未知参数。给定联合模型$p(\bm x,\bm z\mid\theta)$，观测数据对数似然为
 \begin{equation}
-  p(y\mid \mathbf{x})=\int p(y\mid \mathbf{x}, \mathbf{z}) p(\mathbf{z})\,d\mathbf{z}.
+ \ell(\theta)=\log p(\bm x\mid\theta)
+ =\log\int p(\bm x,\bm z\mid\theta)\,d\bm z.
+ \label{eq:solving-marginal-likelihood}
 \end{equation}
-然而，通常在这样的积分是无法直接计算的，甚至在一些情况下，连积分的解析形式都无法得到。那么，为了解决这样带有“潜变量”的极大似然问题，期望最大化（Expectation-Maximization，EM）算法应孕而生。
+离散隐变量时，积分改为求和。这里$\ell$表示对数似然，与前文的单样本损失按上下文区分。对于条件预测模型，相应关系是$p(y\mid\bm x,\theta)=\int p(y,\bm z\mid\bm x,\theta)\,d\bm z$，隐变量的分布可以依赖输入和参数。
 
-EM算法利用当前参数下隐变量的条件分布，交替更新分布与参数。它要求相关条件期望能够计算。EM不能自动消除所有难积分问题；E步本身不可计算时，还需要采样或近似推断。
+极大似然估计要最大化式\eqref{eq:solving-marginal-likelihood}。困难既可能是积分难以计算，也可能是积分或求和外的对数使最大化变得困难。高斯混合模型的求和可以计算，但对数中的多个成分仍耦合在一起。相比之下，完整数据对数似然$\log p(\bm x,\bm z\mid\theta)$往往能拆成容易处理的项。期望最大化（Expectation-Maximization，EM）算法由此提出一个思路：利用当前参数推断缺失信息，再用这些信息改进参数。下面推导为什么应当对缺失信息取条件期望，以及这种交替计算为什么有效。
 
-\subsection{从条件分布到参数更新}
-给定初始参数$\theta^{(0)}$，第$t$轮先计算
+\subsubsection{怎样构造一个能逐步提高的下界}
+只把隐变量替换为一个最可能取值，会丢掉其他取值的概率，通常不能保证观测似然提高。我们引入一个归一化分布$q(\bm z)$，对所有可能的隐变量取加权平均。暂时不指定$q$，先看它能否把难处理的对数积分变成完整数据对数似然的期望。
+
+对数是凹函数。Jensen不等式说明，对正随机量$U$有$\log\E[U]\geq\E[\log U]$。在$q$覆盖联合分布有关支撑、所需期望有限的条件下，将积分改写为$q$下的期望：
+\begin{align}
+ \ell(\theta)
+ &=\log\int q(\bm z)\frac{p(\bm x,\bm z\mid\theta)}{q(\bm z)}\,d\bm z\\
+ &=\log\E_q\left[\frac{p(\bm x,\bm z\mid\theta)}{q(\bm z)}\right]\\
+ &\geq\E_q\left[\log\frac{p(\bm x,\bm z\mid\theta)}{q(\bm z)}\right]
+ =F(q,\theta).
+ \label{eq:solving-em-jensen}
+\end{align}
+这里
 \begin{equation}
- q_t(\bm z)=p(\bm z\mid\bm x,\theta^{(t)}),\qquad
+ F(q,\theta)=\E_q[\log p(\bm x,\bm z\mid\theta)]+\mathcal H(q),\qquad
+ \mathcal H(q)=-\E_q[\log q(\bm z)].
+\end{equation}
+$\mathcal H(q)$是熵，连续变量时为微分熵。$F$是观测对数似然的下界，也称证据下界（Evidence Lower Bound，ELBO）。固定$q$以后，熵与$\theta$无关，最大化这个下界只需要最大化完整数据对数似然的期望。
+
+但任意下界提高，并不意味着原目标提高。例如，一个下界可能从很低的位置上升，仍低于原目标的旧值。要保证原目标不下降，需要让下界在当前参数$\theta^{(t)}$处与原目标相等，然后提高这个下界。
+
+Jensen不等式在上述比值为常数时取等号，即$p(\bm x,\bm z\mid\theta^{(t)})=Cq(\bm z)$在$q$下几乎处处成立。对两边积分，利用$\int q=1$，得到$C=p(\bm x\mid\theta^{(t)})$。因此，令下界接触当前似然的分布应当是
+\begin{equation}
+ q_t(\bm z)=\frac{p(\bm x,\bm z\mid\theta^{(t)})}{p(\bm x\mid\theta^{(t)})}
+ =p(\bm z\mid\bm x,\theta^{(t)}).
+\end{equation}
+这就解释了为什么使用当前参数下的隐变量后验：它让构造的下界在当前参数处恰好等于观测对数似然。
+
+\subsubsection{由下界推导E步和M步}
+给定初始参数$\theta^{(0)}$，E步先按当前参数计算隐变量后验$q_t$，再形成
+\begin{equation}
  Q(\theta\mid\theta^{(t)})=\E_{q_t}[\log p(\bm x,\bm z\mid\theta)].
  \label{eq:solving-em-q}
 \end{equation}
-这里$Q$把未观测变量按当前条件分布取平均。计算这个期望称为E步。固定$q_t$，再进行M步：
+期望中的$\theta$是接下来要改变的候选参数；分布$q_t$中的$\theta^{(t)}$是固定的旧参数。计算时必须区分这两者。很多模型只需计算有关充分统计量的条件期望，无需显式保存整个后验分布。
+
+M步固定$q_t$，最大化下界。因为$\mathcal H(q_t)$与候选参数无关，更新为
 \begin{equation}
- \theta^{(t+1)}=\argmax_\theta Q(\theta\mid\theta^{(t)}).
+ \theta^{(t+1)}=\argmax_\theta F(q_t,\theta)
+ =\argmax_\theta Q(\theta\mid\theta^{(t)}).
  \label{eq:solving-em-m}
 \end{equation}
-隐变量可能有多种取值，E步保留每种取值的条件概率。M步利用这些概率加权的信息更新参数。若M步只保证提高$Q$，而未求出其最大值，就得到广义EM（Generalized EM，GEM）。梯度法可以用于M步，但需要确保$Q$不下降。
+由此得到EM的两个步骤：E步使下界在旧参数处与原目标相等，M步利用这个下界求新参数。得到新参数以后，旧$q_t$通常已不再是新参数下的后验，需要重新执行E步，再继续更新。
 
-\subsection{EM算法的收敛性}
-对归一化分布$q(\bm z)$，定义
+从联合目标$F(q,\theta)$看，EM是一种交替最大化：固定$\theta$时选择精确后验作为$q$，固定$q$时更新$\theta$。每一步只处理一部分未知量，因此可以利用完整数据模型中较容易的计算。M步可能有闭式解，也可能需要数值优化。E步则要求后验或有关条件期望能够计算，EM并不能自动解决所有不可计算的积分。
+
+\subsubsection{为什么每轮更新不会降低观测似然}
+先用下界说明单调性。E步保证$F(q_t,\theta^{(t)})=\ell(\theta^{(t)})$，M步保证$F(q_t,\theta^{(t+1)})\geq F(q_t,\theta^{(t)})$，而下界始终不超过相应似然。因此
 \begin{equation}
- F(q,\theta)=\E_q[\log p(\bm x,\bm z\mid\theta)]-\E_q[\log q(\bm z)].
+ \ell(\theta^{(t+1)})\geq F(q_t,\theta^{(t+1)})
+ \geq F(q_t,\theta^{(t)})=\ell(\theta^{(t)}).
 \end{equation}
-第二项的相反数是分布$q$的熵。由条件概率公式可得
+这条不等式连接了旧目标值、提高后的下界和新目标值。它保证观测对数似然不下降；若M步严格提高$Q$，则观测对数似然也严格提高。
+
+还可以直接从条件概率分解看清楚两个变化项。由$p(\bm x,\bm z\mid\theta)=p(\bm x\mid\theta)p(\bm z\mid\bm x,\theta)$，取对数并在固定的$q_t$下求期望，得到
+\begin{equation}
+ \ell(\theta)=Q(\theta\mid\theta^{(t)})-A(\theta\mid\theta^{(t)}),\qquad
+ A(\theta\mid\theta^{(t)})=\E_{q_t}[\log p(\bm z\mid\bm x,\theta)].
+\end{equation}
+$\ell(\theta)$与$\bm z$无关，左边的期望仍为自身。这里$A$是后验对数密度的期望，只有在$\theta=\theta^{(t)}$时，才等于$-\mathcal H(q_t)$。
+
+定义Kullback--Leibler散度（Kullback--Leibler divergence，KL）为$\KL(q\|p)=\E_q[\log(q/p)]$。在有关期望有定义时，它非负且通常不对称。于是
 \begin{align}
- \KL(q\|p(\bm z\mid\bm x,\theta))
- &=\E_q[\log q(\bm z)-\log p(\bm x,\bm z\mid\theta)]+\log p(\bm x\mid\theta),\\
- \log p(\bm x\mid\theta)&=F(q,\theta)+\KL(q\|p(\bm z\mid\bm x,\theta)).
- \label{eq:solving-em-decomposition}
+ A(\theta^{(t+1)}\mid\theta^{(t)})-A(\theta^{(t)}\mid\theta^{(t)})
+ &=\E_{q_t}\left[\log\frac{p(\bm z\mid\bm x,\theta^{(t+1)})}{q_t(\bm z)}\right]\\
+ &=-\KL(q_t\|p(\bm z\mid\bm x,\theta^{(t+1)}))\leq0.
 \end{align}
-这里Kullback--Leibler散度（Kullback--Leibler divergence，KL）定义为$\KL(q\|p)=\E_q[\log(q/p)]$，离散分布用求和计算，连续分布用积分计算。它非负，且一般不对称。上述关系要求相关期望有定义，且$q$的支撑不超出相应后验的支撑。
-
-E步取$q_t=p(\bm z\mid\bm x,\theta^{(t)})$，使KL散度为零。M步提高$Q$，而$q_t$的熵保持不变。因此
+M步使$Q$不减，而被减去的$A$不增，因此
 \begin{equation}
- \log p(\bm x\mid\theta^{(t+1)})
- \geq F(q_t,\theta^{(t+1)})
- \geq F(q_t,\theta^{(t)})
- =\log p(\bm x\mid\theta^{(t)}).
+ \ell(\theta^{(t+1)})-\ell(\theta^{(t)})
+ =Q(\theta^{(t+1)}\mid\theta^{(t)})-Q(\theta^{(t)}\mid\theta^{(t)})
+ +\KL(q_t\|p(\bm z\mid\bm x,\theta^{(t+1)}))\geq0.
 \end{equation}
-这证明了精确E步和提高$Q$的M步下的单调性。似然单调增加本身不保证参数收敛或全局最优。在适当正则条件下，EM的收敛点可为驻点；无约束高斯混合模型还可能因成分方差趋近零而出现似然无界。
+这个分解说明，新似然的增加来自完整数据期望目标的改进，以及旧隐变量后验与新隐变量后验之间的差异。
+
+对一般$q$，同样的代数还给出下界的精确间隙：
+\begin{equation}
+ \ell(\theta)=F(q,\theta)+\KL(q\|p(\bm z\mid\bm x,\theta)).
+ \label{eq:solving-em-decomposition}
+\end{equation}
+KL为零时，下界与似然相等。这个恒等式与Jensen推导相互对应，也将引出后面的变分推断。
+
+单调性与收敛是不同结论。如果对数似然有上界，不下降的似然值序列会收敛，但这本身不保证参数序列收敛或达到全局最优。在适当正则条件下，EM的收敛点可为驻点，初始化仍会影响结果。无约束高斯混合模型可能因成分方差趋近零而出现似然无界，不能直接套用似然有界时的结论。
+
+\subsubsection{哪些近似仍保留上述保证}
+若E步精确计算后验，而M步只使$Q$不下降，不要求达到其最大值，就得到广义EM（Generalized EM，GEM）。例如，可以在M步使用带下降检查的梯度法最小化$-Q$。上述单调性证明仍成立。
+
+若隐变量后验无法精确计算，则是另一个计算困难。将$q$限制在可处理的分布族内，交替提高$F(q,\theta)$，得到变分EM（Variational EM，VEM）。此时E步通常不能令KL为零，所以提高下界不再自动保证观测似然不下降。用采样估计E步期望则得到蒙特卡洛EM（Monte Carlo EM，MCEM），有限采样误差也可能破坏逐轮单调性。这些方法分别近似分布与期望，不能与只放宽M步的广义EM混为一谈。
 
 \subsection{例子：一维高斯混合模型}
 设独立样本$x_1,\ldots,x_n$来自$K$个高斯成分：
@@ -355,21 +414,86 @@ E步由Bayes公式计算责任度：
 
 \section{随机参数模型的求解}
 
-以上所讲的大多都是面向模型中的参数是确定性时，应该怎么借由观测的数据以及定义好的目标函数来求解参数的最优值。对于随机参数模型，参数本身是随机变量，通常需要求解其后验分布或边际似然。常用的方法包括变分推断、马尔可夫链蒙特卡洛（MCMC）等。
+以上各节主要讨论固定未知参数的求解，结果通常是一个点估计$\hat\theta$。随机参数模型则用概率分布表达对未知参数$\theta$的不确定性。这不要求真实参数在每次观测时重新变化。数据较少时，多个参数取值可能都能解释观测结果；只保留一个参数点，就无法描述这些取值之间的差异及其可信程度。因此，求解需要从参数值扩展到参数分布。
 
-\section{随机参数模型：后验与变分推断}
+\textbf{特别注意：} 引入随机参数并不意味着模型中没有需要优化的量。一个模型可以同时包含随机变量及其先验分布，也包含用于描述条件分布的确定性参数。例如，在概率图模型中，节点可表示随机变量，边所规定的条件分布可以由神经网络参数化。节点的随机状态及模型参数的后验分布需要进行概率推断；神经网络的权重等确定性参数则仍需根据数据估计，通常通过最大似然或相应的梯度目标优化。
 
-贝叶斯学习把参数视为随机量。先验$p(\theta)$与似然$p(\mathcal D\mid\theta)$结合为
+若随机变量的后验难以精确计算，可以先用\textbf{变分分布}近似后验，再优化变分目标来更新神经网络参数。也可以把两类未知量放入同一个目标中联合优化，或采用交替更新。具体做法取决于模型结构和目标函数；\textbf{变分推断}(Variational Inference, VI)负责近似难以计算的分布，梯度优化负责调整可学习的确定性参数，两者可以在同一求解过程中配合使用。我们在上面介绍EM算法的时候也介绍了当隐变量（潜变量）后验$p(\mathbf{z} \mid \mathbf{x})$难以计算时，可以使用变分EM（VEM）或者蒙特卡洛EM（MCEM），其中相关的概念在本节会详细叙述。
+
+\subsection{后验分布：数据怎样更新参数的不确定性}
+设观测数据为$\mathcal D$。先验分布$p(\theta)$表达观察当前数据之前对参数取值的判断；似然$p(\mathcal D\mid\theta)$表示给定参数时，模型赋予观测数据的概率或概率密度。观察数据后，贝叶斯公式将二者结合为后验分布（posterior distribution）：
 \begin{equation}
- p(\theta\mid\mathcal D)=\frac{p(\mathcal D\mid\theta)p(\theta)}{p(\mathcal D)},
- \qquad p(\mathcal D)=\int p(\mathcal D\mid\theta)p(\theta)\,d\theta.
+ p(\theta\mid\mathcal D)=\frac{p(\mathcal D\mid\theta)p(\theta)}{p(\mathcal D)}.
  \label{eq:solving-posterior}
 \end{equation}
-其中$p(\mathcal D)$称为证据，使后验积分为一。预测新标签时，还需要对参数积分：
+后验回答：在已观察到这些数据的条件下，各种参数取值有多可信？分子把先验权重与数据提供的似然相乘，分母$p(\mathcal D)$是与$\theta$无关的归一化常数。连续参数时，$p(\theta\mid\mathcal D)$是密度，参数落在某一区间的概率需要对该区间积分。这个公式要求$p(\mathcal D)$正且有限。
+
+后验的重要性在于它保留了参数的不确定性。我们可以计算后验均值（或者最大后验估计）作为点估计，也可以计算参数区间的后验概率，说明数据支持的取值范围。预测新标签时，还可以让不同参数按其后验权重共同参与预测：
 \begin{equation}
  p(y_*\mid\bm x_*,\mathcal D)=\int p(y_*\mid\bm x_*,\theta)p(\theta\mid\mathcal D)\,d\theta.
+ \label{eq:solving-posterior-predictive}
 \end{equation}
-后验同时描述参数的可能取值与不确定性。复杂模型的证据和预测积分往往没有解析形式。变分推断（Variational Inference，VI）选择一个可计算的分布族$q_\phi(\theta)$来近似后验，其中$\phi$是变分参数，例如高斯分布的均值和尺度。
+其中$\bm x_*$是新输入，$y_*$是待预测标签；假设给定输入和参数后，新标签与训练数据条件独立，并将输入作为已知条件。积分把每个参数下的预测按后验密度加权汇总，使参数不确定性进入预测结果。后验较集中时，单点预测可能是合适的近似；后验分散或具有多个峰时，一个参数点可能遗漏其他有较大后验权重的预测。后验是否可信仍取决于先验、似然和数据假设，分布形式本身不保证预测校准。
+
+\subsection{边际似然：模型整体怎样支持观测数据}
+式\eqref{eq:solving-posterior}的分母由联合分布对参数积分得到：
+\begin{equation}
+ p(\mathcal D)=\int p(\mathcal D,\theta)\,d\theta
+ =\int p(\mathcal D\mid\theta)p(\theta)\,d\theta.
+ \label{eq:solving-model-evidence}
+\end{equation}
+这个量称为边际似然（marginal likelihood），也称模型证据（model evidence）。这里的“边际”表示通过积分消去参数，只留下观测数据的分布；离散参数时，积分改为求和。它是似然在先验分布下的加权平均，表示在尚未用当前数据更新参数时，模型赋予这些数据的概率或概率密度。给定模型、先验和数据后，边际似然是一个数；后验则是参数取值的分布。
+
+边际似然首先保证后验归一化：将式\eqref{eq:solving-posterior}对$\theta$积分，分子的积分恰好是$p(\mathcal D)$，所以后验积分为$1$。它还可以用于比较不同的候选模型。
+
+设有有限个候选模型$M_1,\ldots,M_K$，用离散变量$M$表示选择其中哪一个。每个候选模型都规定了数据的生成关系及其参数先验。例如，根据输入$x$预测标签$y$时，可以考虑直线模型$M_1$和二次曲线模型$M_2$：
+\begin{equation}
+ \begin{aligned}
+ M_1:\quad &y=ax+b+\varepsilon,
+ &\theta_1&=(a,b,\sigma^2),\\
+ M_2:\quad &y=ax^2+bx+c+\varepsilon,
+ &\theta_2&=(a,b,c,\sigma^2),
+ \end{aligned}
+ \qquad \varepsilon\sim\mathcal N(0,\sigma^2).
+\end{equation}
+$M$确定采用哪一种模型，$\theta$表示选定模型内部尚待估计的参数。不同模型的参数个数可以不同，下面用$\theta$统一表示相应模型的参数。给$M$赋予概率，表达的是对模型选择的不确定性。例如，$p(M_1)=p(M_2)=1/2$表示在观察当前数据之前，给予两个候选模型相同的权重。这里的$M$取值于有限的候选集合。
+
+模型先验$p(M)$需要根据观察当前数据之前的知识或建模约定指定。缺少倾向性信息时，可以令$p(M_k)=1/K$。若已有物理规律或以往研究更支持某种模型，也可以赋予它较高的先验概率。模型先验$p(M)$与参数先验$p(\theta\mid M)$处于两个层次：前者分配候选模型之间的权重，后者描述选定模型内部各个参数取值的权重。
+
+固定一个候选模型$M$，按其参数先验对$\theta$积分，得到该模型的边际似然：
+\begin{equation}
+ p(\mathcal D\mid M)=\int p(\mathcal D\mid\theta,M)p(\theta\mid M)\,d\theta.
+ \label{eq:solving-model-comparison}
+\end{equation}
+例如，计算$p(\mathcal D\mid M_1)$时，对直线模型的参数积分，计算$p(\mathcal D\mid M_2)$时，对二次曲线模型的参数积分。再将各个模型的边际似然与模型先验相乘，并在候选模型之间求和归一化：
+\begin{equation}
+ p(M_k\mid\mathcal D)
+ =\frac{p(\mathcal D\mid M_k)p(M_k)}
+ {\sum_{j=1}^{K}p(\mathcal D\mid M_j)p(M_j)}.
+\end{equation}
+$p(M_k\mid\mathcal D)$表示观察数据后第$k$个候选模型的概率。这里对连续参数$\theta$积分，对离散模型$M$求和。模型先验相同时，各模型的后验概率与其边际似然成正比。
+
+边际似然是模型内部似然的先验加权平均。如果较好地解释数据的参数区域只有很小的先验概率，而其余区域的似然很低，这个平均值仍可能较小。因此，一个模型即使在最优参数处具有较高的似然，也未必具有较高的边际似然。比较结果依赖模型先验和参数先验，参数先验应为归一化的概率分布，各候选模型应对同一批数据采用一致的观测定义。模型比较还需要结合独立数据上的预测评价。
+
+前文式\eqref{eq:solving-marginal-likelihood}对隐变量$\bm z$积分，但仍保留待优化的固定参数$\theta$；这里则按参数先验对$\theta$积分，得到模型证据。两者消去的未知量不同。若模型还含隐变量，计算证据时通常需要同时消去隐变量和随机参数。普通EM更新固定参数，不能直接等同于参数后验推断；若另有待估计的超参数且条件期望可计算，则可以用EM优化相应的边际似然。
+
+\subsection{一个离散参数的计算例子}
+设设备的故障率只有两种可能取值$\theta\in\{0.1,0.5\}$，先验概率分别为$0.8$和$0.2$。一次试验观察到故障$Y=1$，其似然为$P(Y=1\mid\theta)=\theta$。边际似然为
+\begin{equation}
+ P(Y=1)=0.1\times0.8+0.5\times0.2=0.18.
+\end{equation}
+它表示该模型在观察试验结果之前，赋予一次故障的概率。用它归一化，得到后验：
+\begin{equation}
+ P(\theta=0.1\mid Y=1)=\frac{0.08}{0.18}=\frac49,
+ \qquad
+ P(\theta=0.5\mid Y=1)=\frac{0.10}{0.18}=\frac59.
+\end{equation}
+故障发生后，高故障率的权重从$0.2$增加到$5/9$，低故障率仍有$4/9$的后验概率。若下一次试验给定$\theta$后与本次独立，其故障概率为$(4/9)\times0.1+(5/9)\times0.5=29/90$。这个预测保留了两种参数解释；若只取后验概率较大的$\theta=0.5$，预测便会变成$0.5$。第七章进一步讨论这类贝叶斯更新与预测。
+
+\subsection{为什么还需要近似求解}
+上述例子只需有限求和。复杂模型中的参数可能有很多维，后验归一化与预测都涉及高维积分，往往没有解析形式。近似求解需要区分任务：近似后验用于参数推断和预测，估计边际似然用于证据计算和模型比较。
+
+马尔可夫链蒙特卡洛（Markov Chain Monte Carlo，MCMC）通过构造以后验为目标分布的马尔可夫链进行采样，在满足相应收敛条件并检查采样质量后，用样本近似后验期望。许多MCMC算法只需未归一化后验$p(\mathcal D\mid\theta)p(\theta)$，因此得到后验样本并不等于已经算出边际似然。变分推断（Variational Inference，VI）选择一个可计算的分布族$q_\phi(\theta)$来近似后验，其中$\phi$是变分参数，例如高斯分布的均值和尺度。接下来说明怎样通过优化证据下界求解这个近似分布。
 
 \subsection{从后验近似到证据下界}
 常见的变分推断最小化

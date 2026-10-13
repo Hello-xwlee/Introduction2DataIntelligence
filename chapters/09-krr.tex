@@ -1,0 +1,108 @@
+\chapter{核岭回归：从函数空间到有限线性方程}
+\label{chap:krr}
+\begin{quote}\small
+\textit{本章摘要。}核岭回归在再生核希尔伯特空间中最小化平方误差与函数范数惩罚。本章先证明表示定理，再推导核系数的线性方程，处理核矩阵奇异时的解与唯一性，并用特征分解解释正则化对拟合的作用。
+\end{quote}
+
+SVM预测类别，PCA与核PCA寻找无标签表示。现在回到实数回归，例如根据当前读数预测下一小时温度。线性回归章已经给出有限维岭回归，这里允许模型使用非线性特征，且不显式存储特征坐标。核岭回归（Kernel Ridge Regression，KRR）及其理论依据参照Theodoridis第11.6、11.7与11.9节\cite{theodoridis2015ml}。
+
+\section{无限维函数为什么仍能用有限个系数表示}
+再生核希尔伯特空间（Reproducing Kernel Hilbert Space，RKHS）是带内积的函数空间$\mathcal H$，其核$k$具有再生性质
+\begin{equation}
+ f(\bm x)=\langle f,k(\cdot,\bm x)\rangle_{\mathcal H}.
+ \label{eq:krr-reproducing-property}
+\end{equation}
+其中$k(\cdot,\bm x)$是以$\bm x$为中心的函数，而$k(\bm x,\bm z)$是实数。取$f=k(\cdot,\bm z)$可得两个核截面函数的内积等于$k(\bm x,\bm z)$。函数范数衡量在所选核空间中的大小，不是训练预测值的欧氏长度。
+
+考虑只通过训练点评价函数的目标
+\begin{equation}
+ J(f)=\frac1n\sum_i L(y_i,f(\bm x_i))
+ +\lambda\Omega(\|f\|_{\mathcal H}^2),\qquad\lambda>0.
+ \label{eq:krr-representer-objective}
+\end{equation}
+若$\Omega$严格递增，且最小值确实存在，则任一最小解都位于核截面张成的有限维子空间$\mathcal A=\operatorname{span}\{k(\cdot,\bm x_i)\}_{i=1}^n$。这个结论称为表示定理（representer theorem）。它说明最优解的形式，并不自行保证任意损失下解存在。
+
+证明只需一个正交分解。写$f=f_{\parallel}+f_{\perp}$，其中$f_{\parallel}\in\mathcal A$，$f_{\perp}$与$\mathcal A$正交。由式\eqref{eq:krr-reproducing-property}，
+\begin{equation}
+ f_{\perp}(\bm x_i)=0,\qquad
+ \|f\|_{\mathcal H}^2=\|f_{\parallel}\|_{\mathcal H}^2+\|f_{\perp}\|_{\mathcal H}^2.
+\end{equation}
+舍弃$f_{\perp}$不改变训练损失，却在$f_{\perp}\ne0$时严格降低惩罚。因此最优解必有$f_{\perp}=0$，可以写成
+\begin{equation}
+ f(\bm x)=\sum_{j=1}^n\alpha_j k(\bm x_j,\bm x).
+ \label{eq:krr-representer-expansion}
+\end{equation}
+若惩罚仅非减，则可保证存在这种形式的最优解，不能据此排除其他最优函数。图\ref{fig:krr-representer-decomposition}表示两部分对训练值和惩罚的不同作用。
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=0.8cm and 1cm]
+ \node[idi input] (f) {$f=f_{\parallel}+f_{\perp}$};
+ \node[idi state,above right=of f] (a) {$f_{\parallel}\in\mathcal A$};
+ \node[idi process,below right=of f] (b) {$f_{\perp}\perp\mathcal A$};
+ \node[idi output,right=of a] (y) {决定训练值};
+ \node[idi output,right=of b] (p) {只增加范数惩罚};
+ \draw[idi arrow] (f)--(a); \draw[idi arrow] (f)--(b);
+ \draw[idi arrow] (a)--(y); \draw[idi arrow] (b)--(p);
+\end{tikzpicture}
+\caption{表示定理的正交分解。箭头表示分解与作用，正交部分在所有训练点取零，不会改善经验损失。}
+\label{fig:krr-representer-decomposition}
+\end{figure}
+
+\section{平方损失怎样给出核岭方程}
+取$L(y,f)=(y-f)^2$和$\Omega(t)=t$。令$K_{ij}=k(\bm x_i,\bm x_j)$，$\bm y=(y_1,\ldots,y_n)^{\mathsf T}$，则训练预测为$K\bm\alpha$。再生性质给出
+\begin{equation}
+ \|f\|_{\mathcal H}^2
+ =\sum_{i,j}\alpha_i\alpha_jk(\bm x_i,\bm x_j)
+ =\bm\alpha^{\mathsf T}K\bm\alpha.
+\end{equation}
+因此系数目标为
+\begin{equation}
+ J(\bm\alpha)=\frac1n\|\bm y-K\bm\alpha\|^2
+ +\lambda\bm\alpha^{\mathsf T}K\bm\alpha.
+ \label{eq:krr-coefficient-objective}
+\end{equation}
+对称性给出梯度$2K(K\bm\alpha-\bm y)/n+2\lambda K\bm\alpha$。驻点满足
+\begin{equation}
+ K\{(K+n\lambda I_n)\bm\alpha-\bm y\}=0.
+\end{equation}
+当$K$奇异时不能约去$K$。但以下系数仍满足驻点条件：
+\begin{equation}
+ (K+n\lambda I_n)\hat{\bm\alpha}=\bm y,
+ \qquad \hat f(\bm x)=\bm k_{\bm x}^{\mathsf T}\hat{\bm\alpha},
+ \label{eq:krr-solution}
+\end{equation}
+其中$\bm k_{\bm x}=(k(\bm x_1,\bm x),\ldots,k(\bm x_n,\bm x))^{\mathsf T}$。因为$K$半正定且$\lambda>0$，移位矩阵严格正定，可以解线性方程。平方损失与正范数惩罚使函数目标严格凸，所以最优函数唯一。
+
+若$\bm\delta\in\ker K$，则$\|\sum_i\delta_i k(\cdot,\bm x_i)\|_{\mathcal H}^2=\bm\delta^{\mathsf T}K\bm\delta=0$，对应零函数。因此$\hat{\bm\alpha}+\bm\delta$与$\hat{\bm\alpha}$表示同一函数。奇异$K$可能造成系数不唯一，不妨碍函数唯一。式\eqref{eq:krr-solution}选出了一个确定的系数代表。
+
+本章采用平均损失。若书中使用误差总和加$C\|f\|^2$，对应$C=n\lambda$，求解矩阵写为$K+CI$。$C$在该回归目标中是范数惩罚系数，与SVM中乘在误差上的$C$作用相反，不能只根据字母判断参数含义。
+
+\section{正则化如何改变预测}
+设$K=V\diag(\kappa_1,\ldots,\kappa_n)V^{\mathsf T}$，$\kappa_j\ge0$。训练预测是
+\begin{equation}
+ \hat{\bm y}=K(K+n\lambda I)^{-1}\bm y
+ =V\diag\left(\frac{\kappa_j}{\kappa_j+n\lambda}\right)V^{\mathsf T}\bm y.
+ \label{eq:krr-spectral-shrinkage}
+\end{equation}
+这将标签在核特征方向上的分量乘以0到1之间的系数。小特征值方向收缩更强，零特征值方向不能拟合。若$K$严格正定且$\lambda\to0$，训练预测趋向$\bm y$。插值并不保证测试误差低。
+
+例如$K=\left(\begin{smallmatrix}1&1/2\\1/2&1\end{smallmatrix}\right)$、$\bm y=(1,-1)^{\mathsf T}$，取$n\lambda=1/2$。$\bm y$属于特征值$1/2$的方向，故$\hat{\bm\alpha}=\bm y$，训练预测为$(1/2,-1/2)^{\mathsf T}$。对核向量$(3/4,1/4)^{\mathsf T}$的新输入，预测为$1/2$。较大的范数惩罚使训练值向零收缩，这与使用零均值函数基准的约定有关。
+
+\section{截距、数值求解与高斯过程联系}
+若均值不应受惩罚，可另设$f(\bm x)+b$，只惩罚$f$。对$b$求导给出残差和为零。一个满足联合驻点条件的线性系统为
+\begin{equation}
+ \begin{pmatrix}K+n\lambda I&\bm1\\\bm1^{\mathsf T}&0\end{pmatrix}
+ \begin{pmatrix}\bm\alpha\\b\end{pmatrix}
+ =\begin{pmatrix}\bm y\\0\end{pmatrix}.
+\end{equation}
+它与简单地让核函数自带一个受惩罚常数特征不同。输入与输出中心化时也要一致地使用训练均值。
+
+数值实现应解线性方程，例如使用Cholesky分解，不显式形成逆矩阵。正定移位使最小特征值至少为$n\lambda$，条件数为$(\kappa_{\max}+n\lambda)/(\kappa_{\min}+n\lambda)$。稳定求解不等于选出了最好的统计正则强度，后者仍要验证。
+
+高斯过程回归在零均值高斯先验和方差为$\sigma^2$的高斯噪声下，后验均值为$\bm k_{\bm x}^{\mathsf T}(K+\sigma^2I)^{-1}\bm y$。取$\sigma^2=n\lambda$时与KRR点预测相同。高斯过程还给出条件预测方差，其完整推导见第\ref{chap:kernel-gp}章。函数均值相同不表示两个模型具有同一种不确定性解释。
+
+\section{阅读依据与练习}
+Theodoridis第11.6节（页525--528）给出表示定理，第11.7与11.9节（页528--530、537--538）给出KRR及特征空间联系。网页的核岭回归部分提供总体公式\cite{zheng2021kernel}，本章另外处理平均损失约定和奇异矩阵，避免把约去$K$当成一般成立的步骤。
+
+练习：让两个输入完全相同，核矩阵全为1，标签为$(1,-1)$。式\eqref{eq:krr-solution}给出$\bm\alpha=\bm y/(2\lambda)$，但两核截面相同，预测函数恒为0。没有确定性函数能够同时在同一输入输出1和$-1$。

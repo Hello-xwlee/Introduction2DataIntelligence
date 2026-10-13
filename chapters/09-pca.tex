@@ -1,0 +1,323 @@
+﻿\chapter{主成分分析：投影、重建与概率潜变量}
+\label{chap:pca}
+\begin{quote}\small
+\textit{本章摘要。}主成分分析寻找保留较多样本方差的低维线性子空间。我们先从确定性的投影与重建推导特征值解和奇异值分解，再用概率潜变量模型解释相同主子空间如何描述观测分布，推导参数的最大似然解、潜变量后验及噪声趋零时的联系。
+\end{quote}
+
+多个传感器可能随同一个运行负载共同变化。直接保留全部读数会重复描述这部分变化。主成分分析（Principal Component Analysis，PCA）将$d$维观测编码为$q$维坐标，其中$q<d$。本章依照MML第10章的最大方差、投影和潜变量三个视角展开\cite{deisenroth2020mml}。前两个视角在给定数据上优化几何目标，第三个视角为观测建立概率模型。PCA本身不需要核函数。后文将在本章末把相同的确定性目标推广到核诱导的特征空间。
+
+\section{先说明要压缩什么}
+令$\bar{\bm x}=n^{-1}\sum_i\bm x_i$为训练均值，$\bm a_i=\bm x_i-\bar{\bm x}$为中心化观测。用样本作为列组成
+\begin{equation}
+ A=[\bm a_1,\ldots,\bm a_n]\in\R^{d\times n},\qquad
+ S=\frac1n AA^{\mathsf T}\in\R^{d\times d}.
+ \label{eq:pca-data-covariance}
+\end{equation}
+$S$是本章采用的经验协方差，分母为$n$，与高斯最大似然估计相符。改为$n-1$会整体缩放特征值，不改变主方向。给定数据上的几何优化不要求独立同分布。后面的独立观测似然及总体统计解释则需要相应概率假设。
+
+用正交列矩阵$U_q\in\R^{d\times q}$表示保留的方向，要求$U_q^{\mathsf T}U_q=I_q$。编码与重建定义为
+\begin{equation}
+ \bm z_i=U_q^{\mathsf T}\bm a_i\in\R^q,\qquad
+ \hat{\bm x}_i=\bar{\bm x}+U_q\bm z_i\in\R^d.
+ \label{eq:pca-encode-decode}
+\end{equation}
+$\bm z_i$是坐标，$U_q\bm z_i$是原空间中的投影向量。两者维度不同。中心化使拟合子空间通过训练均值，防止较大的整体偏移占据主要方向。
+
+\section{确定性视角一：哪一个方向保留最多变化}
+对单位方向$\bm u$，投影得分$z_i=\bm u^{\mathsf T}\bm a_i$的均值为零，经验方差为
+\begin{equation}
+ \frac1n\sum_i z_i^2
+ =\frac1n\sum_i\bm u^{\mathsf T}\bm a_i\bm a_i^{\mathsf T}\bm u
+ =\bm u^{\mathsf T}S\bm u.
+\end{equation}
+若不限制长度，将$\bm u$放大两倍就能将方差放大四倍。因此第一主方向解决
+\begin{equation}
+ \max_{\bm u}\bm u^{\mathsf T}S\bm u,
+ \qquad\bm u^{\mathsf T}\bm u=1.
+ \label{eq:pca-rayleigh}
+\end{equation}
+拉格朗日函数$\bm u^{\mathsf T}S\bm u-\lambda(\bm u^{\mathsf T}\bm u-1)$的梯度为$2S\bm u-2\lambda\bm u$，驻点满足$S\bm u=\lambda\bm u$。
+
+驻点方程尚未说明哪个特征向量取得最大值。将$S$分解为$U\Lambda U^{\mathsf T}$，其中特征值$\lambda_1\ge\cdots\ge\lambda_d\ge0$。任意单位向量可写成$\bm u=U\bm c$，$\sum_jc_j^2=1$，于是
+\begin{equation}
+ \bm u^{\mathsf T}S\bm u=\sum_j\lambda_jc_j^2\le\lambda_1.
+\end{equation}
+取$\bm u=\bm u_1$即可达到上界。下一方向要求与$\bm u_1$正交，在剩余特征方向中选最大值。重复这一过程，前$q$个特征向量组成$U_q$，得分协方差为
+\begin{equation}
+ \frac1n\sum_i\bm z_i\bm z_i^{\mathsf T}=U_q^{\mathsf T}SU_q=\Lambda_q.
+\end{equation}
+不同主成分的经验协方差为零。这是线性不相关，不足以说明它们在任意分布下独立。特征向量正负号可任选。若截断处$\lambda_q=\lambda_{q+1}$，最优$q$维子空间可能不唯一。
+
+\section{确定性视角二：为什么同一方向也最便于重建}
+先固定正交基$U_q$，为单个观测选择坐标，最小化$\|\bm a_i-U_q\bm z_i\|_2^2$。展开并求导：
+\begin{align}
+ \|\bm a_i-U_q\bm z_i\|^2
+ &=\|\bm a_i\|^2-2\bm z_i^{\mathsf T}U_q^{\mathsf T}\bm a_i+\bm z_i^{\mathsf T}\bm z_i,\\
+ \nabla_{\bm z_i}&=2(\bm z_i-U_q^{\mathsf T}\bm a_i).
+\end{align}
+最优坐标正是式\eqref{eq:pca-encode-decode}。令$P=U_qU_q^{\mathsf T}$，有$P^{\mathsf T}=P,P^2=P$。投影残差与投影正交，所以
+\begin{equation}
+ \frac1n\sum_i\|\bm a_i-P\bm a_i\|^2
+ =\operatorname{tr}S-\operatorname{tr}(U_q^{\mathsf T}SU_q).
+ \label{eq:pca-reconstruction-objective}
+\end{equation}
+右侧第一项不依赖$U_q$。最小重建误差等价于最大保留方差。这一等价性依赖欧氏平方误差和正交投影。如果改用加权误差或非线性解码，需要重新推导。最优误差为
+\begin{equation}
+ J_q=\sum_{j=q+1}^d\lambda_j,
+ \qquad r_q=\frac{\sum_{j=1}^q\lambda_j}{\sum_{j=1}^d\lambda_j}.
+ \label{eq:pca-explained-variance}
+\end{equation}
+$r_q$是解释方差比例，分母须非零。它衡量当前缩放和数据下的方差保留比例，不是预测准确率，也不是任意意义下的信息保留比例。
+
+\subsection{一个可逐步核算的二维例子}
+取四个中心化观测$(2,1),(1,2),(-2,-1),(-1,-2)$，得到
+\begin{equation}
+ S=\begin{pmatrix}2.5&2\\2&2.5\end{pmatrix},\qquad
+ \lambda_1=4.5,\quad\lambda_2=0.5,\quad
+ \bm u_1=\frac1{\sqrt2}(1,1)^{\mathsf T}.
+\end{equation}
+投影到$\bm u_1$时，四个得分为$3/\sqrt2,3/\sqrt2,-3/\sqrt2,-3/\sqrt2$。点$(2,1)$的重建是$(1.5,1.5)$，平方残差为$0.5$。四点平均重建误差也是$0.5$，恰等于舍弃的特征值，解释方差比例为$4.5/5=0.9$。
+
+图\ref{fig:pca-projection-example}把这次计算画出。第一主成分把不同点投到相同位置，说明压缩会丢掉沿第二方向的差别，即使保留方差比例较高。
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=0.8,>=Latex]
+ \draw[->] (-2.6,0)--(2.9,0) node[right] {$x_1$};
+ \draw[->] (0,-2.6)--(0,2.9) node[above] {$x_2$};
+ \draw[thick] (-2.3,-2.3)--(2.3,2.3) node[right] {$\bm u_1$};
+ \foreach \x/\y/\p in {2/1/1.5,1/2/1.5,-2/-1/-1.5,-1/-2/-1.5} {
+  \fill[blue] (\x,\y) circle (0.07);
+  \draw[dashed] (\x,\y)--(\p,\p);
+ }
+ \draw[red,thick] (1.5,1.5) circle (0.1);
+ \draw[red,thick] (-1.5,-1.5) circle (0.1);
+\end{tikzpicture}
+\caption{二维算例的正交投影。实心点是观测，空心圆是重建，虚线是被舍弃的残差。每两个观测共享一个重建点。}
+\label{fig:pca-projection-example}
+\end{figure}
+
+\section{怎样计算主方向}
+奇异值分解（Singular Value Decomposition，SVD）写为$A=UDV^{\mathsf T}$。若$D$的非零对角元为$s_j$，则
+\begin{equation}
+ S=\frac1nUD^2U^{\mathsf T},\qquad\lambda_j=\frac{s_j^2}{n}.
+\end{equation}
+因此直接对中心化矩阵做SVD即可得到主方向，不必先形成协方差矩阵。显式构造$AA^{\mathsf T}$会平方非零奇异值的比值，可能损失较弱方向的数值精度。$d\gg n$时，可从$A^{\mathsf T}A\bm v_j=n\lambda_j\bm v_j$计算$\bm u_j=A\bm v_j/\sqrt{n\lambda_j}$，仅对正特征值使用此式。
+
+中心化后$\operatorname{rank}(A)\le\min(d,n-1)$，可识别的非零主成分不能超过这个数量。若需白化，令$\bm t_i=\Lambda_q^{-1/2}\bm z_i$，得分协方差成为$I_q$。白化会放大小特征值方向上的误差，与仅投影不同，必须检查数值稳定性。
+
+\section{概率视角：低维变量怎样生成观测}
+\subsection{生成模型与边缘分布}
+概率主成分分析（Probabilistic Principal Component Analysis，PPCA）假设
+\begin{equation}
+ \bm x=W\bm z+\bm\mu+\bm\epsilon,\qquad
+ \bm z\sim\mathcal N(\bm0,I_q),\qquad
+ \bm\epsilon\sim\mathcal N(\bm0,\sigma^2I_d),
+ \label{eq:ppca-generative-model}
+\end{equation}
+其中$W\in\R^{d\times q}$是载荷矩阵，$\bm\mu\in\R^d$是均值，$\sigma^2>0$是每个观测方向相同的噪声方差。潜变量与噪声独立，不同样本的潜变量和噪声也独立。$W$的列一般没有单位长度，不能直接把它当作确定性PCA的正交基。
+
+图\ref{fig:ppca-generation}中的箭头表示条件生成关系。推断则在观测给定后反向计算$\bm z$的条件分布。参数给定时，由独立性可得
+\begin{equation}
+ \E[\bm x]=\bm\mu,\qquad
+ \Var(\bm x)=WW^{\mathsf T}+\sigma^2I_d=:C_x,
+ \quad p(\bm x)=\mathcal N(\bm\mu,C_x).
+ \label{eq:ppca-marginal}
+\end{equation}
+低秩项描述共同变化，各向同性噪声项描述每个方向相同的剩余方差。这里的$C_x$是模型协方差，不是SVM的惩罚参数。
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=1cm and 1.3cm]
+ \node[idi state] (z) {$\bm z\sim\mathcal N(0,I_q)$};
+ \node[idi process,right=of z] (w) {$W\bm z+\bm\mu$};
+ \node[idi output,right=of w] (x) {$\bm x$};
+ \node[idi input,below=of w] (e) {$\bm\epsilon\sim\mathcal N(0,\sigma^2I_d)$};
+ \draw[idi arrow] (z)--(w); \draw[idi arrow] (w)--(x);
+ \draw[idi arrow] (e)--(x);
+\end{tikzpicture}
+\caption{PPCA的生成模型。低维潜变量经过线性变换，与独立的各向同性高斯噪声相加形成观测。}
+\label{fig:ppca-generation}
+\end{figure}
+
+\subsection{从观测似然求主子空间}
+在独立同分布观测假设下，对数似然为
+\begin{equation}
+ \ell=-\frac{nd}{2}\log(2\pi)-\frac n2\log|C_x|
+ -\frac12\sum_i(\bm x_i-\bm\mu)^{\mathsf T}C_x^{-1}(\bm x_i-\bm\mu).
+\end{equation}
+对$\bm\mu$求导得$C_x^{-1}\sum_i(\bm x_i-\bm\mu)=0$，故$\hat{\bm\mu}=\bar{\bm x}$。用式\eqref{eq:pca-data-covariance}中的$S$，剩余优化等价于最小化
+\begin{equation}
+ F(C_x)=\log|C_x|+\operatorname{tr}(C_x^{-1}S).
+ \label{eq:ppca-likelihood-objective}
+\end{equation}
+第一项惩罚过大的协方差体积，第二项惩罚模型无法解释的观测变化。
+
+说明最优载荷方向为何与PCA一致。设$C_x$的特征值降序为$c_1,\ldots,c_d$。对固定特征值，迹项在$C_x$的大特征值方向与$S$的大特征值方向对齐时最小。可将迹项写为$\sum_{j,l}c_j^{-1}\lambda_l Q_{jl}^2$，其中$Q$是两组正交基之间的变换。$Q_{jl}^2$的每行、每列和均为1。按重排不等式，最小配对把较大的$\lambda_l$与较小的$c_j^{-1}$放在一起，对齐的基可达到该下界。
+
+由于$WW^{\mathsf T}$秩至多为$q$，其余$d-q$个$c_j$均为$\sigma^2$。在对齐的基中，式\eqref{eq:ppca-likelihood-objective}变为
+\begin{equation}
+ \sum_{j=1}^q\left(\log c_j+\frac{\lambda_j}{c_j}\right)
+ +(d-q)\log\sigma^2+\frac{\sum_{j=q+1}^d\lambda_j}{\sigma^2}.
+\end{equation}
+对$c_j$求导得$(c_j-\lambda_j)/c_j^2=0$。对$t=\sigma^2$求导得$(d-q)/t-\sum_{j>q}\lambda_j/t^2=0$。因此在非退化条件下
+\begin{equation}
+ \hat\sigma^2=\frac1{d-q}\sum_{j=q+1}^d\lambda_j,\qquad
+ \hat W=U_q(\Lambda_q-\hat\sigma^2I_q)^{1/2}R,
+ \label{eq:ppca-ml-solution}
+\end{equation}
+其中$R^{\mathsf T}R=I_q$是任意正交矩阵。要求$0<q<d$、舍弃方差平均值为正，并有$\lambda_j\ge\hat\sigma^2$。若某个差为零，对应载荷为零，实际秩降低。若舍弃方差全为零，最大似然会趋向$\sigma^2=0$的奇异边界，不能直接作为满维高斯密度使用。
+
+$R$表明潜变量坐标存在旋转不确定性，观测协方差不受它影响。有限正噪声下，最大似然载荷已经张成PCA主子空间。两种方法的编码和重建方式仍有差别。
+
+\subsection{给定观测后，潜变量是什么}
+在参数固定时，令$\bm a=\bm x-\bm\mu$。把似然与先验相乘，后验指数中的二次项为
+\begin{align}
+ \|\bm z\|^2+\sigma^{-2}\|\bm a-W\bm z\|^2
+ &=\bm z^{\mathsf T}(I_q+\sigma^{-2}W^{\mathsf T}W)\bm z
+ -2\sigma^{-2}\bm z^{\mathsf T}W^{\mathsf T}\bm a
+ +\sigma^{-2}\|\bm a\|^2.
+\end{align}
+完成平方，定义$M=W^{\mathsf T}W+\sigma^2I_q$，得到
+\begin{equation}
+ p(\bm z\mid\bm x)=\mathcal N(\bm m,V_z),\qquad
+ \bm m=M^{-1}W^{\mathsf T}\bm a,\quad
+ V_z=\sigma^2M^{-1}.
+ \label{eq:ppca-posterior}
+\end{equation}
+$M\in\R^{q\times q}$在$\sigma^2>0$时可逆。后验协方差与观测值无关，不能通过它的大小单独判断哪个完整观测是异常点。异常度可另用边缘负对数密度，它还包含马氏距离$\bm a^{\mathsf T}C_x^{-1}\bm a$。
+
+潜在无噪声信号$\bm s=\bm\mu+W\bm z$的条件均值为$\bm\mu+W\bm m$，条件协方差为$WV_zW^{\mathsf T}$。若要生成同一潜变量下一个带独立新噪声的观测，再加$\sigma^2I_d$。这些分布以拟合参数为条件，未包含估计$W,\bm\mu,\sigma^2$的不确定性。PPCA可用最大似然拟合，潜变量后验并不使它自动成为参数全贝叶斯模型。
+
+取$R=I_q$并使用最大似然载荷，条件均值中的线性部分为
+\begin{equation}
+ W\bm m=U_q\diag\left(1-\frac{\hat\sigma^2}{\lambda_1},\ldots,
+ 1-\frac{\hat\sigma^2}{\lambda_q}\right)U_q^{\mathsf T}\bm a.
+ \label{eq:ppca-shrinkage}
+\end{equation}
+它在主子空间内对得分做收缩。在$\sigma^2\to0$且保留载荷满列秩的形式极限下，有
+\begin{equation}
+ WM^{-1}W^{\mathsf T}\longrightarrow U_qU_q^{\mathsf T}.
+\end{equation}
+因此条件均值重建趋于确定性正交投影。潜变量坐标本身仍可能相差尺度与旋转。
+
+二维算例取$q=1$，则$\hat\sigma^2=0.5$，$W=2\bm u_1=(\sqrt2,\sqrt2)^{\mathsf T}$。对$(2,1)$，有$M=4.5$，$m=3\sqrt2/4.5$，$V_z=1/9$，信号均值为$(4/3,4/3)$。与确定性重建$(1.5,1.5)$比较，它沿主方向收缩了$8/9$。
+
+\section{缺失观测与实际选择}
+若只观察坐标集合$O$，令$W_O$为相应行、$\bm a_O=\bm x_O-\bm\mu_O$。在缺失机制可忽略的条件下，将式\eqref{eq:ppca-posterior}中的$W,\bm a$替换为$W_O,\bm a_O$即可计算后验。未观察坐标$M_0$的条件均值为$\bm\mu_{M_0}+W_{M_0}\bm m_O$，条件协方差为$W_{M_0}V_{z,O}W_{M_0}^{\mathsf T}+\sigma^2I$。若传感器恰因极端值而缺测，缺失机制可能不可忽略，这套计算会产生偏差。
+
+训练与应用应使用相同的中心化和缩放统计量。温度与振动单位不同，直接做协方差PCA会受到量纲支配。标准化相当于改变了几何误差的权重，是否适合任务需要说明。$q$可用重建误差、解释方差和下游验证选择。低方差方向可能包含故障信号，高方差方向也可能主要是负载变化。
+
+PPCA的各向同性噪声条件较强。因子分析允许不同观测维度有不同噪声方差，但其估计通常不再是同一简单特征分解。若结构弯曲，增加主成分只能增加线性子空间维度，下一章研究通过核改变表示空间。
+
+
+\section{核化视角：把主成分分析推广到特征空间}
+前面的PCA在原输入空间中寻找线性子空间。若数据在原空间中沿弯曲结构分布，可以先用核函数定义特征映射，再在特征空间中执行同一个确定性PCA目标。这个方法称为核主成分分析（Kernel Principal Component Analysis，kPCA）。它继承PCA的投影和方差解释，但不继承PPCA的高斯生成模型。下面的推导只使用特征空间内积，因此可以通过核矩阵计算。
+
+\section{为什么核矩阵也需要中心化}
+令训练特征均值与中心化特征为
+\begin{equation}
+ \bar\phi=\frac1n\sum_i\phi(\bm x_i),\qquad
+ \psi_i=\phi(\bm x_i)-\bar\phi.
+\end{equation}
+均值可能位于无限维空间，但它与有限个特征的内积仍可用核计算。展开两中心化特征的内积：
+\begin{equation}
+ \langle\psi_i,\psi_j\rangle
+ =K_{ij}-\frac1n\sum_lK_{il}-\frac1n\sum_lK_{lj}
+ +\frac1{n^2}\sum_{l,m}K_{lm}.
+\end{equation}
+用$\bm1\in\R^n$表示全1向量，得到
+\begin{equation}
+ H=I_n-\frac1n\bm1\bm1^{\mathsf T},\qquad K_c=HKH.
+ \label{eq:kpca-centered-gram}
+\end{equation}
+$H$对样本维度去均值，满足$H^2=H$。$K_c$是中心化特征的Gram矩阵，仍然半正定，且$K_c\bm1=0$，所以其秩至多为$n-1$。对原始输入中心化一般不能代替这个操作：非线性映射通常不满足$\phi(\bm x-\bar{\bm x})=\phi(\bm x)-\bar\phi$。
+
+\section{由协方差算子推导核矩阵特征问题}
+在特征空间$\mathcal H$定义经验协方差算子
+\begin{equation}
+ T\bm u=\frac1n\sum_i\psi_i\langle\psi_i,\bm u\rangle_{\mathcal H}.
+ \label{eq:kpca-covariance-operator}
+\end{equation}
+它将一个方向$\bm u\in\mathcal H$映为另一个特征空间向量。单位方向的投影方差为$\langle\bm u,T\bm u\rangle$。正特征值方向满足$T\bm u=\eta\bm u$，$\eta>0$。由此$\bm u=\eta^{-1}T\bm u$必在$\psi_1,\ldots,\psi_n$张成的空间中。
+
+定义线性映射$\Phi_c:\R^n\to\mathcal H$，$\Phi_c\bm v=\sum_i v_i\psi_i$。其伴随映射返回各内积，满足$K_c=\Phi_c^*\Phi_c$及$T=\Phi_c\Phi_c^*/n$。若
+\begin{equation}
+ K_c\bm v_j=\kappa_j\bm v_j,\qquad
+ \|\bm v_j\|_2=1,\quad\kappa_j>0,
+\end{equation}
+则取
+\begin{equation}
+ \bm u_j=\frac{\Phi_c\bm v_j}{\sqrt{\kappa_j}},\qquad
+ T\bm u_j=\frac{\kappa_j}{n}\bm u_j,
+ \qquad \|\bm u_j\|_{\mathcal H}^2
+ =\frac{\bm v_j^{\mathsf T}K_c\bm v_j}{\kappa_j}=1.
+ \label{eq:kpca-normalized-direction}
+\end{equation}
+因此核矩阵特征值$\kappa_j$与协方差特征值$\eta_j$相差因子$n$。写公式时需确认特征分解对象。只把核矩阵特征向量当作投影方向而不除以$\sqrt{\kappa_j}$，会改变主成分尺度。
+
+训练样本$i$的第$j$个得分为
+\begin{equation}
+ z_{ij}=\langle\bm u_j,\psi_i\rangle
+ =\frac{(K_c\bm v_j)_i}{\sqrt{\kappa_j}}
+ =\sqrt{\kappa_j}\,v_{ij}.
+ \label{eq:kpca-training-score}
+\end{equation}
+由于正特征值特征向量与$\bm1$正交，得分均值为零，方差为$\kappa_j/n$。特征空间平均重建误差为$\sum_{j>q}\kappa_j/n$，只对非零谱求和。
+
+\section{新样本怎样使用训练均值}
+对新输入$\bm x$，定义$\bm k_{\bm x}\in\R^n$，其第$i$项为$k(\bm x_i,\bm x)$。新特征仍减去训练均值$\bar\phi$。中心化核向量是
+\begin{equation}
+ \tilde{\bm k}_{\bm x}=\bm k_{\bm x}-\frac1nK\bm1
+ -\frac1n\bm1\bm1^{\mathsf T}\bm k_{\bm x}
+ +\frac1{n^2}\bm1\bm1^{\mathsf T}K\bm1.
+ \label{eq:kpca-test-centering}
+\end{equation}
+四项依次来自原始内积、训练特征均值、新样本与训练均值的内积，以及均值自身的平方长度。于是
+\begin{equation}
+ z_j(\bm x)=\frac{\bm v_j^{\mathsf T}\tilde{\bm k}_{\bm x}}{\sqrt{\kappa_j}}.
+ \label{eq:kpca-new-score}
+\end{equation}
+不能把测试批次加入训练均值，否则同一查询点会因与它一起到达的测试样本不同而得到不同表示。交叉验证时，应在每个训练折内单独计算$K$、中心化统计量与特征分解。
+
+\section{平方特征的完整算例}
+取$x_1=-1,x_2=0,x_3=1$，核为$k(x,z)=x^2z^2$。它对应$\phi(x)=x^2$，是有效的半正定核。特征均值为$2/3$，中心化特征向量为$\bm r=(1/3,-2/3,1/3)^{\mathsf T}$。于是
+\begin{equation}
+ K_c=\bm r\bm r^{\mathsf T},\qquad
+ \kappa_1=\|\bm r\|^2=2/3,\qquad
+ \bm v_1=(1,-2,1)^{\mathsf T}/\sqrt6.
+\end{equation}
+式\eqref{eq:kpca-training-score}给出得分$(1/3,-2/3,1/3)$，经验方差为$2/9$。取新样本$x=2$，中心化特征为$4-2/3=10/3$，故$\tilde{\bm k}_{2}=(10/3)\bm r$。代入式\eqref{eq:kpca-new-score}得到$z_1(2)=10/3$。
+
+图\ref{fig:kpca-square-map}展示这个映射。它合并了$x=-1$与$x=1$，保留的是大小相关的平方变化。若任务需要区分符号，这个核会丢失必要信息。
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=0.65cm and 2.1cm]
+ \node[idi input] (a) {$x=-1$};
+ \node[idi input,below=of a] (b) {$x=0$};
+ \node[idi input,below=of b] (c) {$x=1$};
+ \node[idi state,right=of a] (u) {$\psi=1/3$};
+ \node[idi state,right=of b] (v) {$\psi=-2/3$};
+ \node[idi state,right=of c] (w) {$\psi=1/3$};
+ \draw[idi arrow] (a)--(u); \draw[idi arrow] (b)--(v); \draw[idi arrow] (c)--(w);
+ \node[right=0.6cm of v,align=left,font=\small] {映射：$\phi(x)=x^2$\\中心化：减去$2/3$};
+\end{tikzpicture}
+\caption{平方核的特征中心化。箭头表示具体计算，正负输入可能映为同一特征，核化不保证保留原输入的所有区别。}
+\label{fig:kpca-square-map}
+\end{figure}
+
+\section{得分能算出，为什么原坐标不一定能重建}
+在特征空间中，重建可写成
+\begin{equation}
+ \hat\phi(\bm x)=\bar\phi+\sum_{j=1}^qz_j(\bm x)\bm u_j.
+\end{equation}
+这个向量不一定属于映射$\phi$的像，即可能没有任何原输入映到它。即使存在，也可能不唯一。平方特征例子中，特征值1同时对应输入$-1$和1。寻找原输入称为原像问题（pre-image problem），可考虑最小化$\|\phi(\bm x)-\hat\phi\|_{\mathcal H}^2$，或者另训练解码器。两者都增加了算法与假设，不能把核得分直接当成已恢复的原坐标。
+
+使用高斯核时，$\ell$改变特征空间的几何。很小的$\ell$使不同训练点近似正交，中心化核接近$H$，多个特征值接近，主方向不稳定。很大的$\ell$使$K$接近全1矩阵，中心化后的变化趋小。应以独立验证的任务表现选择核和$q$。高核空间解释方差不保证低原空间重建误差。
+
+完整核矩阵需要$O(n^2)$存储，完整特征分解常需$O(n^3)$计算。迭代特征求解器可只取前$q$个方向，低秩近似可进一步减少成本。特征值接近零时应设数值阈值避免除以很小的$\sqrt{\kappa_j}$，并把舍弃阈值与浮点误差联系起来。
+
+
+\section{阅读依据与练习}
+MML第10.1--10.6节（书内页318--338）对应确定性推导，第10.7节（页339--343）对应生成模型、边缘化与潜变量后验。式\eqref{eq:ppca-ml-solution}进一步从观测似然展开其最大似然解，而不是把它当作无条件结论。
+
+练习：二维算例只观察$x_1=2$，用上述$W,\sigma^2$估计$x_2$。此时$M_O=2.5$，$m_O=2\sqrt2/2.5$，$V_{z,O}=0.2$。因此$x_2$的条件均值为$1.6$，方差为$0.9$。这是一项模型条件下的预测，不是缺失值的精确恢复。

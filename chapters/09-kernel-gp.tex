@@ -1,0 +1,95 @@
+\chapter{高斯过程回归：核均值与预测不确定性}
+\label{chap:kernel-gp}
+\begin{quote}\small
+\textit{本章摘要。}高斯过程用核指定不同输入处函数值的协方差。本章从有限函数值的联合高斯分布推导后验均值与方差，区分潜在函数和带噪声观测，再解释其与核岭回归的联系及超参数学习。
+\end{quote}
+
+核岭回归给出了点预测，但点预测未表达在观测较少的位置还有多大不确定性。高斯过程（Gaussian Process，GP）为函数指定概率分布，使一组输入处的函数值共同服从高斯分布。线性回归章已经从随机权重介绍这一联系，本章在核空间中完整写出条件预测。MML第9.3节的贝叶斯线性回归与第9.5节的进一步阅读建立了到高斯过程的联系\cite{deisenroth2020mml}。本章利用高斯条件化展开核预测公式，并参照Rasmussen与Williams的高斯过程专著\cite{rasmussen2006gpml}。它作为核回归的概率补充，不将它列作Theodoridis第11章选出的算法。
+
+\section{核怎样成为协方差}
+高斯过程先验记为
+\begin{equation}
+ f\sim\mathcal{GP}(m,k),\qquad
+ \E[f(\bm x)]=m(\bm x),\quad
+ \operatorname{Cov}(f(\bm x),f(\bm z))=k(\bm x,\bm z).
+\end{equation}
+定义要求任意有限输入集合的函数值向量均服从多元高斯分布。因此$k$必须对称半正定，保证每个协方差矩阵有效。这里的核值有输出量纲的平方。例如温度回归可取$k(\bm x,\bm z)=\tau^2\exp(-\|\bm x-\bm z\|^2/(2\ell^2))$，其中$\tau^2$是函数方差尺度，$\ell$是输入长度尺度。
+
+为了简化公式，先设已减去已知均值$m$，因此以下先验均值为零。设训练观测满足$y_i=f(\bm x_i)+\varepsilon_i$，$\varepsilon_i$独立服从$\mathcal N(0,\sigma^2)$且与$f$独立。则训练标签协方差为$A=K+\sigma^2I_n$。当$\sigma^2>0$时$A$严格正定。
+
+\section{从联合分布推导条件预测}
+对新输入$\bm x_*$，令$f_*=f(\bm x_*)$、$k_{**}=k(\bm x_*,\bm x_*)$，$\bm k_*=(k(\bm x_i,\bm x_*))_{i=1}^n$。由定义和噪声独立性，
+\begin{equation}
+ \begin{pmatrix}\bm y\\f_*\end{pmatrix}
+ \sim\mathcal N\left(\bm0,
+ \begin{pmatrix}A&\bm k_*\\\bm k_*^{\mathsf T}&k_{**}\end{pmatrix}\right).
+ \label{eq:kernel-gp-joint}
+\end{equation}
+构造残差随机变量$r_*=f_*-\bm k_*^{\mathsf T}A^{-1}\bm y$，其与$\bm y$的协方差为
+\begin{equation}
+ \operatorname{Cov}(r_*,\bm y)=\bm k_*^{\mathsf T}-\bm k_*^{\mathsf T}A^{-1}A=\bm0^{\mathsf T}.
+\end{equation}
+联合高斯下零协方差意味着独立，因此$r_*$的分布在给定$\bm y$后不改变。其方差为$k_{**}-\bm k_*^{\mathsf T}A^{-1}\bm k_*$。得到
+\begin{equation}
+ f_*\mid\mathcal D\sim\mathcal N(\mu_*,v_*),\qquad
+ \mu_*=\bm k_*^{\mathsf T}A^{-1}\bm y,\quad
+ v_*=k_{**}-\bm k_*^{\mathsf T}A^{-1}\bm k_*.
+ \label{eq:kernel-gp-posterior}
+\end{equation}
+方差非负来自联合协方差的半正定性，即其Schur补非负。实现时的小负值可能是舍入误差，应先检查分解与容差，不能用强行截断掩盖无效核。
+
+若预测的是新的带噪声观测$y_*=f_*+\varepsilon_*$，且新噪声与训练噪声独立，则
+\begin{equation}
+ y_*\mid\mathcal D\sim\mathcal N(\mu_*,v_*+\sigma^2).
+ \label{eq:kernel-gp-observation}
+\end{equation}
+潜在函数区间与观测区间宽度不同。已知非零均值时，用$\bm y-m(X)$代替$\bm y$，并在预测均值中加$m(\bm x_*)$。
+
+图\ref{fig:kernel-gp-variance}用一幅定性图说明这一区别。对固定参数的标量高斯预测，$\mu_*\pm1.96\sqrt{v_*+\sigma^2}$是约95\%的模型条件观测预测区间，覆盖率仍需在独立数据上检验。
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>=Latex,scale=0.9]
+ \draw[->] (0,0)--(5.4,0) node[right] {$x$};
+ \draw[->] (0,0)--(0,3.5) node[above] {$y$};
+ \draw[thick] (0.3,1.6) .. controls (2,2.5) and (3.2,0.8) .. (5,1.6);
+ \draw[blue,dashed] (0.3,2.3) .. controls (2,2.8) and (3.2,1.5) .. (5,2.5);
+ \draw[blue,dashed] (0.3,0.9) .. controls (2,2.2) and (3.2,0.1) .. (5,0.7);
+ \draw[red,dotted,thick] (0.3,2.8) .. controls (2,3.3) and (3.2,2.0) .. (5,3.0);
+ \draw[red,dotted,thick] (0.3,0.4) .. controls (2,1.7) and (3.2,-0.2) .. (5,0.2);
+ \node[align=left,right] at (5.2,2.4) {虚线：函数区间\\点线：观测区间};
+\end{tikzpicture}
+\caption{两类预测区间的定性示意，不是数值拟合。相同预测均值下，观测区间包含新噪声的不确定性，通常比函数区间宽。实际区间必须按式\eqref{eq:kernel-gp-posterior}与\eqref{eq:kernel-gp-observation}计算。}
+\label{fig:kernel-gp-variance}
+\end{figure}
+
+\section{单个训练点的算例与KRR联系}
+设$k(x,z)=\exp(-(x-z)^2/2)$，训练点$(x_1,y_1)=(0,1)$，噪声方差$\sigma^2=1$。此时$A=[2]$。在$x_*=0$，预测均值为$1/2$，函数方差为$1-1/2=1/2$，观测方差为$3/2$。即使输入与训练点重合，带噪声观测也不强迫函数精确通过标签。
+
+在$x_*=1$，核值为$e^{-1/2}$，所以$\mu_*=e^{-1/2}/2\approx0.3033$，$v_*=1-e^{-1}/2\approx0.8161$。随着查询远离训练点，高斯核交叉值趋零，均值回到先验均值0，函数方差回到先验方差1。这一行为依赖核与均值假设，不是任意输入上的外推保证。
+
+取KRR平均损失约定中的$n\lambda=\sigma^2$，其点预测与式\eqref{eq:kernel-gp-posterior}的均值相同。不过KRR的范数惩罚是确定性目标，GP的协方差则描述函数值联合分布。尤其在无限维空间，GP样本路径一般不属于同一协方差核的RKHS，不能把KRR的函数范数直接当成每条GP样本路径的有限范数。
+
+\section{超参数学习与计算条件}
+令$\theta$收集核幅度、长度尺度和噪声参数，边缘对数似然为
+\begin{equation}
+ \log p(\bm y\mid X,\theta)
+ =-\tfrac12\bm y^{\mathsf T}A^{-1}\bm y
+ -\tfrac12\log|A|-\tfrac n2\log(2\pi).
+\end{equation}
+第一项衡量标签在协方差度量下的偏离，第二项限制协方差体积。对参数求导可写成
+\begin{equation}
+ \frac{\partial\log p}{\partial\theta_j}
+ =\tfrac12\operatorname{tr}\left[
+ (\bm a\bm a^{\mathsf T}-A^{-1})\frac{\partial A}{\partial\theta_j}\right],
+ \quad\bm a=A^{-1}\bm y.
+\end{equation}
+可据此优化边缘似然，但超参数优化通常非凸，需要检查初值、边界与验证表现。用点估计超参数得到的区间未包含超参数后验不确定性。
+
+训练可用$A=LL^{\mathsf T}$的Cholesky分解解方程。预测方差写为$k_{**}-\|L^{-1}\bm k_*\|^2$，避免显式求逆。精确训练通常需$O(n^3)$时间与$O(n^2)$存储，大样本要使用诱导点或低秩近似，并验证均值与方差近似。
+
+模型假设错误时，高斯区间可能覆盖不足。输入距离失去物理意义、噪声随工况变化或数据来自新设备，都可能使核协方差与实际误差不符。概率表达需要校准验证，不能因为输出方差就认为不确定性已经可信。
+
+\section{阅读依据与练习}
+MML第9.3节介绍贝叶斯线性回归，第9.5节（书内页315--317）简要连接高斯过程，完整GP预测可参照Rasmussen与Williams第2章。这里展开联合高斯条件化，并保留原合章中GP与KRR的比较，使概率方法也有独立章节。
+
+练习：在单点算例中令$\sigma^2\to0$，在训练输入处有$\mu_*\to1,v_*\to0$。在不同查询输入处，函数方差一般仍为正。这是无噪声插值，不是对所有未知输入都确定。

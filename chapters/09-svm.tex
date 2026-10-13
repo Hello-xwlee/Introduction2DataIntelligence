@@ -1,0 +1,165 @@
+﻿\chapter{最优间隔分类：支持向量机}
+\label{chap:svm}
+\label{chap:kernel-algorithms}
+\begin{quote}\small
+\textit{本章摘要。}当多条直线都能分开训练样本时，支持向量机用最近样本到边界的距离选择分类器。本章从几何间隔推导硬间隔优化，再通过松弛变量处理重叠类别，完整建立拉格朗日对偶、支持向量与核化预测之间的联系。
+\end{quote}
+
+上一章建立了核与特征空间内积的关系。本章研究二分类：给定输入$\bm x_i\in\R^d$和标签$y_i\in\{-1,+1\}$，怎样学习一个边界，将新的观测分到两类中？例如，输入是已经标准化的温度与振动，标签表示随后规定时间内是否发生故障。支持向量机（Support Vector Machine，SVM）的推导参照Theodoridis第11.10节的最优间隔分类及第11.11节的计算讨论\cite{theodoridis2015ml}，也可对照MML第12章\cite{deisenroth2020mml}。
+
+\section{训练分类正确后，还需要选择哪一条边界}
+先用线性分数
+\begin{equation}
+ f(\bm x)=\bm w^{\mathsf T}\bm x+b,\qquad
+ \hat y=\operatorname{sign} f(\bm x).
+\end{equation}
+其中$\bm w\in\R^d$是法向量，$b\in\R$是截距。$f=0$是决策超平面，$f>0$对应正类。分数等于零时需约定分类规则。若把$\bm w,b$同时乘以任意正数，预测类别不变，但分数会改变。因此不能直接比较不同参数下的分数大小来判断边界离样本多远。
+
+设$\bm x_0$在边界上。从$\bm x$沿法向量移动到边界，写成$\bm x_0=\bm x-t\bm w$。代入边界方程得
+\begin{equation}
+ 0=\bm w^{\mathsf T}\bm x+b-t\|\bm w\|_2^2,
+ \qquad t=\frac{f(\bm x)}{\|\bm w\|_2^2}.
+\end{equation}
+于是点到超平面的距离为$|t|\|\bm w\|_2=|f(\bm x)|/\|\bm w\|_2$。对带标签的点，用
+\begin{equation}
+ \rho_i=y_if(\bm x_i),\qquad
+ \gamma_i=\frac{y_if(\bm x_i)}{\|\bm w\|_2}
+ \label{eq:svm-geometric-margin}
+\end{equation}
+分别表示函数间隔和有符号几何间隔，假定$\bm w\ne\bm0$。正确分类时两者为正，错分时为负。几何间隔不随共同正比例缩放而改变。
+
+对严格可分的数据，可把参数缩放到$\min_i\rho_i=1$。此时最近点到边界的距离为$1/\|\bm w\|_2$，两侧间隔边界$f=\pm1$的距离为$2/\|\bm w\|_2$。图\ref{fig:svm-margin-geometry}给出一个具体设置。最大化间隔希望边界留出较大的几何余量，但实际泛化还取决于数据分布、标签质量和核的选择。
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=0.85,>=Latex]
+ \draw[->] (-3,0)--(3.4,0) node[right] {$x_1$};
+ \draw[->] (0,-1.8)--(0,2.5) node[above] {$x_2$};
+ \draw[thick] (0,-1.5)--(0,1.9);
+ \draw[dashed] (-1,-1.5)--(-1,1.9);
+ \draw[dashed] (1,-1.5)--(1,1.9);
+ \foreach \x/\y in {-1/1,-1/-1,-2/0.5} {\draw[blue,thick] (\x,\y) circle (0.09);}
+ \foreach \x/\y in {1/1,1/-1,2/0.5} {\fill[red] (\x,\y) rectangle +(0.12,0.12);}
+ \draw[<->] (-1,-1.35)--(1,-1.35) node[midway,below] {$2/\|\bm w\|_2=2$};
+ \node[above] at (-1,1.9) {$f=-1$};
+ \node[above] at (1,1.9) {$f=1$};
+ \node[right] at (0,2.1) {$f=0$};
+\end{tikzpicture}
+\caption{教学数据的间隔几何。圆点为负类，方点为正类。取$\bm w=(1,0)^{\mathsf T},b=0$时，边界为$x_1=0$，两条虚线为$x_1=\pm1$，四个最近点位于间隔边界上。}
+\label{fig:svm-margin-geometry}
+\end{figure}
+
+\section{硬间隔目标与对偶问题}
+\subsection{从距离得到优化约束}
+在两类均有样本、训练数据严格线性可分时，硬间隔SVM求解
+\begin{equation}
+ \min_{\bm w,b}\frac12\|\bm w\|_2^2,
+ \qquad y_i(\bm w^{\mathsf T}\bm x_i+b)\ge1\quad(i=1,\ldots,n).
+ \label{eq:svm-hard-margin-primal}
+\end{equation}
+平方范数与范数有相同的最小点，前面的$1/2$便于求导。约束固定了函数间隔尺度，因此范数最小对应几何间隔最大。若数据不可分，可行集合为空，不能继续用这个目标求分类器。
+
+\subsection{为什么解能写成训练样本的组合}
+为每个约束引入乘子$\alpha_i\ge0$，拉格朗日函数为
+\begin{equation}
+ \mathcal L=\frac12\|\bm w\|_2^2
+ +\sum_i\alpha_i\{1-y_i(\bm w^{\mathsf T}\bm x_i+b)\}.
+\end{equation}
+对$\bm w,b$求偏导并令其为零，得到
+\begin{equation}
+ \bm w=\sum_i\alpha_i y_i\bm x_i,
+ \qquad \sum_i\alpha_i y_i=0.
+ \label{eq:svm-stationarity}
+\end{equation}
+若第二个条件不满足，对$b$取下确界会得到$-\infty$。代回第一式，利用$\sum_i\alpha_i y_i\bm w^{\mathsf T}\bm x_i=\|\bm w\|_2^2$，得到对偶函数
+\begin{equation}
+ g(\bm\alpha)=\sum_i\alpha_i-
+ \frac12\sum_{i,j}\alpha_i\alpha_j y_i y_j\bm x_i^{\mathsf T}\bm x_j.
+\end{equation}
+对偶问题是最大化$g$，约束为$\alpha_i\ge0$及$\bm\alpha^{\mathsf T}\bm y=0$。原问题是凸二次规划。严格可分时可进一步放大参数取得严格可行点，满足Slater条件，所以强对偶成立，原问题和对偶问题有相同最优值。
+
+Karush--Kuhn--Tucker条件（KKT条件）包含驻点条件、原始可行性、对偶可行性和互补松弛。这里的互补松弛是
+\begin{equation}
+ \alpha_i\{y_if(\bm x_i)-1\}=0.
+ \label{eq:svm-hard-kkt}
+\end{equation}
+若$y_if(\bm x_i)>1$，必有$\alpha_i=0$。只有约束活跃的点可能有非零系数。称$\alpha_i>0$的点为支持向量。位于间隔边界上的点在退化情形下也可能系数为零，不能只看几何位置判断其对偶系数。
+
+\subsection{两点算例}
+一维训练集为$(x_1,y_1)=(-1,-1)$、$(x_2,y_2)=(1,+1)$。约束是$w-b\ge1,w+b\ge1$，因此$w\ge1$，最优解为$w=1,b=0$。对偶约束令$\alpha_1=\alpha_2=a$，目标变成$2a-2a^2$。令导数$2-4a=0$，得到$a=1/2$。由式\eqref{eq:svm-stationarity}重建$w=1$。两点都是支持向量，间隔宽度为2。
+
+\section{重叠类别怎样改变目标与支持向量}
+\subsection{松弛变量与合页损失}
+引入$\xi_i\ge0$允许违反规范化间隔，软间隔目标为
+\begin{equation}
+ \min_{\bm w,b,\bm\xi}\frac12\|\bm w\|_2^2+C\sum_i\xi_i,
+ \quad y_if(\bm x_i)\ge1-\xi_i,\quad\xi_i\ge0,
+ \label{eq:svm-soft-margin-primal}
+\end{equation}
+其中$C>0$。固定$\bm w,b$时，最小可行松弛量是$\xi_i=\max(0,1-y_if(\bm x_i))$。消去$\xi_i$便得到合页损失（hinge loss）的正则化目标。
+
+当$y_if\ge1$时损失为零。当$0<y_if<1$时分类正确，但位于间隔内部，损失介于0与1之间。当$y_if<0$时分类错误，损失大于1。$y_if=0$对应边界上的点，损失为1。松弛量总和衡量违约程度，不能把它当成错分个数。
+
+若采用平均损失目标$\lambda\|\bm w\|^2/2+n^{-1}\sum_i\max(0,1-y_if_i)$，与式\eqref{eq:svm-soft-margin-primal}等价的参数关系为$C=1/(n\lambda)$。比较不同软件或样本量时要核对这一约定。
+
+\subsection{软间隔对偶的上界从哪里来}
+用$\alpha_i\ge0$处理间隔约束，用$\beta_i\ge0$处理$\xi_i\ge0$：
+\begin{equation}
+ \mathcal L=\tfrac12\|\bm w\|^2+C\sum_i\xi_i
+ +\sum_i\alpha_i(1-\xi_i-y_if_i)-\sum_i\beta_i\xi_i.
+\end{equation}
+对$\xi_i$求导得$C-\alpha_i-\beta_i=0$。结合非负性得到$0\le\alpha_i\le C$。对$\bm w,b$的驻点条件仍为式\eqref{eq:svm-stationarity}。因此
+\begin{equation}
+ \max_{\bm\alpha}\ \bm1^{\mathsf T}\bm\alpha-	frac12\bm\alpha^{\mathsf T}YKY\bm\alpha,
+ \quad 0\le\alpha_i\le C,\quad \bm y^{\mathsf T}\bm\alpha=0,
+ \label{eq:svm-dual}
+\end{equation}
+其中$Y=\diag(y_1,\ldots,y_n)$，线性情形$K_{ij}=\bm x_i^{\mathsf T}\bm x_j$。软间隔可以取足够大的正松弛量取得严格可行点，故也满足强对偶。互补条件是
+\begin{equation}
+ \alpha_i(y_if_i-1+\xi_i)=0,\qquad (C-\alpha_i)\xi_i=0.
+\end{equation}
+它们解释了三种系数：$\alpha_i=0$的点满足$y_if_i\ge1$。$0<\alpha_i<C$的点有$\xi_i=0,y_if_i=1$，是自由支持向量。$\alpha_i=C$的点有$y_if_i\le1$，可能在边界上、间隔内或已经错分。
+
+对任一自由支持向量$s$，截距为
+\begin{equation}
+ b=y_s-\sum_i\alpha_i y_i K_{is}.
+ \label{eq:svm-bias}
+\end{equation}
+实际可对多个自由支持向量取平均。若没有自由支持向量，不能任意选一个$\alpha_s=C$的点套用这个等式。应利用KKT不等式确定$b$的可行区间，由二次规划求解器处理这一情形。
+
+\section{核化怎样形成非线性边界}
+\subsection{为什么核化发生在对偶问题}
+若直接在特征空间中求解原始问题，参数$\bm w\in\mathcal H$可能是无限维对象，不能按坐标存储。对偶推导消除了这个参数：由驻点条件，最优方向总在训练特征向量$\phi(\bm x_i)$的张成空间中，因而只需要训练样本之间的内积。把线性情形的内积
+\[
+ \phi(\bm x_i)^{\mathsf T}\phi(\bm x_j)
+\]
+替换成核函数$k(\bm x_i,\bm x_j)$，便得到可计算的特征空间分类器。这个替换必须发生在所有内积位置，包括训练二次项和新样本预测，不能只把最终的线性公式局部替换。
+
+设特征空间中的分类函数为$f(\bm x)=\langle\bm w,\phi(\bm x)\rangle+b$。约束和拉格朗日驻点仍给出
+\begin{equation}
+ \bm w=\sum_i\alpha_i y_i\phi(\bm x_i),
+ \qquad \sum_i\alpha_i y_i=0.
+ \label{eq:svm-feature-space-representer}
+\end{equation}
+代回目标函数后，训练只需要矩阵$K$。因此核方法的非线性来自特征映射，而计算仍在样本对的相似性上进行。
+
+\subsection{核矩阵如何进入对偶与预测}
+若将$\bm x$换成$\phi(\bm x)\in\mathcal H$，上述推导只把内积换成$k(\bm x_i,\bm x_j)$。式\eqref{eq:svm-dual}的结构不变，预测是
+\begin{equation}
+ f(\bm x)=\sum_{i:\alpha_i>0}\alpha_i y_i k(\bm x_i,\bm x)+b.
+\end{equation}
+半正定核保证$YKY$半正定，因此对偶是凹最大化问题。预测在特征空间中仍是线性的，在输入空间中可以是曲线。
+
+例如四个点$(\pm1,\pm1)$的标签取$y=x_1x_2$，线性边界不能分开这两类。映射$\phi(\bm x)=(x_1^2,\sqrt2x_1x_2,x_2^2)^{\mathsf T}$使第二个坐标直接区分类别。其内积是$k(\bm x,\bm z)=(\bm x^{\mathsf T}\bm z)^2$。这说明核怎样引入交互项，不说明任意数据在任意核下都可分。相同输入带相反标签时，任何确定性映射都无法分开它们。
+
+\section{求解、验证与适用边界}
+对偶有$n$个变量。序列最小优化（Sequential Minimal Optimization，SMO）每次更新少量乘子，同时保持等式约束与箱约束，避免每一步都处理整个二次规划。核缓存可减少重复计算，但大样本下内存仍可能成为限制。多分类通常用一对其余或一对一构造多个二分类器，其分数需要统一决策规则。
+
+训练时先在训练折中拟合缩放统计量，再联合验证$C$和核参数。高斯核长度尺度太小时，不同点的核值接近零，模型容易形成局部响应。尺度太大时，样本相似性接近，模型可能难以区分局部结构。类别不平衡可采用不同的$C_i$或样本权重，但须根据漏报与误报代价验证。
+
+SVM分数不是故障概率。若需要概率输出，可在独立校准数据上拟合分数到概率的映射，再检验校准。最大间隔也不能修复标签泄漏或分布变化。下一章转入无标签数据，研究怎样根据数据的变化寻找低维表示。
+
+\section{阅读依据与练习}
+主要依据为Theodoridis第11.10--11.11节（书内页538--552）与MML第12章。郑之杰的核方法文章提供核化公式的对照\cite{zheng2021kernel}，本章补全间隔、对偶与KKT的推导。
+
+练习：把两点算例的软间隔参数改成$0<C<1/2$，求$w,b$及松弛量。由对偶得到$a=C,w=2C$。$b=0$是一个最优截距，两点的松弛量均为$1-2C$。允许的最优截距区间为$|b|\le1-2C$，这也说明软间隔下截距未必唯一。

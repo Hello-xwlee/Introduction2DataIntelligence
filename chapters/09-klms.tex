@@ -1,0 +1,103 @@
+\chapter{核最小均方：随观测到达更新预测函数}
+\label{chap:klms}
+\begin{quote}\small
+\textit{本章摘要。}核最小均方算法在每次收到标签后沿瞬时平方误差的函数梯度更新模型。本章推导核展开、步长与误差之间的关系，再解释字典为何增长，以及如何用新颖性和投影限制字典大小。
+\end{quote}
+
+核岭回归通常对一批训练数据求线性方程。如果设备读数不断到达，每次都重新分解全部核矩阵可能代价过高。核最小均方算法（Kernel Least Mean Squares，KLMS）每次只依据一个新观测修正函数。本章依据Theodoridis第11.12.1节\cite{theodoridis2015ml}，把书中的函数空间更新落实为可逐步计算的过程。它是在线平方损失方法，不等同于每一步都重求批量KRR。
+
+\section{在线学习首先要固定信息顺序}
+设时间$t$到达输入$\bm x_t$。先用已有模型$f_{t-1}$预测$\hat y_t=f_{t-1}(\bm x_t)$，随后在$y_t$可用时计算误差并更新。若标签代表一小时后的温度，更新也必须等到相应标签确认。用于评价的$\hat y_t$应保留为更新前预测，不能用已经看过$y_t$的新函数重新预测同一样本来报告在线误差。
+
+在平稳分布下，可考虑总体目标$R(f)=\E[(Y-f(X))^2]/2$。它依赖未知联合分布，无法直接计算。KLMS使用当前样本的瞬时损失$\ell_t(f)=(y_t-f(\bm x_t))^2/2$近似总体梯度。在独立抽样和适当可积条件下，它可作为随机梯度。序列相关或分布漂移时，需另行检查这种解释是否合适。
+
+\section{函数梯度怎样变成一个核截面}
+由再生性质$f(\bm x_t)=\langle f,k(\cdot,\bm x_t)\rangle$。沿任意方向$h\in\mathcal H$作微小变化，得到
+\begin{equation}
+ \left.\frac{d}{ds}\ell_t(f+sh)\right|_{s=0}
+ =-(y_t-f(\bm x_t))h(\bm x_t)
+ =\langle-e_t k(\cdot,\bm x_t),h\rangle,
+\end{equation}
+其中$e_t=y_t-f(\bm x_t)$。这说明函数梯度为$-e_t k(\cdot,\bm x_t)$。用步长$\mu_t>0$沿负梯度更新：
+\begin{equation}
+ e_t=y_t-f_{t-1}(\bm x_t),\qquad
+ f_t=f_{t-1}+\mu_t e_t k(\cdot,\bm x_t).
+ \label{eq:klms-update}
+\end{equation}
+误差为正时提高附近输入的预测，误差为负时降低。影响如何随输入变化由核值决定，有效核并不要求所有核值都非负。
+
+从$f_0=0$开始展开递推，得到
+\begin{equation}
+ f_t(\bm x)=\sum_{s=1}^t\mu_s e_s k(\bm x_s,\bm x),\qquad
+ \hat y_t=\sum_{s=1}^{t-1}\mu_s e_s k(\bm x_s,\bm x_t).
+ \label{eq:klms-expansion}
+\end{equation}
+每次保存输入$\bm x_t$和系数$\mu_t e_t$即可。既往系数包含当时的误差，不需要根据当前模型重新计算。图\ref{fig:klms-online-update}突出预测与更新的顺序。
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[node distance=0.8cm and 0.7cm]
+ \node[idi input] (x) {$\bm x_t,f_{t-1}$};
+ \node[idi process,right=of x] (p) {$\hat y_t=f_{t-1}(\bm x_t)$};
+ \node[idi state,right=of p] (e) {$e_t=y_t-\hat y_t$};
+ \node[idi output,below=of e] (u) {$f_t=f_{t-1}+\mu_te_tk(\cdot,\bm x_t)$};
+ \node[idi input,above=of e] (y) {标签$y_t$确认};
+ \draw[idi arrow] (x)--(p); \draw[idi arrow] (p)--(e);
+ \draw[idi arrow] (y)--(e); \draw[idi arrow] (e)--(u);
+\end{tikzpicture}
+\caption{KLMS一次在线更新。箭头表示计算依赖，当前预测先于标签参与更新。标签延迟时应保留输入与更新前预测。}
+\label{fig:klms-online-update}
+\end{figure}
+
+\section{步长怎样改变当前残差}
+在同一个已观测输入上，更新后的残差为
+\begin{equation}
+ y_t-f_t(\bm x_t)=\{1-\mu_t k(\bm x_t,\bm x_t)\}e_t.
+\end{equation}
+若$k(\bm x_t,\bm x_t)>0$，则$0<\mu_t k(\bm x_t,\bm x_t)<2$使当前点的残差绝对值减小。这只是一次局部更新的结论，不保证未来样本误差减小，也不替代随机迭代的收敛条件。
+
+可使用归一化更新
+\begin{equation}
+ f_t=f_{t-1}+\frac{\eta e_t}{\delta+k(\bm x_t,\bm x_t)}k(\cdot,\bm x_t),
+ \qquad\delta>0,\quad0<\eta<2.
+\end{equation}
+分母调节不同核截面长度，$\delta$避免零除。高斯核有$k(\bm x,\bm x)=1$，普通KLMS的局部条件便为$0<\mu_t<2$。平稳随机优化常采用满足$\sum_t\mu_t=\infty,\sum_t\mu_t^2<\infty$的递减步长，并另外要求梯度噪声和核有适当界。这些条件不能直接保证任意相关工业序列上的收敛。固定步长便于跟踪变化，但会保留随机波动。
+
+\subsection{两次更新的算例}
+取高斯核长度尺度$\ell=1$，固定步长$\mu=1/2$。第一对观测为$(x_1,y_1)=(0,1)$，初始预测为0，所以$e_1=1$，$f_1(x)=0.5\exp(-x^2/2)$。第二对为$(x_2,y_2)=(1,0)$，更新前预测为$0.5\exp(-1/2)\approx0.3033$，误差约为$-0.3033$。因此
+\begin{equation}
+ f_2(x)=0.5k(0,x)-0.1516k(1,x).
+\end{equation}
+第二点更新后预测约为0.1516，残差幅度减半。第一点预测也从0.5降为约0.4080，因为两个核截面存在非零内积。修正一个点会影响别的点，这解释了局部下降与总体下降的区别。
+
+\section{字典为什么增长，怎样限制规模}
+式\eqref{eq:klms-expansion}每次添加一个核中心，处理$t$个样本后单次预测需要$O(t)$核计算，累计成本为$O(t^2)$，存储中心需要$O(td)$。因此在线并不自动意味着恒定时间与内存。实际使用字典$D=\{\bm u_1,\ldots,\bm u_m\}$，只保留一部分核中心。
+
+一种简单新颖性策略同时检查新输入与字典的最小距离以及预测误差：只有距离超过阈值且$|e_t|$超过阈值时才添加中心。它会舍弃部分更新，需要验证带来的误差。原空间距离还依赖缩放，可以改用核诱导距离
+\begin{equation}
+ \|k(\cdot,\bm x)-k(\cdot,\bm u)\|_{\mathcal H}^2
+ =k(\bm x,\bm x)+k(\bm u,\bm u)-2k(\bm x,\bm u).
+\end{equation}
+若想判断新核截面是否已能被整个字典表示，可将其投影到字典张成的空间。令$G_{ij}=k(\bm u_i,\bm u_j)$，$\bm g_i=k(\bm u_i,\bm x_t)$。在$G$可逆时，投影系数和剩余平方长度为
+\begin{equation}
+ \bm c=G^{-1}\bm g,\qquad
+ r_D^2=k(\bm x_t,\bm x_t)-\bm g^{\mathsf T}G^{-1}\bm g\ge0.
+ \label{eq:klms-dictionary-residual}
+\end{equation}
+若$r_D^2$很小，可用$\sum_i c_i k(\cdot,\bm u_i)$近似当前核截面，并对既有字典系数加$\mu_t e_t\bm c$。若较大，则添加新中心。奇异$G$需用伪逆或稳定分解，采用正则近似时不能把剩余量仍当成精确正交投影残差。
+
+该投影近似在一次更新中引入的函数范数误差为$|\mu_te_t|r_D$。由再生性质，在查询点$\bm x$的预测误差至多为$|\mu_te_t|r_D\sqrt{k(\bm x,\bm x)}$。这给出了可检查的局部近似含义，但多步误差仍会累积。
+
+\section{正则化更新与评价边界}
+若瞬时目标另加$\lambda\|f\|^2/2$，函数梯度多出$\lambda f$，得到
+\begin{equation}
+ f_t=(1-\mu_t\lambda)f_{t-1}+\mu_te_tk(\cdot,\bm x_t).
+\end{equation}
+它缩小既有系数，属于正则化在线梯度更新，可与Theodoridis第11.12.2节的朴素在线正则风险最小化算法（Naive Online Regularized Risk Minimization Algorithm，NORMA）对照。只有系数变小还不会使字典有限，仍需剪枝或预算策略。这是对KLMS目标的修改，不能将其正则化参数直接视为批量KRR的同一个解。
+
+在线评价应依时间先预测后更新，并记录标签延迟、字典规模、更新时间和漂移后的恢复过程。按随机顺序打乱数据适合某些平稳优化实验，却不能模拟真实设备的时间部署。核尺度、步长和字典阈值需由历史验证确定，不能用后续测试误差逐次调整。
+
+\section{阅读依据与练习}
+Theodoridis第11.12.1节（书内页553--556）提供KLMS、归一化更新与字典思想，第11.12.2节（页556--560）提供正则化在线更新。本章在这些基础上明确局部步长条件与总体收敛的区别，并补充字典投影误差的推导。
+
+练习：对同一输入重复观察标签$y=1$，高斯核对角值为1，固定步长为$\mu$。该输入处残差满足$e_{t+1}=(1-\mu)e_t$。当$0<\mu<2$时其绝对值趋零，$1<\mu<2$时正负交替。这是单一输入的确定性结论。

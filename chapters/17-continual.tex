@@ -71,7 +71,7 @@ $\mathcal B$是跨轮保存的缓存，$B_m\subseteq\mathcal B$是本次抽取�
 缓存按样本数公平并不等于按字节公平：原图、压缩特征与 logits 占用不同。特征回放节省空间，却依赖编码器版本兼容；生成回放用生成器代替原样本，但生成器本身也会遗忘，偏差可能逐阶段累积\cite{shin2017replay}。保存合成样本也不能自动免除隐私审计。
 
 \paragraph{梯度情景记忆（Gradient Episodic Memory，GEM）与 A-GEM。}
-GEM 将当前梯度$g$投影为与旧任务梯度$g_k$不冲突的方向\cite{lopezpaz2017gem}：
+GEM 将当前梯度$g$投影为与旧任务梯度$g_k$不冲突的$\tilde g$\cite{lopezpaz2017gem}：
 \begin{equation}
  \min_{\tilde g}\frac12\|\tilde g-g\|_2^2,
  \qquad \tilde g^{\mathsf T}g_k\geq0\quad\text{对所有旧任务 }k.
@@ -80,7 +80,26 @@ GEM 将当前梯度$g$投影为与旧任务梯度$g_k$不冲突的方向\cite{lo
 \begin{equation}
  \tilde g=g-\frac{g^{\mathsf T}g_r}{\|g_r\|_2^2}g_r;
 \end{equation}
-否则保留原梯度。它降低计算开销，但只约束平均回放方向，少数旧任务仍可能受损。
+否则保留原梯度。图\ref{fig:agem-projection}以二维情形展示这一投影过程。A-GEM 降低了计算开销，但只约束平均回放方向，少数旧任务仍可能受损。
+
+\begin{figure}[htbp]
+\centering
+\definecolor{accent}{HTML}{287D83}
+\begin{tikzpicture}[>=Stealth,line cap=round,line join=round,font=\small,x=1.85cm,y=1.85cm]
+\draw[gray!70,densely dashed,line width=.45pt] (0,-.16)--(0,1.60);
+\draw[->,line width=.8pt] (0,0)--(-1.15,1.3) node[above left=0pt] {$g$};
+\draw[->,line width=.8pt] (0,0)--(1.25,0) node[right] {$g_r$};
+\draw[->,accent,line width=1pt] (0,0)--(0,1.3) node[above right=1pt] {$\tilde g$};
+\draw[->,gray!85,densely dashed,line width=.55pt] (-1.10,1.3)--(-.06,1.3) node[midway,above=4pt,text=black,font=\footnotesize] {正交投影};
+\draw[gray!85,line width=.45pt] (.14,0)--(.14,.14)--(0,.14);
+\draw[gray!85,line width=.45pt] (.40,0) arc[start angle=0,end angle=131.50,radius=.40];
+\node at (.66,.52) {$\theta>90^{\circ}$};
+\node[below left=2pt] at (0,0) {$O$};
+\node[font=\small] at (.05,-.43) {$g^{\mathsf T}g_r<0\qquad\longrightarrow\qquad\tilde g^{\mathsf T}g_r=0$};
+\end{tikzpicture}
+\caption{A-GEM 的二维梯度投影示意。当$g^{\mathsf T}g_r<0$时，将$g$正交投影到垂直于$g_r$的边界上，得到满足$\tilde g^{\mathsf T}g_r=0$的投影梯度。}
+\label{fig:agem-projection}
+\end{figure}
 
 \paragraph{从约束优化推出投影及其步长限制。}
 令参数维度为$p$，$g,g_r,\tilde g\in\R^p$。单个约束的拉格朗日函数为

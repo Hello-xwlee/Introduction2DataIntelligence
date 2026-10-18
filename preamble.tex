@@ -6,8 +6,11 @@
 	subsection={format=\raggedright\bfseries\large,beforeskip=14pt,afterskip=6pt},
 	subsubsection={format=\raggedright\bfseries\normalsize,beforeskip=10pt,afterskip=4pt}
 }
+\usepackage[bottom]{footmisc}
 \usepackage{booktabs,array,graphicx,xcolor,enumitem,hyperref}
 \usepackage{caption}
+\usepackage{placeins}
+\usepackage{lscape}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,fit,calc,shapes.geometric,decorations.pathreplacing}
 \tikzset{
@@ -25,7 +28,12 @@
 \usepackage{xeCJKfntef}
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily\small,breaklines=true,columns=fullflexible,frame=single}
-\captionsetup{font=small,labelfont=bf}
+\captionsetup{font=small,labelfont=bf,skip=5pt}
+\setlength{\intextsep}{8pt plus 1pt minus 1pt}
+\setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
+\setlength{\floatsep}{8pt plus 1pt minus 1pt}
+% 避免页底强制对齐把图文之间的弹性间距过度拉大。
+\raggedbottom
 
 \hypersetup{colorlinks=true,linkcolor=blue,citecolor=teal,urlcolor=blue}
 \setcounter{secnumdepth}{3}

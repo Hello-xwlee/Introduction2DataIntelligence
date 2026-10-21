@@ -1,243 +1,621 @@
-\chapter{数学与概率预备知识}
+﻿\chapter{数学与概率预备知识}
 
 \begin{quote}\small
-\textit{本章摘要。}本章建立全书共同使用的数学语言。先从向量、矩阵和微积分说明模型如何表示对象、变化与优化，再引入概率、分布和期望，最后解释熵、距离、降维和数值稳定性。阅读顺序对应后文的依赖关系：先能读懂确定性模型，再能处理随机性，最后才能理解贝叶斯推断、深度学习和流形表示中的公式。
+\textit{本章摘要。}本章按知识依赖顺序建立数学与概率工具。先介绍向量、矩阵及其运算，再讨论秩、迹、逆、伪逆、正定性和矩阵分解。随后介绍微积分、概率空间、随机变量、条件分布、矩和常用分布，最后给出全概率公式、贝叶斯公式及指数族的性质。各项结论均注明所需条件。
 \end{quote}
 
-设备的一组传感器读数可以表示为向量，多个样本可以组成矩阵。为了调整模型参数，需要用导数描述预测误差怎样随参数变化。同一工况下的观测仍可能波动，这时还需要概率分布。本章按这些计算需求介绍数学工具。阅读时先确认运算作用于什么对象，再检查结论的成立条件。
+\section{向量、矩阵与基本运算}
+\subsection{对象与记号}
+标量是单个数。本章除特别说明外使用实数，实数集合记为$\R$。向量默认为列向量，写作$\bm x=(x_1,\ldots,x_d)^{\mathsf T}\in\R^d$。矩阵$A=(A_{ij})\in\R^{m\times d}$有$m$行、$d$列，$A_{ij}$是第$i$行第$j$列的元素。上标$\mathsf T$表示转置，即$(A^{\mathsf T})_{ji}=A_{ij}$，转置后矩阵的维度为$d\times m$。
 
-可以始终带着同一组设备读数来理解这些工具。把温度和振动画成一个点，是几何表示；调整权重让预测更接近测量值，需要导数；重复运行后读数仍然有波动，就要用概率和期望。先看清每一步输入和输出的维度，再跟着推导计算。后面遇到具体模型时，可以回到这里核对它用了哪些条件。
+零向量与零矩阵分别记为$\bm0$与$0$，维度由上下文确定。$I_d\in\R^{d\times d}$表示单位矩阵。$\diag(a_1,\ldots,a_d)$表示对角元素为$a_1,\ldots,a_d$、其余元素为零的对角矩阵。$\mathbb{1}\{B\}$是指示函数，命题$B$成立时为$1$，否则为$0$。本章的$\log$均表示自然对数。
 
-\section{为什么需要数学语言}
-数学表达用来明确学习问题中的对象、假设、优化目标和结论的适用条件。本章只介绍后文反复使用的工具。读者不必一次记住所有细节，但应能在看到一个公式时识别其输入、输出、随机性与求和范围。初读时先掌握向量乘法、单变量求导和离散概率加权平均；高斯最大熵、PCA优化证明与期望求导可在对应模型用到时回读，不必先完成这些证明才能进入下一章。
+向量或矩阵只有在维度相同时才能逐元素相加。数乘将每个元素乘以同一个标量。若$\bm v_j\in\R^d$、$a_j\in\R$，则$\sum_{j=1}^k a_j\bm v_j\in\R^d$称为线性组合。
 
-\paragraph{先约定怎样读符号。}
-标量是一个数，向量是一列数，矩阵是按行列排列的一张数表。$\R$表示实数集合，$\in$读作“属于”，$\R^d$表示含$d$个实数的向量空间；上标$\mathsf T$把列变成行，不是乘方。下标$i$常编号样本，下标$j$常编号特征；$\sum_{j=1}^d$表示把第$1$项到第$d$项相加。$\hat y$是预测值，未加帽的$y$是观测标签；$\argmin$返回让目标最小的参数，$\min$返回最小目标值。例如$(w-2)^2$的最小值是$0$，取得它的参数是$w=2$。
+\subsection{内积、范数与距离}
+实向量的欧氏内积与欧氏范数定义为
+\begin{equation}
+ \langle\bm x,\bm y\rangle=\bm x^{\mathsf T}\bm y=\sum_{j=1}^d x_jy_j,
+ \qquad \|\bm x\|_2=\sqrt{\bm x^{\mathsf T}\bm x}.
+\end{equation}
+这里$\bm x,\bm y\in\R^d$，内积是标量。内积为零称为正交。范数满足非负性、绝对齐次性和三角不等式，且仅零向量的范数为零。柯西--施瓦茨不等式（Cauchy--Schwarz inequality）为$|\bm x^{\mathsf T}\bm y|\leq\|\bm x\|_2\|\bm y\|_2$，等号成立当且仅当两向量线性相关。
 
-\section{向量、矩阵与几何}
-先把两个传感器的读数按固定次序排成列，再用加权和生成输出。若$\bm x=(2,3)^{\mathsf T}$，$A=\begin{pmatrix}1&2\\0&1\end{pmatrix}$，则$A\bm x=(8,3)^{\mathsf T}$：第一项是$1\times2+2\times3$。列空间是矩阵所有列的线性组合能到达的集合；零空间是被矩阵乘成零的输入集合；秩是独立输出方向的个数。线性组合就是给各向量乘系数再相加。
-
-向量$\bm{x}\in\R^d$可以表示一个样本，也可以表示参数、梯度或隐状态。内积$\bm{x}^{\mathsf T}\bm{y}$衡量方向相似性，但也随向量长度变化；范数$\|\bm{x}\|_2=(\sum_jx_j^2)^{1/2}$衡量欧氏长度。矩阵$A\in\R^{m\times d}$是从$d$维空间到$m$维空间的线性变换。其列空间、零空间和秩分别描述可表达方向、被压缩方向与有效维数。
-
-对称半正定矩阵是满足$A=A^{\mathsf T}$且对所有$\bm{v}\in\R^d$都有$\bm{v}^{\mathsf T}A\bm{v}\geq0$的方阵；这里的“半”允许某些非零方向的二次型等于零。协方差矩阵必须具有这一性质，因为方差不可能为负。二次型$\bm{v}^{\mathsf T}A\bm{v}$还可以看作沿方向$\bm{v}$观察曲率，这使 Hessian 矩阵成为优化和不确定性分析的核心对象。
-
-\paragraph{维度、投影与半正定性的由来。}
-若$A\in\R^{m\times d}$、$\bm x\in\R^d$，则$(A\bm x)_i=\sum_{j=1}^d A_{ij}x_j$，输出有$m$个分量。内积不是不受尺度影响的相似度：将一个向量放大两倍会使内积也放大两倍；只有先归一化，内积才等于夹角余弦。对单位向量$\bm u$，把$\bm x$投影到其张成的直线上，需要最小化
+对$1\leq p<\infty$定义$\|\bm x\|_p=(\sum_j|x_j|^p)^{1/p}$，另定义$\|\bm x\|_\infty=\max_j|x_j|$。相应距离为
 \begin{align}
- \|\bm x-a\bm u\|_2^2
- &=\|\bm x\|_2^2-2a\bm u^{\mathsf T}\bm x+a^2,\\
- \frac{d}{da}\|\bm x-a\bm u\|_2^2&=-2\bm u^{\mathsf T}\bm x+2a=0.\label{eq:math-projection-stationarity}
+ d_1(x,y)&=\|x-y\|_1=\sum_{j=1}^d|x_j-y_j|,\label{eq:math-manhattan-distance}\\
+ d_2(x,y)&=\|x-y\|_2=\sqrt{\sum_{j=1}^d(x_j-y_j)^2},\label{eq:math-euclidean-distance}\\
+ d_p(x,y)&=\|x-y\|_p=\left(\sum_{j=1}^d|x_j-y_j|^p\right)^{1/p},\quad p\geq1,\label{eq:math-minkowski-distance}\\
+ d_\infty(x,y)&=\|x-y\|_\infty=\max_j|x_j-y_j|.\label{eq:math-chebyshev-distance}
 \end{align}
-由式\eqref{eq:math-projection-stationarity}得$a=\bm u^{\mathsf T}\bm x$，投影为$\bm u\bm u^{\mathsf T}\bm x$，残差与$\bm u$正交。若$\bm u$不是单位向量且$\bm u\ne\bm0$，系数必须再除以$\bm u^{\mathsf T}\bm u$；零向量不张成一条有方向的投影直线，不能用于这个公式。
+这里沿用$x,y\in\R^d$表示两个向量。四式分别称为曼哈顿距离（Manhattan distance）、欧氏距离（Euclidean distance）、闵可夫斯基距离（Minkowski distance）和切比雪夫距离（Chebyshev distance）。度量要求非负、对称、满足三角不等式，且距离为零当且仅当两对象相同。上述距离均为度量。$0<p<1$时同一幂和表达式一般不满足范数的三角不等式。
 
-设随机向量$\bm X$有有限二阶矩，$\bm\mu=\E\bm X$，定义$\Sigma=\E[(\bm X-\bm\mu)(\bm X-\bm\mu)^{\mathsf T}]\in\R^{d\times d}$。对任意$\bm v\in\R^d$，
-\begin{equation}
- \bm v^{\mathsf T}\Sigma\bm v
- =\E\bigl[(\bm v^{\mathsf T}(\bm X-\bm\mu))^2\bigr]
- =\Var(\bm v^{\mathsf T}\bm X)\geq0.\label{eq:math-covariance-psd}
-\end{equation}
-式\eqref{eq:math-covariance-psd}同时证明了协方差半正定，并说明二次型就是投影后的方差。半正定并不保证可逆：若某个传感器恰好是另一个的两倍，就存在非零方向上的方差为零。
-
-\section{微积分与链式法则}
-导数描述输入作微小改变时输出怎样变化；偏导数只改变一个参数，其他参数暂时固定。梯度把所有偏导数排成列。雅可比矩阵（Jacobian matrix）把多个输出对多个输入的偏导数排成矩阵；海森矩阵（Hessian matrix）收集标量函数的二阶偏导数，用来描述斜率怎样变化。
-例如$x=2$、预测$\hat y=wx$、标签$y=3$，在$w=1$时误差是$-1$，损失$J=(\hat y-y)^2/2=1/2$。先求$\partial J/\partial\hat y=-1$，再求$\partial\hat y/\partial w=2$，相乘得$dJ/dw=-2$。用步长$0.1$更新得到$w=1.2$，新损失为$(2.4-3)^2/2=0.18$。
-
-若标量函数$J(\bm{\theta})$对参数可微，梯度为
-\begin{equation}
- \nabla_{\bm{\theta}}J=\left[\frac{\partial J}{\partial\theta_1},\ldots,\frac{\partial J}{\partial\theta_d}\right]^{\mathsf T}.
-\end{equation}
-梯度非零时，它指向欧氏单位方向中函数增长最快的方向，因此$-\nabla J$是局部下降方向；梯度为零时，仅凭一阶导数不能判断是否达到极小值。对复合函数$J(f(\bm{\theta}))$，链式法则给出
-\begin{equation}
- \frac{\partial J}{\partial\theta_j}=\sum_i\frac{\partial J}{\partial f_i}\frac{\partial f_i}{\partial\theta_j}.
-\end{equation}
-反向传播（backpropagation）沿计算的依赖关系反复应用链式法则，并复用中间导数，以减少重复计算。第五章将用一个两层网络说明这一过程。
-
-\paragraph{为什么负梯度是局部下降方向。}
-令$\bm g=\nabla J(\bm\theta)$。可微性给出$J(\bm\theta+\epsilon\bm v)=J(\bm\theta)+\epsilon\bm g^{\mathsf T}\bm v+o(\epsilon)$。在$\|\bm v\|_2=1$的方向中，Cauchy--Schwarz不等式给出$\bm g^{\mathsf T}\bm v\geq-\|\bm g\|_2$，当$\bm g\ne0$时由$\bm v=-\bm g/\|\bm g\|_2$取到等号。这只说明足够小的步长能下降，不保证任意步长都有效，也不保证梯度为零时已经达到最小值。
-
-以$\bm r=A\bm\theta-\bm y\in\R^m$和$J=\tfrac12\bm r^{\mathsf T}\bm r$为例，微分逐步给出
-\begin{equation}
- dJ=\bm r^{\mathsf T}d\bm r
- =\bm r^{\mathsf T}A\,d\bm\theta
- =(A^{\mathsf T}\bm r)^{\mathsf T}d\bm\theta,
- \qquad \nabla J=A^{\mathsf T}(A\bm\theta-\bm y)\in\R^d.
-\end{equation}
-一般地，若$\bm f:\R^d\to\R^m$的Jacobian为$D\bm f\in\R^{m\times d}$，则$\nabla_{\bm\theta}J=(D\bm f)^{\mathsf T}\nabla_{\bm f}J$。转置把输出空间的误差信号拉回参数空间，维度检查可以帮助发现漏转置和广播错误。
-
-\section{概率、条件概率与期望}
-大写$X$表示还未确定的随机量，小写$x$表示一次具体取值。离散概率给每个可能值分配权重，所有权重之和为一；连续密度则要在区间上积分才得到概率，密度值本身可以大于一。条件概率是先限定已知条件，再在剩余情形中计算比例。假设同一工况下温度$Y$以$1/4$概率为$2$，以$3/4$概率为$4$，则均值为$2/4+3\times4/4=3.5$，方差为$(2-3.5)^2/4+3(4-3.5)^2/4=0.75$。均值不一定是能实际观测到的一个值。
-
-随机变量$X$的分布描述不确定性。联合分布满足乘法法则
-\begin{equation}
- p(x,y)=p(y\mid x)p(x),
- \qquad p(y\mid x)=\frac{p(x,y)}{p(x)}.\label{eq:math-conditional-probability}
-\end{equation}
-边缘化把未知变量积分掉：$p(x)=\int p(x,y)\,dy$。期望是随机量的加权平均，方差是
-\begin{equation}
- \Var(X)=\mathbb{E}[(X-\mathbb{E}[X])^2].
-\end{equation}
-条件期望$\mathbb{E}[Y\mid X]$是给定输入后对输出的最佳平方损失预测，这解释了为什么均方误差回归在理想条件下学习条件均值。
-
-\paragraph{条件均值为何最优。}
-对离散变量使用概率质量，对连续变量使用密度；式\eqref{eq:math-conditional-probability}的条件概率比值只在分母为正处使用，连续情形不是把单点概率相除。假设$\E[Y^2]<\infty$，固定输入$x$，记$\mu(x)=\E[Y\mid X=x]$。对任意实数预测$a$，把误差拆为$(Y-\mu)+(\mu-a)$，得到
-\begin{align}
- \E[(Y-a)^2\mid X=x]
- &=\E[(Y-\mu)^2\mid X=x]
-   +2(\mu-a)\E[Y-\mu\mid X=x]+(\mu-a)^2\\
- &=\Var(Y\mid X=x)+(\mu(x)-a)^2.\label{eq:math-conditional-mse}
-\end{align}
-式\eqref{eq:math-conditional-mse}的第一项与$a$无关，交叉项因条件残差均值为零而消失，所以最优$a$为$\mu(x)$。这不是说有限样本拟合一定得到条件均值，而是说它是无限制平方损失预测的理想目标。
-
-将$Y-\E Y=(Y-\E[Y\mid X])+(\E[Y\mid X]-\E Y)$平方后取期望。交叉项先对$X$条件化，其中$\E[Y-\E[Y\mid X]\mid X]=0$，故该项消失；两个平方项分别给出全方差公式
-\begin{equation}
- \Var(Y)=\E[\Var(Y\mid X)]+\Var(\E[Y\mid X]).\label{eq:math-total-variance}
-\end{equation}
-式\eqref{eq:math-total-variance}将总波动分为给定输入后仍存在的波动，以及不同输入导致的均值变化。缺少关键传感器时，前一项可能很大；仅靠更精细地优化参数无法消除这种信息缺失。
-
-\section{高斯分布与最大熵}
-高斯分布把靠近中心的读数看得更常见，把远离中心的读数看得更少见。先看一维：均值$\mu$给中心，标准差$\sigma>0$给横向尺度，$p(x)=\exp[-(x-\mu)^2/(2\sigma^2)]/(\sqrt{2\pi}\sigma)$。多维时用向量$\bm\mu\in\R^d$替代中心，用协方差矩阵$\Sigma\in\R^{d\times d}$替代方差；$|\Sigma|$是行列式，描述体积缩放，不是逐元素绝对值。正定指任意非零$\bm v$都有$\bm v^{\mathsf T}\Sigma\bm v>0$，比半正定更强。
-多元高斯分布写作
-\begin{equation}
- p(\bm{x})=\frac{1}{(2\pi)^{d/2}|\Sigma|^{1/2}}
- \exp\left[-\frac12(\bm{x}-\bm{\mu})^{\mathsf T}\Sigma^{-1}(\bm{x}-\bm{\mu})\right].\label{eq:math-gaussian-density}
-\end{equation}
-均值决定中心，协方差决定椭球的方向和尺度。给定均值和协方差，高斯分布具有最大的微分熵，因此它常作为“只知道一二阶统计量时不过度添加假设”的基线。
-
-\paragraph{密度公式与最大熵结论的条件。}
-式\eqref{eq:math-gaussian-density}的普通密度要求$\Sigma$正定。写$\Sigma=U\Lambda U^{\mathsf T}$，令$\bm z=\Lambda^{-1/2}U^{\mathsf T}(\bm x-\bm\mu)$，则指数中的二次型为$\|\bm z\|_2^2$，变量替换的体积因子为$|\Sigma|^{1/2}$。因此它实际上是独立标准正态密度经旋转、伸缩和平移得到的分布。若$\Sigma$奇异，概率集中在较低维子空间上，不能直接套用含$\Sigma^{-1}$的$d$维密度。
-
-设$q$为具有给定均值和正定协方差的高斯密度，$p$为具有相同矩且相关积分有限的另一密度。因为$\log q$只是常数加二次型，相同的一二阶矩意味着$\E_p\log q=\E_q\log q$。利用下一节证明的库尔贝克--莱布勒散度（Kullback--Leibler divergence，KL散度）的非负性，
-\begin{equation}
- 0\leq\KL(p\|q)=\int p\log p-\int p\log q
- =-h(p)+h(q),\qquad
- h(q)=\frac12\log\bigl((2\pi e)^d|\Sigma|\bigr).
-\end{equation}
-故$h(p)\leq h(q)$。最大熵说的是固定矩约束下不再添加额外分布结构，并不证明现实数据必为高斯。微分熵还会随坐标单位改变，不应直接当成离散事件数目。
-
-\section{熵、交叉熵与 KL 散度}
-一个必然发生的结果没有不确定性，两个等可能结果则较难事先猜中。熵把这种不确定性量化；交叉熵还计入使用了不准确概率的额外代价；KL散度正是这部分差额。本书无特别说明时$\log$是自然对数，信息单位为奈特；改用以$2$为底的对数才以比特计。对$p=(1/2,1/2)$、$q=(3/4,1/4)$，$H(p)=\log2\approx0.693$，$H(p,q)=-\tfrac12\log(3/4)-\tfrac12\log(1/4)\approx0.837$，差额约$0.144$。
-
-熵的信息度量来自 Shannon 的信息论框架，相对熵的统计区分意义可追溯到 Kullback 与 Leibler 的工作\cite{shannon1948information,kullback1951information}。以下公式区分随机性、编码代价与分布差异，三者不能仅因为都使用对数就被视为同一个量。
-离散分布$p$的熵为$H(p)=-\sum_xp(x)\log p(x)$。用$q$编码来自$p$的数据时，平均代价是交叉熵$H(p,q)=-\sum_xp(x)\log q(x)$。两者关系为
-\begin{equation}
- H(p,q)=H(p)+\KL(p\|q),
- \qquad \KL(p\|q)=\sum_xp(x)\log\frac{p(x)}{q(x)}\geq0.\label{eq:math-cross-entropy-kl}
-\end{equation}
-由式\eqref{eq:math-cross-entropy-kl}可知，最小化交叉熵等价于让预测分布接近真实分布。KL 散度不对称，选择$\KL(p\|q)$还是$\KL(q\|p)$会带来不同的近似行为，这一点在变分推断中非常重要。
-
-\begin{example}
- 若故障类别的真实分布为$(0.9,0.1)$，模型给出$(0.6,0.4)$，交叉熵会惩罚模型对高概率类别的低估。若模型输出概率而不是只输出类别，系统还可以根据置信度设置不同告警阈值。
-\end{example}
-
-\paragraph{KL非负性与交叉熵分解。}
-约定$0\log0=0$，若$p(x)>0$但$q(x)=0$，则KL为无穷大。其余情形利用$-\log u\geq1-u$，逐项得到
-\begin{equation}
- \KL(p\|q)=\sum_{p(x)>0}p(x)\left[-\log\frac{q(x)}{p(x)}\right]
- \geq\sum_{p(x)>0}(p(x)-q(x))\geq0.
-\end{equation}
-等号要求两分布相同。再把$\log(p/q)=\log p-\log q$代回求和，立即得到$\KL=H(p,q)-H(p)$。训练时真实分布$p$固定，因而最小化交叉熵与最小化这个方向的KL有相同最优解；用有限样本平均替代期望后，还存在采样误差和模型表达能力限制。
-
-\section{从几何距离到概率距离}
-机器学习中常见的“距离”并不只有欧氏距离。欧氏距离比较两个向量在坐标空间中的位置，余弦距离比较方向，马氏距离（Mahalanobis distance）利用协方差修正不同方向的尺度：
-\begin{equation}
- d_M(x,y)=\sqrt{(x-y)^{\mathsf T}\Sigma^{-1}(x-y)}.
-\end{equation}
-若$\Sigma$刻画的是噪声协方差，这种缩放可降低高噪声方向的影响；若使用全部观测的协方差，大方差还可能来自有用信号，不能直接等同于噪声。下面先比较向量之间的距离，再转向分布之间的差异：
-
-\begin{align}
- d_1(x,y)&=\|x-y\|_1=\sum_{j=1}^{d}|x_j-y_j|,\label{eq:math-manhattan-distance}\\
- d_2(x,y)&=\|x-y\|_2=\sqrt{\sum_{j=1}^{d}(x_j-y_j)^2},\label{eq:math-euclidean-distance}\\
- d_p(x,y)&=\|x-y\|_p=\left(\sum_{j=1}^{d}|x_j-y_j|^p\right)^{1/p},\quad p\geq1,\label{eq:math-minkowski-distance}\\
- d_\infty(x,y)&=\|x-y\|_\infty=\max_{1\leq j\leq d}|x_j-y_j|.\label{eq:math-chebyshev-distance}
-\end{align}
-
-式\eqref{eq:math-manhattan-distance}把各坐标的绝对差直接相加，适合把每个传感器的偏差看成可以分别累积的误差。式\eqref{eq:math-euclidean-distance}对较大的单项差异惩罚更重，常用于连续特征经过同尺度处理后的比较。式\eqref{eq:math-minkowski-distance}把前两者统一起来：$p=1$得到曼哈顿距离，$p=2$得到欧氏距离；当$p$增大时，最大坐标差异的影响逐渐增强。式\eqref{eq:math-chebyshev-distance}只关注最不一致的那个坐标，例如设备的多个安全指标中只要有一项超出容许范围，就把该项作为整体差异的代表。
-
-如果只关心方向而不关心向量长度，可以使用余弦相似度及其对应的余弦距离：
+非零向量的余弦相似度（cosine similarity）与余弦距离（cosine distance）为
 \begin{equation}
  s_{\cos}(x,y)=\frac{x^{\mathsf T}y}{\|x\|_2\|y\|_2},\qquad
- d_{\cos}(x,y)=1-s_{\cos}(x,y),
- \quad x\ne0,\ y\ne0.\label{eq:math-cosine-distance}
+ d_{\cos}(x,y)=1-s_{\cos}(x,y),\quad x\ne0,\ y\ne0.
+ \label{eq:math-cosine-distance}
 \end{equation}
-例如，两台设备的振动频谱一个整体强、一个整体弱，但频率峰的相对分布相似时，余弦距离可能很小，而欧氏距离仍然可能很大。相反，若要比较类别、开关状态或字符串中有多少位置不同，可以使用汉明距离：
+相似度等于夹角余弦，范围为$[-1,1]$。余弦距离的范围为$[0,2]$，但一般不是度量，正比例向量可有零距离，三角不等式也未必成立。对等长离散符号序列，汉明距离（Hamming distance）为
 \begin{equation}
- d_{\mathrm H}(x,y)=\sum_{j=1}^{d}\mathbb{1}\{x_j\ne y_j\},\label{eq:math-hamming-distance}
+ d_{\mathrm H}(x,y)=\sum_{j=1}^d\mathbb{1}\{x_j\ne y_j\}.
+ \label{eq:math-hamming-distance}
 \end{equation}
-它只统计不相同的位置，不表示数值差异的大小，因此不适合直接代替连续传感器变量的欧氏距离。
+它计数不同坐标的位置，在固定长度的同一符号集合上满足度量条件。
 
-概率模型中的 KL 散度比较分布而非单个点：
+\subsection{矩阵乘法与线性变换}
+若$A\in\R^{m\times d}$、$B\in\R^{d\times k}$，则
 \begin{equation}
- \KL(p\|q)=\sum_xp(x)\log\frac{p(x)}{q(x)},\label{eq:math-kl-distance}
+ (AB)_{i\ell}=\sum_{j=1}^d A_{ij}B_{j\ell},\qquad AB\in\R^{m\times k}.
 \end{equation}
-它会把概率质量放错位置的代价纳入比较，因此适合描述预测分布与真实分布之间的差异。不过，KL 散度一般不对称，也可能为无穷大。若希望比较两个分布搬运概率质量所需的“距离”，离散情形还可以使用 Wasserstein距离（Wasserstein distance）：
+相邻的两个维度必须相等。特别地，$A\bm x\in\R^m$且$(A\bm x)_i=\sum_jA_{ij}x_j$。映射$\bm x\mapsto A\bm x$保持加法与数乘，称为线性变换。矩阵乘法满足结合律和分配律，一般不满足交换律。转置满足$(AB)^{\mathsf T}=B^{\mathsf T}A^{\mathsf T}$。对$\bm x\in\R^m$、$\bm y\in\R^d$，外积$\bm x\bm y^{\mathsf T}\in\R^{m\times d}$的元素为$x_iy_j$。
+
+弗罗贝尼乌斯范数（Frobenius norm）与谱范数（spectral norm）定义为
 \begin{equation}
- W_1(p,q)=\min_{\gamma\in\Gamma(p,q)}
- \sum_{a,b}\gamma(a,b)c(a,b),\label{eq:math-wasserstein-distance}
+ \|A\|_{\mathrm F}=\left(\sum_{i,j}A_{ij}^2\right)^{1/2},\qquad
+ \|A\|_2=\sup_{\|\bm x\|_2=1}\|A\bm x\|_2.
 \end{equation}
-其中$\Gamma(p,q)$是边缘分布分别为$p$和$q$的联合分布集合，$c(a,b)$是把质量从$a$搬到$b$的代价。举例来说，把预测的风速分布从“每秒 8 米”移到“每秒 9 米”，Wasserstein 距离会利用这两个数值相近这一事实；KL 散度则只看概率质量在各个取值上的比例。实际使用哪一种距离，取决于特征的尺度、是否关心方向、是否关心最坏坐标，以及分布取值之间是否有自然的距离。
+前者计入全部元素，后者度量单位输入向量的最大输出长度。维度相容时$\|AB\|_2\leq\|A\|_2\|B\|_2$。
 
-\paragraph{手算距离并检查“距离”是否严格。}
-取$x=(0,0)$、$y=(3,4)$，曼哈顿、欧氏和最大坐标距离分别是$7,5,4$。若$\Sigma=\diag(9,16)$，Mahalanobis距离为$\sqrt{3^2/9+4^2/16}=\sqrt2$。严格的度量要求非负、相同点且仅相同点距离为零、对称以及三角不等式；余弦距离一般不是这种度量，两个不同长度的同向向量也可距离为零。Wasserstein公式中的$c$若是底层空间的度量，才具有相应距离解释；任意成本表不自动保证这些性质。
+\section{线性空间、秩、迹、逆与伪逆}
+\subsection{线性无关与秩}
+向量组$\bm v_1,\ldots,\bm v_k$线性无关，是指$\sum_j a_j\bm v_j=\bm0$仅在全部$a_j=0$时成立。全部线性组合构成它们张成的空间。子空间的一组线性无关生成向量称为基，基中向量的个数称为维数。
 
-\section{特征值、主方向与降维}
-特征向量是乘矩阵后仍落在原向量所张成直线上的非零向量，特征值是相应倍数，即$A\bm u=\lambda\bm u$；负特征值会反向，零特征值会把该向量映到零。协方差的特征值非负。主成分分析（Principal Component Analysis，PCA）将样本投影到方差较大的少数方向，用较少的坐标近似表示原始样本。若协方差是$\diag(4,1)$，保留第一坐标就保留$4/(4+1)=80\%$的总方差；丢弃第二坐标的平均平方重构误差为$1$。这里是方差比例，不是分类准确率。
-
-对称矩阵可以正交对角化：$A=U\Lambda U^{\mathsf T}$，其中$U$的列是两两正交、长度为一的特征向量，$\Lambda$是特征值组成的对角矩阵。若$A$是协方差矩阵，按特征值从大到小排列后，第一个方向使投影方差最大，后续方向在与已选方向正交的约束下依次最大；并不是每个特征向量都取得同一个最大方差。PCA选择前$r$个方向，得到投影坐标和重构值
+对$A\in\R^{m\times d}$，列空间与零空间为
 \begin{equation}
- \bm z^{\mathrm{PCA}}=U_r^{\mathsf T}(\bm x-\bar{\bm x}),
- \qquad \hat{\bm x}=U_r\bm z^{\mathrm{PCA}}+\bar{\bm x}.
+ \mathcal C(A)=\{A\bm x:\bm x\in\R^d\}\subseteq\R^m,\qquad
+ \mathcal N(A)=\{\bm x\in\R^d:A\bm x=\bm0\}\subseteq\R^d.
 \end{equation}
-这里的$\bm z^{\mathrm{PCA}}\in\R^r$是单个样本的降维坐标，不要与后文证明中表示中心化样本的$\bm z_i\in\R^d$混淆。训练后须保存均值$\bar{\bm x}$与投影基$U_r$；新样本沿用二者，不能用新样本自身替换均值，否则单样本中心化会把输入变成零。
-它同时可以理解为最大化投影方差，或最小化线性子空间的重构误差。这个双重解释为后文的表示学习和流形学习提供了桥梁。
+列空间包含全部可能输出，零空间包含映射为零的输入。行空间为$\mathcal C(A^{\mathsf T})$。秩（rank）定义为列空间的维数，满足
+\begin{equation}
+ \operatorname{rank}(A)=\operatorname{rank}(A^{\mathsf T}),\qquad
+ \operatorname{rank}(A)+\dim\mathcal N(A)=d.
+\end{equation}
+第二式称为秩--零度定理。正交直和分解为$\R^d=\mathcal C(A^{\mathsf T})\oplus\mathcal N(A)$、$\R^m=\mathcal C(A)\oplus\mathcal N(A^{\mathsf T})$，其中$\oplus$表示两子空间正交，且每个向量有唯一的分解。
 
-\paragraph{从白化到PCA的优化证明。}
-当$\Sigma$正定，令$W=\Lambda^{-1/2}U^{\mathsf T}$，则$d_M(x,y)=\|W(x-y)\|_2$。变换后协方差为$W\Sigma W^{\mathsf T}=I$，这种使协方差成为单位阵的操作称为白化，不同于只缩放各原始特征的标准化。这是先把各主方向除以其标准差再测欧氏距离；但协方差同时含有信号变化和噪声变化，不能无条件把大方差方向都解释为低质量传感器。样本协方差奇异时可考虑$\Sigma+\epsilon I$，代价是改变了原距离。
+秩不超过$\min(m,d)$。秩为$d$称为满列秩，要求$m\geq d$。秩为$m$称为满行秩，要求$m\leq d$。维度相容时，
+\begin{equation}
+ \operatorname{rank}(AB)\leq\min\{\operatorname{rank}(A),\operatorname{rank}(B)\},\qquad
+ \operatorname{rank}(A^{\mathsf T}A)=\operatorname{rank}(A).
+\end{equation}
+后一结论来自$\mathcal N(A^{\mathsf T}A)=\mathcal N(A)$：$A^{\mathsf T}A\bm x=\bm0$蕴含$\|A\bm x\|_2^2=0$，反向蕴含直接成立。
 
-对中心化样本$\bm z_i=\bm x_i-\bar{\bm x}\in\R^d$，定义$S=n^{-1}\sum_i\bm z_i\bm z_i^{\mathsf T}$。单个单位方向$\bm u$的平均投影平方为$\bm u^{\mathsf T}S\bm u$。拉格朗日函数$\bm u^{\mathsf T}S\bm u-\lambda(\bm u^{\mathsf T}\bm u-1)$的驻点满足$S\bm u=\lambda\bm u$；按特征向量展开$\bm u$可知该二次型是特征值的加权平均，最大值因此为最大特征值。
+\subsection{迹与行列式}
+方阵$A\in\R^{d\times d}$的迹（trace）为$\operatorname{tr}(A)=\sum_jA_{jj}$。迹是标量，具有线性性质，且$\operatorname{tr}(A^{\mathsf T})=\operatorname{tr}(A)$。若$A\in\R^{m\times d}$、$B\in\R^{d\times m}$，则
+\begin{equation}
+ \operatorname{tr}(AB)=\sum_{i=1}^m\sum_{j=1}^dA_{ij}B_{ji}=\operatorname{tr}(BA).
+\end{equation}
+循环移动可推广到多个因子，只要各乘积有定义且是方阵。一般不能任意交换因子。另有$\|A\|_{\mathrm F}^2=\operatorname{tr}(A^{\mathsf T}A)$。若$B\in\R^{d\times d}$，则$\bm x^{\mathsf T}B\bm x=\operatorname{tr}(B\bm x\bm x^{\mathsf T})$。
 
-对$U_r\in\R^{d\times r}$且$U_r^{\mathsf T}U_r=I_r$，投影与残差正交，故
+行列式（determinant）是关于方阵各列交替多线性的标量函数，由$\det I_d=1$确定。绝对值表示体积缩放因子，符号表示定向。同阶方阵满足$\det(AB)=\det A\det B$、$\det(A^{\mathsf T})=\det A$。三角矩阵的行列式为对角元素之积。$|A|$也表示行列式。
+
+\subsection{逆与线性方程组}
+若方阵$A\in\R^{d\times d}$存在$A^{-1}$满足$AA^{-1}=A^{-1}A=I_d$，则称为可逆，$A^{-1}$是唯一的逆矩阵（inverse matrix）。可逆等价于$\operatorname{rank}(A)=d$、$\mathcal N(A)=\{\bm0\}$、$\det A\ne0$，也等价于对每个$\bm b\in\R^d$，$A\bm x=\bm b$恰有一个解。可逆同阶方阵满足
+\begin{equation}
+ (AB)^{-1}=B^{-1}A^{-1},\qquad (A^{\mathsf T})^{-1}=(A^{-1})^{\mathsf T}.
+\end{equation}
+对一般$A\in\R^{m\times d}$，方程有解当且仅当$\bm b\in\mathcal C(A)$。若$\bm x_0$为一个解，则全部解为$\bm x_0+\mathcal N(A)$。解存在时，唯一性等价于满列秩。矩形矩阵没有上述双侧逆，但满列秩矩阵有左逆，满行秩矩阵有右逆。
+
+\subsection{穆尔--彭罗斯伪逆}
+每个$A\in\R^{m\times d}$均有唯一的穆尔--彭罗斯伪逆（Moore--Penrose pseudoinverse）$A^+\in\R^{d\times m}$，定义条件为
+\begin{align}
+ AA^+A&=A,&A^+AA^+&=A^+,\\
+ (AA^+)^{\mathsf T}&=AA^+,&(A^+A)^{\mathsf T}&=A^+A.
+\end{align}
+可逆方阵的伪逆等于逆。满列秩时$A^+=(A^{\mathsf T}A)^{-1}A^{\mathsf T}$，满行秩时$A^+=A^{\mathsf T}(AA^{\mathsf T})^{-1}$。一般构造将在奇异值分解中给出。
+
+$AA^+$是到列空间的正交投影，$A^+A$是到行空间的正交投影。对任意$\bm b\in\R^m$，$A^+\bm b$是使$\|A\bm x-\bm b\|_2$最小的全部解中范数最小的唯一解。全部最小平方残差解为
+\begin{equation}
+ \bm x=A^+\bm b+(I_d-A^+A)\bm z,\qquad\bm z\in\R^d.
+\end{equation}
+其输出均为$\bm b$到列空间的投影。第二项属于零空间，与行空间中的$A^+\bm b$正交，加入非零第二项会增大解的范数。
+
+\section{正交投影与正定性}
+\subsection{正交矩阵与投影}
+方阵$U\in\R^{d\times d}$满足$U^{\mathsf T}U=I_d$时称为正交矩阵（orthogonal matrix）。它也满足$UU^{\mathsf T}=I_d$，故$U^{-1}=U^{\mathsf T}$。正交变换保持内积与欧氏范数。
+
+若$U_r\in\R^{d\times r}$满足$U_r^{\mathsf T}U_r=I_r$，其列为一个$r$维子空间的标准正交基。令$P=U_rU_r^{\mathsf T}$，则
+\begin{equation}
+ \bm x=P\bm x+(I_d-P)\bm x,\qquad
+ \|\bm x\|_2^2=\|P\bm x\|_2^2+\|(I_d-P)\bm x\|_2^2.
+\end{equation}
+两项分别位于该子空间及其正交补。$P=P^{\mathsf T}$、$P^2=P$分别表达正交性与重复投影不改变结果。对称且幂等的实矩阵均为正交投影矩阵。
+
+单位向量$\bm u$张成的直线具有投影$\bm u\bm u^{\mathsf T}\bm x$。其系数由
+\begin{equation}
+ \frac{d}{da}\|\bm x-a\bm u\|_2^2=-2\bm u^{\mathsf T}\bm x+2a=0
+ \label{eq:math-projection-stationarity}
+\end{equation}
+确定。这里$\|\bm u\|_2=1$、$a\in\R$，二阶导数为$2$，故$a=\bm u^{\mathsf T}\bm x$是唯一最小点。非单位的非零向量具有系数$\bm u^{\mathsf T}\bm x/(\bm u^{\mathsf T}\bm u)$。
+
+\subsection{二次型与正定矩阵}
+实方阵$A\in\R^{d\times d}$满足$A=A^{\mathsf T}$时称为对称矩阵（symmetric matrix）。本章对实对称矩阵定义正定性：
+\begin{align}
+ A\succeq0&\ \Longleftrightarrow\ \bm v^{\mathsf T}A\bm v\geq0\quad\text{对所有 }\bm v\in\R^d,\\
+ A\succ0&\ \Longleftrightarrow\ \bm v^{\mathsf T}A\bm v>0\quad\text{对所有非零 }\bm v\in\R^d.
+\end{align}
+第一种性质称为半正定（positive semidefinite，PSD），第二种称为正定（positive definite，PD）。标量$\bm v^{\mathsf T}A\bm v$称为二次型。负定与半负定分别由$-A\succ0$与$-A\succeq0$定义。二次型既取正值又取负值时称为不定。任意实方阵的二次型只取决于对称部分$(A+A^{\mathsf T})/2$。
+
+对称矩阵之间记$A\succeq B$表示$A-B\succeq0$。半正定矩阵的非负系数线性组合仍半正定。若$A\succeq0$、$C\in\R^{d\times k}$，则$C^{\mathsf T}AC\succeq0$，因为对$\bm z\in\R^k$有
+\begin{equation}
+ \bm z^{\mathsf T}C^{\mathsf T}AC\bm z=(C\bm z)^{\mathsf T}A(C\bm z)\geq0.
+\end{equation}
+若$A\succ0$，则$C^{\mathsf T}AC$正定当且仅当$C$满列秩。任意$B\in\R^{m\times d}$都有$B^{\mathsf T}B\succeq0$，且正定当且仅当$B$满列秩。
+
+正定矩阵必可逆，逆矩阵也正定。半正定矩阵可能奇异，但任意$\epsilon>0$均使$A+\epsilon I_d\succ0$。西尔维斯特判据（Sylvester criterion）指出，对称矩阵正定等价于全部顺序主子式为正。顺序主子式是前$k$行、前$k$列形成方阵的行列式。半正定等价于全部主子式非负，主子式允许选取任意相同的行列指标，仅检查顺序主子式不足以判定半正定。
+
+\subsection{分块矩阵与舒尔补}
+设对称分块矩阵为
+\begin{equation}
+ M=\begin{pmatrix}A&B\\B^{\mathsf T}&C\end{pmatrix},\qquad
+ A\in\R^{d\times d},\ B\in\R^{d\times k},\ C\in\R^{k\times k}.
+\end{equation}
+若$A\succ0$，则$S=C-B^{\mathsf T}A^{-1}B$称为关于$A$的舒尔补（Schur complement）。配方给出
+\begin{equation}
+ \begin{pmatrix}\bm x\\\bm y\end{pmatrix}^{\mathsf T}M
+ \begin{pmatrix}\bm x\\\bm y\end{pmatrix}
+ =(\bm x+A^{-1}B\bm y)^{\mathsf T}A(\bm x+A^{-1}B\bm y)+\bm y^{\mathsf T}S\bm y.
+\end{equation}
+这里$\bm x\in\R^d$、$\bm y\in\R^k$。在$A\succ0$的前提下，$M\succ0$等价于$S\succ0$，$M\succeq0$等价于$S\succeq0$。
+
+\section{矩阵分解}
+矩阵分解将一个矩阵表示为结构较简单的矩阵的乘积。三角矩阵便于逐项解方程，正交矩阵保持欧氏长度，对角矩阵使各坐标的作用分离。各分解的存在条件不同。
+
+\subsection{LU 分解}
+下三角--上三角分解（Lower--Upper decomposition，LU 分解）写为$A=LU$，其中$L$为单位下三角矩阵，$U$为上三角矩阵。非奇异方阵$A\in\R^{d\times d}$的全部顺序主子式非零时，这样的分解存在且唯一。
+
+一般非奇异方阵需要允许交换行，形式为
+\begin{equation}
+ PA=LU,\qquad P,L,U\in\R^{d\times d}.
+\end{equation}
+$P$为置换矩阵，满足$P^{-1}=P^{\mathsf T}$。通过选择非零主元，任意非奇异方阵均有这一分解。求解$A\bm x=\bm b$可依次解$L\bm z=P\bm b$、$U\bm x=\bm z$，分别从首行向末行、从末行向首行代入。选主元有助于控制舍入误差，但不能消除方程对扰动的敏感性。
+
+\subsection{QR 分解}
+正交--三角分解（Orthogonal--Triangular decomposition，QR 分解）对任意$A\in\R^{m\times d}$存在：
+\begin{equation}
+ A=QR,\qquad Q\in\R^{m\times m},\quad Q^{\mathsf T}Q=I_m,\quad R\in\R^{m\times d}.
+\end{equation}
+$R$为上梯形矩阵，即$i>j$时$R_{ij}=0$。当$m\geq d$时，可取简化形式$A=Q_1R_1$，其中$Q_1\in\R^{m\times d}$、$Q_1^{\mathsf T}Q_1=I_d$、$R_1\in\R^{d\times d}$为上三角矩阵。$A$满列秩且规定$R_1$对角元素为正时，简化分解唯一。
+
+正交分解给出
+\begin{equation}
+ \|A\bm x-\bm b\|_2^2=\|R_1\bm x-Q_1^{\mathsf T}\bm b\|_2^2
+ +\|(I_m-Q_1Q_1^{\mathsf T})\bm b\|_2^2.
+\end{equation}
+这里$\bm x\in\R^d$、$\bm b\in\R^m$。满列秩时，最小平方残差解由$R_1\bm x=Q_1^{\mathsf T}\bm b$唯一确定。秩不足时$R_1$奇异，不能使用唯一解结论。豪斯霍尔德反射（Householder reflection）和吉文斯旋转（Givens rotation）可通过正交变换构造 QR 分解。
+
+\subsection{特征分解}
+若$A\in\R^{d\times d}$与非零向量$\bm u$满足$A\bm u=\lambda\bm u$，则$\lambda$称为特征值（eigenvalue），$\bm u$称为特征向量（eigenvector）。特征值是$\det(A-\lambda I_d)=0$的根，一般实矩阵可能有复特征值。
+
+在所讨论数域上，$A$有$d$个线性无关的特征向量时称为可对角化，此时
+\begin{equation}
+ A=V\Lambda V^{-1},\qquad\Lambda=\diag(\lambda_1,\ldots,\lambda_d).
+\end{equation}
+$V$的列为特征向量。一般方阵未必可对角化。不同特征值的特征向量线性无关，因此$d$个互异特征值足以保证可对角化。
+
+实对称矩阵的谱定理（spectral theorem）保证特征值为实数，且
+\begin{equation}
+ A=U\Lambda U^{\mathsf T},\qquad U^{\mathsf T}U=I_d.
+\end{equation}
+由$\bm v=U\bm z$得到$\bm v^{\mathsf T}A\bm v=\sum_j\lambda_jz_j^2$。所以半正定等价于全部特征值非负，正定等价于全部特征值为正。另有
+\begin{equation}
+ \operatorname{tr}(A)=\sum_j\lambda_j,\qquad\det A=\prod_j\lambda_j,\qquad
+ \lambda_{\min}\leq\frac{\bm v^{\mathsf T}A\bm v}{\bm v^{\mathsf T}\bm v}\leq\lambda_{\max}.
+\end{equation}
+最后一式要求$\bm v\ne\bm0$，比值称为瑞利商（Rayleigh quotient），端点由对应特征向量达到。一般方阵的迹与行列式仍等于特征值之和与之积，按代数重数计入。
+
+半正定矩阵有唯一的对称半正定平方根$A^{1/2}=U\diag(\sqrt{\lambda_j})U^{\mathsf T}$。正定时还可定义$A^{-1/2}=U\diag(\lambda_j^{-1/2})U^{\mathsf T}$。重特征值空间内的标准正交基不唯一，但这些矩阵函数不依赖基的选择。
+
+\subsection{奇异值分解}
+奇异值分解（Singular Value Decomposition，SVD）对任意$A\in\R^{m\times d}$存在：
+\begin{equation}
+ A=U\Sigma V^{\mathsf T},\qquad U\in\R^{m\times m},\quad
+ V\in\R^{d\times d},\quad\Sigma\in\R^{m\times d}.
+\end{equation}
+$U,V$均正交。令$q=\min(m,d)$，$\Sigma$只在$(j,j)$位置可能非零，且$\sigma_1\geq\cdots\geq\sigma_q\geq0$，称为奇异值（singular values）。此处$\Sigma$为奇异值矩阵，概率部分的同一字母表示协方差矩阵，须按所在公式区分。
+
+若$r=\operatorname{rank}(A)$，则恰有$r$个正奇异值。取相应列组成$U_r\in\R^{m\times r}$、$V_r\in\R^{d\times r}$，得到
+\begin{align}
+ A&=U_r\diag(\sigma_1,\ldots,\sigma_r)V_r^{\mathsf T},\\
+ A^+&=V_r\diag(\sigma_1^{-1},\ldots,\sigma_r^{-1})U_r^{\mathsf T}.
+\end{align}
+零矩阵的伪逆为零。也可写$A^+=V\Sigma^+U^{\mathsf T}$，$\Sigma^+\in\R^{d\times m}$将正奇异值取倒数，将零奇异值保持为零。
+
+因为$A^{\mathsf T}A=V\Sigma^{\mathsf T}\Sigma V^{\mathsf T}$，其非零特征值为$\sigma_j^2$，且$\|A\|_2=\sigma_1$、$\|A\|_{\mathrm F}^2=\sum_j\sigma_j^2$。对$0\leq k<r$，截断矩阵$A_k=\sum_{j=1}^k\sigma_j\bm u_j\bm v_j^{\mathsf T}$的秩至多为$k$，满足低秩近似定理：
+\begin{equation}
+ \min_{\operatorname{rank}(B)\leq k}\|A-B\|_2=\sigma_{k+1},\qquad
+ \min_{\operatorname{rank}(B)\leq k}\|A-B\|_{\mathrm F}^2=\sum_{j=k+1}^q\sigma_j^2.
+\end{equation}
+$A_k$达到这两个最小值。把正的小奇异值置零会改变矩阵及其伪逆，所得矩阵一般不是原矩阵的精确伪逆。
+
+\subsection{Cholesky 与对称分解}
+实对称正定矩阵$A\in\R^{d\times d}$具有唯一的乔列斯基分解（Cholesky decomposition）$A=LL^{\mathsf T}$，其中$L$是对角元素严格为正的下三角矩阵。反过来，可逆下三角矩阵$L$使$LL^{\mathsf T}$正定。解方程可依次解$L\bm z=\bm b$与$L^{\mathsf T}\bm x=\bm z$。同时$\det A=\prod_jL_{jj}^2$，故$\log\det A=2\sum_j\log L_{jj}$。
+
+半正定矩阵可写为$BB^{\mathsf T}$，但$B$可能秩不足，不能要求严格正对角元素的 Cholesky 因子。对称不定矩阵可使用带对称置换的$PAP^{\mathsf T}=LDL^{\mathsf T}$，其中$L$为单位下三角矩阵，$D$为具有$1\times1$或$2\times2$对角块的对称分块对角矩阵。允许$2\times2$块可处理无法使用标量主元的情形。
+
+\subsection{条件数与投影恒等式}
+可逆方阵的二范数条件数（condition number）为
+\begin{equation}
+ \kappa_2(A)=\|A\|_2\|A^{-1}\|_2=\frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}\geq1.
+\end{equation}
+若$A\bm x=\bm b$且只扰动右端，$\delta\bm x=A^{-1}\delta\bm b$。当$\bm b\ne\bm0$时，
+\begin{equation}
+ \frac{\|\delta\bm x\|_2}{\|\bm x\|_2}
+ \leq\kappa_2(A)\frac{\|\delta\bm b\|_2}{\|\bm b\|_2}.
+\end{equation}
+可逆性保证解唯一，条件数描述对扰动的敏感性。条件数很大时称为病态。满列秩矩形矩阵也可定义$\kappa_2(A)=\sigma_1/\sigma_d$，此时$\kappa_2(A^{\mathsf T}A)=\kappa_2(A)^2$。数学秩以严格为零为准，数值秩还需给定尺度和容差。
+
+设$\bm z_i\in\R^d$、$S=n^{-1}\sum_{i=1}^n\bm z_i\bm z_i^{\mathsf T}$、$n\geq1$，且$U_r^{\mathsf T}U_r=I_r$。由正交分解与迹的性质，
 \begin{align}
  \frac1n\sum_i\|\bm z_i-U_rU_r^{\mathsf T}\bm z_i\|_2^2
- &=\frac1n\sum_i\bigl(\|\bm z_i\|_2^2-\|U_r^{\mathsf T}\bm z_i\|_2^2\bigr)\\
- &=\operatorname{tr}(S)-\operatorname{tr}(U_r^{\mathsf T}SU_r).\label{eq:math-pca-reconstruction}
+ &=\frac1n\sum_i(\|\bm z_i\|_2^2-\|U_r^{\mathsf T}\bm z_i\|_2^2)\\
+ &=\operatorname{tr}(S)-\operatorname{tr}(U_r^{\mathsf T}SU_r).
+ \label{eq:math-pca-reconstruction}
 \end{align}
-式\eqref{eq:math-pca-reconstruction}中，$\operatorname{tr}$表示对角元素之和。在$S$的特征基中，后一迹是特征值按各方向保留程度的加权和，权重在$[0,1]$内且总和为$r$，所以保留最大的$r$个特征值达到最大值，最小重构误差为$\sum_{j>r}\lambda_j$。重根时最优基不唯一；大方差也不必与故障标签有关，PCA最优的是重构，不是分类。
+这里$S\in\R^{d\times d}$半正定，不要求$\bm z_i$来自随机抽样。若$S$的特征值按$\lambda_1\geq\cdots\geq\lambda_d\geq0$排列，则在全部$r$维子空间上，右端最小值为$\sum_{j>r}\lambda_j$。在特征基中，保留的迹为$\sum_j\lambda_jw_j$，其中$0\leq w_j\leq1$、$\sum_jw_j=r$，将权重配置给最大的$r$个特征值即可达到最大值。重根可能使最优子空间不唯一。
 
-\section{微分、积分与期望的对应}
-连续概率密度的积分必须等于一；离散概率则通过求和归一化。对参数化密度$p_\theta(x)$，当分布本身也依赖参数时，采样分布的变化也必须被考虑：
+\section{微积分工具}
+\subsection{导数、全微分与链式法则}
+函数$f$在$x$的导数为$f'(x)=\lim_{h\to0}[f(x+h)-f(x)]/h$，前提是极限存在。对$f:\R^d\to\R$，偏导数只沿一个坐标方向取极限。各偏导数存在并不自动保证全微分存在。若存在$\bm g\in\R^d$使
 \begin{equation}
- \nabla_\theta\mathbb{E}_{x\sim p_\theta}[f_\theta(x)]
- \neq \mathbb{E}_{x\sim p_\theta}[\nabla_\theta f_\theta(x)].\label{eq:math-expectation-gradient-warning}
+ f(\bm x+\bm h)=f(\bm x)+\bm g^{\mathsf T}\bm h+o(\|\bm h\|_2),
 \end{equation}
-这里有两种变化要一起计算：参数改变后，同一个样本上的函数值会变，抽到各个样本的概率也可能变。普通监督学习通常把训练样本固定，只需处理前一种变化；变分推断中的采样分布也要学习，因此常用重参数化技巧或得分函数估计来处理后一种变化。
+则$f$在$\bm x$可微。$\bm g=\nabla f(\bm x)$称为梯度（gradient），分量为各偏导数。小量$o(\|\bm h\|_2)$除以$\|\bm h\|_2$后趋于零。偏导数在邻域内连续是可微的充分条件。
 
-\paragraph{把缺少的梯度项补出来。}
-式\eqref{eq:math-expectation-gradient-warning}的$\neq$应理解为一般不能直接交换，并非所有函数都严格不等。若积分支撑集不随$\theta$变化，密度与函数可微，且存在允许微分与积分交换的可积控制函数，则乘积法则给出
+对$\bm f:\R^d\to\R^m$，雅可比矩阵（Jacobian matrix）为$D\bm f=(\partial f_i/\partial x_j)_{i,j}\in\R^{m\times d}$。可微时，$\bm f(\bm x+\bm h)=\bm f(\bm x)+D\bm f(\bm x)\bm h+o(\|\bm h\|_2)$。若$\bm g:\R^m\to\R^k$也可微，链式法则（chain rule）给出
+\begin{equation}
+ D(\bm g\circ\bm f)(\bm x)=D\bm g(\bm f(\bm x))D\bm f(\bm x)\in\R^{k\times d}.
+\end{equation}
+当$g$为标量函数时，$\nabla(g\circ\bm f)=(D\bm f)^{\mathsf T}\nabla g\in\R^d$。
+
+\subsection{二阶导数与泰勒展开}
+海森矩阵（Hessian matrix）为$H_f=(\partial^2 f/\partial x_i\partial x_j)_{i,j}\in\R^{d\times d}$。若二阶偏导数在邻域内连续，混合偏导数可交换，$H_f$对称，且二阶泰勒展开（Taylor expansion）为
+\begin{equation}
+ f(\bm x+\bm h)=f(\bm x)+\nabla f(\bm x)^{\mathsf T}\bm h
+ +\frac12\bm h^{\mathsf T}H_f(\bm x)\bm h+o(\|\bm h\|_2^2).
+\end{equation}
+可微函数沿方向$\bm v$的方向导数为$\nabla f^{\mathsf T}\bm v$。梯度非零时，柯西--施瓦茨不等式说明单位方向中的最小方向导数为$-\|\nabla f\|_2$，由负梯度的单位方向取得。这保证足够小的正位移使函数下降。
+
+定义域内部的可微局部极小点必须满足$\nabla f=\bm0$。二阶连续可微时，该点还必须满足$H_f\succeq0$。若驻点满足$H_f\succ0$，则为严格局部极小点。仅半正定不足以判定极小点。
+
+\subsection{矩阵微分}
+对固定$A\in\R^{d\times d}$、$\bm b\in\R^d$，
+\begin{equation}
+ \nabla_{\bm x}(\bm b^{\mathsf T}\bm x)=\bm b,\qquad
+ \nabla_{\bm x}(\bm x^{\mathsf T}A\bm x)=(A+A^{\mathsf T})\bm x.
+\end{equation}
+第二式由$d(\bm x^{\mathsf T}A\bm x)=(d\bm x)^{\mathsf T}A\bm x+\bm x^{\mathsf T}A\,d\bm x$得到。$A$对称时梯度为$2A\bm x$。
+
+对固定$A\in\R^{m\times d}$、$\bm b\in\R^m$，$F(\bm x)=\tfrac12\|A\bm x-\bm b\|_2^2$满足
+\begin{equation}
+ dF=(A\bm x-\bm b)^{\mathsf T}A\,d\bm x,\quad
+ \nabla F=A^{\mathsf T}(A\bm x-\bm b),\quad H_F=A^{\mathsf T}A.
+\end{equation}
+梯度为$d$维，海森矩阵为$d\times d$且半正定。
+
+对可微变化的可逆方阵，
+\begin{equation}
+ d(A^{-1})=-A^{-1}(dA)A^{-1},\qquad
+ d\log|\det A|=\operatorname{tr}(A^{-1}dA).
+\end{equation}
+第一式由$d(AA^{-1})=0$推得，第二式在可逆矩阵邻域内成立。正定时可写$\log\det A$。对矩阵函数$F(A)$，可由$dF=\operatorname{tr}((\nabla_A F)^{\mathsf T}dA)$定义同维度的矩阵梯度。
+
+\subsection{积分与变量替换}
+若$f$连续且$F'=f$，微积分基本定理给出$\int_a^b f(x)\,dx=F(b)-F(a)$。若$u,v$连续可微，分部积分为$\int_a^b uv'\,dx=[uv]_a^b-\int_a^b u'v\,dx$。
+
+若$\bm x=\bm g(\bm z)$为开集之间一一、连续可微且逆也连续可微的变换，则
+\begin{equation}
+ \int_{\mathcal X}f(\bm x)\,d\bm x
+ =\int_{\mathcal Z}f(\bm g(\bm z))|\det D\bm g(\bm z)|\,d\bm z.
+\end{equation}
+这里$\mathcal X,\mathcal Z\subseteq\R^d$，雅可比矩阵为$d\times d$，要求$f$非负或绝对可积。行列式绝对值是体积因子。非负函数可交换积分次序，这是托内利定理（Tonelli theorem）。绝对可积函数也可交换次序，这是富比尼定理（Fubini theorem）。缺少这些条件时，不能任意交换积分或求和次序。
+
+\section{概率空间、随机变量与分布}
+\subsection{事件与概率}
+概率空间（probability space）是三元组$(\Omega,\mathcal F,P)$。$\Omega$为所有可能结果组成的样本空间。$\mathcal F$为事件组成的$\sigma$代数，包含$\Omega$，对补集与可数并封闭。概率测度$P$定义在$\mathcal F$上，满足
+\begin{equation}
+ P(A)\geq0,\qquad P(\Omega)=1,\qquad
+ P\left(\bigcup_{i=1}^\infty A_i\right)=\sum_{i=1}^\infty P(A_i)
+\end{equation}
+最后一式要求$A_i$两两不交。公理蕴含$P(\varnothing)=0$、$P(A^{\mathrm c})=1-P(A)$及$P(A\cup B)=P(A)+P(B)-P(A\cap B)$。
+
+若$P(B)>0$，条件概率（conditional probability）定义为$P(A\mid B)=P(A\cap B)/P(B)$。它在$B$内重新归一化。事件$A,B$独立（independent）是指$P(A\cap B)=P(A)P(B)$。相互独立要求任意有限子集的交事件概率等于相应概率之积，比两两独立更强。
+
+\subsection{随机变量与分布函数}
+随机变量（random variable）是可测映射$X:\Omega\to\R$，即对每个实数$t$都有$\{X\leq t\}\in\mathcal F$。分布由$P_X(B)=P(X\in B)$确定，$B$为实数上的可测集合。大写$X$表示随机变量，小写$x$表示可能取值。分布函数（cumulative distribution function，CDF）为$F_X(t)=P(X\leq t)$，它单调不减、右连续，在$t\to-\infty$与$t\to+\infty$时分别趋于$0$与$1$。区间概率为$P(a<X\leq b)=F_X(b)-F_X(a)$。
+
+离散随机变量的取值至多可数，概率质量函数（probability mass function，PMF）为$p_X(x)=P(X=x)$，满足$p_X(x)\geq0$与$\sum_xp_X(x)=1$。分布相对于勒贝格测度绝对连续时，存在概率密度函数（probability density function，PDF），满足
+\begin{equation}
+ P(X\in B)=\int_Bp_X(x)\,dx,\qquad p_X(x)\geq0,\qquad\int_{\R}p_X(x)\,dx=1.
+\end{equation}
+这时$F_X(t)=\int_{-\infty}^t p_X(x)\,dx$，几乎处处有$F_X'=p_X$。密度可大于$1$，但单点概率为零。密度量纲是变量量纲的倒数，积分后概率无量纲。一般分布可能有离散或奇异连续部分，不能假定每个分布都有普通密度。
+
+随机向量$\bm X=(X_1,\ldots,X_d)^{\mathsf T}$是到$\R^d$的可测映射。多维密度相对于$d$维勒贝格测度定义，积分覆盖全部坐标。
+
+\subsection{联合、边缘、条件与独立}
+联合分布（joint distribution）描述共同取值。有联合密度$p(x,y)$时，边缘密度（marginal density）为$p_X(x)=\int p(x,y)\,dy$。离散变量使用求和。无歧义时用$p(x)$代替$p_X(x)$。
+
+在$p(x)>0$处，条件密度或条件质量函数满足
+\begin{equation}
+ p(x,y)=p(y\mid x)p(x),\qquad p(y\mid x)=\frac{p(x,y)}{p(x)}.
+ \label{eq:math-conditional-probability}
+\end{equation}
+条件分布在$y$上归一化。连续情形不能将其写成两个单点概率相除。条件分布仅需在$X$的分布下几乎处处定义，$p(x)=0$处不由比值确定。多变量链式法则为$p(x_1,\ldots,x_d)=p(x_1)\prod_{j=2}^d p(x_j\mid x_1,\ldots,x_{j-1})$，在条件分布有定义处使用。
+
+$X,Y$独立，是指任意可测集合$B,C$满足$P(X\in B,Y\in C)=P(X\in B)P(Y\in C)$。有联合密度时，等价于$p(x,y)=p(x)p(y)$几乎处处成立。给定$Z$时条件独立（conditional independence）记为$X\perp Y\mid Z$，密度形式为
+\begin{equation}
+ p(x,y\mid z)=p(x\mid z)p(y\mid z)
+\end{equation}
+对$Z$的分布下几乎所有$z$成立。独立与条件独立一般不能互相推出。
+
+\section{期望、方差与协方差}
+\subsection{期望与矩}
+若$\E|g(X)|<\infty$，期望（expectation）为
+\begin{equation}
+ \E[g(X)]=\sum_xg(x)p_X(x)\quad\text{或}\quad
+ \E[g(X)]=\int g(x)p_X(x)\,dx.
+\end{equation}
+前式针对离散分布，后式针对有密度的分布。一般定义是对分布测度积分。非负函数允许期望为$+\infty$，但正负部分均为无穷时不能定义为它们的差。均值为$\mu=\E X$，$k$阶原点矩为$\E[X^k]$，中心矩为$\E[(X-\mu)^k]$，均需检查存在条件。
+
+期望具有线性性质，不要求变量独立。若$X,Y$独立且绝对可积，则$\E[XY]=\E X\E Y$。对凸函数$\phi$，若$X$与$\phi(X)$可积，詹森不等式（Jensen inequality）为$\phi(\E X)\leq\E[\phi(X)]$。
+
+\subsection{方差与协方差}
+若$\E[X^2]<\infty$，方差（variance）与标准差（standard deviation）为
+\begin{equation}
+ \Var(X)=\E[(X-\mu)^2]=\E[X^2]-\mu^2,\qquad
+ \operatorname{sd}(X)=\sqrt{\Var(X)}.
+\end{equation}
+方差非负，且为零当且仅当$X=\mu$几乎必然成立。方差量纲为$X$量纲的平方，标准差与$X$同量纲。常数$a,b$满足$\Var(aX+b)=a^2\Var(X)$。
+
+若$X,Y$有有限二阶矩，协方差（covariance）为
 \begin{align}
- \nabla_\theta\int f_\theta(x)p_\theta(x)\,dx
- &=\int\bigl[p_\theta(x)\nabla_\theta f_\theta(x)
-       +f_\theta(x)\nabla_\theta p_\theta(x)\bigr]dx\\
- &=\E_{p_\theta}[\nabla_\theta f_\theta(X)]
-   +\E_{p_\theta}[f_\theta(X)\nabla_\theta\log p_\theta(X)].\label{eq:math-score-gradient}
+ \operatorname{Cov}(X,Y)&=\E[(X-\E X)(Y-\E Y)],\\
+ \Var(X+Y)&=\Var(X)+\Var(Y)+2\operatorname{Cov}(X,Y).
 \end{align}
-式\eqref{eq:math-score-gradient}的第二项就是采样分布变化的贡献。若可写$X=\mu+\sigma\varepsilon$、$\varepsilon\sim\mathcal N(0,1)$且$\sigma>0$，也可对固定噪声分布下的$f_\theta(\mu+\sigma\varepsilon)$使用链式法则。若支撑集依赖参数，例如$X\sim\operatorname{Uniform}(0,\theta)$，则还要处理积分边界，不能机械使用式\eqref{eq:math-score-gradient}。
+独立蕴含协方差为零，反向结论一般不成立。两方差均为正时，相关系数（correlation coefficient）为$\rho_{XY}=\operatorname{Cov}(X,Y)/(\operatorname{sd}(X)\operatorname{sd}(Y))\in[-1,1]$，它无量纲。任一方差为零时，相关系数无定义。
 
-\paragraph{一个不能漏掉分布变化的例子。}
-令$X\in\{0,1\}$、$P_\theta(X=1)=\theta$，$0<\theta<1$，且$f(X)=X$不显含参数。由于$\E_\theta X=\theta$，其导数为$1$；但固定$X$求导得$\partial f/\partial\theta=0$。缺少的$1$完全来自概率权重的变化。离散情形把积分换成求和即可看清这一点。
-
-\section{数值稳定性}
-计算机只能保存有限范围和精度的数。NaN（Not a Number，非数值）表示运算没有得到可表示的有效数，不是很大的正常损失。softmax把一组实数得分变成总和为一的概率：第$i$项为$\exp(a_i)/\sum_j\exp(a_j)$。所有得分减去同一个常数不会改变概率；例如得分$(1000,1000)$应给出$(1/2,1/2)$，减去$1000$后计算$(1,1)/2$，就不必先算可能溢出的$e^{1000}$。
-
-概率模型经常使用对数概率。直接计算$\exp(a)$可能溢出，通常使用
+有有限二阶矩的$\bm X\in\R^d$具有均值$\bm\mu=\E\bm X$及协方差矩阵$\Sigma=\E[(\bm X-\bm\mu)(\bm X-\bm\mu)^{\mathsf T}]\in\R^{d\times d}$。第$(i,j)$个元素为$\operatorname{Cov}(X_i,X_j)$，且
 \begin{equation}
- \log\sum_i\exp(a_i)=m+\log\sum_i\exp(a_i-m),\qquad m=\max_i a_i.
+ \bm v^{\mathsf T}\Sigma\bm v=\E[(\bm v^{\mathsf T}(\bm X-\bm\mu))^2]
+ =\Var(\bm v^{\mathsf T}\bm X)\geq0.
+ \label{eq:math-covariance-psd}
 \end{equation}
-这称为对数指数和（log-sum-exp）计算。减去最大得分后，每个指数项都不超过$1$，从而避免较大正得分造成指数溢出。softmax和交叉熵的实现常使用这一形式。如果损失或梯度出现非数值（Not a Number，NaN），后续参数更新也可能失效，因此训练时需要检查数值是否有限。
+此式对任意$\bm v\in\R^d$成立，证明$\Sigma$对称半正定。它正定当且仅当每个非零线性组合均有正方差。固定$B\in\R^{m\times d}$、$\bm b\in\R^m$时，$\E[B\bm X+\bm b]=B\bm\mu+\bm b$，$\operatorname{Cov}(B\bm X+\bm b)=B\Sigma B^{\mathsf T}$。
 
-\section{本章小结：看到公式时问什么}
-面对一个新公式，先问变量是确定量还是随机量，再问每一项的维度和求和范围；然后检查它是在拟合条件均值、概率分布、几何结构还是约束；最后确认该量在训练和推理阶段是否都可计算。这个检查顺序把符号阅读转化为模型理解。
+\subsection{条件期望与全方差}
+对可积$Y$，条件期望$\E[Y\mid X]$是$X$的可积函数，满足对任意有界可测$g$都有$\E[g(X)\E[Y\mid X]]=\E[g(X)Y]$。它几乎处处唯一。存在条件密度时，$\mu(x)=\E[Y\mid X=x]=\int yp(y\mid x)\,dy$，离散时使用求和。
 
-本章的几条推导可以连起来阅读：投影把逼近误差分解为可表达部分和残差；条件均值把预测误差分解为可约误差和条件波动；KL把交叉熵分解为真实分布自身的不确定性和模型失配。它们共同提醒读者，优化只能改变目标中的某些项，不能凭空补充缺失的信息，也不能消除模型假设的边界。
+条件期望具有线性性质，满足塔式法则$\E[\E[Y\mid X]]=\E Y$。有界可测$g$还满足$\E[g(X)Y\mid X]=g(X)\E[Y\mid X]$。
 
-下一章把这些运算用到具体任务中：一段振动记录算一个样本，还是一次完整运行算一个样本？要预测平均温度、温度的某个分位数，还是故障概率？这些选择会决定标签和损失，也决定本章的公式该用在哪里。
+若$\E[Y^2]<\infty$，定义$\Var(Y\mid X)=\E[(Y-\E[Y\mid X])^2\mid X]$。对任意常数$a\in\R$，在条件二阶矩有限处展开平方：
+\begin{align}
+ \E[(Y-a)^2\mid X=x]
+ &=\E[(Y-\mu(x))^2\mid X=x]
+ +2(\mu(x)-a)\E[Y-\mu(x)\mid X=x]+(\mu(x)-a)^2\\
+ &=\Var(Y\mid X=x)+(\mu(x)-a)^2.
+ \label{eq:math-conditional-mse}
+\end{align}
+交叉项由条件均值为零而消失，所以条件平方偏差在$a=\mu(x)$处取得唯一最小值，不需要分布形状假设。
+
+将$Y-\E Y=(Y-\E[Y\mid X])+(\E[Y\mid X]-\E Y)$平方并取期望。交叉项先对$X$条件化后为零，故
+\begin{equation}
+ \Var(Y)=\E[\Var(Y\mid X)]+\Var(\E[Y\mid X]).
+ \label{eq:math-total-variance}
+\end{equation}
+这称为全方差公式（law of total variance），要求有限二阶矩。
+
+\section{常用概率分布}
+本节给出分布的定义、参数范围与基本性质。质量函数与密度在指定支撑集之外均取零。$X\sim\mathcal D$表示$X$服从分布$\mathcal D$。
+
+\subsection{离散分布}
+伯努利分布（Bernoulli distribution）$X\sim\operatorname{Bernoulli}(\pi)$定义在$\{0,1\}$上，$0\leq\pi\leq1$，满足$P(X=1)=\pi$、$P(X=0)=1-\pi$。均值为$\pi$，方差为$\pi(1-\pi)$。
+
+二项分布（binomial distribution）$X\sim\operatorname{Binomial}(n,\pi)$的质量函数为
+\begin{equation}
+ P(X=k)=\binom nk\pi^k(1-\pi)^{n-k},\qquad k=0,\ldots,n.
+\end{equation}
+$n$为非负整数，$0\leq\pi\leq1$，端点参数按退化分布理解。均值为$n\pi$，方差为$n\pi(1-\pi)$。$n$个独立同参数伯努利变量之和服从该分布。
+
+类别分布（categorical distribution）定义在$\{1,\ldots,K\}$上，$P(X=j)=\pi_j$，$\pi_j\geq0$且$\sum_j\pi_j=1$。多项分布（multinomial distribution）$\bm N\sim\operatorname{Multinomial}(n,\bm\pi)$定义在非负整数向量$\bm k$且$\sum_jk_j=n$上：
+\begin{equation}
+ P(\bm N=\bm k)=\frac{n!}{\prod_{j=1}^Kk_j!}\prod_{j=1}^K\pi_j^{k_j}.
+\end{equation}
+$n$为非负整数，$\bm\pi$为类别概率向量，$0^0$按$1$处理。均值为$\E N_j=n\pi_j$，方差为$n\pi_j(1-\pi_j)$，$i\ne j$时协方差为$-n\pi_i\pi_j$。
+
+泊松分布（Poisson distribution）$X\sim\operatorname{Poisson}(\lambda)$为
+\begin{equation}
+ P(X=k)=e^{-\lambda}\frac{\lambda^k}{k!},\qquad k=0,1,\ldots,\quad\lambda>0.
+\end{equation}
+均值与方差均为$\lambda$。相互独立的泊松变量之和仍为泊松变量，参数为各参数之和。
+
+\subsection{连续分布}
+均匀分布（uniform distribution）$X\sim\operatorname{Uniform}(a,b)$要求$a<b$，在$[a,b]$上的密度为$1/(b-a)$，均值为$(a+b)/2$，方差为$(b-a)^2/12$。
+
+指数分布（exponential distribution）$X\sim\operatorname{Exponential}(\lambda)$的密度为$\lambda e^{-\lambda x}$，$x\geq0$、$\lambda>0$。均值为$1/\lambda$，方差为$1/\lambda^2$。无记忆性质为$P(X>s+t\mid X>s)=P(X>t)$，$s,t\geq0$。
+
+伽马分布（gamma distribution）采用形状--率参数化：
+\begin{equation}
+ p(x)=\frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x},
+ \qquad x>0,\quad\alpha,\beta>0.
+\end{equation}
+$\Gamma(\alpha)=\int_0^\infty t^{\alpha-1}e^{-t}\,dt$为伽马函数。均值为$\alpha/\beta$，方差为$\alpha/\beta^2$。若使用尺度参数，尺度为$1/\beta$，须相应改写公式。
+
+贝塔分布（beta distribution）$X\sim\operatorname{Beta}(\alpha,\beta)$的密度为
+\begin{equation}
+ p(x)=\frac{x^{\alpha-1}(1-x)^{\beta-1}}{\mathrm B(\alpha,\beta)},
+ \qquad0<x<1,\quad\alpha,\beta>0.
+\end{equation}
+$\mathrm B(\alpha,\beta)=\Gamma(\alpha)\Gamma(\beta)/\Gamma(\alpha+\beta)$为贝塔函数。均值为$\alpha/(\alpha+\beta)$，方差为$\alpha\beta/[(\alpha+\beta)^2(\alpha+\beta+1)]$。
+
+狄利克雷分布（Dirichlet distribution）$\bm X\sim\operatorname{Dirichlet}(\alpha_1,\ldots,\alpha_K)$要求$K\geq2$、$\alpha_j>0$。在$x_j>0$、$\sum_jx_j=1$的单纯形上，以$x_1,\ldots,x_{K-1}$为自由坐标，其密度为
+\begin{equation}
+ p(\bm x)=\frac{\Gamma(\alpha_0)}{\prod_j\Gamma(\alpha_j)}\prod_{j=1}^Kx_j^{\alpha_j-1},
+ \qquad\alpha_0=\sum_{j=1}^K\alpha_j.
+\end{equation}
+密度相对于自由坐标的$(K-1)$维勒贝格测度定义。均值为$\alpha_j/\alpha_0$，方差为$\alpha_j(\alpha_0-\alpha_j)/[\alpha_0^2(\alpha_0+1)]$，$i\ne j$时协方差为$-\alpha_i\alpha_j/[\alpha_0^2(\alpha_0+1)]$。
+
+\subsection{正态分布}
+正态分布（normal distribution），又称高斯分布（Gaussian distribution），$X\sim\mathcal N(\mu,\sigma^2)$的密度为
+\begin{equation}
+ p(x)=\frac1{\sqrt{2\pi}\sigma}\exp\left[-\frac{(x-\mu)^2}{2\sigma^2}\right],
+ \qquad x\in\R,\quad\mu\in\R,\quad\sigma>0.
+\end{equation}
+均值为$\mu$，方差为$\sigma^2$。标准正态分布的均值为零、方差为一。
+
+多元正态分布$\bm X\sim\mathcal N(\bm\mu,\Sigma)$在$\Sigma\succ0$时具有密度
+\begin{equation}
+ p(\bm x)=\frac1{(2\pi)^{d/2}|\Sigma|^{1/2}}
+ \exp\left[-\frac12(\bm x-\bm\mu)^{\mathsf T}\Sigma^{-1}(\bm x-\bm\mu)\right].
+ \label{eq:math-gaussian-density}
+\end{equation}
+$\bm x,\bm\mu\in\R^d$，$\Sigma\in\R^{d\times d}$为协方差矩阵，$|\Sigma|=\det\Sigma>0$。若$\bm Z$的分量为相互独立的标准正态变量，则$\bm\mu+\Sigma^{1/2}\bm Z$具有该分布。固定$B\in\R^{m\times d}$、$\bm b\in\R^m$时，$B\bm X+\bm b\sim\mathcal N(B\bm\mu+\bm b,B\Sigma B^{\mathsf T})$。
+
+允许$\Sigma\succeq0$时仍可通过线性变换定义退化正态分布，但奇异$\Sigma$没有$\R^d$上的普通密度，不能使用式\eqref{eq:math-gaussian-density}。联合正态变量的零协方差等价于独立，该等价性不适用于任意分布。
+
+设分块联合正态向量为
+\begin{equation}
+ \begin{pmatrix}\bm X\\\bm Y\end{pmatrix}\sim\mathcal N\left(
+ \begin{pmatrix}\bm\mu_X\\\bm\mu_Y\end{pmatrix},
+ \begin{pmatrix}\Sigma_{XX}&\Sigma_{XY}\\\Sigma_{YX}&\Sigma_{YY}\end{pmatrix}\right).
+\end{equation}
+$\bm X\in\R^d$、$\bm Y\in\R^k$，交叉协方差$\Sigma_{XY}\in\R^{d\times k}$且$\Sigma_{YX}=\Sigma_{XY}^{\mathsf T}$。当$\Sigma_{XX}\succ0$时，
+\begin{align}
+ \bm Y\mid\bm X=\bm x&\sim\mathcal N(\bm\mu_{Y\mid x},\Sigma_{Y\mid X}),\\
+ \bm\mu_{Y\mid x}&=\bm\mu_Y+\Sigma_{YX}\Sigma_{XX}^{-1}(\bm x-\bm\mu_X),\\
+ \Sigma_{Y\mid X}&=\Sigma_{YY}-\Sigma_{YX}\Sigma_{XX}^{-1}\Sigma_{XY}.
+\end{align}
+条件协方差是舒尔补，不依赖$\bm x$。令$\bm R=\bm Y-\bm\mu_Y-\Sigma_{YX}\Sigma_{XX}^{-1}(\bm X-\bm\mu_X)$，计算可得$\operatorname{Cov}(\bm R,\bm X)=0$。联合正态性使$\bm R$与$\bm X$独立，从而得到上述条件均值与协方差。
+
+\section{全概率与贝叶斯公式}
+\subsection{事件形式}
+若$B_i$为两两不交、并集为$\Omega$的有限或可数事件，且各$P(B_i)>0$，全概率公式（law of total probability）为
+\begin{equation}
+ P(A)=\sum_iP(A\mid B_i)P(B_i).
+\end{equation}
+它由$A=\bigcup_i(A\cap B_i)$及可数可加性推出。零概率的$B_i$可直接按$P(A\cap B_i)=0$处理，避免定义零概率事件上的条件概率。当$P(A)>0$时，贝叶斯公式（Bayes' theorem）为
+\begin{equation}
+ P(B_j\mid A)=\frac{P(A\mid B_j)P(B_j)}{\sum_iP(A\mid B_i)P(B_i)}.
+\end{equation}
+分子是交事件的概率，分母是$P(A)$，保证结果归一化。
+
+\subsection{密度形式}
+设$\Theta$与$X$具有联合密度，则
+\begin{equation}
+ p(x)=\int p(x\mid\theta)p(\theta)\,d\theta,\qquad
+ p(\theta\mid x)=\frac{p(x\mid\theta)p(\theta)}{p(x)}.
+\end{equation}
+离散$\Theta$时使用求和。第二式要求$0<p(x)<\infty$，以几乎处处意义理解。$p(\theta)$称为先验分布（prior distribution），$p(\theta\mid x)$称为后验分布（posterior distribution）。固定$x$后，将$p(x\mid\theta)$视为$\theta$的函数称为似然函数（likelihood function），它不要求在$\theta$上积分为一。$p(x)$称为边缘似然（marginal likelihood），也称证据（evidence）。先验归一化且分母为正、有限时，公式给出归一化的后验。
+
+\section{信息量与分布差异}
+\subsection{熵、交叉熵与相对熵}
+离散分布的熵（entropy）为$H(p)=-\sum_xp(x)\log p(x)$，交叉熵（cross entropy）为$H(p,q)=-\sum_xp(x)\log q(x)$。约定$0\log0=0$。若$p(x)>0$且$q(x)=0$，交叉熵为$+\infty$。自然对数对应的信息单位为奈特（nat）。
+
+库尔贝克--莱布勒散度（Kullback--Leibler divergence，KL 散度），又称相对熵，为
+\begin{equation}
+ \KL(p\|q)=\sum_xp(x)\log\frac{p(x)}{q(x)}.
+ \label{eq:math-kl-distance}
+\end{equation}
+采用同样的零值约定。共同基准测度下的密度使用积分。若$p$不相对于$q$绝对连续，散度为$+\infty$。散度非负，为零当且仅当两分布相同。离散情形由$-\log u\geq1-u$得到
+\begin{equation}
+ \KL(p\|q)\geq\sum_{p(x)>0}(p(x)-q(x))\geq0.
+\end{equation}
+连续情形有相应积分证明。KL 散度一般不对称，不满足度量的全部条件。熵与交叉熵均有限时，展开对数比得到
+\begin{equation}
+ H(p,q)=H(p)+\KL(p\|q),\qquad\KL(p\|q)\geq0.
+ \label{eq:math-cross-entropy-kl}
+\end{equation}
+有限性避免$\infty-\infty$。连续分布的微分熵（differential entropy）为$h(p)=-\int p(x)\log p(x)\,dx$，要求积分有定义。它可为负，并随坐标尺度改变。
+
+多元正态分布在$\Sigma\succ0$时的微分熵为$\tfrac12\log((2\pi e)^d|\Sigma|)$。在具有相同均值与正定协方差、相关积分有限的密度中，它具有最大微分熵。令$q$为该正态密度，因$\log q$为常数加二次型，相同矩意味着$\E_p\log q=\E_q\log q$。于是$\KL(p\|q)=h(q)-h(p)\geq0$。
+
+\subsection{Wasserstein 距离}
+对有限共同支撑集上的分布$p,q$，令$c(a,b)$为支撑集上的度量，$\Gamma(p,q)$为边缘分别是$p,q$的联合质量函数集合。一阶瓦瑟斯坦距离（Wasserstein distance）定义为
+\begin{equation}
+ W_1(p,q)=\min_{\gamma\in\Gamma(p,q)}\sum_{a,b}\gamma(a,b)c(a,b).
+ \label{eq:math-wasserstein-distance}
+\end{equation}
+约束为$\gamma(a,b)\geq0$、$\sum_b\gamma(a,b)=p(a)$、$\sum_a\gamma(a,b)=q(b)$。$\gamma$也称为耦合（coupling），规定两个边缘取值之间的共同质量。有限支撑使最小值存在，底层$c$为度量时$W_1$也为度量。一般度量空间上将求和改为对耦合测度积分，将最小值改为下确界，并要求有限一阶矩以保证距离有限。
+
+\section{期望与参数微分}
+参数变化时，函数值与分布都可能变化。对$\theta\in\R^k$，仅对函数求导一般不能给出完整的期望导数：
+\begin{equation}
+ \nabla_\theta\E_{X\sim p_\theta}[f_\theta(X)]
+ \quad\text{一般不能直接写为}\quad
+ \E_{X\sim p_\theta}[\nabla_\theta f_\theta(X)].
+ \label{eq:math-expectation-gradient-warning}
+\end{equation}
+特殊条件下两者可以相等，该式说明不能无条件交换运算。
+
+设$p_\theta$相对于固定测度$\nu$具有共同的参数无关支撑集，且$f_\theta,p_\theta$关于$\theta$可微。若在参数的邻域内，$f_\theta p_\theta$及其各参数偏导具有可积控制函数，则可由支配收敛定理交换微分与积分：
+\begin{align}
+ \nabla_\theta\int f_\theta(x)p_\theta(x)\,d\nu(x)
+ &=\int[p_\theta(x)\nabla_\theta f_\theta(x)
+ +f_\theta(x)\nabla_\theta p_\theta(x)]\,d\nu(x)\\
+ &=\E_{p_\theta}[\nabla_\theta f_\theta(X)]
+ +\E_{p_\theta}[f_\theta(X)\nabla_\theta\log p_\theta(X)].
+ \label{eq:math-score-gradient}
+\end{align}
+第二步另要求共同支撑上密度为正，且各项可积。向量$\nabla_\theta\log p_\theta(x)\in\R^k$称为得分函数（score function）。同样的交换条件应用于$\int p_\theta\,d\nu=1$，给出$\E_{p_\theta}[\nabla_\theta\log p_\theta(X)]=\bm0$。支撑集随参数变化时需要处理移动边界，不能直接套用式\eqref{eq:math-score-gradient}。
+
+\section{指数族分布}
+\subsection{基准测度、自然参数与归一化}
+指数族（exponential family）通过固定统计量与参数的内积表达密度。设$\nu$为固定的$\sigma$有限基准测度（base measure），$h(x)\geq0$为参数无关的基准项，$T(x)\in\R^k$为固定可测函数。$\sigma$有限表示空间可被可数个具有有限测度的集合覆盖。分布写作
+\begin{equation}
+ p_\theta(x)=h(x)\exp\{\theta^{\mathsf T}T(x)-A(\theta)\},\qquad
+ A(\theta)=\log\int h(x)e^{\theta^{\mathsf T}T(x)}\,d\nu(x).
+ \label{eq:math-exponential-family}
+\end{equation}
+$p_\theta$为相对于$\nu$的密度，$\theta\in\R^k$称为自然参数（natural parameter），$T$称为充分统计量（sufficient statistic），$A$称为对数配分函数（log-partition function）。$h$不必积分为一。离散变量可使用计数测度，普通连续密度使用勒贝格测度。也可将$h$吸收到测度$h\,d\nu$中。
+
+自然参数空间为
+\begin{equation}
+ \mathcal H=\left\{\theta\in\R^k:
+ 0<\int h(x)e^{\theta^{\mathsf T}T(x)}\,d\nu(x)<\infty\right\}.
+\end{equation}
+只有$\theta\in\mathcal H$时，密度才可归一化。$A$使$\int p_\theta\,d\nu=1$，同时描述参数改变时归一化量的变化。共同支撑由$h(x)>0$确定，要求不随参数变化。
+
+参数集合取为全部$\mathcal H$时称为满指数族（full exponential family）。自然参数集合为$\R^k$中的开集时称为正则指数族（regular exponential family）。使用受限参数映射$\theta=\theta(\eta)$时，关于$\theta$的导数不能直接当作关于$\eta$的导数。
+
+\subsection{充分性与最小表示}
+统计量的充分性是指给定该统计量后，随机对象的条件分布不再依赖参数。对具有共同支配测度的分布族，因子分解判据将充分性写为$p_\theta(x)=g_\theta(S(x))b(x)$。式\eqref{eq:math-exponential-family}具有这一形式，所以$T(X)$对$\theta$充分。
+
+若$X_1,\ldots,X_n$相互独立且同分布，其联合密度为
+\begin{equation}
+ \prod_{i=1}^np_\theta(x_i)=\left(\prod_{i=1}^nh(x_i)\right)
+ \exp\left\{\theta^{\mathsf T}\sum_{i=1}^nT(x_i)-nA(\theta)\right\}.
+\end{equation}
+因此$\sum_iT(X_i)$是联合分布的充分统计量。充分性不保证维度最小，也不保证不同参数对应不同分布。
+
+若不存在非零$\bm a\in\R^k$和常数$b$使$\bm a^{\mathsf T}T(x)=b$在测度$h\,d\nu$下几乎处处成立，则称为最小表示（minimal representation）。存在这样的仿射关系时，统计量含有冗余分量，自然参数可沿相应方向改变而不改变分布。
+
+\subsection{对数配分函数的导数}
+在自然参数空间内部，要求一阶、二阶微分可移入积分，且相关矩有限。一个足够的局部条件是：在参数的某个邻域内，$h(x)e^{\theta^{\mathsf T}T(x)}$及其一阶、二阶偏导具有共同的可积控制函数。令$Z(\theta)=e^{A(\theta)}$，则
+\begin{align}
+ \frac{\partial A}{\partial\theta_j}
+ &=\frac1{Z(\theta)}\int T_j(x)h(x)e^{\theta^{\mathsf T}T(x)}\,d\nu(x)
+ =\E_\theta[T_j(X)],\\
+ \frac{\partial^2A}{\partial\theta_i\partial\theta_j}
+ &=\E_\theta[T_i(X)T_j(X)]-\E_\theta[T_i(X)]\E_\theta[T_j(X)].
+\end{align}
+因此
+\begin{equation}
+ \nabla A(\theta)=\E_\theta[T(X)]\in\R^k,\qquad
+ \nabla^2A(\theta)=\operatorname{Cov}_\theta(T(X))\in\R^{k\times k}.
+ \label{eq:math-log-partition-derivatives}
+\end{equation}
+这些公式将归一化函数的导数与统计量的矩联系起来。海森矩阵半正定，因为$\bm a^{\mathsf T}\nabla^2A\bm a=\Var_\theta(\bm a^{\mathsf T}T(X))\geq0$。最小表示下，非零线性组合不能几乎必然为常数，所以在满足上述条件的内部点，海森矩阵正定。
+
+自然参数空间是凸集。对$\theta_1,\theta_2\in\mathcal H$与$0<t<1$，赫尔德不等式（Hölder inequality）给出$Z(t\theta_1+(1-t)\theta_2)\leq Z(\theta_1)^tZ(\theta_2)^{1-t}$。取对数可得$A$为凸函数。在最小正则表示下，$A$在自然参数空间内部严格凸。边界处导数或矩可能不存在，不能无条件延伸内部结论。
+
+\subsection{得分与信息矩阵}
+在上述正则条件下，得分函数为
+\begin{equation}
+ \nabla_\theta\log p_\theta(x)=T(x)-\nabla A(\theta),
+\end{equation}
+其期望为零。费舍尔信息矩阵（Fisher information matrix）定义为得分的二阶矩：
+\begin{equation}
+ \mathcal I(\theta)=\E_\theta\left[
+ (\nabla_\theta\log p_\theta(X))(\nabla_\theta\log p_\theta(X))^{\mathsf T}\right]
+ =\nabla^2A(\theta).
+\end{equation}
+它为$k\times k$半正定矩阵，最小正则表示下正定。它描述分布相对于自然参数的局部变化。若$\theta=\theta(\eta)$可微，则信息矩阵按$\mathcal I_\eta=(D\theta)^{\mathsf T}\mathcal I_\theta D\theta$变换，矩阵元素依赖参数坐标。
 

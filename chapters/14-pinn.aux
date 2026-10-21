@@ -1,65 +1,178 @@
 \relax 
 \providecommand\hyper@newdestlabel[2]{}
-\@writefile{toc}{\contentsline {chapter}{\numberline {第二十章\hspace  {.3em}}物理信息神经网络：从稀疏观测重建风场}{267}{chapter.20}\protected@file@percent }
+\citation{karniadakis2021physics}
+\citation{raissi2019pinn}
+\@writefile{toc}{\contentsline {chapter}{\numberline {第十三章\hspace  {.3em}}物理信息神经网络与风场重建}{272}{chapter.13}\protected@file@percent }
 \@writefile{lof}{\addvspace {10.0pt}}
 \@writefile{lot}{\addvspace {10.0pt}}
-\newlabel{chap:pinn}{{二十}{267}{物理信息神经网络：从稀疏观测重建风场}{chapter.20}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {20.1}从函数拟合到受约束逆问题}{267}{section.20.1}\protected@file@percent }
-\newlabel{sec:pinn-formulation}{{20.1}{267}{从函数拟合到受约束逆问题}{section.20.1}{}}
+\newlabel{chap:pinn}{{十三}{272}{物理信息神经网络与风场重建}{chapter.13}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {13.1}先用一个小例子理解 PINN}{273}{section.13.1}\protected@file@percent }
+\newlabel{sec:pinn-formulation}{{13.1}{273}{先用一个小例子理解 PINN}{section.13.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.1.1}网络表示的是一个可以查询的函数}{273}{subsection.13.1.1}\protected@file@percent }
+\newlabel{eq:pinn-generic-network}{{13.1}{273}{网络表示的是一个可以查询的函数}{equation.13.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.1.2}把方程变成可以计算的误差}{273}{subsection.13.1.2}\protected@file@percent }
+\newlabel{eq:pinn-hand-ode}{{13.2}{273}{把方程变成可以计算的误差}{equation.13.2}{}}
+\newlabel{eq:pinn-hand-loss}{{13.3}{274}{把方程变成可以计算的误差}{equation.13.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.1.3}两次求导分别在做什么}{274}{subsection.13.1.3}\protected@file@percent }
 \citation{raissi2019pinn}
-\citation{karniadakis2021physics}
-\@writefile{toc}{\contentsline {paragraph}{先读懂坐标、导数与残差。}{268}{paragraph*.224}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {20.2}激光雷达实际观测了什么}{269}{section.20.2}\protected@file@percent }
-\newlabel{sec:pinn-lidar}{{20.2}{269}{激光雷达实际观测了什么}{section.20.2}{}}
+\citation{wang2023expert}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.1.4}同一套流程可以用于哪些问题}{275}{subsection.13.1.4}\protected@file@percent }
+\newlabel{sec:pinn-generality}{{13.1.4}{275}{同一套流程可以用于哪些问题}{subsection.13.1.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {13.1}{\ignorespaces 不同任务中的 PINN 输入、输出与方程。这里以一维传热、波动和二维流动为例。}}{275}{table.caption.239}\protected@file@percent }
+\newlabel{tab:pinn-general-problems}{{13.1}{275}{不同任务中的 PINN 输入、输出与方程。这里以一维传热、波动和二维流动为例。}{table.caption.239}{}}
+\newlabel{eq:pinn-generic-heat-residual}{{13.4}{275}{同一套流程可以用于哪些问题}{equation.13.4}{}}
+\citation{raissi2019pinn}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.1.5}正问题、逆问题与本章的风场重建}{276}{subsection.13.1.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{正问题：已知模型与条件，求物理场。}{276}{paragraph*.240}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{逆问题：利用观测，推断未知场或参数。}{276}{paragraph*.241}\protected@file@percent }
+\newlabel{eq:pinn-coordinate-network}{{13.5}{276}{逆问题：利用观测，推断未知场或参数。}{equation.13.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {13.2}激光雷达给了我们什么数据}{276}{section.13.2}\protected@file@percent }
+\newlabel{sec:pinn-lidar}{{13.2}{276}{激光雷达给了我们什么数据}{section.13.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.2.1}径向速度是风速在波束方向上的投影}{276}{subsection.13.2.1}\protected@file@percent }
+\newlabel{eq:pinn-observation}{{13.6}{276}{径向速度是风速在波束方向上的投影}{equation.13.6}{}}
 \citation{sathe2013lidar}
-\@writefile{lof}{\contentsline {figure}{\numberline {20.1}{\ignorespaces PINN 的信息路径：观测通过测量算子约束场，微分方程和边界条件在未观测位置提供额外约束。}}{270}{figure.caption.225}\protected@file@percent }
-\newlabel{fig:pinn-constraint-path}{{20.1}{270}{PINN 的信息路径：观测通过测量算子约束场，微分方程和边界条件在未观测位置提供额外约束。}{figure.caption.225}{}}
-\newlabel{eq:pinn-observation}{{20.5}{270}{激光雷达实际观测了什么}{equation.20.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {20.3}风场方程、尺度与物理假设}{271}{section.20.3}\protected@file@percent }
-\newlabel{sec:pinn-physics}{{20.3}{271}{风场方程、尺度与物理假设}{section.20.3}{}}
-\newlabel{eq:pinn-momentum}{{20.16}{273}{风场方程、尺度与物理假设}{equation.20.16}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {20.4}网络、损失与训练过程}{273}{section.20.4}\protected@file@percent }
-\newlabel{sec:pinn-training}{{20.4}{273}{网络、损失与训练过程}{section.20.4}{}}
-\newlabel{eq:pinn-weighted-data-loss}{{20.18}{274}{网络、损失与训练过程}{equation.20.18}{}}
-\newlabel{eq:pinn-loss}{{20.20}{274}{网络、损失与训练过程}{equation.20.20}{}}
-\@writefile{toc}{\contentsline {paragraph}{一个可手算的微分训练例子。}{274}{paragraph*.226}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{从残差到参数梯度。}{275}{paragraph*.227}\protected@file@percent }
-\citation{wang2021gradient}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.2.2}一条训练样本包含哪些信息}{277}{subsection.13.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {13.3}用流体方程描述风速怎样变化}{278}{section.13.3}\protected@file@percent }
+\newlabel{sec:pinn-physics}{{13.3}{278}{用流体方程描述风速怎样变化}{section.13.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.3.1}连续性方程：检查局部的流入和流出}{278}{subsection.13.3.1}\protected@file@percent }
+\newlabel{eq:pinn-continuity}{{13.8}{278}{连续性方程：检查局部的流入和流出}{equation.13.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.3.2}动量方程：联系速度变化、压力和黏性}{278}{subsection.13.3.2}\protected@file@percent }
+\newlabel{eq:pinn-momentum}{{13.10}{278}{动量方程：联系速度变化、压力和黏性}{equation.13.10}{}}
+\@writefile{toc}{\contentsline {paragraph}{左边：为什么加速度要写成三项？}{279}{paragraph*.242}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{右边第一项：压力差怎样推动空气？}{279}{paragraph*.244}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {13.1}{\ignorespaces 固定位置的变化与跟随空气团的变化。实线箭头表示同一时刻各处的$x$方向速度，黑点标出测量位置。虚线箭头表示空气团的移动方向，数字为教学示例。}}{280}{figure.caption.243}\protected@file@percent }
+\newlabel{fig:pinn-material-acceleration}{{13.1}{280}{固定位置的变化与跟随空气团的变化。实线箭头表示同一时刻各处的$x$方向速度，黑点标出测量位置。虚线箭头表示空气团的移动方向，数字为教学示例。}{figure.caption.243}{}}
+\@writefile{toc}{\contentsline {paragraph}{右边第二项：黏性为什么与速度的二阶导数有关？}{280}{paragraph*.245}\protected@file@percent }
+\newlabel{eq:pinn-dimensional-residual}{{13.12}{280}{右边第二项：黏性为什么与速度的二阶导数有关？}{equation.13.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.3.3}初值、边界与尺度}{281}{subsection.13.3.3}\protected@file@percent }
+\newlabel{eq:pinn-scales}{{13.13}{281}{初值、边界与尺度}{equation.13.13}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {13.4}把数据和方程放进同一次训练}{281}{section.13.4}\protected@file@percent }
+\newlabel{sec:pinn-training}{{13.4}{281}{把数据和方程放进同一次训练}{section.13.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.4.1}两条计算路径汇入一个损失}{281}{subsection.13.4.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {13.2}{\ignorespaces 风场 PINN 的计算路径。实线表示预测量和误差的计算，虚线表示根据总损失更新网络参数。可用的初值、边界信息也可形成损失项，一起加入总损失。}}{282}{figure.caption.246}\protected@file@percent }
+\newlabel{fig:pinn-constraint-path}{{13.2}{282}{风场 PINN 的计算路径。实线表示预测量和误差的计算，虚线表示根据总损失更新网络参数。可用的初值、边界信息也可形成损失项，一起加入总损失。}{figure.caption.246}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.4.2}数据损失检查预测与测量是否接近}{282}{subsection.13.4.2}\protected@file@percent }
+\newlabel{eq:pinn-weighted-data-loss}{{13.14}{282}{数据损失检查预测与测量是否接近}{equation.13.14}{}}
+\citation{zhang2021spatiotemporal}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.4.3}物理损失检查预测是否符合方程}{283}{subsection.13.4.3}\protected@file@percent }
+\newlabel{eq:pinn-loss}{{13.16}{283}{物理损失检查预测是否符合方程}{equation.13.16}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.4.4}一次训练和一张风场图怎样得到}{283}{subsection.13.4.4}\protected@file@percent }
+\citation{zhang2021spatiotemporal}
+\citation{zhang2021spatiotemporal}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces 从稀疏雷达观测训练风场 PINN}}{284}{algorithm.1}\protected@file@percent }
+\newlabel{alg:pinn-wind}{{1}{284}{从稀疏雷达观测训练风场 PINN}{algorithm.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {13.5}论文案例：两束激光雷达怎样重建风机前方的风场}{284}{section.13.5}\protected@file@percent }
+\newlabel{sec:pinn-validation}{{13.5}{284}{论文案例：两束激光雷达怎样重建风机前方的风场}{section.13.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.5.1}先看任务、测点与参考风场}{284}{subsection.13.5.1}\protected@file@percent }
+\citation{zhang2021spatiotemporal}
+\citation{zhang2021spatiotemporal}
+\@writefile{lof}{\contentsline {figure}{\numberline {13.3}{\ignorespaces 双波束激光雷达的测量布置与径向速度记录。A 为测量几何，B 为各测点的时间序列。摘自 Zhang 和 Zhao\cite  {zhang2021spatiotemporal}原文图 1(A、B)，保留原图标注。}}{285}{figure.caption.247}\protected@file@percent }
+\newlabel{fig:pinn-zhang-measurements}{{13.3}{285}{双波束激光雷达的测量布置与径向速度记录。A 为测量几何，B 为各测点的时间序列。摘自 Zhang 和 Zhao\cite {zhang2021spatiotemporal}原文图 1(A、B)，保留原图标注。}{figure.caption.247}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {13.2}{\ignorespaces 论文基准算例的主要设置，整理自原文第 2.3、3.2 节与表 2\cite  {zhang2021spatiotemporal}。}}{285}{table.caption.248}\protected@file@percent }
+\newlabel{tab:pinn-zhang-setup}{{13.2}{285}{论文基准算例的主要设置，整理自原文第 2.3、3.2 节与表 2\cite {zhang2021spatiotemporal}。}{table.caption.248}{}}
+\citation{zhang2021spatiotemporal}
+\citation{zhang2021spatiotemporal}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.5.2}网络为什么先输出流函数和压力}{286}{subsection.13.5.2}\protected@file@percent }
+\newlabel{eq:pinn-zhang-network}{{13.17}{286}{网络为什么先输出流函数和压力}{equation.13.17}{}}
+\newlabel{eq:pinn-zhang-streamfunction}{{13.18}{286}{网络为什么先输出流函数和压力}{equation.13.18}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13.4}{\ignorespaces 论文中的网络及损失计算。$\mathcal  L_1$来自方程残差，$\mathcal  L_2$来自径向观测误差，两者共同训练基础网络。原图用$p$表示无量纲压力，对应本章的$\pi $。摘自 Zhang 和 Zhao\cite  {zhang2021spatiotemporal}原文图 1(C)。}}{287}{figure.caption.249}\protected@file@percent }
+\newlabel{fig:pinn-zhang-network}{{13.4}{287}{论文中的网络及损失计算。$\mathcal L_1$来自方程残差，$\mathcal L_2$来自径向观测误差，两者共同训练基础网络。原图用$p$表示无量纲压力，对应本章的$\pi $。摘自 Zhang 和 Zhao\cite {zhang2021spatiotemporal}原文图 1(C)。}{figure.caption.249}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.5.3}两束观测怎样参与损失计算}{287}{subsection.13.5.3}\protected@file@percent }
+\newlabel{eq:pinn-zhang-projection}{{13.20}{287}{两束观测怎样参与损失计算}{equation.13.20}{}}
+\citation{zhang2021spatiotemporal}
+\citation{zhang2021spatiotemporal}
+\newlabel{eq:pinn-zhang-data}{{13.21}{288}{两束观测怎样参与损失计算}{equation.13.21}{}}
+\newlabel{eq:pinn-zhang-residual}{{13.23}{288}{两束观测怎样参与损失计算}{equation.13.23}{}}
+\newlabel{eq:pinn-zhang-physics}{{13.24}{288}{两束观测怎样参与损失计算}{equation.13.24}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.5.4}从风场图片看重建效果}{288}{subsection.13.5.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {13.5}{\ignorespaces 基准算例的重建与参考风场。左列为 PINN 结果，右列为 SOWFA 参考值，从上到下为$50$、$60$、$70\,\mathrm  {s}$。颜色表示风速大小，箭头表示速度方向，叉号表示雷达测点。摘自 Zhang 和 Zhao\cite  {zhang2021spatiotemporal}原文图 3。}}{289}{figure.caption.250}\protected@file@percent }
+\newlabel{fig:pinn-zhang-baseline}{{13.5}{289}{基准算例的重建与参考风场。左列为 PINN 结果，右列为 SOWFA 参考值，从上到下为$50$、$60$、$70\,\mathrm {s}$。颜色表示风速大小，箭头表示速度方向，叉号表示雷达测点。摘自 Zhang 和 Zhao\cite {zhang2021spatiotemporal}原文图 3。}{figure.caption.250}{}}
+\citation{zhang2021spatiotemporal}
+\citation{zhang2021spatiotemporal}
+\citation{zhang2021spatiotemporal}
+\citation{zhang2021spatiotemporal}
+\newlabel{eq:pinn-zhang-mrmse}{{13.25}{290}{从风场图片看重建效果}{equation.13.25}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {13.3}{\ignorespaces 部分算例的全场重建误差，整理自 Zhang 和 Zhao\cite  {zhang2021spatiotemporal}原文表 3。各行采用同一 MRMSE 计算方式。}}{290}{table.caption.251}\protected@file@percent }
+\newlabel{tab:pinn-zhang-results}{{13.3}{290}{部分算例的全场重建误差，整理自 Zhang 和 Zhao\cite {zhang2021spatiotemporal}原文表 3。各行采用同一 MRMSE 计算方式。}{table.caption.251}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.5.5}从重建时间窗走向短时预测}{290}{subsection.13.5.5}\protected@file@percent }
 \citation{krishnapriyan2021failure}
-\citation{kharazmi2021hpvpinn}
+\citation{wang2023expert}
 \citation{jagtap2020xpinn}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces 稀疏激光雷达风场重建的 PINN 训练}}{277}{algorithm.1}\protected@file@percent }
-\newlabel{alg:pinn-wind}{{1}{277}{稀疏激光雷达风场重建的 PINN 训练}{algorithm.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {20.5}主要变体及其适用条件}{277}{section.20.5}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {13.6}{\ignorespaces 三个横向位置的风速时间序列。横向坐标依次为$y=0$、$15$、$30\,\mathrm  {m}$。黑色实线为参考值，红色虚线为预测值。曲线包含$100$到$115\,\mathrm  {s}$的未来时间外推。摘自 Zhang 和 Zhao\cite  {zhang2021spatiotemporal}原文图 5。}}{291}{figure.caption.252}\protected@file@percent }
+\newlabel{fig:pinn-zhang-timeseries}{{13.6}{291}{三个横向位置的风速时间序列。横向坐标依次为$y=0$、$15$、$30\,\mathrm {m}$。黑色实线为参考值，红色虚线为预测值。曲线包含$100$到$115\,\mathrm {s}$的未来时间外推。摘自 Zhang 和 Zhao\cite {zhang2021spatiotemporal}原文图 5。}{figure.caption.252}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {13.6}PINN 的优化方向}{291}{section.13.6}\protected@file@percent }
+\newlabel{sec:pinn-optimization}{{13.6}{291}{PINN 的优化方向}{section.13.6}{}}
+\citation{krishnapriyan2021failure}
+\citation{wang2023expert}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.6.1}先看清训练卡在哪里}{292}{subsection.13.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.6.2}统一变量尺度，并把配点放到合适的位置}{292}{subsection.13.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{先处理尺度。}{292}{paragraph*.253}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{让配点覆盖整个重建区域。}{292}{paragraph*.254}\protected@file@percent }
+\citation{wang2023expert}
+\citation{wang2023expert}
+\citation{wang2023expert}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.6.3}平衡数据损失和物理损失}{293}{subsection.13.6.3}\protected@file@percent }
+\newlabel{eq:pinn-gradient-balance}{{13.26}{293}{平衡数据损失和物理损失}{equation.13.26}{}}
+\newlabel{eq:pinn-gradient-balance-ema}{{13.27}{293}{平衡数据损失和物理损失}{equation.13.27}{}}
+\citation{krishnapriyan2021failure}
+\citation{wang2023expert}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.6.4}采用课程训练，让任务由易到难}{294}{subsection.13.6.4}\protected@file@percent }
+\newlabel{eq:pinn-curriculum-convection}{{13.28}{294}{采用课程训练，让任务由易到难}{equation.13.28}{}}
+\citation{krishnapriyan2021failure}
+\citation{wang2023expert}
+\citation{wang2023expert}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.6.5}缩短单次时间跨度，并按时间顺序学习}{295}{subsection.13.6.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{时间分窗：每次重建一小段。}{295}{paragraph*.255}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{因果加权：在一个窗口内先学好较早的时刻。}{295}{paragraph*.256}\protected@file@percent }
+\newlabel{eq:pinn-causal-weight}{{13.30}{295}{因果加权：在一个窗口内先学好较早的时刻。}{equation.13.30}{}}
+\citation{wang2023expert}
+\@writefile{lof}{\contentsline {figure}{\numberline {13.7}{\ignorespaces 时间分窗与因果加权的教学示意。上排箭头表示前一窗口的末态用于下一窗口的初值。下排箭头表示较早时间段的残差参与后面权重的计算，见式\eqref  {eq:pinn-causal-weight}。图中窗口长度用于举例。}}{296}{figure.caption.257}\protected@file@percent }
+\newlabel{fig:pinn-time-strategies}{{13.7}{296}{时间分窗与因果加权的教学示意。上排箭头表示前一窗口的末态用于下一窗口的初值。下排箭头表示较早时间段的残差参与后面权重的计算，见式\eqref {eq:pinn-causal-weight}。图中窗口长度用于举例。}{figure.caption.257}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.6.6}改进网络对局部细节的表达}{296}{subsection.13.6.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{傅里叶特征：给坐标增加不同频率的表示。}{296}{paragraph*.258}\protected@file@percent }
+\newlabel{eq:pinn-fourier-features}{{13.31}{296}{傅里叶特征：给坐标增加不同频率的表示。}{equation.13.31}{}}
+\citation{wang2023expert}
+\citation{jagtap2020xpinn}
+\@writefile{toc}{\contentsline {paragraph}{随机权重分解：调整参数的组织方式。}{297}{paragraph*.259}\protected@file@percent }
+\newlabel{eq:pinn-rwf}{{13.32}{297}{随机权重分解：调整参数的组织方式。}{equation.13.32}{}}
+\@writefile{toc}{\contentsline {paragraph}{改进连接方式，并利用已知物理结构。}{297}{paragraph*.260}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.6.7}用 XPINNs 把大区域拆成相互连接的子区域}{297}{subsection.13.6.7}\protected@file@percent }
+\citation{jagtap2020xpinn}
+\@writefile{lof}{\contentsline {figure}{\numberline {13.8}{\ignorespaces 风场区域分解的教学示意。虚线为两个子区域的界面，黑点为界面约束的计算位置，箭头表示来流方向。这里的划分用于解释 XPINNs 的计算方法。}}{298}{figure.caption.261}\protected@file@percent }
+\newlabel{fig:pinn-xpinn-domain}{{13.8}{298}{风场区域分解的教学示意。虚线为两个子区域的界面，黑点为界面约束的计算位置，箭头表示来流方向。这里的划分用于解释 XPINNs 的计算方法。}{figure.caption.261}{}}
+\newlabel{eq:pinn-xpinn-interface-value}{{13.33}{298}{用 XPINNs 把大区域拆成相互连接的子区域}{equation.13.33}{}}
+\newlabel{eq:pinn-xpinn-interface-residual}{{13.34}{298}{用 XPINNs 把大区域拆成相互连接的子区域}{equation.13.34}{}}
+\citation{wang2023expert}
+\@writefile{toc}{\contentsline {subsection}{\numberline {13.6.8}在风场重建中怎样安排这些改进}{299}{subsection.13.6.8}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {13.4}{\ignorespaces 风场 PINN 中常见的训练现象与改进思路。这里给出方法选择的教学对应关系。}}{299}{table.caption.262}\protected@file@percent }
+\newlabel{tab:pinn-optimization-guide}{{13.4}{299}{风场 PINN 中常见的训练现象与改进思路。这里给出方法选择的教学对应关系。}{table.caption.262}{}}
+\citation{kharazmi2021hpvpinn}
 \citation{yang2021bpinn}
-\newlabel{eq:pinn-causal-weight}{{20.23}{278}{主要变体及其适用条件}{equation.20.23}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {20.6}风电场案例的验证流程}{278}{section.20.6}\protected@file@percent }
-\newlabel{sec:pinn-validation}{{20.6}{278}{风电场案例的验证流程}{section.20.6}{}}
-\@writefile{toc}{\contentsline {paragraph}{本章小结。}{281}{paragraph*.229}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{本章小结。}{300}{paragraph*.263}\protected@file@percent }
 \@setckpt{chapters/14-pinn}{
-\setcounter{page}{282}
-\setcounter{equation}{25}
+\setcounter{page}{301}
+\setcounter{equation}{34}
 \setcounter{enumi}{4}
 \setcounter{enumii}{0}
 \setcounter{enumiii}{0}
 \setcounter{enumiv}{0}
 \setcounter{footnote}{0}
 \setcounter{mpfootnote}{0}
-\setcounter{part}{4}
-\setcounter{chapter}{20}
+\setcounter{part}{3}
+\setcounter{chapter}{13}
 \setcounter{section}{6}
-\setcounter{subsection}{0}
+\setcounter{subsection}{8}
 \setcounter{subsubsection}{0}
 \setcounter{paragraph}{0}
 \setcounter{subparagraph}{0}
-\setcounter{figure}{1}
-\setcounter{table}{0}
+\setcounter{figure}{8}
+\setcounter{table}{4}
 \setcounter{parentequation}{0}
 \setcounter{section@level}{0}
-\setcounter{Item}{16}
-\setcounter{Hfootnote}{0}
+\setcounter{Item}{20}
+\setcounter{Hfootnote}{32}
 \setcounter{Hy@AnnotLevel}{0}
-\setcounter{bookmark@seq@number}{149}
+\setcounter{bookmark@seq@number}{91}
 \setcounter{caption@flags}{2}
 \setcounter{continuedfloat}{0}
 \setcounter{float@type}{16}

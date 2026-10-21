@@ -1,77 +1,77 @@
 \relax 
 \providecommand\hyper@newdestlabel[2]{}
-\@writefile{toc}{\contentsline {chapter}{\numberline {第十六章\hspace  {.3em}}图上的神经网络}{209}{chapter.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {第十六章\hspace  {.3em}}图上的神经网络}{219}{chapter.16}\protected@file@percent }
 \@writefile{lof}{\addvspace {10.0pt}}
 \@writefile{lot}{\addvspace {10.0pt}}
-\newlabel{chap:graph-neural-networks}{{十六}{209}{图上的神经网络}{chapter.16}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {16.1}先确定图表示什么、预测什么}{209}{section.16.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.1.1}节点、边与节点特征}{209}{subsection.16.1.1}\protected@file@percent }
-\newlabel{eq:graph-feature-matrix}{{16.1}{210}{节点、边与节点特征}{equation.16.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {16.1}{\ignorespaces 图结构与节点特征是两类输入。矩阵的节点顺序均为1、2、3，本图尚未添加自环。}}{210}{figure.caption.178}\protected@file@percent }
-\newlabel{fig:graph-topology-features}{{16.1}{210}{图结构与节点特征是两类输入。矩阵的节点顺序均为1、2、3，本图尚未添加自环。}{figure.caption.178}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.1.2}节点、边与整图输出}{210}{subsection.16.1.2}\protected@file@percent }
+\newlabel{chap:graph-neural-networks}{{十六}{219}{图上的神经网络}{chapter.16}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {16.1}先确定图表示什么、预测什么}{219}{section.16.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.1.1}节点、边与节点特征}{219}{subsection.16.1.1}\protected@file@percent }
+\newlabel{eq:graph-feature-matrix}{{16.1}{220}{节点、边与节点特征}{equation.16.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {16.1}{\ignorespaces 图结构与节点特征是两类输入。矩阵的节点顺序均为1、2、3，本图尚未添加自环。}}{220}{figure.caption.191}\protected@file@percent }
+\newlabel{fig:graph-topology-features}{{16.1}{220}{图结构与节点特征是两类输入。矩阵的节点顺序均为1、2、3，本图尚未添加自环。}{figure.caption.191}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.1.2}节点、边与整图输出}{220}{subsection.16.1.2}\protected@file@percent }
 \citation{graphgilmer2017mpnn}
-\@writefile{toc}{\contentsline {section}{\numberline {16.2}消息传递：一个节点怎样读取邻居}{211}{section.16.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.2.1}从逐节点网络到邻域聚合}{211}{subsection.16.2.1}\protected@file@percent }
-\newlabel{eq:graph-message-passing}{{16.4}{211}{从逐节点网络到邻域聚合}{equation.16.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {16.2}消息传递：一个节点怎样读取邻居}{221}{section.16.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.2.1}从逐节点网络到邻域聚合}{221}{subsection.16.2.1}\protected@file@percent }
+\newlabel{eq:graph-message-passing}{{16.4}{221}{从逐节点网络到邻域聚合}{equation.16.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.2.2}节点编号变化时，输出怎样变化}{221}{subsection.16.2.2}\protected@file@percent }
 \citation{graphkipf2017gcn}
-\@writefile{lof}{\contentsline {figure}{\numberline {16.2}{\ignorespaces 消息传递将邻居信息的生成、汇总与节点更新分开。自身信息可通过更新函数进入，是否另加自环取决于具体模型。}}{212}{figure.caption.179}\protected@file@percent }
-\newlabel{fig:graph-message-passing}{{16.2}{212}{消息传递将邻居信息的生成、汇总与节点更新分开。自身信息可通过更新函数进入，是否另加自环取决于具体模型。}{figure.caption.179}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.2.2}节点编号变化时，输出怎样变化}{212}{subsection.16.2.2}\protected@file@percent }
-\newlabel{eq:graph-permutation-equivariance}{{16.5}{212}{节点编号变化时，输出怎样变化}{equation.16.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {16.3}图卷积网络：把消息传递写成矩阵}{212}{section.16.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.3.1}自环与对称归一化}{212}{subsection.16.3.1}\protected@file@percent }
-\newlabel{eq:graph-self-loop-degree}{{16.6}{212}{自环与对称归一化}{equation.16.6}{}}
-\newlabel{eq:graph-gcn-propagation}{{16.7}{213}{自环与对称归一化}{equation.16.7}{}}
-\newlabel{eq:graph-gcn-layer}{{16.8}{213}{自环与对称归一化}{equation.16.8}{}}
-\newlabel{eq:graph-gcn-node}{{16.9}{213}{自环与对称归一化}{equation.16.9}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.3.2}一个三节点路径的完整计算}{213}{subsection.16.3.2}\protected@file@percent }
-\newlabel{eq:graph-path-example}{{16.12}{214}{一个三节点路径的完整计算}{equation.16.12}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {16.3}{\ignorespaces GCN路径算例中节点1的局部计算，取$W=1$与恒等激活。实线箭头表示本层计算，底部虚线箭头表示跨两层的信息路径，不表示该信息一定改善预测。}}{214}{figure.caption.180}\protected@file@percent }
-\newlabel{fig:graph-gcn-local-calculation}{{16.3}{214}{GCN路径算例中节点1的局部计算，取$W=1$与恒等激活。实线箭头表示本层计算，底部虚线箭头表示跨两层的信息路径，不表示该信息一定改善预测。}{figure.caption.180}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.3.3}带权边、方向与自环尺度}{215}{subsection.16.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {16.4}为什么称为图卷积：从频率滤波到局部传播}{215}{section.16.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {16.2}{\ignorespaces 消息传递将邻居信息的生成、汇总与节点更新分开。自身信息可通过更新函数进入，是否另加自环取决于具体模型。}}{222}{figure.caption.192}\protected@file@percent }
+\newlabel{fig:graph-message-passing}{{16.2}{222}{消息传递将邻居信息的生成、汇总与节点更新分开。自身信息可通过更新函数进入，是否另加自环取决于具体模型。}{figure.caption.192}{}}
+\newlabel{eq:graph-permutation-equivariance}{{16.5}{222}{节点编号变化时，输出怎样变化}{equation.16.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {16.3}图卷积网络：把消息传递写成矩阵}{222}{section.16.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.3.1}自环与对称归一化}{222}{subsection.16.3.1}\protected@file@percent }
+\newlabel{eq:graph-self-loop-degree}{{16.6}{222}{自环与对称归一化}{equation.16.6}{}}
+\newlabel{eq:graph-gcn-propagation}{{16.7}{222}{自环与对称归一化}{equation.16.7}{}}
+\newlabel{eq:graph-gcn-layer}{{16.8}{223}{自环与对称归一化}{equation.16.8}{}}
+\newlabel{eq:graph-gcn-node}{{16.9}{223}{自环与对称归一化}{equation.16.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.3.2}一个三节点路径的完整计算}{223}{subsection.16.3.2}\protected@file@percent }
+\newlabel{eq:graph-path-example}{{16.12}{224}{一个三节点路径的完整计算}{equation.16.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {16.3}{\ignorespaces GCN路径算例中节点1的局部计算，取$W=1$与恒等激活。实线箭头表示本层计算，底部虚线箭头表示跨两层的信息路径，不表示该信息一定改善预测。}}{224}{figure.caption.193}\protected@file@percent }
+\newlabel{fig:graph-gcn-local-calculation}{{16.3}{224}{GCN路径算例中节点1的局部计算，取$W=1$与恒等激活。实线箭头表示本层计算，底部虚线箭头表示跨两层的信息路径，不表示该信息一定改善预测。}{figure.caption.193}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.3.3}带权边、方向与自环尺度}{224}{subsection.16.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {16.4}为什么称为图卷积：从频率滤波到局部传播}{225}{section.16.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.4.1}图拉普拉斯如何定义频率}{225}{subsection.16.4.1}\protected@file@percent }
+\newlabel{eq:graph-laplacian}{{16.15}{225}{图拉普拉斯如何定义频率}{equation.16.15}{}}
 \citation{graphdefferrard2016chebnet}
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.4.1}图拉普拉斯如何定义频率}{216}{subsection.16.4.1}\protected@file@percent }
-\newlabel{eq:graph-laplacian}{{16.15}{216}{图拉普拉斯如何定义频率}{equation.16.15}{}}
-\newlabel{eq:graph-smoothness}{{16.17}{216}{图拉普拉斯如何定义频率}{equation.16.17}{}}
-\newlabel{eq:graph-spectral-filter}{{16.18}{216}{图拉普拉斯如何定义频率}{equation.16.18}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.4.2}多项式、一阶近似与重归一化}{216}{subsection.16.4.2}\protected@file@percent }
+\newlabel{eq:graph-smoothness}{{16.17}{226}{图拉普拉斯如何定义频率}{equation.16.17}{}}
+\newlabel{eq:graph-spectral-filter}{{16.18}{226}{图拉普拉斯如何定义频率}{equation.16.18}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.4.2}多项式、一阶近似与重归一化}{226}{subsection.16.4.2}\protected@file@percent }
 \citation{graphhamilton2017sage}
-\@writefile{toc}{\contentsline {section}{\numberline {16.5}固定邻域聚合留下的两个问题}{217}{section.16.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.5.1}大图与新节点：邻域采样}{217}{subsection.16.5.1}\protected@file@percent }
 \citation{graphvelickovic2018gat}
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.5.2}邻居作用不同：图注意力}{218}{subsection.16.5.2}\protected@file@percent }
-\newlabel{eq:graph-attention}{{16.27}{218}{邻居作用不同：图注意力}{equation.16.27}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {16.6}超图：多个节点共同参与的关系}{218}{section.16.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.6.1}为什么成对连接可能丢失组信息}{218}{subsection.16.6.1}\protected@file@percent }
-\newlabel{eq:graph-hyper-incidence}{{16.28}{219}{为什么成对连接可能丢失组信息}{equation.16.28}{}}
-\newlabel{eq:graph-hyper-degrees}{{16.29}{219}{为什么成对连接可能丢失组信息}{equation.16.29}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {16.4}{\ignorespaces 超图的节点--超边关联表示。实线为第一组的成员关系，虚线为第二组的成员关系，均无方向。节点2与3各参加两个组，节点1只参加第一组。}}{219}{figure.caption.181}\protected@file@percent }
-\newlabel{fig:graph-hyper-incidence-picture}{{16.4}{219}{超图的节点--超边关联表示。实线为第一组的成员关系，虚线为第二组的成员关系，均无方向。节点2与3各参加两个组，节点1只参加第一组。}{figure.caption.181}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {16.5}固定邻域聚合留下的两个问题}{227}{section.16.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.5.1}大图与新节点：邻域采样}{227}{subsection.16.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.5.2}邻居作用不同：图注意力}{228}{subsection.16.5.2}\protected@file@percent }
+\newlabel{eq:graph-attention}{{16.27}{228}{邻居作用不同：图注意力}{equation.16.27}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {16.6}超图：多个节点共同参与的关系}{228}{section.16.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.6.1}为什么成对连接可能丢失组信息}{228}{subsection.16.6.1}\protected@file@percent }
+\newlabel{eq:graph-hyper-incidence}{{16.28}{229}{为什么成对连接可能丢失组信息}{equation.16.28}{}}
+\newlabel{eq:graph-hyper-degrees}{{16.29}{229}{为什么成对连接可能丢失组信息}{equation.16.29}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {16.4}{\ignorespaces 超图的节点--超边关联表示。实线为第一组的成员关系，虚线为第二组的成员关系，均无方向。节点2与3各参加两个组，节点1只参加第一组。}}{229}{figure.caption.194}\protected@file@percent }
+\newlabel{fig:graph-hyper-incidence-picture}{{16.4}{229}{超图的节点--超边关联表示。实线为第一组的成员关系，虚线为第二组的成员关系，均无方向。节点2与3各参加两个组，节点1只参加第一组。}{figure.caption.194}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.6.2}从节点到超边，再从超边到节点}{229}{subsection.16.6.2}\protected@file@percent }
+\newlabel{eq:graph-hyper-random-walk}{{16.30}{229}{从节点到超边，再从超边到节点}{equation.16.30}{}}
 \citation{graphzhou2006hypergraph}
 \citation{graphfeng2019hgnn}
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.6.2}从节点到超边，再从超边到节点}{220}{subsection.16.6.2}\protected@file@percent }
-\newlabel{eq:graph-hyper-random-walk}{{16.30}{220}{从节点到超边，再从超边到节点}{equation.16.30}{}}
-\newlabel{eq:graph-hyper-convolution}{{16.32}{220}{从节点到超边，再从超边到节点}{equation.16.32}{}}
-\newlabel{eq:graph-hyper-node}{{16.33}{220}{从节点到超边，再从超边到节点}{equation.16.33}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.6.3}三个节点、两条超边的手算}{220}{subsection.16.6.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {16.5}{\ignorespaces 权重均为1的超图行归一化传播$R_HX$。实线箭头经第一组，虚线箭头经第二组。本图展示两次普通平均，不是对称归一化$S_HX$的计算图。}}{221}{figure.caption.182}\protected@file@percent }
-\newlabel{fig:graph-hyper-two-stage}{{16.5}{221}{权重均为1的超图行归一化传播$R_HX$。实线箭头经第一组，虚线箭头经第二组。本图展示两次普通平均，不是对称归一化$S_HX$的计算图。}{figure.caption.182}{}}
-\newlabel{eq:graph-hyper-example}{{16.36}{221}{三个节点、两条超边的手算}{equation.16.36}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.6.4}超图拉普拉斯与成对传播的联系}{222}{subsection.16.6.4}\protected@file@percent }
-\newlabel{eq:graph-hyper-smoothness}{{16.37}{222}{超图拉普拉斯与成对传播的联系}{equation.16.37}{}}
-\newlabel{eq:graph-hyper-clique}{{16.38}{222}{超图拉普拉斯与成对传播的联系}{equation.16.38}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {16.7}怎样训练，哪些信息允许进入图}{222}{section.16.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.7.1}从节点表示到故障概率与训练损失}{222}{subsection.16.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.7.2}传导设定与归纳设定}{223}{subsection.16.7.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {16.8}传播何时失效，怎样检查}{224}{section.16.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.8.1}同配关系与过平滑}{224}{subsection.16.8.1}\protected@file@percent }
-\newlabel{eq:graph-oversmoothing-limit}{{16.42}{224}{同配关系与过平滑}{equation.16.42}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.8.2}远处信息压缩与计算成本}{224}{subsection.16.8.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {16.8.3}工业验证：图结构是否提供了新增信息}{225}{subsection.16.8.3}\protected@file@percent }
+\newlabel{eq:graph-hyper-convolution}{{16.32}{230}{从节点到超边，再从超边到节点}{equation.16.32}{}}
+\newlabel{eq:graph-hyper-node}{{16.33}{230}{从节点到超边，再从超边到节点}{equation.16.33}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.6.3}三个节点、两条超边的手算}{230}{subsection.16.6.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {16.5}{\ignorespaces 权重均为1的超图行归一化传播$R_HX$。实线箭头经第一组，虚线箭头经第二组。本图展示两次普通平均，不是对称归一化$S_HX$的计算图。}}{231}{figure.caption.195}\protected@file@percent }
+\newlabel{fig:graph-hyper-two-stage}{{16.5}{231}{权重均为1的超图行归一化传播$R_HX$。实线箭头经第一组，虚线箭头经第二组。本图展示两次普通平均，不是对称归一化$S_HX$的计算图。}{figure.caption.195}{}}
+\newlabel{eq:graph-hyper-example}{{16.36}{231}{三个节点、两条超边的手算}{equation.16.36}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.6.4}超图拉普拉斯与成对传播的联系}{231}{subsection.16.6.4}\protected@file@percent }
+\newlabel{eq:graph-hyper-smoothness}{{16.37}{231}{超图拉普拉斯与成对传播的联系}{equation.16.37}{}}
+\newlabel{eq:graph-hyper-clique}{{16.38}{232}{超图拉普拉斯与成对传播的联系}{equation.16.38}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {16.7}怎样训练，哪些信息允许进入图}{232}{section.16.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.7.1}从节点表示到故障概率与训练损失}{232}{subsection.16.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.7.2}传导设定与归纳设定}{233}{subsection.16.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {16.8}传播何时失效，怎样检查}{233}{section.16.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.8.1}同配关系与过平滑}{233}{subsection.16.8.1}\protected@file@percent }
+\newlabel{eq:graph-oversmoothing-limit}{{16.42}{234}{同配关系与过平滑}{equation.16.42}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.8.2}远处信息压缩与计算成本}{234}{subsection.16.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {16.8.3}工业验证：图结构是否提供了新增信息}{234}{subsection.16.8.3}\protected@file@percent }
 \@setckpt{chapters/10-graph-neural-networks}{
-\setcounter{page}{227}
+\setcounter{page}{237}
 \setcounter{equation}{42}
 \setcounter{enumi}{5}
 \setcounter{enumii}{0}
@@ -91,9 +91,9 @@
 \setcounter{parentequation}{0}
 \setcounter{section@level}{0}
 \setcounter{Item}{8}
-\setcounter{Hfootnote}{0}
+\setcounter{Hfootnote}{32}
 \setcounter{Hy@AnnotLevel}{0}
-\setcounter{bookmark@seq@number}{126}
+\setcounter{bookmark@seq@number}{128}
 \setcounter{caption@flags}{2}
 \setcounter{continuedfloat}{0}
 \setcounter{float@type}{16}

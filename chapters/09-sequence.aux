@@ -1,108 +1,127 @@
 \relax 
 \providecommand\hyper@newdestlabel[2]{}
-\@writefile{toc}{\contentsline {chapter}{\numberline {第十四章\hspace  {.3em}}序列建模模型}{168}{chapter.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {第八章\hspace  {.3em}}序列建模模型}{167}{chapter.8}\protected@file@percent }
 \@writefile{lof}{\addvspace {10.0pt}}
 \@writefile{lot}{\addvspace {10.0pt}}
-\@writefile{toc}{\contentsline {section}{\numberline {14.1}先固定任务与可用的历史}{168}{section.14.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.1.1}预测未来与识别当前异常}{168}{subsection.14.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.1.2}共享表示与不同的输出头}{169}{subsection.14.1.2}\protected@file@percent }
-\newlabel{eq:sequence-encoder-head}{{14.1}{169}{共享表示与不同的输出头}{equation.14.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {14.1}{\ignorespaces 相同类别的历史编码方法可以服务于不同任务。实线是截至$t-1$的预测计算，虚线是$t$时刻观测到达后的异常评分。各任务可分别训练，也可在有相应标签时联合训练。}}{169}{figure.caption.135}\protected@file@percent }
-\newlabel{fig:sequence-tasks}{{14.1}{169}{相同类别的历史编码方法可以服务于不同任务。实线是截至$t-1$的预测计算，虚线是$t$时刻观测到达后的异常评分。各任务可分别训练，也可在有相应标签时联合训练。}{figure.caption.135}{}}
-\citation{hochreiter1997lstm}
-\@writefile{toc}{\contentsline {section}{\numberline {14.2}RNN 与 LSTM：把历史逐步写入记忆}{170}{section.14.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.2.1}RNN 的状态怎样形成预测}{170}{subsection.14.2.1}\protected@file@percent }
-\newlabel{eq:sequence-rnn-predict}{{14.2}{170}{RNN 的状态怎样形成预测}{equation.14.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {14.2}{\ignorespaces 递归序列模型把历史压缩为状态；状态维度和更新机制决定哪些信息能够持续保留。}}{170}{figure.caption.136}\protected@file@percent }
-\newlabel{fig:sequence-recurrent-state}{{14.2}{170}{递归序列模型把历史压缩为状态；状态维度和更新机制决定哪些信息能够持续保留。}{figure.caption.136}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.2.2}LSTM：分开控制保留、写入与读出}{171}{subsection.14.2.2}\protected@file@percent }
-\newlabel{eq:sequence-lstm-input-forget}{{14.3}{171}{LSTM：分开控制保留、写入与读出}{equation.14.3}{}}
-\newlabel{eq:sequence-lstm-output-candidate}{{14.4}{171}{LSTM：分开控制保留、写入与读出}{equation.14.4}{}}
-\@writefile{toc}{\contentsline {paragraph}{从单步导数到跨时间反向传播。}{172}{paragraph*.137}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.2.3}GRU：用较少门控更新状态}{173}{subsection.14.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {14.3}时间卷积网络：在固定范围内组合历史}{173}{section.14.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.3.1}因果卷积怎样保留顺序}{173}{subsection.14.3.1}\protected@file@percent }
-\newlabel{eq:sequence-tcn}{{14.16}{173}{因果卷积怎样保留顺序}{equation.14.16}{}}
-\citation{vaswani2017attention}
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.3.2}空洞卷积怎样扩大感受野}{174}{subsection.14.3.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {14.3}{\ignorespaces 核宽为二的三层因果空洞卷积中，当前位置输出读取最近八步的路径。箭头表示特征参与下一层计算，只展开与$z_t$相关的节点。}}{174}{figure.caption.138}\protected@file@percent }
-\newlabel{fig:sequence-tcn-receptive}{{14.3}{174}{核宽为二的三层因果空洞卷积中，当前位置输出读取最近八步的路径。箭头表示特征参与下一层计算，只展开与$z_t$相关的节点。}{figure.caption.138}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {14.4}Transformer：按内容重新读取历史}{174}{section.14.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.4.1}查询、键和值怎样完成一次读取}{174}{subsection.14.4.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {14.4}{\ignorespaces 注意力把“压缩全部历史”改为“按查询重新读取历史”，代价是保存和计算位置间的相互作用。}}{175}{figure.caption.139}\protected@file@percent }
-\newlabel{fig:sequence-attention-query}{{14.4}{175}{注意力把“压缩全部历史”改为“按查询重新读取历史”，代价是保存和计算位置间的相互作用。}{figure.caption.139}{}}
-\@writefile{toc}{\contentsline {paragraph}{注意力的逐位置解释。}{175}{paragraph*.140}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{一次可以手算的读取。}{175}{paragraph*.141}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{缩放、归一化与访问成本的推导。}{176}{paragraph*.142}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{位置编码与因果遮罩。}{177}{paragraph*.143}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.4.2}Transformer 编码块怎样接到预测头}{177}{subsection.14.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{多头注意力的张量形状。}{177}{paragraph*.144}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {14.5}{\ignorespaces 前置归一化 Transformer 编码块。实线表示变换路径，虚线表示残差相加路径；注意力交换位置间的信息，前馈网络逐位置加工特征。}}{178}{figure.caption.145}\protected@file@percent }
-\newlabel{fig:sequence-transformer-flow}{{14.5}{178}{前置归一化 Transformer 编码块。实线表示变换路径，虚线表示残差相加路径；注意力交换位置间的信息，前馈网络逐位置加工特征。}{figure.caption.145}{}}
-\@writefile{toc}{\contentsline {paragraph}{位置编码的选择。}{178}{paragraph*.146}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.4.3}非平稳性与位置表示}{178}{subsection.14.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.4.4}PatchTST：把局部时间片作为读取单位}{178}{subsection.14.4.4}\protected@file@percent }
-\citation{kalman1960filter}
-\@writefile{toc}{\contentsline {section}{\numberline {14.5}状态空间与 Mamba：选择性地保留长历史}{179}{section.14.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.5.1}状态转移不自动等于概率估计}{179}{subsection.14.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{卡尔曼滤波的两步更新。}{179}{paragraph*.147}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{把滤波更新算成一个温度例子。}{179}{paragraph*.148}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{由高斯条件化推导滤波增益。}{180}{paragraph*.149}\protected@file@percent }
-\newlabel{eq:sequence-joseph-covariance}{{14.34}{180}{由高斯条件化推导滤波增益。}{equation.14.34}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.5.2}从固定状态空间到 Mamba 的选择性记忆}{180}{subsection.14.5.2}\protected@file@percent }
-\newlabel{sec:sequence-mamba}{{14.5.2}{180}{从固定状态空间到 Mamba 的选择性记忆}{subsection.14.5.2}{}}
-\@writefile{toc}{\contentsline {paragraph}{连续动力学怎样成为离散记忆。}{181}{paragraph*.150}\protected@file@percent }
-\newlabel{eq:sequence-ssm-continuous}{{14.35}{181}{连续动力学怎样成为离散记忆。}{equation.14.35}{}}
-\newlabel{eq:sequence-ssm-discrete}{{14.36}{181}{连续动力学怎样成为离散记忆。}{equation.14.36}{}}
-\newlabel{eq:sequence-ssm-zoh}{{14.37}{181}{连续动力学怎样成为离散记忆。}{equation.14.37}{}}
-\newlabel{eq:sequence-ssm-convolution}{{14.38}{181}{连续动力学怎样成为离散记忆。}{equation.14.38}{}}
-\@writefile{toc}{\contentsline {paragraph}{输入依赖的步长、写入与读取。}{182}{paragraph*.151}\protected@file@percent }
-\newlabel{eq:sequence-mamba-selection}{{14.39}{182}{输入依赖的步长、写入与读取。}{equation.14.39}{}}
-\newlabel{eq:sequence-mamba-zoh}{{14.40}{182}{输入依赖的步长、写入与读取。}{equation.14.40}{}}
-\newlabel{eq:sequence-mamba-recurrence}{{14.41}{182}{输入依赖的步长、写入与读取。}{equation.14.41}{}}
-\@writefile{toc}{\contentsline {paragraph}{先手算两步，再理解扫描。}{182}{paragraph*.152}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{为何能递推推理，也能并行训练。}{183}{paragraph*.153}\protected@file@percent }
-\newlabel{eq:sequence-mamba-scan}{{14.42}{183}{为何能递推推理，也能并行训练。}{equation.14.42}{}}
-\@writefile{toc}{\contentsline {paragraph}{从选择性 SSM 到 Mamba 模块。}{183}{paragraph*.154}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{与 Transformer 的计算和记忆取舍。}{183}{paragraph*.155}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{工业实例：保留冲击还是保留工况。}{184}{paragraph*.156}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {14.6}把历史表示接到预测与异常任务}{185}{section.14.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.6.1}直接多步预测与递归预测}{185}{subsection.14.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.6.2}概率输出怎样表达未来的不确定性}{185}{subsection.14.6.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.6.3}异常评分：把新观测与正常模式比较}{186}{subsection.14.6.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {14.6.4}时间边界与工业验证}{187}{subsection.14.6.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{滚动预测的完整设置。}{187}{paragraph*.157}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{从预测到异常告警。}{187}{paragraph*.158}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {14.7}回到设备监测：怎样验证历史表示有用}{188}{section.14.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{序列模型的基线与消融。}{188}{paragraph*.159}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{不规则采样与时间间隔。}{188}{paragraph*.160}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{多变量序列的因果边界。}{188}{paragraph*.161}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{概率预测的评价。}{188}{paragraph*.162}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{本章小结。}{189}{paragraph*.164}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8.1}先固定任务与可用的历史}{168}{section.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1.1}预测未来与识别当前异常}{168}{subsection.8.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1.2}共享表示与不同的输出头}{168}{subsection.8.1.2}\protected@file@percent }
+\newlabel{eq:sequence-encoder-head}{{8.1}{168}{共享表示与不同的输出头}{equation.8.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.1}{\ignorespaces 相同类别的历史编码方法可以服务于不同任务。实线是截至$t-1$的预测计算，虚线是$t$时刻观测到达后的异常评分。各任务可分别训练，也可在有相应标签时联合训练。}}{169}{figure.caption.143}\protected@file@percent }
+\newlabel{fig:sequence-tasks}{{8.1}{169}{相同类别的历史编码方法可以服务于不同任务。实线是截至$t-1$的预测计算，虚线是$t$时刻观测到达后的异常评分。各任务可分别训练，也可在有相应标签时联合训练。}{figure.caption.143}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.2}RNN 与 LSTM：把历史逐步写入记忆}{169}{section.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.1}RNN 的状态怎样形成预测}{169}{subsection.8.2.1}\protected@file@percent }
+\newlabel{eq:sequence-rnn-predict}{{8.2}{169}{RNN 的状态怎样形成预测}{equation.8.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.2}{\ignorespaces 递归序列模型把历史压缩为状态；状态维度和更新机制决定哪些信息能够持续保留。}}{170}{figure.caption.144}\protected@file@percent }
+\newlabel{fig:sequence-recurrent-state}{{8.2}{170}{递归序列模型把历史压缩为状态；状态维度和更新机制决定哪些信息能够持续保留。}{figure.caption.144}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.2}LSTM：分开控制保留、写入与读出}{170}{subsection.8.2.2}\protected@file@percent }
+\newlabel{eq:sequence-lstm-input-forget}{{8.3}{170}{LSTM：分开控制保留、写入与读出}{equation.8.3}{}}
+\newlabel{eq:sequence-lstm-output-candidate}{{8.4}{170}{LSTM：分开控制保留、写入与读出}{equation.8.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{从单步导数到跨时间反向传播。}{171}{paragraph*.145}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2.3}GRU：用较少门控更新状态}{173}{subsection.8.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8.3}时间卷积网络：在固定范围内组合历史}{173}{section.8.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.1}因果卷积怎样保留顺序}{173}{subsection.8.3.1}\protected@file@percent }
+\newlabel{eq:sequence-tcn}{{8.16}{173}{因果卷积怎样保留顺序}{equation.8.16}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3.2}空洞卷积怎样扩大感受野}{174}{subsection.8.3.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8.3}{\ignorespaces 核宽为二的三层因果空洞卷积中，当前位置输出读取最近八步的路径。箭头表示特征参与下一层计算，只展开与$z_t$相关的节点。}}{174}{figure.caption.146}\protected@file@percent }
+\newlabel{fig:sequence-tcn-receptive}{{8.3}{174}{核宽为二的三层因果空洞卷积中，当前位置输出读取最近八步的路径。箭头表示特征参与下一层计算，只展开与$z_t$相关的节点。}{figure.caption.146}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.4}{\ignorespaces TCN 残差块}}{175}{figure.caption.147}\protected@file@percent }
+\newlabel{fig:sequence-tcn-original-block}{{8.4}{175}{TCN 残差块}{figure.caption.147}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.4}Transformer：按内容重新读取历史}{175}{section.8.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4.1}查询、键和值怎样完成一次读取}{175}{subsection.8.4.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8.5}{\ignorespaces 注意力把“压缩全部历史”改为“按查询重新读取历史”，代价是保存和计算位置间的相互作用。}}{176}{figure.caption.148}\protected@file@percent }
+\newlabel{fig:sequence-attention-query}{{8.5}{176}{注意力把“压缩全部历史”改为“按查询重新读取历史”，代价是保存和计算位置间的相互作用。}{figure.caption.148}{}}
+\@writefile{toc}{\contentsline {paragraph}{注意力的逐位置解释。}{176}{paragraph*.149}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{一次可以手算的读取。}{176}{paragraph*.150}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{缩放、归一化与访问成本的推导。}{177}{paragraph*.151}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{位置编码与因果遮罩。}{178}{paragraph*.152}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4.2}Transformer 编码块怎样接到预测头}{178}{subsection.8.4.2}\protected@file@percent }
+\newlabel{fn:sequence-transformer-structure-source}{{4}{178}{}{Hfootnote.4}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.6}{\ignorespaces Transformer 编码器与解码器}}{179}{figure.caption.153}\protected@file@percent }
+\newlabel{fig:sequence-transformer-original}{{8.6}{179}{Transformer 编码器与解码器}{figure.caption.153}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4.3}非平稳性与位置表示}{179}{subsection.8.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{位置编码的选择。}{180}{paragraph*.154}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4.4}PatchTST：把局部时间片作为读取单位}{180}{subsection.8.4.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8.7}{\ignorespaces PatchTST 预测与预训练}}{181}{figure.caption.155}\protected@file@percent }
+\newlabel{fig:sequence-patchtst}{{8.7}{181}{PatchTST 预测与预训练}{figure.caption.155}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4.5}iTransformer：以变量标记表达传感器关系}{181}{subsection.8.4.5}\protected@file@percent }
+\newlabel{fn:sequence-itransformer-source}{{7}{181}{}{Hfootnote.7}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8.8}{\ignorespaces 时间标记与变量标记}}{182}{figure.caption.156}\protected@file@percent }
+\newlabel{fig:sequence-itransformer}{{8.8}{182}{时间标记与变量标记}{figure.caption.156}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {8.5}状态空间与 Mamba：选择性地保留长历史}{182}{section.8.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.5.1}状态转移不自动等于概率估计}{182}{subsection.8.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{卡尔曼滤波的两步更新。}{183}{paragraph*.157}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{把滤波更新算成一个温度例子。}{183}{paragraph*.158}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{由高斯条件化推导滤波增益。}{183}{paragraph*.159}\protected@file@percent }
+\newlabel{eq:sequence-joseph-covariance}{{8.34}{184}{由高斯条件化推导滤波增益。}{equation.8.34}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.5.2}从固定状态空间到 Mamba 的选择性记忆}{184}{subsection.8.5.2}\protected@file@percent }
+\newlabel{sec:sequence-mamba}{{8.5.2}{184}{从固定状态空间到 Mamba 的选择性记忆}{subsection.8.5.2}{}}
+\@writefile{toc}{\contentsline {paragraph}{连续动力学怎样成为离散记忆。}{184}{paragraph*.160}\protected@file@percent }
+\newlabel{eq:sequence-ssm-continuous}{{8.35}{184}{连续动力学怎样成为离散记忆。}{equation.8.35}{}}
+\newlabel{eq:sequence-ssm-discrete}{{8.36}{185}{连续动力学怎样成为离散记忆。}{equation.8.36}{}}
+\newlabel{eq:sequence-ssm-zoh}{{8.37}{185}{连续动力学怎样成为离散记忆。}{equation.8.37}{}}
+\newlabel{eq:sequence-ssm-convolution}{{8.38}{185}{连续动力学怎样成为离散记忆。}{equation.8.38}{}}
+\@writefile{toc}{\contentsline {paragraph}{输入依赖的步长、写入与读取。}{185}{paragraph*.161}\protected@file@percent }
+\newlabel{eq:sequence-mamba-selection}{{8.39}{185}{输入依赖的步长、写入与读取。}{equation.8.39}{}}
+\newlabel{eq:sequence-mamba-zoh}{{8.40}{186}{输入依赖的步长、写入与读取。}{equation.8.40}{}}
+\newlabel{eq:sequence-mamba-recurrence}{{8.41}{186}{输入依赖的步长、写入与读取。}{equation.8.41}{}}
+\@writefile{toc}{\contentsline {paragraph}{先手算两步，再理解扫描。}{186}{paragraph*.162}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{为何能递推推理，也能并行训练。}{187}{paragraph*.163}\protected@file@percent }
+\newlabel{eq:sequence-mamba-scan}{{8.42}{187}{为何能递推推理，也能并行训练。}{equation.8.42}{}}
+\@writefile{toc}{\contentsline {paragraph}{从选择性 SSM 到 Mamba 模块。}{187}{paragraph*.164}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8.9}{\ignorespaces Mamba 模块}}{188}{figure.caption.165}\protected@file@percent }
+\newlabel{fig:sequence-mamba-original-block}{{8.9}{188}{Mamba 模块}{figure.caption.165}{}}
+\@writefile{toc}{\contentsline {paragraph}{与 Transformer 的计算和记忆取舍。}{188}{paragraph*.166}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{工业实例：保留冲击还是保留工况。}{188}{paragraph*.167}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8.6}把历史表示接到预测与异常任务}{189}{section.8.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.6.1}直接多步预测与递归预测}{189}{subsection.8.6.1}\protected@file@percent }
+\newlabel{sec:sequence-direct-recursive}{{8.6.1}{189}{直接多步预测与递归预测}{subsection.8.6.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.6.2}概率输出怎样表达未来的不确定性}{190}{subsection.8.6.2}\protected@file@percent }
+\newlabel{sec:sequence-probabilistic}{{8.6.2}{190}{概率输出怎样表达未来的不确定性}{subsection.8.6.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.6.3}异常评分：把新观测与正常模式比较}{191}{subsection.8.6.3}\protected@file@percent }
+\newlabel{sec:sequence-anomaly-score}{{8.6.3}{191}{异常评分：把新观测与正常模式比较}{subsection.8.6.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.6.4}时间边界与工业验证}{191}{subsection.8.6.4}\protected@file@percent }
+\newlabel{sec:sequence-validation}{{8.6.4}{191}{时间边界与工业验证}{subsection.8.6.4}{}}
+\@writefile{toc}{\contentsline {paragraph}{滚动预测的完整设置。}{191}{paragraph*.168}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{从预测到异常告警。}{192}{paragraph*.169}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8.7}时序基础模型：先在大量序列上预训练}{192}{section.8.7}\protected@file@percent }
+\newlabel{sec:sequence-foundation}{{8.7}{192}{时序基础模型：先在大量序列上预训练}{section.8.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.7.1}把数值离散成词元：Chronos}{192}{subsection.8.7.1}\protected@file@percent }
+\newlabel{eq:sequence-chronos-token}{{8.51}{193}{把数值离散成词元：Chronos}{equation.8.51}{}}
+\@writefile{toc}{\contentsline {paragraph}{手算一次缩放与量化。}{193}{paragraph*.170}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8.10}{\ignorespaces Chronos 预训练与推理流程}}{194}{figure.caption.171}\protected@file@percent }
+\newlabel{fig:sequence-chronos-original}{{8.10}{194}{Chronos 预训练与推理流程}{figure.caption.171}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.7.2}片段解码、多变量与其他预训练目标}{194}{subsection.8.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.7.3}零样本预测怎样接入设备监测}{195}{subsection.8.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8.8}回到设备监测：怎样验证历史表示有用}{195}{section.8.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{基线与消融。}{195}{paragraph*.172}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{时间间隔与特征的可用性。}{195}{paragraph*.173}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{概率预测的评价。}{195}{paragraph*.174}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{本章小结。}{196}{paragraph*.176}\protected@file@percent }
 \@setckpt{chapters/09-sequence}{
-\setcounter{page}{191}
-\setcounter{equation}{50}
+\setcounter{page}{198}
+\setcounter{equation}{51}
 \setcounter{enumi}{5}
 \setcounter{enumii}{0}
 \setcounter{enumiii}{0}
 \setcounter{enumiv}{0}
-\setcounter{footnote}{0}
+\setcounter{footnote}{15}
 \setcounter{mpfootnote}{0}
-\setcounter{part}{4}
-\setcounter{chapter}{14}
-\setcounter{section}{7}
+\setcounter{part}{3}
+\setcounter{chapter}{8}
+\setcounter{section}{8}
 \setcounter{subsection}{0}
 \setcounter{subsubsection}{0}
 \setcounter{paragraph}{0}
 \setcounter{subparagraph}{0}
-\setcounter{figure}{5}
+\setcounter{figure}{10}
 \setcounter{table}{0}
 \setcounter{parentequation}{0}
 \setcounter{section@level}{0}
 \setcounter{Item}{8}
-\setcounter{Hfootnote}{0}
+\setcounter{Hfootnote}{15}
 \setcounter{Hy@AnnotLevel}{0}
-\setcounter{bookmark@seq@number}{110}
+\setcounter{bookmark@seq@number}{60}
 \setcounter{caption@flags}{2}
 \setcounter{continuedfloat}{0}
 \setcounter{float@type}{16}

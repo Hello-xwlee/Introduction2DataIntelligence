@@ -4,19 +4,13 @@ The top-level auxiliary file: main.aux
 A level-1 auxiliary file: chapters/01-mathematical-preliminaries.aux
 A level-1 auxiliary file: chapters/02-foundations.aux
 A level-1 auxiliary file: chapters/03-linear-models.aux
-A level-1 auxiliary file: chapters/04-objectives-and-metrics.aux
+A level-1 auxiliary file: chapters/04-learning-pipeline.aux
 A level-1 auxiliary file: chapters/05-optimization-training.aux
+A level-1 auxiliary file: chapters/06-statistical-learning.aux
 A level-1 auxiliary file: chapters/07-bayesian.aux
-A level-1 auxiliary file: chapters/08-kernel-functions.aux
-A level-1 auxiliary file: chapters/09-svm.aux
-A level-1 auxiliary file: chapters/09-pca.aux
-A level-1 auxiliary file: chapters/09-krr.aux
-A level-1 auxiliary file: chapters/09-svr.aux
-A level-1 auxiliary file: chapters/09-klms.aux
-A level-1 auxiliary file: chapters/09-kernel-gp.aux
+A level-1 auxiliary file: chapters/08-parametric-nonparametric.aux
 A level-1 auxiliary file: chapters/09-sequence.aux
 A level-1 auxiliary file: chapters/10-vision.aux
-A level-1 auxiliary file: chapters/10-graph-neural-networks.aux
 A level-1 auxiliary file: chapters/11-llm.aux
 A level-1 auxiliary file: chapters/12-multimodal.aux
 A level-1 auxiliary file: chapters/13-generative.aux
@@ -30,44 +24,44 @@ A level-1 auxiliary file: chapters/20-manifold.aux
 A level-1 auxiliary file: chapters/21-meta.aux
 The style file: plain.bst
 Database file #1: references.bib
-You've used 108 entries,
+You've used 97 entries,
             2118 wiz_defined-function locations,
-            991 strings with 21746 characters,
-and the built_in function-call counts, 35545 in all, are:
-= -- 3161
-> -- 2126
+            944 strings with 20006 characters,
+and the built_in function-call counts, 31911 in all, are:
+= -- 2848
+> -- 1910
 < -- 1
-+ -- 844
-- -- 724
-* -- 2430
-:= -- 6079
-add.period$ -- 324
-call.type$ -- 108
-change.case$ -- 669
++ -- 758
+- -- 650
+* -- 2188
+:= -- 5468
+add.period$ -- 291
+call.type$ -- 97
+change.case$ -- 601
 chr.to.int$ -- 0
-cite$ -- 108
-duplicate$ -- 1365
-empty$ -- 2877
-format.name$ -- 724
-if$ -- 7277
+cite$ -- 97
+duplicate$ -- 1216
+empty$ -- 2562
+format.name$ -- 650
+if$ -- 6523
 int.to.chr$ -- 0
-int.to.str$ -- 108
-missing$ -- 111
-newline$ -- 543
-num.names$ -- 216
-pop$ -- 883
+int.to.str$ -- 97
+missing$ -- 99
+newline$ -- 488
+num.names$ -- 194
+pop$ -- 777
 preamble$ -- 1
-purify$ -- 566
+purify$ -- 508
 quote$ -- 0
-skip$ -- 795
+skip$ -- 718
 stack$ -- 0
-substring$ -- 1410
-swap$ -- 170
+substring$ -- 1285
+swap$ -- 150
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 422
+type$ -- 380
 warning$ -- 0
-while$ -- 277
-width$ -- 111
-write$ -- 1114
+while$ -- 251
+width$ -- 99
+write$ -- 1003

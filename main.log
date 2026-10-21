@@ -1,7 +1,6 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.5.14)  13 OCT 2026 19:40
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.5.14)  21 OCT 2026 22:30
 entering extended mode
  restricted \write18 enabled.
- file:line:error style messages enabled.
  %&-line parsing enabled.
 **main.tex
 (./main.tex
@@ -47,8 +46,8 @@ File: ctexopts.cfg 2022/07/14 v2.5.10 Option configuration file (CTEX)
 )
 (f:/texlive/2025/texmf-dist/tex/latex/base/book.cls
 Document Class: book 2024/06/29 v1.4n Standard LaTeX document class
-(f:/texlive/2025/texmf-dist/tex/latex/base/bk11.clo
-File: bk11.clo 2024/06/29 v1.4n Standard LaTeX file (size option)
+(f:/texlive/2025/texmf-dist/tex/latex/base/bk12.clo
+File: bk12.clo 2024/06/29 v1.4n Standard LaTeX file (size option)
 )
 \c@part=\count198
 \c@chapter=\count199
@@ -186,6 +185,9 @@ CTEX)
 (f:/texlive/2025/texmf-dist/tex/latex/ctex/config/ctex-name-utf8.cfg
 File: ctex-name-utf8.cfg 2022/07/14 v2.5.10 Caption with encoding UTF-8 (CTEX)
 ))
+(f:/texlive/2025/texmf-dist/tex/latex/ctex/ctex-cs4size.clo
+File: ctex-cs4size.clo 2022/07/14 v2.5.10 cs4size option (CTEX)
+)
 (f:/texlive/2025/texmf-dist/tex/latex/ctex/fontset/ctex-fontset-windows.def
 File: ctex-fontset-windows.def 2022/07/14 v2.5.10 Windows fonts definition (CTE
 X)
@@ -382,32 +384,46 @@ Package: iftex 2024/12/12 v1.0g TeX engine tests
 \Gm@layoutvoffset=\dimen257
 \Gm@dimlist=\toks29
 )
+(f:/texlive/2025/texmf-dist/tex/latex/footmisc/footmisc.sty
+Package: footmisc 2024/12/24 v6.0g a miscellany of footnote facilities
+\FN@temptoken=\toks30
+\footnotemargin=\dimen258
+\@outputbox@depth=\dimen259
+Package footmisc Info: Declaring symbol style bringhurst on input line 699.
+Package footmisc Info: Declaring symbol style chicago on input line 707.
+Package footmisc Info: Declaring symbol style wiley on input line 716.
+Package footmisc Info: Declaring symbol style lamport-robust on input line 727.
+
+Package footmisc Info: Declaring symbol style lamport* on input line 747.
+Package footmisc Info: Declaring symbol style lamport*-robust on input line 768
+.
+)
 (f:/texlive/2025/texmf-dist/tex/latex/booktabs/booktabs.sty
 Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
-\heavyrulewidth=\dimen258
-\lightrulewidth=\dimen259
-\cmidrulewidth=\dimen260
-\belowrulesep=\dimen261
-\belowbottomsep=\dimen262
-\aboverulesep=\dimen263
-\abovetopsep=\dimen264
-\cmidrulesep=\dimen265
-\cmidrulekern=\dimen266
-\defaultaddspace=\dimen267
+\heavyrulewidth=\dimen260
+\lightrulewidth=\dimen261
+\cmidrulewidth=\dimen262
+\belowrulesep=\dimen263
+\belowbottomsep=\dimen264
+\aboverulesep=\dimen265
+\abovetopsep=\dimen266
+\cmidrulesep=\dimen267
+\cmidrulekern=\dimen268
+\defaultaddspace=\dimen269
 \@cmidla=\count317
 \@cmidlb=\count318
-\@aboverulesep=\dimen268
-\@belowrulesep=\dimen269
+\@aboverulesep=\dimen270
+\@belowrulesep=\dimen271
 \@thisruleclass=\count319
 \@lastruleclass=\count320
-\@thisrulewidth=\dimen270
+\@thisrulewidth=\dimen272
 )
 (f:/texlive/2025/texmf-dist/tex/latex/tools/array.sty
 Package: array 2024/10/17 v2.6g Tabular extension package (FMi)
-\col@sep=\dimen271
+\col@sep=\dimen273
 \ar@mcellbox=\box59
-\extrarowheight=\dimen272
-\NC@list=\toks30
+\extrarowheight=\dimen274
+\NC@list=\toks31
 \extratabsurround=\skip70
 \backup@length=\skip71
 \ar@cellbox=\box60
@@ -429,8 +445,8 @@ Package graphics Info: Driver file: xetex.def on input line 106.
 (f:/texlive/2025/texmf-dist/tex/latex/graphics-def/xetex.def
 File: xetex.def 2022/09/22 v5.0n Graphics/color driver for xetex
 ))
-\Gin@req@height=\dimen273
-\Gin@req@width=\dimen274
+\Gin@req@height=\dimen275
+\Gin@req@width=\dimen276
 )
 (f:/texlive/2025/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
@@ -453,8 +469,8 @@ Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
 (f:/texlive/2025/texmf-dist/tex/latex/enumitem/enumitem.sty
 Package: enumitem 2025/02/06 v3.11 Customized lists
 \labelindent=\skip72
-\enit@outerparindent=\dimen275
-\enit@toks=\toks31
+\enit@outerparindent=\dimen277
+\enit@toks=\toks32
 \enit@inbox=\box61
 \enit@count@id=\count321
 \enitdp@description=\count322
@@ -510,7 +526,7 @@ Package: etoolbox 2025/02/11 v2.5l e-TeX tools for LaTeX (JAW)
 Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
 )
 )
-\@linkdim=\dimen276
+\@linkdim=\dimen278
 \Hy@linkcounter=\count325
 \Hy@pagecounter=\count326
 
@@ -540,7 +556,7 @@ Package hyperref Info: Bookmarks ON on input line 4424.
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 4763.
-\XeTeXLinkMargin=\dimen277
+\XeTeXLinkMargin=\dimen279
 
 (f:/texlive/2025/texmf-dist/tex/generic/bitset/bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
@@ -550,8 +566,8 @@ Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
 \Fld@menulength=\count329
-\Field@Width=\dimen278
-\Fld@charsize=\dimen279
+\Field@Width=\dimen280
+\Fld@charsize=\dimen281
 Package hyperref Info: Hyper figures OFF on input line 6042.
 Package hyperref Info: Link nesting OFF on input line 6047.
 Package hyperref Info: Hyper index ON on input line 6050.
@@ -599,27 +615,33 @@ Package: caption 2023/08/05 v3.6o Customizing captions (AR)
 
 (f:/texlive/2025/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
-\caption@tempdima=\dimen280
-\captionmargin=\dimen281
-\caption@leftmargin=\dimen282
-\caption@rightmargin=\dimen283
-\caption@width=\dimen284
-\caption@indent=\dimen285
-\caption@parindent=\dimen286
-\caption@hangindent=\dimen287
+\caption@tempdima=\dimen282
+\captionmargin=\dimen283
+\caption@leftmargin=\dimen284
+\caption@rightmargin=\dimen285
+\caption@width=\dimen286
+\caption@indent=\dimen287
+\caption@parindent=\dimen288
+\caption@hangindent=\dimen289
 Package caption Info: Standard document class detected.
 )
 \c@caption@flags=\count337
 \c@continuedfloat=\count338
 Package caption Info: hyperref package is loaded.
 )
+(f:/texlive/2025/texmf-dist/tex/latex/placeins/placeins.sty
+Package: placeins 2005/04/18  v 2.2
+)
+(f:/texlive/2025/texmf-dist/tex/latex/graphics/lscape.sty
+Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
+)
 (f:/texlive/2025/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
 (f:/texlive/2025/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty
 (f:/texlive/2025/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
-\pgfutil@everybye=\toks32
-\pgfutil@tempdima=\dimen288
-\pgfutil@tempdimb=\dimen289
+\pgfutil@everybye=\toks33
+\pgfutil@tempdima=\dimen290
+\pgfutil@tempdimb=\dimen291
 )
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
 \pgfutil@abb=\box63
@@ -636,32 +658,32 @@ Package: pgf 2023-01-15 v3.1.10 (3.1.10)
 Package: pgfsys 2023-01-15 v3.1.10 (3.1.10)
 
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
-\pgfkeys@pathtoks=\toks33
-\pgfkeys@temptoks=\toks34
+\pgfkeys@pathtoks=\toks34
+\pgfkeys@temptoks=\toks35
 
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/utilities/pgfkeyslibraryfiltered.co
 de.tex
-\pgfkeys@tmptoks=\toks35
+\pgfkeys@tmptoks=\toks36
 ))
-\pgf@x=\dimen290
-\pgf@y=\dimen291
-\pgf@xa=\dimen292
-\pgf@ya=\dimen293
-\pgf@xb=\dimen294
-\pgf@yb=\dimen295
-\pgf@xc=\dimen296
-\pgf@yc=\dimen297
-\pgf@xd=\dimen298
-\pgf@yd=\dimen299
+\pgf@x=\dimen292
+\pgf@y=\dimen293
+\pgf@xa=\dimen294
+\pgf@ya=\dimen295
+\pgf@xb=\dimen296
+\pgf@yb=\dimen297
+\pgf@xc=\dimen298
+\pgf@yc=\dimen299
+\pgf@xd=\dimen300
+\pgf@yd=\dimen301
 \w@pgf@writea=\write3
 \r@pgf@reada=\read2
 \c@pgf@counta=\count339
 \c@pgf@countb=\count340
 \c@pgf@countc=\count341
 \c@pgf@countd=\count342
-\t@pgf@toka=\toks36
-\t@pgf@tokb=\toks37
-\t@pgf@tokc=\toks38
+\t@pgf@toka=\toks37
+\t@pgf@tokb=\toks38
+\t@pgf@tokc=\toks39
 \pgf@sys@id@count=\count343
  (f:/texlive/2025/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
 File: pgf.cfg 2023-01-15 v3.1.10 (3.1.10)
@@ -692,12 +714,12 @@ Package: pgfcore 2023-01-15 v3.1.10 (3.1.10)
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
-\pgfmath@dimen=\dimen300
+\pgfmath@dimen=\dimen302
 \pgfmath@count=\count347
 \pgfmath@box=\box64
-\pgfmath@toks=\toks39
-\pgfmath@stack@operand=\toks40
-\pgfmath@stack@operation=\toks41
+\pgfmath@toks=\toks40
+\pgfmath@stack@operand=\toks41
+\pgfmath@stack@operation=\toks42
 )
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex)
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code.te
@@ -723,32 +745,32 @@ etics.code.tex)
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfint.code.tex)
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex
 File: pgfcorepoints.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgf@picminx=\dimen301
-\pgf@picmaxx=\dimen302
-\pgf@picminy=\dimen303
-\pgf@picmaxy=\dimen304
-\pgf@pathminx=\dimen305
-\pgf@pathmaxx=\dimen306
-\pgf@pathminy=\dimen307
-\pgf@pathmaxy=\dimen308
-\pgf@xx=\dimen309
-\pgf@xy=\dimen310
-\pgf@yx=\dimen311
-\pgf@yy=\dimen312
-\pgf@zx=\dimen313
-\pgf@zy=\dimen314
+\pgf@picminx=\dimen303
+\pgf@picmaxx=\dimen304
+\pgf@picminy=\dimen305
+\pgf@picmaxy=\dimen306
+\pgf@pathminx=\dimen307
+\pgf@pathmaxx=\dimen308
+\pgf@pathminy=\dimen309
+\pgf@pathmaxy=\dimen310
+\pgf@xx=\dimen311
+\pgf@xy=\dimen312
+\pgf@yx=\dimen313
+\pgf@yy=\dimen314
+\pgf@zx=\dimen315
+\pgf@zy=\dimen316
 )
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.cod
 e.tex
 File: pgfcorepathconstruct.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgf@path@lastx=\dimen315
-\pgf@path@lasty=\dimen316
+\pgf@path@lastx=\dimen317
+\pgf@path@lasty=\dimen318
 )
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code.te
 x
 File: pgfcorepathusage.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgf@shorten@end@additional=\dimen317
-\pgf@shorten@start@additional=\dimen318
+\pgf@shorten@end@additional=\dimen319
+\pgf@shorten@start@additional=\dimen320
 )
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex
 File: pgfcorescopes.code.tex 2023-01-15 v3.1.10 (3.1.10)
@@ -760,14 +782,14 @@ File: pgfcorescopes.code.tex 2023-01-15 v3.1.10 (3.1.10)
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code
 .tex
 File: pgfcoregraphicstate.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgflinewidth=\dimen319
+\pgflinewidth=\dimen321
 )
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformations.c
 ode.tex
 File: pgfcoretransformations.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgf@pt@x=\dimen320
-\pgf@pt@y=\dimen321
-\pgf@pt@temp=\dimen322
+\pgf@pt@x=\dimen322
+\pgf@pt@y=\dimen323
+\pgf@pt@temp=\dimen324
 )
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
 File: pgfcorequick.code.tex 2023-01-15 v3.1.10 (3.1.10)
@@ -781,11 +803,11 @@ File: pgfcorepathprocessing.code.tex 2023-01-15 v3.1.10 (3.1.10)
 )
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex
 File: pgfcorearrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgfarrowsep=\dimen323
+\pgfarrowsep=\dimen325
 )
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
 File: pgfcoreshade.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgf@max=\dimen324
+\pgf@max=\dimen326
 \pgf@sys@shading@range@num=\count350
 \pgf@shadingcount=\count351
 )
@@ -817,8 +839,8 @@ File: pgfmoduleplot.code.tex 2023-01-15 v3.1.10 (3.1.10)
 (f:/texlive/2025/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65.st
 y
 Package: pgfcomp-version-0-65 2023-01-15 v3.1.10 (3.1.10)
-\pgf@nodesepstart=\dimen325
-\pgf@nodesepend=\dimen326
+\pgf@nodesepstart=\dimen327
+\pgf@nodesepend=\dimen328
 )
 (f:/texlive/2025/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18.st
 y
@@ -830,10 +852,10 @@ Package: pgfcomp-version-1-18 2023-01-15 v3.1.10 (3.1.10)
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex))
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
 Package: pgffor 2023-01-15 v3.1.10 (3.1.10)
-\pgffor@iter=\dimen327
-\pgffor@skip=\dimen328
-\pgffor@stack=\toks42
-\pgffor@toks=\toks43
+\pgffor@iter=\dimen329
+\pgffor@skip=\dimen330
+\pgffor@stack=\toks43
+\pgffor@toks=\toks44
 ))
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
 Package: tikz 2023-01-15 v3.1.10 (3.1.10)
@@ -842,16 +864,16 @@ Package: tikz 2023-01-15 v3.1.10 (3.1.10)
 de.tex
 File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@plot@mark@count=\count352
-\pgfplotmarksize=\dimen329
+\pgfplotmarksize=\dimen331
 )
-\tikz@lastx=\dimen330
-\tikz@lasty=\dimen331
-\tikz@lastxsaved=\dimen332
-\tikz@lastysaved=\dimen333
-\tikz@lastmovetox=\dimen334
-\tikz@lastmovetoy=\dimen335
-\tikzleveldistance=\dimen336
-\tikzsiblingdistance=\dimen337
+\tikz@lastx=\dimen332
+\tikz@lasty=\dimen333
+\tikz@lastxsaved=\dimen334
+\tikz@lastysaved=\dimen335
+\tikz@lastmovetox=\dimen336
+\tikz@lastmovetoy=\dimen337
+\tikzleveldistance=\dimen338
+\tikzsiblingdistance=\dimen339
 \tikz@figbox=\box70
 \tikz@figbox@bg=\box71
 \tikz@tempbox=\box72
@@ -876,10 +898,10 @@ File: tikzlibrarytopaths.code.tex 2023-01-15 v3.1.10 (3.1.10)
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.meta.cod
 e.tex
 File: pgflibraryarrows.meta.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgfarrowinset=\dimen338
-\pgfarrowlength=\dimen339
-\pgfarrowwidth=\dimen340
-\pgfarrowlinewidth=\dimen341
+\pgfarrowinset=\dimen340
+\pgfarrowlength=\dimen341
+\pgfarrowwidth=\dimen342
+\pgfarrowlinewidth=\dimen343
 )
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzli
 brarypositioning.code.tex
@@ -907,14 +929,14 @@ brarydecorations.pathreplacing.code.tex
 brarydecorations.code.tex
 (f:/texlive/2025/texmf-dist/tex/generic/pgf/modules/pgfmoduledecorations.code.t
 ex
-\pgfdecoratedcompleteddistance=\dimen342
-\pgfdecoratedremainingdistance=\dimen343
-\pgfdecoratedinputsegmentcompleteddistance=\dimen344
-\pgfdecoratedinputsegmentremainingdistance=\dimen345
-\pgf@decorate@distancetomove=\dimen346
+\pgfdecoratedcompleteddistance=\dimen344
+\pgfdecoratedremainingdistance=\dimen345
+\pgfdecoratedinputsegmentcompleteddistance=\dimen346
+\pgfdecoratedinputsegmentremainingdistance=\dimen347
+\pgf@decorate@distancetomove=\dimen348
 \pgf@decorate@repeatstate=\count361
-\pgfdecorationsegmentamplitude=\dimen347
-\pgfdecorationsegmentlength=\dimen348
+\pgfdecorationsegmentamplitude=\dimen349
+\pgfdecorationsegmentlength=\dimen350
 )
 \tikz@lib@dec@box=\box74
 )
@@ -928,15 +950,15 @@ nment
 (f:/texlive/2025/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count362
-\float@exts=\toks44
+\float@exts=\toks45
 \float@box=\box75
-\@float@everytoks=\toks45
+\@float@everytoks=\toks46
 \@floatcapt=\box76
 )
 (f:/texlive/2025/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
 )
-\@float@every@algorithm=\toks46
+\@float@every@algorithm=\toks47
 \c@algorithm=\count363
 )
 (f:/texlive/2025/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
@@ -960,15 +982,15 @@ Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
 Document Style - pseudocode environments for use with the `algorithmicx' style
 ) (f:/texlive/2025/texmf-dist/tex/latex/microtype/microtype.sty
 Package: microtype 2025/02/11 v3.2a Micro-typographical refinements (RS)
-\MT@toks=\toks47
+\MT@toks=\toks48
 \MT@tempbox=\box77
 \MT@count=\count371
 LaTeX Info: Redefining \noprotrusionifhmode on input line 1087.
 LaTeX Info: Redefining \leftprotrusion on input line 1088.
-\MT@prot@toks=\toks48
+\MT@prot@toks=\toks49
 LaTeX Info: Redefining \rightprotrusion on input line 1107.
 LaTeX Info: Redefining \textls on input line 1449.
-\MT@outer@kern=\dimen349
+\MT@outer@kern=\dimen351
 LaTeX Info: Redefining \microtypecontext on input line 2053.
 LaTeX Info: Redefining \textmicrotypecontext on input line 2070.
 \MT@listname@count=\count372
@@ -993,16 +1015,16 @@ Package: xeCJKfntef 2022/08/05 v3.9.1 xeCJK font effect
 \UL@box=\box78
 \UL@hyphenbox=\box79
 \UL@skip=\skip78
-\UL@hook=\toks49
-\UL@height=\dimen350
+\UL@hook=\toks50
+\UL@height=\dimen352
 \UL@pe=\count373
-\UL@pixel=\dimen351
+\UL@pixel=\dimen353
 \ULC@box=\box80
 Package: ulem 2019/11/18
-\ULdepth=\dimen352
+\ULdepth=\dimen354
 )
 \l__xeCJK_space_skip=\skip79
-\c__xeCJK_ulem-begin_node_dim=\dimen353
+\c__xeCJK_ulem-begin_node_dim=\dimen355
 \l__xeCJK_hidden_box=\box81
 \l__xeCJK_fntef_box=\box82
 \l__xeCJK_under_symbol_box=\box83
@@ -1011,16 +1033,16 @@ Package: ulem 2019/11/18
 (f:/texlive/2025/texmf-dist/tex/latex/listings/listings.sty
 \lst@mode=\count374
 \lst@gtempboxa=\box84
-\lst@token=\toks50
+\lst@token=\toks51
 \lst@length=\count375
-\lst@currlwidth=\dimen354
+\lst@currlwidth=\dimen356
 \lst@column=\count376
 \lst@pos=\count377
-\lst@lostspace=\dimen355
-\lst@width=\dimen356
+\lst@lostspace=\dimen357
+\lst@width=\dimen358
 \lst@newlines=\count378
 \lst@lineno=\count379
-\lst@maxwidth=\dimen357
+\lst@maxwidth=\dimen359
 
 (f:/texlive/2025/texmf-dist/tex/latex/listings/lstpatch.sty
 File: lstpatch.sty 2024/09/23 1.10c (Carsten Heinz)
@@ -1041,7 +1063,7 @@ Package: xeCJK-listings 2022/08/05 v3.9.1 xeCJK patch file for listings
 \l__xeCJK_listings_max_char_int=\count382
 \l__xeCJK_listings_flag_int=\count383
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 30.
+Package hyperref Info: Option `colorlinks' set `true' on input line 38.
 \c@definition=\count384
 \c@proposition=\count385
 \c@example=\count386
@@ -1050,13 +1072,11 @@ Package hyperref Info: Option `colorlinks' set `true' on input line 30.
 \c@lemma=\count389
 ) (./main.aux
 (./chapters/01-mathematical-preliminaries.aux) (./chapters/02-foundations.aux)
-(./chapters/03-linear-models.aux) (./chapters/04-objectives-and-metrics.aux)
-(./chapters/05-optimization-training.aux) (./chapters/07-bayesian.aux)
-(./chapters/08-kernel-functions.aux) (./chapters/09-svm.aux)
-(./chapters/09-pca.aux) (./chapters/09-krr.aux) (./chapters/09-svr.aux)
-(./chapters/09-klms.aux) (./chapters/09-kernel-gp.aux)
-(./chapters/09-sequence.aux) (./chapters/10-vision.aux)
-(./chapters/10-graph-neural-networks.aux) (./chapters/11-llm.aux)
+(./chapters/03-linear-models.aux) (./chapters/04-learning-pipeline.aux)
+(./chapters/05-optimization-training.aux)
+(./chapters/06-statistical-learning.aux) (./chapters/07-bayesian.aux)
+(./chapters/08-parametric-nonparametric.aux) (./chapters/09-sequence.aux)
+(./chapters/10-vision.aux) (./chapters/11-llm.aux)
 (./chapters/12-multimodal.aux) (./chapters/13-generative.aux)
 (./chapters/14-pinn.aux) (./chapters/15-pretraining.aux)
 (./chapters/16-transfer.aux) (./chapters/17-continual.aux)
@@ -1161,12 +1181,12 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 * \topmargin=-50.77328pt
 * \headheight=15.0pt
 * \headsep=19.8738pt
-* \topskip=11.0pt
-* \footskip=27.46295pt
-* \marginparwidth=116.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=88.0pt
 * \marginparsep=7.0pt
 * \columnsep=10.0pt
-* \skip\footins=10.0pt plus 4.0pt minus 2.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
 * \hoffset=0.0pt
 * \voffset=0.0pt
 * \mag=1000
@@ -1239,46 +1259,41 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 
 ]
 
-LaTeX Font Info:    Font shape `TU/SimSun(0)/m/sl' in size <10.95> not availabl
-e
+LaTeX Font Info:    Font shape `TU/SimSun(0)/m/sl' in size <12.045> not availab
+le
 (Font)              Font shape `TU/SimSun(0)/m/it' tried instead on input line 
-208.
+202.
 [2]
 
 [3]
 
 [4]
 
-[5]
-
-[6]
-
-[7])
+[5])
 \tf@toc=\write5
 \openout5 = `main.toc'.
 
 
 
-[8]
+[6]
 
-[9
+[7
 
 ]
-Underfull \vbox (badness 1472) has occurred while \output is active []
 
+[8]
 
+[9]
 
 [10]
-Underfull \vbox (badness 2547) has occurred while \output is active []
-
-
 
 [11]
 
-[12]
+[12
+
+]
 
 [1
-
 
 ]
 
@@ -1301,24 +1316,8 @@ Package microtype Info: Loading generic protrusion settings for font family
 [4]
 
 [5]
-Overfull \hbox (1.83656pt too wide) detected at line 88
-[]
- []
-
-
 
 [6]
-Overfull \hbox (7.57506pt too wide) in paragraph at lines 98--100
-\TU/SimSun(0)/m/n/10.95 一 维：|  均 值 $\OML/cmm/m/it/10.95 ^^V$ \TU/SimSun(0)/m/n/
-10.95 给 中 心，|  标 准 差 $\OML/cmm/m/it/10.95 ^^[ > \OT1/cmr/m/n/10.95 0$ \TU/SimSu
-n(0)/m/n/10.95 给 横 向 尺 度，| $\OML/cmm/m/it/10.95 p\OT1/cmr/m/n/10.95 (\OML/cmm/m
-/it/10.95 x\OT1/cmr/m/n/10.95 ) = [][\OMS/cmsy/m/n/10.95 ^^@\OT1/cmr/m/n/10.95 
-(\OML/cmm/m/it/10.95 x \OMS/cmsy/m/n/10.95 ^^@ \OML/cmm/m/it/10.95 ^^V\OT1/cmr/
-m/n/10.95 )[]/(2\OML/cmm/m/it/10.95 ^^[[]\OT1/cmr/m/n/10.95 )]/([]\OML/cmm/m/it
-/10.95 ^^[\OT1/cmr/m/n/10.95 )$\TU/SimSun(0)/m/n/10.95 。|
- []
-
-
 
 [7]
 
@@ -1332,28 +1331,20 @@ m/n/10.95 )[]/(2\OML/cmm/m/it/10.95 ^^[[]\OT1/cmr/m/n/10.95 )]/([]\OML/cmm/m/it
 
 [12]
 
-[13])
+[13]
 
 [14]
-\openout2 = `chapters/02-foundations.aux'.
 
- (./chapters/02-foundations.tex
-第二章
-
-
-[15
-
-
-
-
-]
+[15]
 
 [16]
 
 [17]
 
 [18]
-Underfull \vbox (badness 2547) has occurred while \output is active []
+Overfull \hbox (97.72005pt too wide) detected at line 396
+[]
+ []
 
 
 
@@ -1362,38 +1353,30 @@ Underfull \vbox (badness 2547) has occurred while \output is active []
 [20]
 
 [21]
-Underfull \vbox (badness 2547) has occurred while \output is active []
-
-
 
 [22]
-Overfull \hbox (31.42136pt too wide) in paragraph at lines 185--186
- [][] 
- []
-
-
 
 [23]
 
-[24])
+[24]
 
 [25]
-\openout2 = `chapters/03-linear-models.aux'.
 
- (./chapters/03-linear-models.tex
-第三章
+[26])
+
+[27]
+\openout2 = `chapters/02-foundations.aux'.
+
+ (./chapters/02-foundations.tex
+第二章
 
 
-[26
+[28
 
 
 
 
 ]
-
-[27]
-
-[28]
 
 [29]
 
@@ -1412,12 +1395,27 @@ Overfull \hbox (31.42136pt too wide) in paragraph at lines 185--186
 [36]
 
 [37]
+Overfull \hbox (31.42136pt too wide) in paragraph at lines 185--186
+ [][] 
+ []
 
-[38]
+
+
+[38])
 
 [39]
+\openout2 = `chapters/03-linear-models.aux'.
 
-[40]
+ (./chapters/03-linear-models.tex
+第三章
+
+
+[40
+
+
+
+
+]
 
 [41]
 
@@ -1429,35 +1427,32 @@ Overfull \hbox (31.42136pt too wide) in paragraph at lines 185--186
 
 [45]
 
-[46])
+[46]
 
 [47]
-\openout2 = `chapters/04-objectives-and-metrics.aux'.
 
- (./chapters/04-objectives-and-metrics.tex
-第四章
-
-
-[48
-
-
-
-
-]
+[48]
 
 [49]
 
 [50]
 
 [51]
-Overfull \hbox (18.21144pt too wide) detected at line 157
-[][][][] \OT1/cmr/m/n/10.95 = []\OML/cmm/m/it/10.95 ;  [] \OT1/cmr/m/n/10.95 = 
-[]\OML/cmm/m/it/10.95 ;  [] \OT1/cmr/m/n/10.95 = []\OML/cmm/m/it/10.95 :
+Overfull \hbox (7.41211pt too wide) in paragraph at lines 279--280
+[]\TU/SimSun(0)/m/n/12.045 独 立 性 使 得 $\OML/cmm/m/it/12.045 n$ \TU/SimSun(0)/m/n
+/12.045 条 观 测 的 联 合 条 件 密 度 等 于 各 项 密 度 的 乘 积。|  把 式[]代
  []
 
 
 
 [52]
+Overfull \hbox (22.81801pt too wide) in paragraph at lines 321--323
+\TU/SimSun(0)/m/n/12.045 取 负 号 后，|  最 大 化 似 然 就 等 价 于 最 小 化  |“\TU/SimSun(0)/b/
+n/12.045 负 对 数 似 然\TU/SimSun(0)/m/n/12.045 ” （\TU/lmr/m/n/12.045 Negative Log-L
+ikelihood\TU/SimSun(0)/m/n/12.045 ） 。|
+ []
+
+
 
 [53]
 
@@ -1472,81 +1467,54 @@ Overfull \hbox (18.21144pt too wide) detected at line 157
 [58]
 
 [59]
-Underfull \hbox (badness 10000) in paragraph at lines 380--380
-[]|\TU/lmr/m/n/10.95 MAE\TU/SimSun(0)/m/n/10.95 、| \TU/lmr/m/n/10.95 RMSE\TU/Si
-mSun(0)/m/n/10.95 、| $\OML/cmm/m/it/10.95 R[]$\TU/SimSun(0)/m/n/10.95 、|
- []
-
-
-Underfull \hbox (badness 1783) in paragraph at lines 380--381
-\TU/SimSun(0)/m/n/10.95 对 误 差 和 不 确 定 性
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 381--381
-[]|\TU/lmr/m/n/10.95 FPR\TU/SimSun(0)/m/n/10.95 、| \TU/lmr/m/n/10.95 FNR\TU/Sim
-Sun(0)/m/n/10.95 、| \TU/lmr/m/n/10.95 BAcc\TU/SimSun(0)/m/n/10.95 、|
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 381--381
-\TU/lmr/m/n/10.95 Precision\TU/SimSun(0)/m/n/10.95 、| \TU/lmr/m/n/10.95 Recall\
-TU/SimSun(0)/m/n/10.95 、|
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 381--381
-\OML/cmm/m/it/10.95 F[]$\TU/SimSun(0)/m/n/10.95 、| \TU/lmr/m/n/10.95 ROC-AUC\TU
-/SimSun(0)/m/n/10.95 、|
- []
-
-
-Underfull \hbox (badness 1783) in paragraph at lines 382--383
-[]|\TU/SimSun(0)/m/n/10.95 无 标 签 时 不 存 在 唯
- []
-
-
-Overfull \hbox (8.97185pt too wide) in paragraph at lines 376--385
- [][] 
+Overfull \hbox (1.5011pt too wide) in paragraph at lines 565--567
+\TU/SimSun(0)/m/n/12.045 的 内 积。|  训 练 数 据 与 新 输 入 之 间 的 核 向 量 为 $\OML/cmm/b/it/
+12.045 k[] \OT1/cmr/m/n/12.045 = [\OML/cmm/m/it/12.045 k\OT1/cmr/m/n/12.045 (\O
+ML/cmm/b/it/12.045 x[]\OML/cmm/m/it/12.045 ; \OML/cmm/b/it/12.045 x[]\OT1/cmr/m
+/n/12.045 )\OML/cmm/m/it/12.045 ; [] ; k\OT1/cmr/m/n/12.045 (\OML/cmm/b/it/12.0
+45 x[]\OML/cmm/m/it/12.045 ; \OML/cmm/b/it/12.045 x[]\OT1/cmr/m/n/12.045 )]$\TU
+/SimSun(0)/m/n/12.045 。|
  []
 
 
 
-[60])
+[60]
 
 [61]
+
+[62]
+
+[63]
+Overfull \hbox (5.59239pt too wide) in paragraph at lines 645--646
+[]\TU/SimSun(0)/b/n/12.045 正 则 化 与 先 验：|  \TU/SimSun(0)/m/n/12.045 岭 惩 罚 可 以 在 
+给 定 高 斯 似 然 和 高 斯 先 验 时 解 释 为 \TU/lmr/m/n/12.045 MAP\TU/SimSun(0)/m/n/12.045 。|
+
+ []
+
+
+
+[64])
+
+[65]
+\openout2 = `chapters/04-learning-pipeline.aux'.
+
+
+No file chapters/04-learning-pipeline.tex.
 \openout2 = `chapters/05-optimization-training.aux'.
 
- (./chapters/05-optimization-training.tex
-第五章
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
+(./chapters/05-optimization-training.tex
+第四章
 
 
+[66
 
-[62
+
+
 
 
 
 
 ]
-
-[63]
-
-[64]
-Overfull \hbox (1.64789pt too wide) in paragraph at lines 116--118
-$\OML/cmm/m/it/10.95 ^^N[]$ \TU/SimSun(0)/m/n/10.95 表 示 预 测 值 发 生 微 小 变 化 时，|  
-损 失 的 一 阶 变 化 率。|  由 于 $\OML/cmm/m/it/10.95 @[]\OT1/cmr/m/n/10.95 /\OML/cmm/m/i
-t/10.95 @w[] \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 h[]$ \TU/SimSun(0)/m/n/10
-.95 和 $\OML/cmm/m/it/10.95 @[]\OT1/cmr/m/n/10.95 /\OML/cmm/m/it/10.95 @b[] \OT1
-/cmr/m/n/10.95 =
- []
-
-
-
-[65]
-
-[66]
 
 [67]
 
@@ -1563,17 +1531,50 @@ t/10.95 @w[] \OT1/cmr/m/n/10.95 = \OML/cmm/m/it/10.95 h[]$ \TU/SimSun(0)/m/n/10
 [73]
 
 [74]
+Overfull \hbox (1.3759pt too wide) in paragraph at lines 243--244
+\TU/SimSun(0)/m/n/12.045 理 解。|  当 该 分 布 可 归 一 化 时，|  对 称 提 议 下 两 个 候 选 的 密 度 比 
+就 是 $[]\OT1/cmr/m/n/12.045 (\OMS/cmsy/m/n/12.045 ^^@\OT1/cmr/m/n/12.045 ^^A/\OM
+L/cmm/m/it/12.045 T\OT1/cmr/m/n/12.045 )$\TU/SimSun(0)/m/n/12.045 。|
+ []
+
+
 
 [75]
 
 [76]
 
 [77]
+Overfull \hbox (5.57431pt too wide) in paragraph at lines 300--301
+[]\TU/SimSun(0)/m/n/12.045 对 数 是 凹 函 数。| \TU/lmr/m/n/12.045 Jensen \TU/SimSun(0
+)/m/n/12.045 不 等 式 说 明，|  对 正 随 机 量 $\OML/cmm/m/it/12.045 U$ \TU/SimSun(0)/m/n/
+12.045 有 $[] \U/msb/m/n/12.045 E\OT1/cmr/m/n/12.045 [\OML/cmm/m/it/12.045 U\OT1
+/cmr/m/n/12.045 ] \OMS/cmsy/m/n/12.045 ^^U \U/msb/m/n/12.045 E\OT1/cmr/m/n/12.0
+45 [[] \OML/cmm/m/it/12.045 U\OT1/cmr/m/n/12.045 ]$\TU/SimSun(0)/m/n/12.045 。|
+ []
+
+
 
 [78]
+Overfull \hbox (21.16403pt too wide) in paragraph at lines 344--345
+[]\TU/SimSun(0)/m/n/12.045 先 用 下 界 说 明 单 调 性。| \TU/lmr/m/n/12.045 E \TU/SimSun(
+0)/m/n/12.045 步 保 证 $\OML/cmm/m/it/12.045 F\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/1
+2.045 q[]; ^^R[]\OT1/cmr/m/n/12.045 ) = \OML/cmm/m/it/12.045 `\OT1/cmr/m/n/12.0
+45 (\OML/cmm/m/it/12.045 ^^R[]\OT1/cmr/m/n/12.045 )$\TU/SimSun(0)/m/n/12.045 ，|
+ \TU/lmr/m/n/12.045 M \TU/SimSun(0)/m/n/12.045 步 保 证 $\OML/cmm/m/it/12.045 F\OT
+1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 q[]; ^^R[]\OT1/cmr/m/n/12.045 ) \OMS/cms
+y/m/n/12.045 ^^U
+ []
+
+
 
 [79]
-Underfull \vbox (badness 4531) has occurred while \output is active []
+Overfull \hbox (23.98521pt too wide) in paragraph at lines 358--359
+[]\TU/SimSun(0)/m/n/12.045 定 义 \TU/lmr/m/n/12.045 Kullback–Leibler \TU/SimSun(0
+)/m/n/12.045 散 度  |（\TU/lmr/m/n/12.045 Kullback–Leibler divergence\TU/SimSun(0)
+/m/n/12.045 ，| \TU/lmr/m/n/12.045 KL\TU/SimSun(0)/m/n/12.045 ）|  为 $[]\OT1/cmr/
+m/n/12.045 (\OML/cmm/m/it/12.045 q\OMS/cmsy/m/n/12.045 k\OML/cmm/m/it/12.045 p\
+OT1/cmr/m/n/12.045 ) =
+ []
 
 
 
@@ -1586,176 +1587,131 @@ Underfull \vbox (badness 4531) has occurred while \output is active []
 [83]
 
 [84]
-Underfull \vbox (badness 1205) has occurred while \output is active []
+Overfull \hbox (15.93803pt too wide) in paragraph at lines 492--494
+\TU/SimSun(0)/m/n/12.045 不 包 含 这 个 未 知 的 归 一 化 常 数。|  只 要 能 够 计 算 给 定 参 数 下 的 联
+ 合 密 度 $\OML/cmm/m/it/12.045 p\OT1/cmr/m/n/12.045 (\OMS/cmsy/m/n/12.045 D\OML/c
+mm/m/it/12.045 ; ^^R\OT1/cmr/m/n/12.045 ) =
+ []
 
 
 
-[85])
+[85]
 
 [86]
 
-[87
-
-
-
-]
+[87]
 
 [88]
-\openout2 = `chapters/07-bayesian.aux'.
 
- (./chapters/07-bayesian.tex
-第六章
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-[89
-
-
-]
+[89]
 
 [90]
 
 [91]
 
-[92]
-Underfull \vbox (badness 6428) has occurred while \output is active []
-
-
+[92])
 
 [93]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+\openout2 = `chapters/06-statistical-learning.aux'.
+
+ (./chapters/06-statistical-learning.tex
+第五章
+
+
+[94
 
 
 
-[94]
+
+]
 
 [95]
-Underfull \vbox (badness 7012) has occurred while \output is active []
+Overfull \hbox (35.67586pt too wide) in paragraph at lines 53--55
+\TU/SimSun(0)/m/n/12.045 这 说 明 样 本 量 需 要 随 假 设 空 间 复 杂 度 增 加。|  对 无 限 空 间，|  可 
+用 \TU/lmr/m/n/12.045 Vapnik–Chervonenkis
+ []
 
 
 
 [96]
 
 [97]
+LaTeX Font Info:    Trying to load font information for U+euf on input line 107
+.
+ (f:/texlive/2025/texmf-dist/tex/latex/amsfonts/ueuf.fd
+File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
+)
+(f:/texlive/2025/texmf-dist/tex/latex/microtype/mt-euf.cfg
+File: mt-euf.cfg 2006/07/03 v1.1 microtype config. file: AMS Euler Fraktur (RS)
+
+)
 
 [98]
-Underfull \vbox (badness 1297) has occurred while \output is active []
-
-
 
 [99]
 
 [100]
+Overfull \hbox (6.40211pt too wide) in paragraph at lines 175--176
+\TU/SimSun(0)/m/n/12.045 测 试 数 据 $\OML/cmm/m/it/12.045 D$ \TU/SimSun(0)/m/n/12.
+045 算 出 的 区 间 为 $\OT1/cmr/m/n/12.045 [\OML/cmm/m/it/12.045 L\OT1/cmr/m/n/12.045
+ (\OML/cmm/m/it/12.045 D\OT1/cmr/m/n/12.045 )\OML/cmm/m/it/12.045 ; U\OT1/cmr/m
+/n/12.045 (\OML/cmm/m/it/12.045 D\OT1/cmr/m/n/12.045 )]$\TU/SimSun(0)/m/n/12.04
+5 。| \TU/lmr/m/n/12.045 95% \TU/SimSun(0)/m/n/12.045 置 信 区 间 的 目 标 是 $\OML/cmm/
+m/it/12.045 P[]\OMS/cmsy/m/n/12.045 f\OML/cmm/m/it/12.045 L\OT1/cmr/m/n/12.045 
+(\OML/cmm/m/it/12.045 D\OT1/cmr/m/n/12.045 ) \OMS/cmsy/m/n/12.045 ^^T
+ []
+
+
 
 [101]
 
 [102]
-Overfull \hbox (8.67447pt too wide) detected at line 436
-[][][]\OML/cmm/m/it/10.95 ^^V[] \OT1/cmr/m/n/10.95 = []\OML/cmm/m/it/10.95 ;  \
-OT1/cmr/m/n/10.95 ^^F[] = []\OML/cmm/m/it/10.95 ;  N[] \OT1/cmr/m/n/10.95 = [] 
-\OML/cmm/m/it/10.95 ^^M[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 k\OT1/cmr/m/n/
-10.95 )\OML/cmm/m/it/10.95 :
- []
-
-
 
 [103]
 
 [104]
 
-[105]
-Overfull \hbox (28.74095pt too wide) in paragraph at lines 507--508
-[]\TU/SimSun(0)/m/n/10.95 链 $\OML/cmm/m/it/10.95 A \OMS/cmsy/m/n/10.95 ^^@ \OML
-/cmm/m/it/10.95 B \OMS/cmsy/m/n/10.95 ^^@ \OML/cmm/m/it/10.95 C$ \TU/SimSun(0)/
-m/n/10.95 的 极 大 团 为 $\OMS/cmsy/m/n/10.95 f\OML/cmm/m/it/10.95 A; B\OMS/cmsy/m/n
-/10.95 g\OML/cmm/m/it/10.95 ; \OMS/cmsy/m/n/10.95 f\OML/cmm/m/it/10.95 B; C\OMS
-/cmsy/m/n/10.95 g$\TU/SimSun(0)/m/n/10.95 ，|  可 以 写 成 $\OML/cmm/m/it/10.95 p\OT
-1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 a; b; c\OT1/cmr/m/n/10.95 ) = \OML/cmm/m/i
-t/10.95  []\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 a; b\OT1/cmr/m/n/10.95 )\OML
-/cmm/m/it/10.95  []\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 b; c\OT1/cmr/m/n/10.
-95 )/\OML/cmm/m/it/10.95 Z$\TU/SimSun(0)/m/n/10.95 。|
- []
-
-
+[105])
 
 [106]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[107
 
 
 
-[107]
+]
 
 [108]
+\openout2 = `chapters/07-bayesian.aux'.
 
-[109]
+ (./chapters/07-bayesian.tex
+第六章
+
+
+[109
+
+
+]
 
 [110]
-Underfull \hbox (badness 4013) in paragraph at lines 671--672
-[]|\TU/SimSun(0)/m/n/10 观 测 假 设 和 状 态 持 续 时 间
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 673--673
-[]|\TU/SimSun(0)/m/n/10 链 式
- []
-
-
-Underfull \hbox (badness 7540) in paragraph at lines 674--674
-[]|\TU/SimSun(0)/m/n/10 无 向 图 上 的 联 合 分
- []
-
-
-Underfull \hbox (badness 4013) in paragraph at lines 674--675
-[]|\TU/SimSun(0)/m/n/10 一 般 图 中 配 分 函 数 和 推 断
- []
-
-
 
 [111]
 
 [112]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 
 [113]
 
 [114]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 
 [115]
 
 [116]
-Overfull \hbox (25.42091pt too wide) in paragraph at lines 820--821
-[]\TU/SimSun(0)/m/n/10.95 训 练 数 据 只 提 供 $\OML/cmm/m/it/10.95 v$\TU/SimSun(0)/m/
-n/10.95 。|  对 单 个 样 本 求 对 数 似 然 梯 度，|  利 用 $\OML/cmm/m/it/10.95 @ [] Z[]\OT1/cm
-r/m/n/10.95 /\OML/cmm/m/it/10.95 @W[] \OT1/cmr/m/n/10.95 = \U/msb/m/n/10.95 E[]
-\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 v[]h[]\OT1/cmr/m/n/10.95 ]$\TU/SimSun(0
-)/m/n/10.95 ，|
- []
-
-
 
 [117]
 
 [118]
 
 [119]
-Overfull \hbox (8.20222pt too wide) in paragraph at lines 877--878
-[]\TU/SimSun(0)/b/n/10.95 分 布 参 数 化。|  \TU/SimSun(0)/m/n/10.95 指 数 族 用 固 定 统 计 
-量 和 自 然 参 数 表 达 概 率。|  高 斯 局 部 分 布、| \TU/lmr/m/n/10.95 MEMM
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 892--892
-[]|\TU/SimSun(0)/m/n/10 线 性 高 斯
- []
-
-
 
 [120]
 
@@ -1764,61 +1720,92 @@ Underfull \hbox (badness 10000) in paragraph at lines 892--892
 [122]
 
 [123]
-
-[124]
-
-[125])
-
-[126]
-
-[127
-
-
-
-]
-
-[128]
-\openout2 = `chapters/08-kernel-functions.aux'.
-
- (./chapters/08-kernel-functions.tex
-第七章
-
-
-[129
-
-
-]
-Overfull \hbox (7.37904pt too wide) in paragraph at lines 50--52
-\TU/SimSun(0)/m/n/10.95 反 方 向 可 由 核 诱 导 的 函 数 空 间 构 造 特 征 映 射。|  先 取 所 有 形 式 有 
-限 和 $\OML/cmm/m/it/10.95 f \OT1/cmr/m/n/10.95 = [][] \OML/cmm/m/it/10.95 a[]k\O
-T1/cmr/m/n/10.95 (\OMS/cmsy/m/n/10.95 ^^A\OML/cmm/m/it/10.95 ; \OML/cmm/b/it/10
-.95 x[]\OT1/cmr/m/n/10.95 )$\TU/SimSun(0)/m/n/10.95 ，|
+Overfull \hbox (34.12624pt too wide) detected at line 436
+[][][]\OML/cmm/m/it/12.045 ^^V[] \OT1/cmr/m/n/12.045 = []\OML/cmm/m/it/12.045 ;
+  \OT1/cmr/m/n/12.045 ^^F[] = []\OML/cmm/m/it/12.045 ;  N[] \OT1/cmr/m/n/12.045
+ = [] \OML/cmm/m/it/12.045 ^^M[]\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 k\OT1
+/cmr/m/n/12.045 )\OML/cmm/m/it/12.045 :
  []
 
 
 
+[124]
+
+[125]
+
+[126]
+Overfull \hbox (12.8471pt too wide) in paragraph at lines 480--482
+\TU/SimSun(0)/m/n/12.045 指 数 化 后，|  归 一 化 消 去 $\OML/cmm/m/it/12.045 ^^U\OT1/cmr
+/m/n/12.045 (\OML/cmm/m/it/12.045 c\OT1/cmr/m/n/12.045 )$\TU/SimSun(0)/m/n/12.0
+45 ，|  即 得 $\OML/cmm/m/it/12.045 q\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 k \
+OMS/cmsy/m/n/12.045 j \OML/cmm/m/it/12.045 c\OT1/cmr/m/n/12.045 ) = [](\OML/cmm
+/m/it/12.045 ^^R[]^^^\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 c; k\OT1/cmr/m/n
+/12.045 ))/ [][] [](\OML/cmm/m/it/12.045 ^^R[]^^^\OT1/cmr/m/n/12.045 (\OML/cmm/
+m/it/12.045 c; k[]\OT1/cmr/m/n/12.045 ))$\TU/SimSun(0)/m/n/12.045 。|
+ []
+
+
+
+[127]
+Overfull \hbox (63.28867pt too wide) in paragraph at lines 507--508
+[]\TU/SimSun(0)/m/n/12.045 链 $\OML/cmm/m/it/12.045 A \OMS/cmsy/m/n/12.045 ^^@ \
+OML/cmm/m/it/12.045 B \OMS/cmsy/m/n/12.045 ^^@ \OML/cmm/m/it/12.045 C$ \TU/SimS
+un(0)/m/n/12.045 的 极 大 团 为 $\OMS/cmsy/m/n/12.045 f\OML/cmm/m/it/12.045 A; B\OMS
+/cmsy/m/n/12.045 g\OML/cmm/m/it/12.045 ; \OMS/cmsy/m/n/12.045 f\OML/cmm/m/it/12
+.045 B; C\OMS/cmsy/m/n/12.045 g$\TU/SimSun(0)/m/n/12.045 ，|  可 以 写 成 $\OML/cmm/
+m/it/12.045 p\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 a; b; c\OT1/cmr/m/n/12.0
+45 ) = \OML/cmm/m/it/12.045  []\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 a; b\O
+T1/cmr/m/n/12.045 )\OML/cmm/m/it/12.045  []\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/1
+2.045 b; c\OT1/cmr/m/n/12.045 )/\OML/cmm/m/it/12.045 Z$\TU/SimSun(0)/m/n/12.045
+ 。|
+ []
+
+
+
+[128]
+Overfull \hbox (3.31001pt too wide) in paragraph at lines 541--542
+[]\TU/SimSun(0)/m/n/12.045 若 标 签 节 点 构 成 一 条 链，|  就 得 到 线 性 链 条 件 随 机 场  |（\TU/
+lmr/m/n/12.045 Linear-Chain CRF\TU/SimSun(0)/m/n/12.045 ） 。|
+ []
+
+
+
+[129]
+
 [130]
-Underfull \vbox (badness 4556) has occurred while \output is active []
-
-
 
 [131]
 
-[132])
+[132]
 
 [133]
-\openout2 = `chapters/09-svm.aux'.
-
- (./chapters/09-svm.tex
-第八章
-
-
-[134
+Underfull \hbox (badness 10000) in paragraph at lines 671--671
+[]|\TU/SimSun(0)/m/n/10.53937 转 移 与 观 测 局 部 归
+ []
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 672--672
+[]|\TU/SimSun(0)/m/n/10.53937 每 个 前 驱 状 态 局 部
+ []
 
 
-]
+Underfull \hbox (badness 10000) in paragraph at lines 673--673
+[]|\TU/SimSun(0)/m/n/10.53937 链 式
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 673--673
+[]|\TU/SimSun(0)/m/n/10.53937 所 有 标 签 路 径 全 局
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 674--674
+[]|\TU/SimSun(0)/m/n/10.53937 全 部 配 置 全 局 归 一
+ []
+
+
+
+[134]
 
 [135]
 
@@ -1826,41 +1813,47 @@ Underfull \vbox (badness 4556) has occurred while \output is active []
 
 [137]
 
-[138])
+[138]
 
 [139]
-\openout2 = `chapters/09-pca.aux'.
 
- (./chapters/09-pca.tex
-第九章
-
-
-[140
-
-
-
-
-]
+[140]
 
 [141]
-Overfull \hbox (2.15775pt too wide) in paragraph at lines 78--80
-\TU/SimSun(0)/m/n/10.95 投 影 到 $\OML/cmm/b/it/10.95 u[]$ \TU/SimSun(0)/m/n/10.95
- 时，|  四 个 得 分 为 $\OT1/cmr/m/n/10.95 3/[]\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.9
-5 3/[]\OML/cmm/m/it/10.95 ; \OMS/cmsy/m/n/10.95 ^^@\OT1/cmr/m/n/10.95 3/[]\OML/
-cmm/m/it/10.95 ; \OMS/cmsy/m/n/10.95 ^^@\OT1/cmr/m/n/10.95 3/[]$\TU/SimSun(0)/m
-/n/10.95 。|  点 $\OT1/cmr/m/n/10.95 (2\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1
-)$ \TU/SimSun(0)/m/n/10.95 的 重 建 是 $\OT1/cmr/m/n/10.95 (1\OML/cmm/m/it/10.95 :\
-OT1/cmr/m/n/10.95 5\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10.9
-5 :\OT1/cmr/m/n/10.95 5)$\TU/SimSun(0)/m/n/10.95 ，|
+
+[142]
+Underfull \hbox (badness 10000) in paragraph at lines 890--890
+[]|\TU/SimSun(0)/m/n/10.53937 离 散 成 分、|
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 892--892
+[]|\TU/SimSun(0)/m/n/10.53937 线 性 高 斯
+ []
+
+
+Underfull \hbox (badness 2744) in paragraph at lines 892--893
+[]|\TU/SimSun(0)/m/n/10.53937 卡 尔 曼 过 滤 的 均 值 与 协
+ []
+
+
+Underfull \hbox (badness 2744) in paragraph at lines 893--894
+[]|\TU/SimSun(0)/m/n/10.53937 标 签 路 径 概 率 与 链 式 推
  []
 
 
 
-[142]
-
 [143]
 
 [144]
+Overfull \hbox (5.57019pt too wide) in paragraph at lines 954--955
+[]\TU/SimSun(0)/m/n/12.045 若 有 $\OML/cmm/m/it/12.045 S$ \TU/SimSun(0)/m/n/12.04
+5 个 参 数 样 本，|  并 能 计 算 条 件 均 值 $\OML/cmm/m/it/12.045 m[]$ \TU/SimSun(0)/m/n/12.
+045 及 方 差 $\OML/cmm/m/it/12.045 v[]$\TU/SimSun(0)/m/n/12.045 ，|  令 $[] \OT1/cmr
+/m/n/12.045 = \OML/cmm/m/it/12.045 S[] [][] m[]$\TU/SimSun(0)/m/n/12.045 ，|
+ []
+
+
 
 [145]
 
@@ -1868,118 +1861,97 @@ OT1/cmr/m/n/10.95 5\OML/cmm/m/it/10.95 ; \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10.9
 
 [147]
 
-[148])
+[148]
 
-[149]
-\openout2 = `chapters/09-krr.aux'.
+[149])
 
- (./chapters/09-krr.tex
-第十章
+[150]
+\openout2 = `chapters/08-parametric-nonparametric.aux'.
+
+ (./chapters/08-parametric-nonparametric.tex
+第七章
 
 
-[150
+[151
 
 
 
 
 ]
 
-[151]
-
-[152])
+[152]
 
 [153]
-\openout2 = `chapters/09-svr.aux'.
-
- (./chapters/09-svr.tex
-第十一章
-
-Underfull \vbox (badness 3525) has occurred while \output is active []
-
-
-
-[154
-
-
-
-
-]
-
-[155]
-
-[156])
-
-[157]
-\openout2 = `chapters/09-klms.aux'.
-
- (./chapters/09-klms.tex
-第十二章
-
-
-[158
-
-
-
-
-]
-
-[159]
-
-[160])
-
-[161]
-\openout2 = `chapters/09-kernel-gp.aux'.
-
- (./chapters/09-kernel-gp.tex
-第十三章
-
-Underfull \vbox (badness 1348) has occurred while \output is active []
-
-
-
-[162
-
-
-
-
-]
-Overfull \hbox (17.91112pt too wide) in paragraph at lines 48--64
-[]\TU/SimSun(0)/m/n/10.95 图[][]\TU/lmr/m/n/10.95 13.1[][]\TU/SimSun(0)/m/n/10.9
-5 用 一 幅 定 性 图 说 明 这 一 区 别。|  对 固 定 参 数 的 标 量 高 斯 预 测，| $\OML/cmm/m/it/10.95 ^^V
-[] \OMS/cmsy/m/n/10.95 ^^F \OT1/cmr/m/n/10.95 1\OML/cmm/m/it/10.95 :\OT1/cmr/m/
-n/10.95 96[]$
+Overfull \hbox (30.7836pt too wide) in paragraph at lines 112--114
+\TU/SimSun(0)/m/n/12.045 函 数，| $\OML/cmm/m/it/12.045 m\OT1/cmr/m/n/12.045 (\OML
+/cmm/m/it/12.045 X\OT1/cmr/m/n/12.045 ) = [\OML/cmm/m/it/12.045 m\OT1/cmr/m/n/1
+2.045 (\OML/cmm/m/it/12.045 x[]\OT1/cmr/m/n/12.045 )\OML/cmm/m/it/12.045 ; [] ;
+ m\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 x[]\OT1/cmr/m/n/12.045 )][]$\TU/Sim
+Sun(0)/m/n/12.045 ，| $\OML/cmm/m/it/12.045 K[] \OT1/cmr/m/n/12.045 = \OML/cmm/m
+/it/12.045 k\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 x[]; x[]\OT1/cmr/m/n/12.0
+45 )$\TU/SimSun(0)/m/n/12.045 ，| $\OML/cmm/m/it/12.045 k[] \OT1/cmr/m/n/12.045 
+= [\OML/cmm/m/it/12.045 k\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 x[]; x[]\OT1
+/cmr/m/n/12.045 )\OML/cmm/m/it/12.045 ; [] ; k\OT1/cmr/m/n/12.045 (\OML/cmm/m/i
+t/12.045 x[]; x[]\OT1/cmr/m/n/12.045 )][]$\TU/SimSun(0)/m/n/12.045 。|
  []
 
 
 
-[163]
+[154]
 
-[164])
+[155]
 
-[165]
+[156]
 
-[166
+[157]
+
+[158]
+
+[159]
+
+[160]
+
+[161]
+Overfull \hbox (11.44518pt too wide) in paragraph at lines 285--286
+\TU/SimSun(0)/b/n/12.045 随 机 特 征 的 另 一 路 近 似。| [] \TU/SimSun(0)/m/n/12.045 对 适 
+当 的 平 稳 正 定 核，|  写 $\OML/cmm/m/it/12.045 k\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12
+.045 x; x[]\OT1/cmr/m/n/12.045 ) = \OML/cmm/m/it/12.045 s[]\U/msb/m/n/12.045 E[
+] []\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 ![]\OT1/cmr/m/n/12.045 (\OML/cmm/
+m/it/12.045 x \OMS/cmsy/m/n/12.045 ^^@
+ []
+
+
+
+[162]
+
+[163])
+
+[164]
+
+[165
 
 
 
 ]
 
-LaTeX Warning: Reference `chap:pipeline' on page 167 undefined on input line 72
+LaTeX Warning: Reference `chap:pipeline' on page 166 undefined on input line 64
 .
 
 
 
-[167]
+[166]
 \openout2 = `chapters/09-sequence.aux'.
 
  (./chapters/09-sequence.tex
-第十四章
+第八章
 
 
-[168
+[167
 
 
 ]
+
+[168]
 
 [169]
 
@@ -1988,11 +1960,11 @@ LaTeX Warning: Reference `chap:pipeline' on page 167 undefined on input line 72
 [171]
 
 [172]
-Underfull \vbox (badness 1210) has occurred while \output is active []
-
-
 
 [173]
+File: images/中文重绘/tcn-cn.png Graphic file (type bmp)
+<images/中文重绘/tcn-cn.png>
+
 
 [174]
 
@@ -2003,189 +1975,165 @@ Underfull \vbox (badness 1210) has occurred while \output is active []
 [177]
 
 [178]
+File: images/transformer-cn.png Graphic file (type bmp)
+<images/transformer-cn.png>
+
 
 [179]
+File: images/patchtst-cn.png Graphic file (type bmp)
+<images/patchtst-cn.png>
+
 
 [180]
-Overfull \hbox (5.51125pt too wide) detected at line 349
+File: images/itransformer-cn-v2.png Graphic file (type bmp)
+<images/itransformer-cn-v2.png>
+
+
+[181]
+
+[182]
+
+[183]
+
+[184]
+Overfull \hbox (34.3168pt too wide) detected at line 369
 []
  []
 
 
 
-[181]
-Overfull \hbox (13.25964pt too wide) in paragraph at lines 349--351
-\TU/SimSun(0)/m/n/10.95 这 里 $\OML/cmm/m/it/10.95 w[] \OMS/cmsy/m/n/10.95 2 \U/m
-sb/m/n/10.95 R[]$\TU/SimSun(0)/m/n/10.95 、| $\OML/cmm/m/it/10.95 W[]; W[] \OMS/
-cmsy/m/n/10.95 2 \U/msb/m/n/10.95 R[]$ \TU/SimSun(0)/m/n/10.95 以 及 $\OML/cmm/m/
-it/10.95 a[]$ \TU/SimSun(0)/m/n/10.95 是 训 练 得 到、|  推 理 时 共 享 的 参 数；| $[]\OT1/cm
-r/m/n/10.95 (\OML/cmm/m/it/10.95 s\OT1/cmr/m/n/10.95 ) =
- []
-
-
-
-[182]
-
-[183]
-Overfull \hbox (1.42375pt too wide) in paragraph at lines 396--397
-[]\TU/SimSun(0)/m/n/10.95 前 面 的 模 型 都 先 形 成 表 示，|  输 出 头 才 决 定 预 测 什 么。|  直 接 多
- 步 预 测 用 $[] \OT1/cmr/m/n/10.95 =
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-[184]
-
 [185]
-Underfull \vbox (badness 1082) has occurred while \output is active []
-
-
 
 [186]
-Underfull \vbox (badness 1142) has occurred while \output is active []
-
+File: images/中文重绘/mamba-cn.png Graphic file (type bmp)
+<images/中文重绘/mamba-cn.png>
 
 
 [187]
-Underfull \vbox (badness 3417) has occurred while \output is active []
-
-
 
 [188]
 
-[189])
+[189]
 
 [190]
-\openout2 = `chapters/10-vision.aux'.
 
- (./chapters/10-vision.tex
-第十五章
-
-
-[191
-
-
-
-
-]
+[191]
 
 [192]
+File: images/中文重绘/chronos-cn.png Graphic file (type bmp)
+<images/中文重绘/chronos-cn.png>
+
 
 [193]
 
 [194]
 
 [195]
-Overfull \hbox (0.4806pt too wide) in paragraph at lines 118--119
-[]\TU/lmr/m/n/10.95 ResNet-18 \TU/SimSun(0)/m/n/10.95 和 \TU/lmr/m/n/10.95 ResNe
-t-34 \TU/SimSun(0)/m/n/10.95 主 要 使 用 由 两 个 $\OT1/cmr/m/n/10.95 3 \OMS/cmsy/m/n/
-10.95 ^^B \OT1/cmr/m/n/10.95 3$ \TU/SimSun(0)/m/n/10.95 卷 积 构 成 的 基 本 残 差 块。| \
-TU/lmr/m/n/10.95 ResNet-
- []
 
-
-
-[196]
+[196])
 
 [197]
+\openout2 = `chapters/10-vision.aux'.
 
-[198]
-
-[199]
-
-[200]
-
-[201]
-
-[202]
-Underfull \vbox (badness 2057) has occurred while \output is active []
+ (./chapters/10-vision.tex
+第九章
 
 
-
-[203]
-
-[204]
-
-[205]
-
-[206]
-
-[207])
-
-[208]
-\openout2 = `chapters/10-graph-neural-networks.aux'.
-
- (./chapters/10-graph-neural-networks.tex
-第十六章
-
-
-[209
+[198
 
 
 
 
 ]
 
+[199]
+
+[200]
+
+[201]
+Overfull \hbox (5.81018pt too wide) in paragraph at lines 76--78
+\TU/SimSun(0)/m/n/12.045 例 如 三 类 概 率 为 $\OT1/cmr/m/n/12.045 (0\OML/cmm/m/it/12.
+045 :\OT1/cmr/m/n/12.045 7\OML/cmm/m/it/12.045 ; \OT1/cmr/m/n/12.045 0\OML/cmm/
+m/it/12.045 :\OT1/cmr/m/n/12.045 2\OML/cmm/m/it/12.045 ; \OT1/cmr/m/n/12.045 0\
+OML/cmm/m/it/12.045 :\OT1/cmr/m/n/12.045 1)$ \TU/SimSun(0)/m/n/12.045 而 真 实 类 别
+ 为 第 二 类 时，|  梯 度 为 $\OT1/cmr/m/n/12.045 (0\OML/cmm/m/it/12.045 :\OT1/cmr/m/n/1
+2.045 7\OML/cmm/m/it/12.045 ; \OMS/cmsy/m/n/12.045 ^^@\OT1/cmr/m/n/12.045 0\OML
+/cmm/m/it/12.045 :\OT1/cmr/m/n/12.045 8\OML/cmm/m/it/12.045 ; \OT1/cmr/m/n/12.0
+45 0\OML/cmm/m/it/12.045 :\OT1/cmr/m/n/12.045 1)$\TU/SimSun(0)/m/n/12.045 ：|
+ []
+
+
+
+[202]
+
+[203]
+File: images/中文重绘/resnet-cn.png Graphic file (type bmp)
+<images/中文重绘/resnet-cn.png>
+
+
+[204]
+Overfull \hbox (12.36151pt too wide) detected at line 153
+[][][]\OML/cmm/m/it/12.045 Q \OT1/cmr/m/n/12.045 = \OML/cmm/m/it/12.045 ZW[];  
+K \OT1/cmr/m/n/12.045 = \OML/cmm/m/it/12.045 ZW[];  V \OT1/cmr/m/n/12.045 = \OM
+L/cmm/m/it/12.045 ZW[];  A \OT1/cmr/m/n/12.045 = [] [] \OML/cmm/m/it/12.045 ;  
+O \OT1/cmr/m/n/12.045 = \OML/cmm/m/it/12.045 AV:
+ []
+
+
+
+[205]
+File: images/vit-cn-v2.png Graphic file (type bmp)
+<images/vit-cn-v2.png>
+
+
+[206]
+File: images/registers-cn-v2.png Graphic file (type bmp)
+<images/registers-cn-v2.png>
+
+
+[207]
+File: images/中文重绘/swin-cn.png Graphic file (type bmp)
+<images/中文重绘/swin-cn.png>
+
+
+[208]
+
+[209]
+File: images/中文重绘/faster-rcnn-cn.png Graphic file (type bmp)
+<images/中文重绘/faster-rcnn-cn.png>
+
+
 [210]
-Underfull \vbox (badness 2119) has occurred while \output is active []
-
-
 
 [211]
 
 [212]
 
 [213]
-Underfull \vbox (badness 3780) has occurred while \output is active []
-
+File: images/中文重绘/fpn-cn.png Graphic file (type bmp)
+<images/中文重绘/fpn-cn.png>
 
 
 [214]
 
 [215]
-Overfull \hbox (6.41336pt too wide) in paragraph at lines 199--201
-$\OML/cmm/m/it/10.95 L[]$ \TU/SimSun(0)/m/n/10.95 是 对 称 归 一 化 图 拉 普 拉 斯 矩 阵，| $
-\OML/cmm/m/it/10.95 U$ \TU/SimSun(0)/m/n/10.95 的 列 为 正 交 单 位 特 征 向 量，| $\OT1/cm
-r/m/n/10.95 ^^C = [](\OML/cmm/m/it/10.95 ^^U[]; [] ; ^^U[]\OT1/cmr/m/n/10.95 )$
-
- []
-
-
 
 [216]
-
-[217]
-Overfull \hbox (20.58899pt too wide) in paragraph at lines 267--269
-$\OML/cmm/m/it/10.95 B \OMS/cmsy/m/n/10.95 2 \U/msb/m/n/10.95 R[]$ \TU/SimSun(0
-)/m/n/10.95 与 $\OML/cmm/b/it/10.95 a \OMS/cmsy/m/n/10.95 2 \U/msb/m/n/10.95 R[]
-$ \TU/SimSun(0)/m/n/10.95 为 可 训 练 参 数，| $\OMS/cmsy/m/n/10.95 k$ \TU/SimSun(0)/m
-/n/10.95 表 示 拼 接。|  带 泄 漏 的 整 流 函 数 $[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 
-u\OT1/cmr/m/n/10.95 ) =
- []
+File: images/中文重绘/unet-cn.png Graphic file (type bmp)
+<images/中文重绘/unet-cn.png>
 
 
+[217
 
-[218]
-Overfull \hbox (44.7175pt too wide) detected at line 289
-[][][]\OT1/cmr/m/n/10.95 
- = [](\OML/cmm/m/it/10.95 ![]; [] ; ![]\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95 
-;  ^^N[] \OT1/cmr/m/n/10.95 = [] \OML/cmm/m/it/10.95 C[];  d[] \OT1/cmr/m/n/10.
-95 = [] \OML/cmm/m/it/10.95 ![]C[];  D[] \OT1/cmr/m/n/10.95 = [](\OML/cmm/m/it/
-10.95 ^^N[]\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95 ;  D[] \OT1/cmr/m/n/10.95 = 
-[](\OML/cmm/m/it/10.95 d[]\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95 :
- []
+]
 
+[218
 
+]
 
 [219]
 
 [220]
-Underfull \vbox (badness 1629) has occurred while \output is active []
-
-
 
 [221]
 
@@ -2193,30 +2141,41 @@ Underfull \vbox (badness 1629) has occurred while \output is active []
 
 [223]
 
-[224]
-Overfull \hbox (12.97362pt too wide) in paragraph at lines 474--475
-[]\TU/lmr/m/n/10.95 Hamilton \TU/SimSun(0)/m/n/10.95 等 的 \TU/lmr/m/it/10.95 Ind
-uctive Representation Learning on Large Graphs \TU/SimSun(0)/m/n/10.95 与 \TU/lm
-r/m/n/10.95 Veličković
- []
+[224])
 
-
-
-[225])
-
-[226]
+[225]
 \openout2 = `chapters/11-llm.aux'.
 
  (./chapters/11-llm.tex
-第十七章
+第十章
 
 
-[227
+[226
 
 
 
 
 ]
+
+[227]
+Overfull \hbox (12.68571pt too wide) in paragraph at lines 31--32
+\TU/SimSun(0)/b/n/12.045 链 式 分 解 如 何 变 成 可 计 算 的 训 练 目 标。| [] \TU/SimSun(0)/m/n
+/12.045 设 词 表 大 小 为 $\OML/cmm/m/it/12.045 V[]$\TU/SimSun(0)/m/n/12.045 ，| $\OML
+/cmm/m/it/12.045 x[] \OMS/cmsy/m/n/12.045 2 f\OT1/cmr/m/n/12.045 1\OML/cmm/m/it
+/12.045 ; [] ; V[]\OMS/cmsy/m/n/12.045 g$\TU/SimSun(0)/m/n/12.045 ，|
+ []
+
+
+Overfull \hbox (30.43816pt too wide) in paragraph at lines 31--32
+\TU/SimSun(0)/m/n/12.045 嵌 入 矩 阵 $\OML/cmm/m/it/12.045 E \OMS/cmsy/m/n/12.045 2
+ \U/msb/m/n/12.045 R[]$\TU/SimSun(0)/m/n/12.045 。|  由 联 合 概 率 的 乘 法 公 式，|  反 复 
+展 开 $\OML/cmm/m/it/12.045 p\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 x[]\OT1/cm
+r/m/n/12.045 ) = \OML/cmm/m/it/12.045 p\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.04
+5 x[]\OT1/cmr/m/n/12.045 )\OML/cmm/m/it/12.045 p\OT1/cmr/m/n/12.045 (\OML/cmm/m
+/it/12.045 x[] \OMS/cmsy/m/n/12.045 j
+ []
+
+
 
 [228]
 
@@ -2225,25 +2184,34 @@ r/m/n/10.95 Veličković
 [230]
 
 [231]
+Underfull \hbox (badness 10000) in paragraph at lines 129--129
+[]|\TU/lmr/m/n/7.52812 BERT \TU/SimSun(0)/m/n/7.52812 类 \TU/lmr/m/n/7.52812 enc
+oder-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 129--129
+[]|\TU/lmr/m/n/7.52812 GPT/LLaMA \TU/SimSun(0)/m/n/7.52812 类
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 129--129
+[]|\TU/lmr/m/n/7.52812 T5 \TU/SimSun(0)/m/n/7.52812 类 \TU/lmr/m/n/7.52812 encod
+er–
+ []
+
+
 
 [232]
-Underfull \hbox (badness 4013) in paragraph at lines 129--129
-[]|\TU/lmr/m/n/8 BERT \TU/SimSun(0)/m/n/8 类 \TU/lmr/m/n/8 encoder-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 129--129
-[]|\TU/lmr/m/n/8 GPT/LLaMA \TU/SimSun(0)/m/n/8 类
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 129--129
-[]|\TU/lmr/m/n/8 T5 \TU/SimSun(0)/m/n/8 类 \TU/lmr/m/n/8 encoder–
- []
-
-
 
 [233]
+Overfull \hbox (6.56026pt too wide) in paragraph at lines 161--162
+\TU/SimSun(0)/b/n/12.045 区 分 训 练 目 标、|  可 训 练 参 数 与 当 前 提 示。| [] \TU/SimSun(0)/
+m/n/12.045 监 督 微 调  |（\TU/lmr/m/n/12.045 Supervised Fine-Tuning\TU/SimSun(0)/m/
+n/12.045 ，|
+ []
+
+
 
 [234]
 
@@ -2259,50 +2227,67 @@ Underfull \hbox (badness 10000) in paragraph at lines 129--129
 
 [240]
 
-[241])
+[241]
 
-[242]
+[242])
+
+[243]
 \openout2 = `chapters/12-multimodal.aux'.
 
  (./chapters/12-multimodal.tex
-第十八章
+第十一章
 
 
-[243
+[244
 
 
 
 
 ]
 
-[244]
-
 [245]
 
 [246]
 
 [247]
-Overfull \hbox (19.56096pt too wide) in paragraph at lines 150--151
-[]\TU/SimSun(0)/m/n/10.95 第 二 代 视 觉 语 言 预 训 练 模 型 \TU/lmr/m/n/10.95 BLIP-2 |\TU
-/SimSun(0)/m/n/10.95 （\TU/lmr/m/n/10.95 Bootstrapping Language-Image Pre-traini
-ng\TU/SimSun(0)/m/n/10.95 ，|
- []
-
-
 
 [248]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Overfull \hbox (23.39499pt too wide) in paragraph at lines 125--127
+\TU/SimSun(0)/m/n/12.045 第 二 行 以 及 两 列 的 正 确 配 对 概 率 相 同。|  因 此 两 方 向 平 均 损 失 都
+ 约 为 $\OMS/cmsy/m/n/12.045 ^^@ [] \OT1/cmr/m/n/12.045 0\OML/cmm/m/it/12.045 :\O
+T1/cmr/m/n/12.045 731 =
+ []
 
 
 
 [249]
 
 [250]
+Overfull \hbox (15.721pt too wide) in paragraph at lines 157--158
+[]\TU/SimSun(0)/m/n/12.045 查 询 先 在 自 身 之 间 进 行 自 注 意 力 交 互，|  再 通 过 交 叉 注 意 力  
+|（\TU/lmr/m/n/12.045 cross-attention\TU/SimSun(0)/m/n/12.045 ）|
+ []
+
+
 
 [251]
-Overfull \hbox (14.30786pt too wide) in paragraph at lines 233--234
-[]\TU/SimSun(0)/m/n/10.95 这 沿 用 上 一 章 的 下 一 词 元 预 测。|  图 文 对 比 损 失 在 有 限 候 选 间 
-选 择 配 对，|  式[]在
+Overfull \hbox (6.23149pt too wide) in paragraph at lines 176--178
+$\OML/cmm/m/it/12.045 V$ \TU/SimSun(0)/m/n/12.045 的 三 个 标 量 是 教 学 特 征 值，|  没 有 
+像 素 或 毫 米 单 位。|  第 一 行 得 分 为 $\OT1/cmr/m/n/12.045 ([] 2\OML/cmm/m/it/12.045 ; \
+OT1/cmr/m/n/12.045 0\OML/cmm/m/it/12.045 ; \OT1/cmr/m/n/12.045 0)$\TU/SimSun(0)
+/m/n/12.045 ，|
+ []
+
+
+Overfull \hbox (31.98306pt too wide) in paragraph at lines 176--178
+\TU/lmr/m/n/12.045 softmax \TU/SimSun(0)/m/n/12.045 权 重 为 $\OT1/cmr/m/n/12.045 
+(1/2\OML/cmm/m/it/12.045 ; \OT1/cmr/m/n/12.045 1/4\OML/cmm/m/it/12.045 ; \OT1/c
+mr/m/n/12.045 1/4)$\TU/SimSun(0)/m/n/12.045 。|  第 二 行 得 分 为 $\OT1/cmr/m/n/12.04
+5 (\OMS/cmsy/m/n/12.045 ^^@ [] \OT1/cmr/m/n/12.045 2\OML/cmm/m/it/12.045 ; \OT1
+/cmr/m/n/12.045 0\OML/cmm/m/it/12.045 ; \OT1/cmr/m/n/12.045 0)$\TU/SimSun(0)/m/
+n/12.045 ，|  权 重 为 $\OT1/cmr/m/n/12.045 (1/5\OML/cmm/m/it/12.045 ; \OT1/cmr/m/n
+/12.045 2/5\OML/cmm/m/it/12.045 ; \OT1/cmr/m/n/12.045 2/5)$\TU/SimSun(0)/m/n/12
+.045 。|
  []
 
 
@@ -2312,76 +2297,77 @@ Overfull \hbox (14.30786pt too wide) in paragraph at lines 233--234
 [253]
 
 [254]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 
 [255]
 
 [256]
 
-[257])
+[257]
 
 [258]
-\openout2 = `chapters/13-generative.aux'.
 
- (./chapters/13-generative.tex
-第十九章
-
-
-[259
-
-
-
-
-]
+[259]
 
 [260]
 
-[261]
+[261])
 
 [262]
+\openout2 = `chapters/13-generative.aux'.
 
-[263]
-
-[264]
-
-[265])
-
-[266]
-\openout2 = `chapters/14-pinn.aux'.
-
- (./chapters/14-pinn.tex
-第二十章
+ (./chapters/13-generative.tex
+第十二章
 
 
-[267
+[263
 
 
 
 
 ]
+
+[264]
+
+[265]
+
+[266]
+
+[267]
 
 [268]
 
 [269]
 
-[270]
+[270])
 
 [271]
+\openout2 = `chapters/14-pinn.aux'.
 
-[272]
+ (./chapters/14-pinn.tex
+第十三章
+
+
+[272
+
+
+
+
+]
 
 [273]
 
 [274]
 
 [275]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 237.
-
 
 [276]
+Overfull \hbox (6.58351pt too wide) in paragraph at lines 138--140
+\TU/SimSun(0)/m/n/12.045 它 依 次 记 录 测 点 位 置、|  测 量 时 间、|  波 束 方 向 和 径 向 速 度。|  训
+ 练 时，|  将 $\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 x[]; y[]; t[]\OT1/cmr/m/n/
+12.045 )$
+ []
+
+
 
 [277]
 
@@ -2389,102 +2375,90 @@ put line 237.
 
 [279]
 
-[280])
+[280]
 
 [281]
 
-[282
+[282]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
+put line 329.
 
-
-
-]
 
 [283]
-\openout2 = `chapters/15-pretraining.aux'.
-
- (./chapters/15-pretraining.tex
-第二十一章
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
+File: images/pinn-zhang2021/fig1-measurements.pdf Graphic file (type pdf)
+<use images/pinn-zhang2021/fig1-measurements.pdf>
 
 
-
-[284
-
-
-]
+[284]
 
 [285]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
+File: images/pinn-zhang2021/fig1-network.pdf Graphic file (type pdf)
+<use images/pinn-zhang2021/fig1-network.pdf>
 
 
 [286]
 
 [287]
+File: images/pinn-zhang2021/fig3-baseline.pdf Graphic file (type pdf)
+<use images/pinn-zhang2021/fig3-baseline.pdf>
+
 
 [288]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 
 [289]
+File: images/pinn-zhang2021/fig5-time-series.pdf Graphic file (type pdf)
+<use images/pinn-zhang2021/fig5-time-series.pdf>
+
 
 [290]
-Underfull \vbox (badness 1092) has occurred while \output is active []
-
-
 
 [291]
 
 [292]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 
 [293]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 
 [294]
 
 [295]
 
-[296])
+[296]
 
 [297]
-\openout2 = `chapters/16-transfer.aux'.
 
- (./chapters/16-transfer.tex
-第二十二章
-
-
-[298
+[298]
+Underfull \hbox (badness 2165) in paragraph at lines 716--716
+[]|\TU/SimSun(0)/m/n/10.53937 局 部 高 速 区 或 剪 切 被 抹
+ []
 
 
-
-
-]
-Underfull \vbox (badness 1348) has occurred while \output is active []
-
-
-
-[299]
-
-[300]
-Overfull \hbox (16.55724pt too wide) in paragraph at lines 83--84
-\TU/lmr/bx/n/10.95 Maximum Mean Discrepancy (MMD) \TU/SimSun(0)/b/n/10.95 与 \TU
-/lmr/bx/n/10.95 Correlation Alignment (CORAL)\TU/SimSun(0)/b/n/10.95 。|
+Underfull \hbox (badness 2165) in paragraph at lines 718--718
+[]|\TU/SimSun(0)/m/n/10.53937 目 标 方 程 从 随 机 初 始 化
  []
 
 
 
-[301]
+[299])
+
+[300]
+
+[301
+
+
+
+]
 
 [302]
+\openout2 = `chapters/15-pretraining.aux'.
 
-[303]
+ (./chapters/15-pretraining.tex
+第十四章
+
+
+[303
+
+
+]
 
 [304]
 
@@ -2492,30 +2466,17 @@ Overfull \hbox (16.55724pt too wide) in paragraph at lines 83--84
 
 [306]
 
-[307])
+[307]
 
 [308]
-\openout2 = `chapters/17-continual.aux'.
 
- (./chapters/17-continual.tex
-第二十三章
-
-
-[309
-
-
-
-
-]
+[309]
 
 [310]
 
 [311]
 
 [312]
-Underfull \vbox (badness 3302) has occurred while \output is active []
-
-
 
 [313]
 
@@ -2523,28 +2484,37 @@ Underfull \vbox (badness 3302) has occurred while \output is active []
 
 [315]
 
-[316]
+[316])
 
 [317]
+\openout2 = `chapters/16-transfer.aux'.
 
-[318])
-
-[319]
-\openout2 = `chapters/18-active.aux'.
-
- (./chapters/18-active.tex
-第二十四章
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
+ (./chapters/16-transfer.tex
+第十五章
 
 
-
-[320
+[318
 
 
 
 
 ]
+Overfull \hbox (6.96936pt too wide) in paragraph at lines 32--34
+\TU/SimSun(0)/m/n/12.045 域 联 合 分 布 分 别 为 $\OML/cmm/m/it/12.045 P[]\OT1/cmr/m/n/
+12.045 (\OML/cmm/m/it/12.045 X; Y\OT1/cmr/m/n/12.045 )$ \TU/SimSun(0)/m/n/12.04
+5 与 $\OML/cmm/m/it/12.045 P[]\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 X; Y\OT1
+/cmr/m/n/12.045 )$\TU/SimSun(0)/m/n/12.045 ，|  目 标 是 降 低 $\OML/cmm/m/it/12.045 
+R[]\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 f\OT1/cmr/m/n/12.045 ) = \U/msb/m/
+n/12.045 E[]\OML/cmm/m/it/12.045 `\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 f\O
+T1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 X\OT1/cmr/m/n/12.045 )\OML/cmm/m/it/12.
+045 ; Y\OT1/cmr/m/n/12.045 )$\TU/SimSun(0)/m/n/12.045 。|
+ []
+
+
+
+[319]
+
+[320]
 
 [321]
 
@@ -2553,70 +2523,45 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 [323]
 
 [324]
-Overfull \hbox (3.39157pt too wide) in paragraph at lines 126--128
-\TU/SimSun(0)/m/n/10.95 这 里 先 对 每 个 假 想 标 签 的 损 失 求 梯 度，|  再 用 当 前 概 率 加 权；|  不
- 是 对 $[][] \OML/cmm/m/it/10.95 p[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 y \OM
-S/cmsy/m/n/10.95 j \OML/cmm/m/it/10.95 x\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95
- `\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 x; y\OT1/cmr/m/n/10.95 )$
- []
-
-
 
 [325]
 
 [326]
 
 [327]
-Underfull \vbox (badness 3396) has occurred while \output is active []
 
-
-
-[328]
+[328])
 
 [329]
+\openout2 = `chapters/17-continual.aux'.
 
-[330])
-
-[331]
-\openout2 = `chapters/19-federated.aux'.
-
- (./chapters/19-federated.tex
-第二十五章
+ (./chapters/17-continual.tex
+第十六章
 
 
-[332
+[330
 
 
 
 
 ]
 
+[331]
+
+[332]
+
 [333]
 
 [334]
-Underfull \hbox (badness 10000) in paragraph at lines 96--96
-[]|\TU/SimSun(0)/m/n/8 安 全 聚 合 与 \TU/lmr/m/n/8 Dif-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 96--96
-\TU/lmr/m/n/8 ferential Privacy
+Overfull \hbox (15.15472pt too wide) in paragraph at lines 116--117
+[]\TU/SimSun(0)/m/n/12.045 即 使 投 影 精 确，|  有 限 步 长 仍 可 能 增 加 旧 损 失。|  若 旧 损 失 梯 
+度 为 $\OML/cmm/m/it/12.045 L[]$\TU/lmr/m/n/12.045 -Lipschitz\TU/SimSun(0)/m/n/12
+.045 ，|
  []
 
 
 
 [335]
-Overfull \hbox (6.81151pt too wide) in paragraph at lines 127--129
-\TU/SimSun(0)/m/n/10.95 当 $\OMS/cmsy/m/n/10.95 j\OT1/cmr/m/n/10.95 1 \OMS/cmsy/
-m/n/10.95 ^^@ \OML/cmm/m/it/10.95 ^^Qa[]\OMS/cmsy/m/n/10.95 j \OML/cmm/m/it/10.
-95 < \OT1/cmr/m/n/10.95 1$ \TU/SimSun(0)/m/n/10.95 且 $\OML/cmm/m/it/10.95 E \OM
-S/cmsy/m/n/10.95 ! 1$\TU/SimSun(0)/m/n/10.95 ，|  聚 合 趋 于 $[][] \OML/cmm/m/it/10
-.95 p[]b[]$\TU/SimSun(0)/m/n/10.95 ，|  但 全 局 最 优 点 是 $[][] \OML/cmm/m/it/10.95 
-p[]a[]b[]\OT1/cmr/m/n/10.95 / [][] \OML/cmm/m/it/10.95 p[]a[]$\TU/SimSun(0)/m/n
-/10.95 。|
- []
-
-
 
 [336]
 
@@ -2628,30 +2573,39 @@ p[]a[]b[]\OT1/cmr/m/n/10.95 / [][] \OML/cmm/m/it/10.95 p[]a[]$\TU/SimSun(0)/m/n
 
 [340]
 
-[341]
+[341])
 
 [342]
+\openout2 = `chapters/18-active.aux'.
 
-[343])
-
-[344]
-\openout2 = `chapters/20-manifold.aux'.
-
- (./chapters/20-manifold.tex
-第二十六章
+ (./chapters/18-active.tex
+第十七章
 
 
-[345
+[343
 
 
 
 
 ]
-Underfull \vbox (badness 10000) has occurred while \output is active []
 
+[344]
 
+[345]
 
 [346]
+Overfull \hbox (6.74481pt too wide) in paragraph at lines 83--85
+\TU/SimSun(0)/m/n/12.045 从 式[]到 式[]使 用 贝 叶 斯 公 式 $\OML/cmm/m/it/12.045 p\OT1/cm
+r/m/n/12.045 (\OML/cmm/m/it/12.045 ^^R \OMS/cmsy/m/n/12.045 j \OML/cmm/m/it/12.
+045 L; x; y\OT1/cmr/m/n/12.045 )/\OML/cmm/m/it/12.045 p\OT1/cmr/m/n/12.045 (\OM
+L/cmm/m/it/12.045 ^^R \OMS/cmsy/m/n/12.045 j \OML/cmm/m/it/12.045 L\OT1/cmr/m/n
+/12.045 ) = \OML/cmm/m/it/12.045 p\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 y \
+OMS/cmsy/m/n/12.045 j \OML/cmm/m/it/12.045 x; ^^R\OT1/cmr/m/n/12.045 )/\OML/cmm
+/m/it/12.045 p\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 y \OMS/cmsy/m/n/12.045 
+j
+ []
+
+
 
 [347]
 
@@ -2667,29 +2621,40 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 [353]
 
-[354]
+[354])
 
 [355]
+\openout2 = `chapters/19-federated.aux'.
 
-[356])
-
-[357]
-\openout2 = `chapters/21-meta.aux'.
-
- (./chapters/21-meta.tex
-第二十七章
+ (./chapters/19-federated.tex
+第十八章
 
 
-[358
+[356
 
 
 
 
 ]
 
+[357]
+
+[358]
+
 [359]
 
 [360]
+Overfull \hbox (38.44225pt too wide) in paragraph at lines 127--129
+\TU/SimSun(0)/m/n/12.045 当 $\OMS/cmsy/m/n/12.045 j\OT1/cmr/m/n/12.045 1 \OMS/cm
+sy/m/n/12.045 ^^@ \OML/cmm/m/it/12.045 ^^Qa[]\OMS/cmsy/m/n/12.045 j \OML/cmm/m/
+it/12.045 < \OT1/cmr/m/n/12.045 1$ \TU/SimSun(0)/m/n/12.045 且 $\OML/cmm/m/it/12
+.045 E \OMS/cmsy/m/n/12.045 ! 1$\TU/SimSun(0)/m/n/12.045 ，|  聚 合 趋 于 $[][] \OML
+/cmm/m/it/12.045 p[]b[]$\TU/SimSun(0)/m/n/12.045 ，|  但 全 局 最 优 点 是 $[][] \OML/c
+mm/m/it/12.045 p[]a[]b[]\OT1/cmr/m/n/12.045 / [][] \OML/cmm/m/it/12.045 p[]a[]$
+\TU/SimSun(0)/m/n/12.045 。|
+ []
+
+
 
 [361]
 
@@ -2702,51 +2667,44 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 [365]
 
 [366]
-Overfull \hbox (1.10052pt too wide) in paragraph at lines 233--234
-\TU/SimSun(0)/b/n/10.95 层 次 先 验 如 何 产 生 少 样 本 适 应。| [] \TU/SimSun(0)/m/n/10.95 
-一 个 可 明 确 计 算 的 概 率 元 学 习 模 型 是 $\OML/cmm/m/it/10.95 ^^R[] \OMS/cmsy/m/n/10.95 
-^^X \OML/cmm/m/it/10.95 p[]\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 ^^R[]\OT1/cm
-r/m/n/10.95 )$\TU/SimSun(0)/m/n/10.95 、|
- []
-
-
 
 [367]
-Underfull \vbox (badness 2512) has occurred while \output is active []
-
-
 
 [368]
 
-[369]
-Underfull \hbox (badness 1990) in paragraph at lines 295--296
-[]\TU/lmr/bx/n/10.95 higher documentation: Top-Level Functions\TU/SimSun(0)/m/n
-/10.95 ；|  作 者\TU/lmr/m/n/10.95 /\TU/SimSun(0)/m/n/10.95 平 台：| \TU/lmr/m/n/10.9
-5 Face-
- []
+[369])
+
+[370]
+\openout2 = `chapters/20-manifold.aux'.
+
+ (./chapters/20-manifold.tex
+第十九章
 
 
-
-[370])
-
-[371]
-
-[372
+[371
 
 
 
 
-] (./main.bbl
+]
+
+[372]
 
 [373]
 
-[374
-
-]
+[374]
 
 [375]
 
 [376]
+Overfull \hbox (18.02316pt too wide) in paragraph at lines 128--129
+[]\TU/SimSun(0)/m/n/12.045 对 新 点 可 以 在 训 练 点 中 求 同 样 的 和 为 一 重 构 权 重，|  并 令 $\O
+ML/cmm/m/it/12.045 z\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 x\OT1/cmr/m/n/12.
+045 ) = [][] \OML/cmm/m/it/12.045 w[]\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 
+x\OT1/cmr/m/n/12.045 )\OML/cmm/m/it/12.045 z[]$\TU/SimSun(0)/m/n/12.045 。|
+ []
+
+
 
 [377]
 
@@ -2757,61 +2715,126 @@ Underfull \hbox (badness 1990) in paragraph at lines 295--296
 [380]
 
 [381]
-Underfull \hbox (badness 6675) in paragraph at lines 459--464
-[]\TU/lmr/m/n/10.95 Sylvestre-Alvise Rebuffi, Alexander Kolesnikov, Georg Sperl
-, and
- []
-
-
 
 [382]
 
-[383]
+[383])
 
 [384]
 
 [385]
+\openout2 = `chapters/21-meta.aux'.
 
-Package fontspec Info: 
-(fontspec)             Could not resolve font "FangSong/BI" (it probably
-(fontspec)             doesn't exist).
-
-
-Package fontspec Info: 
-(fontspec)             Could not resolve font "FangSong/B" (it probably
-(fontspec)             doesn't exist).
+ (./chapters/21-meta.tex
+第二十章
 
 
-Package fontspec Info: 
-(fontspec)             Could not resolve font "FangSong/I" (it probably
-(fontspec)             doesn't exist).
+[386
 
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `lmtt' (encoding: TU).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
 
-Package fontspec Info: 
-(fontspec)             Font family 'FangSong(0)' created for font 'FangSong'
-(fontspec)             with options [Script={CJK}].
-(fontspec)              
-(fontspec)              This font family consists of the following NFSS
-(fontspec)             series/shapes:
-(fontspec)              
-(fontspec)             - 'normal' (m/n) with NFSS spec.:
-(fontspec)             <->"FangSong/OT:script=hani;language=dflt;"
 
-)
 
-[386] (./main.aux (./chapters/01-mathematical-preliminaries.aux)
+]
+
+[387]
+
+[388]
+
+[389]
+
+[390]
+
+[391]
+
+[392]
+
+[393]
+Overfull \hbox (2.70244pt too wide) in paragraph at lines 169--170
+[]\TU/SimSun(0)/m/n/12.045 对 \TU/lmr/m/n/12.045 ANIL\TU/SimSun(0)/m/n/12.045 ，|
+  令 参 数 为 编 码 器 $\OML/cmm/m/it/12.045 !$ \TU/SimSun(0)/m/n/12.045 与 任 务 头 $\OML
+/cmm/m/it/12.045 w$\TU/SimSun(0)/m/n/12.045 ，|  仅 更 新 $\OML/cmm/m/it/12.045 w[]
+ \OT1/cmr/m/n/12.045 = \OML/cmm/m/it/12.045 w \OMS/cmsy/m/n/12.045 ^^@ \OML/cmm
+/m/it/12.045 ^^K\OMS/cmsy/m/n/12.045 r[]L[]\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/1
+2.045 !; w\OT1/cmr/m/n/12.045 )$\TU/SimSun(0)/m/n/12.045 。|
+ []
+
+
+
+[394]
+
+[395]
+Overfull \hbox (7.17128pt too wide) detected at line 239
+[][][]\OML/cmm/m/it/12.045 p[]\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 ^^R[] \
+OMS/cmsy/m/n/12.045 j \OML/cmm/m/it/12.045 S[]\OT1/cmr/m/n/12.045 ) = []\OML/cm
+m/m/it/12.045 ;  p\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 y \OMS/cmsy/m/n/12.
+045 j \OML/cmm/m/it/12.045 x; S[]\OT1/cmr/m/n/12.045 ) = [] \OML/cmm/m/it/12.04
+5 p\OT1/cmr/m/n/12.045 (\OML/cmm/m/it/12.045 y \OMS/cmsy/m/n/12.045 j \OML/cmm/
+m/it/12.045 x; ^^R[]\OT1/cmr/m/n/12.045 )\OML/cmm/m/it/12.045 p[]\OT1/cmr/m/n/1
+2.045 (\OML/cmm/m/it/12.045 ^^R[] \OMS/cmsy/m/n/12.045 j \OML/cmm/m/it/12.045 S
+[]\OT1/cmr/m/n/12.045 ) \OML/cmm/m/it/12.045 d^^R[]:
+ []
+
+
+
+[396]
+
+[397]
+
+[398]
+
+[399]
+
+[400])
+
+[401]
+
+[402
+
+
+
+
+] (./main.bbl
+
+[403]
+
+[404
+
+]
+
+[405]
+
+[406]
+
+[407]
+
+[408]
+
+[409]
+
+[410]
+
+[411]
+
+[412]
+Underfull \hbox (badness 1117) in paragraph at lines 420--425
+[]\TU/lmr/m/n/12.045 Sylvestre-Alvise Rebuffi, Alexander Kolesnikov, Georg Sper
+l, and
+ []
+
+
+
+[413]
+
+[414]
+
+[415])
+
+[416] (./main.aux (./chapters/01-mathematical-preliminaries.aux)
 (./chapters/02-foundations.aux) (./chapters/03-linear-models.aux)
-(./chapters/04-objectives-and-metrics.aux)
-(./chapters/05-optimization-training.aux) (./chapters/07-bayesian.aux)
-(./chapters/08-kernel-functions.aux) (./chapters/09-svm.aux)
-(./chapters/09-pca.aux) (./chapters/09-krr.aux) (./chapters/09-svr.aux)
-(./chapters/09-klms.aux) (./chapters/09-kernel-gp.aux)
-(./chapters/09-sequence.aux) (./chapters/10-vision.aux)
-(./chapters/10-graph-neural-networks.aux) (./chapters/11-llm.aux)
+(./chapters/04-learning-pipeline.aux) (./chapters/05-optimization-training.aux)
+(./chapters/06-statistical-learning.aux) (./chapters/07-bayesian.aux)
+(./chapters/08-parametric-nonparametric.aux) (./chapters/09-sequence.aux)
+(./chapters/10-vision.aux) (./chapters/11-llm.aux)
 (./chapters/12-multimodal.aux) (./chapters/13-generative.aux)
 (./chapters/14-pinn.aux) (./chapters/15-pretraining.aux)
 (./chapters/16-transfer.aux) (./chapters/17-continual.aux)
@@ -2826,15 +2849,15 @@ L3 programming layer <2022/08/05>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 2C1803E1C2BAFAF328A28D76D8A7E05A;28000.
+(rerunfilecheck)             Checksum: D60BC90D19590BC016C7DF3AB8D60526;19101.
  ) 
 Here is how much of TeX's memory you used:
- 38274 strings out of 473832
- 856628 string characters out of 5733158
- 1234743 words of memory out of 5000000
- 60517 multiletter control sequences out of 15000+600000
- 575751 words of font info for 152 fonts, out of 8000000 for 9000
+ 38802 strings out of 473832
+ 874501 string characters out of 5733158
+ 1229045 words of memory out of 5000000
+ 61036 multiletter control sequences out of 15000+600000
+ 583759 words of font info for 187 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 93i,13n,111p,1001b,873s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 93i,13n,111p,1001b,856s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.xdv (400 pages, 5490684 bytes).
+Output written on main.xdv (430 pages, 5253112 bytes).

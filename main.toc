@@ -1,625 +1,623 @@
 \contentsline {part}{第一部分\hspace {1em}机器学习的基本语言与完整流程}{1}{part.1}%
 \contentsline {chapter}{\numberline {第一章\hspace {.3em}}数学与概率预备知识}{3}{chapter.1}%
-\contentsline {section}{\numberline {1.1}为什么需要数学语言}{3}{section.1.1}%
-\contentsline {paragraph}{先约定怎样读符号。}{3}{paragraph*.6}%
-\contentsline {section}{\numberline {1.2}向量、矩阵与几何}{4}{section.1.2}%
-\contentsline {paragraph}{维度、投影与半正定性的由来。}{4}{paragraph*.7}%
-\contentsline {section}{\numberline {1.3}微积分与链式法则}{5}{section.1.3}%
-\contentsline {paragraph}{为什么负梯度是局部下降方向。}{5}{paragraph*.8}%
-\contentsline {section}{\numberline {1.4}概率、条件概率与期望}{6}{section.1.4}%
-\contentsline {paragraph}{条件均值为何最优。}{6}{paragraph*.9}%
-\contentsline {section}{\numberline {1.5}高斯分布与最大熵}{7}{section.1.5}%
-\contentsline {paragraph}{密度公式与最大熵结论的条件。}{7}{paragraph*.10}%
-\contentsline {section}{\numberline {1.6}熵、交叉熵与 KL 散度}{8}{section.1.6}%
-\contentsline {paragraph}{KL非负性与交叉熵分解。}{8}{paragraph*.11}%
-\contentsline {section}{\numberline {1.7}从几何距离到概率距离}{9}{section.1.7}%
-\contentsline {paragraph}{手算距离并检查“距离”是否严格。}{10}{paragraph*.12}%
-\contentsline {section}{\numberline {1.8}特征值、主方向与降维}{11}{section.1.8}%
-\contentsline {paragraph}{从白化到PCA的优化证明。}{11}{paragraph*.13}%
-\contentsline {section}{\numberline {1.9}微分、积分与期望的对应}{12}{section.1.9}%
-\contentsline {paragraph}{把缺少的梯度项补出来。}{12}{paragraph*.14}%
-\contentsline {paragraph}{一个不能漏掉分布变化的例子。}{13}{paragraph*.15}%
-\contentsline {section}{\numberline {1.10}数值稳定性}{13}{section.1.10}%
-\contentsline {section}{\numberline {1.11}本章小结：看到公式时问什么}{13}{section.1.11}%
-\contentsline {chapter}{\numberline {第二章\hspace {.3em}}机器学习究竟在学习什么}{15}{chapter.2}%
-\contentsline {section}{\numberline {2.1}学习对象：数据、任务与模型}{15}{section.2.1}%
-\contentsline {paragraph}{从数据到任务。}{15}{paragraph*.16}%
-\contentsline {paragraph}{把一个任务写成可核查的样本。}{16}{paragraph*.17}%
-\contentsline {paragraph}{模型、参数与预测。}{16}{paragraph*.18}%
-\contentsline {section}{\numberline {2.2}损失函数怎样规定训练目标}{17}{section.2.2}%
-\contentsline {paragraph}{从一次预测的误差到整个训练集的目标。}{17}{paragraph*.19}%
-\contentsline {paragraph}{经验风险与总体风险.}{18}{paragraph*.20}%
-\contentsline {section}{\numberline {2.3}归纳偏置}{19}{section.2.3}%
-\contentsline {paragraph}{惩罚形式与约束形式如何联系。}{20}{paragraph*.21}%
-\contentsline {section}{\numberline {2.4}任务的可学习性}{22}{section.2.4}%
-\contentsline {paragraph}{从训练到部署及反馈。}{23}{paragraph*.22}%
-\contentsline {section}{\numberline {2.5}从问题定义到模型计算}{23}{section.2.5}%
-\contentsline {chapter}{\numberline {第三章\hspace {.3em}}从一个简单模型开始：线性回归}{26}{chapter.3}%
-\contentsline {section}{\numberline {3.1}先固定数据和任务}{26}{section.3.1}%
-\contentsline {paragraph}{例：根据当前读数预测下一小时温度。}{27}{paragraph*.25}%
-\contentsline {paragraph}{模型结构与参数各是什么。}{27}{paragraph*.26}%
-\contentsline {paragraph}{基函数：先表示输入，再在线性空间中学习。}{27}{paragraph*.27}%
-\contentsline {section}{\numberline {3.2}第一种视角：确定性判别模型}{28}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}线性回归：直接输出一个数}{28}{subsection.3.2.1}%
-\contentsline {paragraph}{一个简单的手算例子。}{28}{paragraph*.28}%
-\contentsline {paragraph}{线性回归最小二乘的矩阵表示——正规方程。}{29}{paragraph*.29}%
-\contentsline {paragraph}{不可逆与病态：解是否唯一，与解是否稳定。}{29}{paragraph*.30}%
-\contentsline {paragraph}{为什么正规方程也是正交投影条件。}{30}{paragraph*.31}%
-\contentsline {subsection}{\numberline {3.2.2}实际计算：用矩阵分解解方程，而不是求逆}{31}{subsection.3.2.2}%
-\contentsline {paragraph}{Cholesky：适合已经形成的正规方程。}{31}{paragraph*.32}%
-\contentsline {paragraph}{QR：通常的最小二乘默认方法。}{31}{paragraph*.33}%
-\contentsline {paragraph}{SVD：处理病态或秩不足问题。}{32}{paragraph*.34}%
-\contentsline {paragraph}{大规模问题：迭代法。}{32}{paragraph*.35}%
-\contentsline {paragraph}{岭回归的数值实现。}{32}{paragraph*.36}%
-\contentsline {subsection}{\numberline {3.2.3}正则化：在拟合之外加入偏好}{33}{subsection.3.2.3}%
-\contentsline {paragraph}{Lasso：用$\ell _1$惩罚实现变量选择。}{33}{paragraph*.37}%
-\contentsline {paragraph}{Elastic Net：在稀疏与稳定之间折中。}{34}{paragraph*.38}%
-\contentsline {paragraph}{Group Lasso：按组进行结构化选择。}{34}{paragraph*.39}%
-\contentsline {paragraph}{非凸惩罚：减少过度收缩。}{34}{paragraph*.40}%
-\contentsline {paragraph}{约束式正则化与早停。}{35}{paragraph*.41}%
-\contentsline {section}{\numberline {3.3}第二种视角：输出有分布，参数取一个确定值}{36}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}概率回归：把线性输出作为均值}{36}{subsection.3.3.1}%
-\contentsline {paragraph}{噪声方差的无偏估计。}{38}{paragraph*.42}%
-\contentsline {section}{\numberline {3.4}第三种视角：参数也用分布表示}{39}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}先验与后验：不再只选一组权重}{39}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}最大后验估计：从后验中选一个点}{40}{subsection.3.4.2}%
-\contentsline {subsection}{\numberline {3.4.3}完整后验：均值与方差都保留}{41}{subsection.3.4.3}%
-\contentsline {paragraph}{新数据怎样更新已有后验。}{42}{paragraph*.43}%
-\contentsline {subsection}{\numberline {3.4.4}后验预测：把参数不确定性带到新样本}{42}{subsection.3.4.4}%
-\contentsline {section}{\numberline {3.5}第四种视角：从核贝叶斯线性回归到高斯过程}{43}{section.3.5}%
-\contentsline {subsection}{\numberline {3.5.1}先在特征空间中做贝叶斯线性回归}{43}{subsection.3.5.1}%
-\contentsline {subsection}{\numberline {3.5.2}特征函数映射为何引出核函数}{44}{subsection.3.5.2}%
-\contentsline {subsection}{\numberline {3.5.3}从核贝叶斯线性回归引出高斯过程}{44}{subsection.3.5.3}%
-\contentsline {subsection}{\numberline {3.5.4}观测数据怎样更新函数}{45}{subsection.3.5.4}%
-\contentsline {subsection}{\numberline {3.5.5}高斯过程回归何时适合}{46}{subsection.3.5.5}%
-\contentsline {section}{\numberline {3.6}把上一章的概念逐项放回例子}{46}{section.3.6}%
-\contentsline {chapter}{\numberline {第四章\hspace {.3em}}回归、分类与聚类：训练目标与评价指标}{48}{chapter.4}%
-\contentsline {section}{\numberline {4.1}回归：连续数值的预测}{48}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}常用目标函数}{48}{subsection.4.1.1}%
-\contentsline {paragraph}{平方损失与均方误差。}{48}{paragraph*.45}%
-\contentsline {paragraph}{绝对损失与平均绝对误差。}{49}{paragraph*.46}%
-\contentsline {paragraph}{Huber损失。}{49}{paragraph*.47}%
-\contentsline {paragraph}{分位数损失。}{49}{paragraph*.48}%
-\contentsline {paragraph}{相对误差和对数目标。}{50}{paragraph*.49}%
-\contentsline {subsection}{\numberline {4.1.2}回归评价指标及差异}{50}{subsection.4.1.2}%
-\contentsline {paragraph}{误差大小。}{50}{paragraph*.50}%
-\contentsline {paragraph}{解释方差而非误差尺度。}{50}{paragraph*.51}%
-\contentsline {paragraph}{概率预测的评价。}{51}{paragraph*.52}%
-\contentsline {section}{\numberline {4.2}分类：离散标签与概率决策}{51}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}常用目标函数}{51}{subsection.4.2.1}%
-\contentsline {paragraph}{交叉熵与对数损失。}{51}{paragraph*.53}%
-\contentsline {paragraph}{加权交叉熵和焦点损失。}{52}{paragraph*.54}%
-\contentsline {paragraph}{直接优化分类错误的困难。}{52}{paragraph*.55}%
-\contentsline {subsection}{\numberline {4.2.2}分类评价指标及差异}{52}{subsection.4.2.2}%
-\contentsline {paragraph}{从混淆矩阵确定统计对象。}{52}{paragraph*.56}%
-\contentsline {paragraph}{误报率、漏报率与特异度。}{53}{paragraph*.57}%
-\contentsline {paragraph}{类别不平衡时的平衡准确率。}{54}{paragraph*.58}%
-\contentsline {paragraph}{同时检查精确率与召回率。}{54}{paragraph*.59}%
-\contentsline {paragraph}{从一个阈值到ROC曲线。}{55}{paragraph*.60}%
-\contentsline {paragraph}{ROC-AUC的面积与排序含义。}{56}{paragraph*.62}%
-\contentsline {paragraph}{稀有异常下的PR曲线。}{57}{paragraph*.63}%
-\contentsline {paragraph}{概率质量：Brier分数与校准。}{57}{paragraph*.64}%
-\contentsline {paragraph}{阈值、基率与业务代价。}{57}{paragraph*.65}%
-\contentsline {section}{\numberline {4.3}聚类：没有标签时如何定义好坏}{58}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}常用目标函数}{58}{subsection.4.3.1}%
-\contentsline {paragraph}{$K$均值目标。}{58}{paragraph*.66}%
-\contentsline {paragraph}{$K$中心与$K$中位数。}{59}{paragraph*.67}%
-\contentsline {paragraph}{概率混合模型。}{59}{paragraph*.68}%
-\contentsline {subsection}{\numberline {4.3.2}聚类评价指标及差异}{59}{subsection.4.3.2}%
-\contentsline {paragraph}{内部指标。}{59}{paragraph*.69}%
-\contentsline {paragraph}{外部指标。}{60}{paragraph*.70}%
-\contentsline {paragraph}{稳定性与任务效用。}{60}{paragraph*.71}%
-\contentsline {section}{\numberline {4.4}三类任务的统一比较}{60}{section.4.4}%
-\contentsline {chapter}{\numberline {第五章\hspace {.3em}}模型的求解}{62}{chapter.5}%
-\contentsline {section}{\numberline {5.1}确定性参数模型：从目标到参数值}{63}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}先判断是否存在直接解}{63}{subsection.5.1.1}%
-\contentsline {subsection}{\numberline {5.1.2}梯度怎样给出局部改进方向}{63}{subsection.5.1.2}%
-\contentsline {subsection}{\numberline {5.1.3}链式法则与神经网络的梯度计算}{64}{subsection.5.1.3}%
-\contentsline {subsubsection}{\numberline {5.1.3.1}从一条计算链理解链式法则}{65}{subsubsection.5.1.3.1}%
-\contentsline {subsubsection}{\numberline {5.1.3.2}一个两层网络的完整计算}{65}{subsubsection.5.1.3.2}%
-\contentsline {subsubsection}{\numberline {5.1.3.3}多层网络怎样复用导数}{66}{subsubsection.5.1.3.3}%
-\contentsline {subsection}{\numberline {5.1.4}随机梯度、动量与自适应尺度}{67}{subsection.5.1.4}%
-\contentsline {subsection}{\numberline {5.1.5}启发式搜索求解模型参数}{68}{subsection.5.1.5}%
-\contentsline {paragraph}{遗传算法。}{69}{paragraph*.74}%
-\contentsline {paragraph}{模拟退火。}{70}{paragraph*.75}%
-\contentsline {paragraph}{粒子群优化。}{71}{paragraph*.76}%
-\contentsline {subsection}{\numberline {5.1.6}含隐变量的极大似然：EM算法}{72}{subsection.5.1.6}%
-\contentsline {subsubsection}{\numberline {5.1.6.1}为什么完整数据容易求解，观测数据却难求解}{72}{subsubsection.5.1.6.1}%
-\contentsline {subsubsection}{\numberline {5.1.6.2}怎样构造一个能逐步提高的下界}{73}{subsubsection.5.1.6.2}%
-\contentsline {subsubsection}{\numberline {5.1.6.3}由下界推导E步和M步}{74}{subsubsection.5.1.6.3}%
-\contentsline {subsubsection}{\numberline {5.1.6.4}为什么每轮更新不会降低观测似然}{74}{subsubsection.5.1.6.4}%
-\contentsline {subsubsection}{\numberline {5.1.6.5}哪些近似仍保留上述保证}{75}{subsubsection.5.1.6.5}%
-\contentsline {subsection}{\numberline {5.1.7}例子：一维高斯混合模型}{76}{subsection.5.1.7}%
-\contentsline {section}{\numberline {5.2}随机参数模型的求解}{77}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}后验分布：数据怎样更新参数的不确定性}{77}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {5.2.2}边际似然：模型整体怎样支持观测数据}{78}{subsection.5.2.2}%
-\contentsline {subsection}{\numberline {5.2.3}分布近似：从贝叶斯公式推导变分目标}{79}{subsection.5.2.3}%
-\contentsline {subsection}{\numberline {5.2.4}均值场近似怎样计算}{81}{subsection.5.2.4}%
-\contentsline {subsection}{\numberline {5.2.5}蒙特卡洛变分推断与随机梯度优化}{82}{subsection.5.2.5}%
-\contentsline {paragraph}{重参数化梯度}{82}{paragraph*.77}%
-\contentsline {paragraph}{得分函数梯度}{82}{paragraph*.78}%
-\contentsline {paragraph}{用随机梯度更新变分参数}{83}{paragraph*.79}%
-\contentsline {subsection}{\numberline {5.2.6}随机性近似：用后验样本计算期望}{84}{subsection.5.2.6}%
-\contentsline {section}{\numberline {5.3}选择求解方法时应问的问题}{85}{section.5.3}%
-\contentsline {section}{\numberline {5.4}本章小结}{86}{section.5.4}%
-\contentsline {part}{第二部分\hspace {1em}概率模型：依赖结构与函数不确定性}{87}{part.2}%
-\contentsline {chapter}{\numberline {第六章\hspace {.3em}}概率图模型}{89}{chapter.6}%
-\contentsline {section}{\numberline {6.1}从朴素贝叶斯理解有向图}{90}{section.6.1}%
-\contentsline {subsection}{\numberline {6.1.1}类别如何把多个观测联系起来}{90}{subsection.6.1.1}%
-\contentsline {subsection}{\numberline {6.1.2}有向无环图怎样定义分布}{91}{subsection.6.1.2}%
-\contentsline {subsection}{\numberline {6.1.3}用d-分离判断条件独立}{92}{subsection.6.1.3}%
-\contentsline {paragraph}{为什么观察碰撞节点会引入依赖。}{93}{paragraph*.84}%
-\contentsline {paragraph}{为什么必须检查所有路径。}{93}{paragraph*.85}%
-\contentsline {section}{\numberline {6.2}从已知类别到单个隐变量：高斯混合模型}{93}{section.6.2}%
-\contentsline {subsection}{\numberline {6.2.1}把类别变成需要推断的变量}{93}{subsection.6.2.1}%
-\contentsline {subsection}{\numberline {6.2.2}后验责任度与EM学习}{95}{subsection.6.2.2}%
-\contentsline {section}{\numberline {6.3}从单个隐变量到状态序列}{95}{section.6.3}%
-\contentsline {subsection}{\numberline {6.3.1}状态空间模型的结构假设}{95}{subsection.6.3.1}%
-\contentsline {subsection}{\numberline {6.3.2}链结构怎样支持递归推断}{97}{subsection.6.3.2}%
-\contentsline {subsection}{\numberline {6.3.3}线性高斯模型与卡尔曼滤波}{97}{subsection.6.3.3}%
-\contentsline {subsection}{\numberline {6.3.4}非线性、非高斯模型与粒子滤波}{98}{subsection.6.3.4}%
-\contentsline {subsection}{\numberline {6.3.5}有限离散状态与隐马尔可夫模型}{99}{subsection.6.3.5}%
-\contentsline {paragraph}{过滤、平滑与最优路径。}{100}{paragraph*.91}%
-\contentsline {paragraph}{两状态、两时刻的过滤手算。}{101}{paragraph*.92}%
-\contentsline {paragraph}{前向后向递推的推导与稳定实现。}{102}{paragraph*.93}%
-\contentsline {paragraph}{从隐状态推断到参数学习。}{102}{paragraph*.94}%
-\contentsline {paragraph}{EM为什么得到期望计数比。}{103}{paragraph*.95}%
-\contentsline {section}{\numberline {6.4}从生成模型到局部条件模型：MEMM}{104}{section.6.4}%
-\contentsline {subsection}{\numberline {6.4.1}为什么直接建模标签的条件分布}{104}{subsection.6.4.1}%
-\contentsline {paragraph}{最大熵为何导出softmax。}{104}{paragraph*.97}%
-\contentsline {section}{\numberline {6.5}无向图：分离、团分解与条件随机场}{105}{section.6.5}%
-\contentsline {subsection}{\numberline {6.5.1}无向图怎样表达条件独立}{105}{subsection.6.5.1}%
-\contentsline {subsection}{\numberline {6.5.2}从团与势函数构造联合分布}{106}{subsection.6.5.2}%
-\contentsline {subsection}{\numberline {6.5.3}从局部归一化改为全局归一化}{107}{subsection.6.5.3}%
-\contentsline {paragraph}{两条路径怎样体现全局归一化。}{109}{paragraph*.100}%
-\contentsline {paragraph}{配分函数、边缘概率与梯度的完整联系。}{109}{paragraph*.101}%
-\contentsline {subsection}{\numberline {6.5.4}从链到网格：空间相互作用}{110}{subsection.6.5.4}%
-\contentsline {paragraph}{MRF的局部更新与均值场。}{112}{paragraph*.104}%
-\contentsline {paragraph}{两个像素的能量可以全部列完。}{113}{paragraph*.105}%
-\contentsline {paragraph}{把图结构带回维护任务。}{113}{paragraph*.106}%
-\contentsline {section}{\numberline {6.6}无向图中的隐变量：玻尔兹曼机与RBM}{114}{section.6.6}%
-\contentsline {subsection}{\numberline {6.6.1}能量形式与指数族参数化}{114}{subsection.6.6.1}%
-\contentsline {subsection}{\numberline {6.6.2}玻尔兹曼机怎样引入隐变量}{114}{subsection.6.6.2}%
-\contentsline {subsection}{\numberline {6.6.3}受限玻尔兹曼机的二部图与能量}{115}{subsection.6.6.3}%
-\contentsline {subsection}{\numberline {6.6.4}为什么两层的条件分布容易计算}{116}{subsection.6.6.4}%
-\contentsline {subsection}{\numberline {6.6.5}可见分布与一个可枚举的例子}{117}{subsection.6.6.5}%
-\contentsline {subsection}{\numberline {6.6.6}最大似然为什么需要两类期望}{117}{subsection.6.6.6}%
-\contentsline {subsection}{\numberline {6.6.7}连续观测与适用边界}{118}{subsection.6.6.7}%
-\contentsline {section}{\numberline {6.7}用五个方面比较概率图模型}{119}{section.6.7}%
-\contentsline {subsection}{\numberline {6.7.1}因子图与消息传递的共同计算方式}{120}{subsection.6.7.1}%
-\contentsline {subsection}{\numberline {6.7.2}图模型与贝叶斯参数学习的区别}{121}{subsection.6.7.2}%
-\contentsline {paragraph}{不确定性的分解与校准。}{122}{paragraph*.113}%
-\contentsline {paragraph}{全方差公式的推导与估计。}{122}{paragraph*.114}%
-\contentsline {paragraph}{参数抽样与观测抽样要分两层。}{122}{paragraph*.115}%
-\contentsline {paragraph}{贝叶斯方法的常见误用。}{123}{paragraph*.116}%
-\contentsline {paragraph}{预测分布的蒙特卡洛近似。}{123}{paragraph*.117}%
-\contentsline {paragraph}{采样诊断。}{123}{paragraph*.118}%
-\contentsline {paragraph}{Effective Sample Size (ESS)是针对哪个估计量。}{124}{paragraph*.119}%
-\contentsline {paragraph}{先验敏感性分析。}{124}{paragraph*.120}%
-\contentsline {paragraph}{校准、覆盖率与风险。}{124}{paragraph*.121}%
-\contentsline {paragraph}{小样本故障率的后验决策。}{124}{paragraph*.122}%
-\contentsline {paragraph}{回归预测区间的覆盖实验。}{125}{paragraph*.123}%
-\contentsline {paragraph}{后验预测检查的操作步骤。}{125}{paragraph*.124}%
-\contentsline {paragraph}{本章小结。}{126}{paragraph*.126}%
-\contentsline {part}{第三部分\hspace {1em}核方法}{127}{part.3}%
-\contentsline {chapter}{\numberline {第七章\hspace {.3em}}核函数的前世今生}{129}{chapter.7}%
-\contentsline {section}{\numberline {7.1}从特征映射到核函数}{129}{section.7.1}%
-\contentsline {section}{\numberline {7.2}核函数、特征映射与特征函数不是同一个对象}{130}{section.7.2}%
-\contentsline {section}{\numberline {7.3}有效核的充要条件：从有限矩阵到特征空间}{130}{section.7.3}%
-\contentsline {section}{\numberline {7.4}谱展开与核的构造规则}{131}{section.7.4}%
-\contentsline {section}{\numberline {7.5}为什么要计算核}{132}{section.7.5}%
-\contentsline {section}{\numberline {7.6}常见核及其含义}{132}{section.7.6}%
-\contentsline {section}{\numberline {7.7}核方法的边界}{133}{section.7.7}%
-\contentsline {chapter}{\numberline {第八章\hspace {.3em}}最优间隔分类：支持向量机}{134}{chapter.8}%
-\contentsline {section}{\numberline {8.1}训练分类正确后，还需要选择哪一条边界}{134}{section.8.1}%
-\contentsline {section}{\numberline {8.2}硬间隔目标与对偶问题}{135}{section.8.2}%
-\contentsline {subsection}{\numberline {8.2.1}从距离得到优化约束}{135}{subsection.8.2.1}%
-\contentsline {subsection}{\numberline {8.2.2}为什么解能写成训练样本的组合}{135}{subsection.8.2.2}%
-\contentsline {subsection}{\numberline {8.2.3}两点算例}{136}{subsection.8.2.3}%
-\contentsline {section}{\numberline {8.3}重叠类别怎样改变目标与支持向量}{136}{section.8.3}%
-\contentsline {subsection}{\numberline {8.3.1}松弛变量与合页损失}{136}{subsection.8.3.1}%
-\contentsline {subsection}{\numberline {8.3.2}软间隔对偶的上界从哪里来}{137}{subsection.8.3.2}%
-\contentsline {section}{\numberline {8.4}核化怎样形成非线性边界}{138}{section.8.4}%
-\contentsline {subsection}{\numberline {8.4.1}为什么核化发生在对偶问题}{138}{subsection.8.4.1}%
-\contentsline {subsection}{\numberline {8.4.2}核矩阵如何进入对偶与预测}{138}{subsection.8.4.2}%
-\contentsline {section}{\numberline {8.5}求解、验证与适用边界}{139}{section.8.5}%
-\contentsline {section}{\numberline {8.6}阅读依据}{139}{section.8.6}%
-\contentsline {chapter}{\numberline {第九章\hspace {.3em}}主成分分析：投影、重建与概率潜变量}{140}{chapter.9}%
-\contentsline {section}{\numberline {9.1}先说明要压缩什么}{140}{section.9.1}%
-\contentsline {section}{\numberline {9.2}确定性视角一：哪一个方向保留最多变化}{141}{section.9.2}%
-\contentsline {section}{\numberline {9.3}确定性视角二：为什么同一方向也最便于重建}{141}{section.9.3}%
-\contentsline {subsection}{\numberline {9.3.1}一个可逐步核算的二维例子}{142}{subsection.9.3.1}%
-\contentsline {section}{\numberline {9.4}怎样计算主方向}{143}{section.9.4}%
-\contentsline {section}{\numberline {9.5}概率视角：低维变量怎样生成观测}{143}{section.9.5}%
-\contentsline {subsection}{\numberline {9.5.1}生成模型与边缘分布}{143}{subsection.9.5.1}%
-\contentsline {subsection}{\numberline {9.5.2}从观测似然求主子空间}{144}{subsection.9.5.2}%
-\contentsline {subsection}{\numberline {9.5.3}给定观测后，潜变量是什么}{145}{subsection.9.5.3}%
-\contentsline {section}{\numberline {9.6}缺失观测与实际选择}{146}{section.9.6}%
-\contentsline {section}{\numberline {9.7}核化视角：把主成分分析推广到特征空间}{146}{section.9.7}%
-\contentsline {section}{\numberline {9.8}为什么核矩阵也需要中心化}{146}{section.9.8}%
-\contentsline {section}{\numberline {9.9}由协方差算子推导核矩阵特征问题}{147}{section.9.9}%
-\contentsline {section}{\numberline {9.10}新样本怎样使用训练均值}{148}{section.9.10}%
-\contentsline {section}{\numberline {9.11}平方特征的完整算例}{148}{section.9.11}%
-\contentsline {section}{\numberline {9.12}得分能算出，为什么原坐标不一定能重建}{148}{section.9.12}%
-\contentsline {section}{\numberline {9.13}阅读依据}{149}{section.9.13}%
-\contentsline {chapter}{\numberline {第十章\hspace {.3em}}核岭回归：从函数空间到有限线性方程}{150}{chapter.10}%
-\contentsline {section}{\numberline {10.1}无限维函数为什么仍能用有限个系数表示}{150}{section.10.1}%
-\contentsline {section}{\numberline {10.2}平方损失怎样给出核岭方程}{151}{section.10.2}%
-\contentsline {section}{\numberline {10.3}正则化如何改变预测}{152}{section.10.3}%
-\contentsline {section}{\numberline {10.4}截距、数值求解与高斯过程联系}{152}{section.10.4}%
-\contentsline {section}{\numberline {10.5}阅读依据}{153}{section.10.5}%
-\contentsline {chapter}{\numberline {第十一章\hspace {.3em}}支持向量回归：误差容忍带与稀疏预测}{154}{chapter.11}%
-\contentsline {section}{\numberline {11.1}先定义哪些误差需要计入}{154}{section.11.1}%
-\contentsline {section}{\numberline {11.2}将损失改写为约束优化}{155}{section.11.2}%
-\contentsline {section}{\numberline {11.3}对偶怎样产生正负两个系数}{155}{section.11.3}%
-\contentsline {section}{\numberline {11.4}支持向量与截距的计算}{156}{section.11.4}%
-\contentsline {subsection}{\numberline {11.4.1}两点线性算例}{157}{subsection.11.4.1}%
-\contentsline {section}{\numberline {11.5}参数选择与局限}{157}{section.11.5}%
-\contentsline {section}{\numberline {11.6}阅读依据}{157}{section.11.6}%
-\contentsline {chapter}{\numberline {第十二章\hspace {.3em}}核最小均方：随观测到达更新预测函数}{158}{chapter.12}%
-\contentsline {section}{\numberline {12.1}在线学习首先要固定信息顺序}{158}{section.12.1}%
-\contentsline {section}{\numberline {12.2}函数梯度怎样变成一个核截面}{158}{section.12.2}%
-\contentsline {section}{\numberline {12.3}步长怎样改变当前残差}{159}{section.12.3}%
-\contentsline {subsection}{\numberline {12.3.1}两次更新的算例}{160}{subsection.12.3.1}%
-\contentsline {section}{\numberline {12.4}字典为什么增长，怎样限制规模}{160}{section.12.4}%
-\contentsline {section}{\numberline {12.5}正则化更新与评价边界}{161}{section.12.5}%
-\contentsline {section}{\numberline {12.6}阅读依据}{161}{section.12.6}%
-\contentsline {chapter}{\numberline {第十三章\hspace {.3em}}高斯过程回归：核均值与预测不确定性}{162}{chapter.13}%
-\contentsline {section}{\numberline {13.1}核怎样成为协方差}{162}{section.13.1}%
-\contentsline {section}{\numberline {13.2}从联合分布推导条件预测}{163}{section.13.2}%
-\contentsline {section}{\numberline {13.3}单个训练点的算例与KRR联系}{163}{section.13.3}%
-\contentsline {section}{\numberline {13.4}超参数学习与计算条件}{164}{section.13.4}%
-\contentsline {section}{\numberline {13.5}阅读依据}{165}{section.13.5}%
-\contentsline {part}{第四部分\hspace {1em}深度学习模型}{166}{part.4}%
-\contentsline {chapter}{\numberline {第十四章\hspace {.3em}}序列建模模型}{168}{chapter.14}%
-\contentsline {section}{\numberline {14.1}先固定任务与可用的历史}{168}{section.14.1}%
-\contentsline {subsection}{\numberline {14.1.1}预测未来与识别当前异常}{168}{subsection.14.1.1}%
-\contentsline {subsection}{\numberline {14.1.2}共享表示与不同的输出头}{169}{subsection.14.1.2}%
-\contentsline {section}{\numberline {14.2}RNN 与 LSTM：把历史逐步写入记忆}{170}{section.14.2}%
-\contentsline {subsection}{\numberline {14.2.1}RNN 的状态怎样形成预测}{170}{subsection.14.2.1}%
-\contentsline {subsection}{\numberline {14.2.2}LSTM：分开控制保留、写入与读出}{171}{subsection.14.2.2}%
-\contentsline {paragraph}{从单步导数到跨时间反向传播。}{172}{paragraph*.137}%
-\contentsline {subsection}{\numberline {14.2.3}GRU：用较少门控更新状态}{173}{subsection.14.2.3}%
-\contentsline {section}{\numberline {14.3}时间卷积网络：在固定范围内组合历史}{173}{section.14.3}%
-\contentsline {subsection}{\numberline {14.3.1}因果卷积怎样保留顺序}{173}{subsection.14.3.1}%
-\contentsline {subsection}{\numberline {14.3.2}空洞卷积怎样扩大感受野}{174}{subsection.14.3.2}%
-\contentsline {section}{\numberline {14.4}Transformer：按内容重新读取历史}{174}{section.14.4}%
-\contentsline {subsection}{\numberline {14.4.1}查询、键和值怎样完成一次读取}{174}{subsection.14.4.1}%
-\contentsline {paragraph}{注意力的逐位置解释。}{175}{paragraph*.140}%
-\contentsline {paragraph}{一次可以手算的读取。}{175}{paragraph*.141}%
-\contentsline {paragraph}{缩放、归一化与访问成本的推导。}{176}{paragraph*.142}%
-\contentsline {paragraph}{位置编码与因果遮罩。}{177}{paragraph*.143}%
-\contentsline {subsection}{\numberline {14.4.2}Transformer 编码块怎样接到预测头}{177}{subsection.14.4.2}%
-\contentsline {paragraph}{多头注意力的张量形状。}{177}{paragraph*.144}%
-\contentsline {paragraph}{位置编码的选择。}{178}{paragraph*.146}%
-\contentsline {subsection}{\numberline {14.4.3}非平稳性与位置表示}{178}{subsection.14.4.3}%
-\contentsline {subsection}{\numberline {14.4.4}PatchTST：把局部时间片作为读取单位}{178}{subsection.14.4.4}%
-\contentsline {section}{\numberline {14.5}状态空间与 Mamba：选择性地保留长历史}{179}{section.14.5}%
-\contentsline {subsection}{\numberline {14.5.1}状态转移不自动等于概率估计}{179}{subsection.14.5.1}%
-\contentsline {paragraph}{卡尔曼滤波的两步更新。}{179}{paragraph*.147}%
-\contentsline {paragraph}{把滤波更新算成一个温度例子。}{179}{paragraph*.148}%
-\contentsline {paragraph}{由高斯条件化推导滤波增益。}{180}{paragraph*.149}%
-\contentsline {subsection}{\numberline {14.5.2}从固定状态空间到 Mamba 的选择性记忆}{180}{subsection.14.5.2}%
-\contentsline {paragraph}{连续动力学怎样成为离散记忆。}{181}{paragraph*.150}%
-\contentsline {paragraph}{输入依赖的步长、写入与读取。}{182}{paragraph*.151}%
-\contentsline {paragraph}{先手算两步，再理解扫描。}{182}{paragraph*.152}%
-\contentsline {paragraph}{为何能递推推理，也能并行训练。}{183}{paragraph*.153}%
-\contentsline {paragraph}{从选择性 SSM 到 Mamba 模块。}{183}{paragraph*.154}%
-\contentsline {paragraph}{与 Transformer 的计算和记忆取舍。}{183}{paragraph*.155}%
-\contentsline {paragraph}{工业实例：保留冲击还是保留工况。}{184}{paragraph*.156}%
-\contentsline {section}{\numberline {14.6}把历史表示接到预测与异常任务}{185}{section.14.6}%
-\contentsline {subsection}{\numberline {14.6.1}直接多步预测与递归预测}{185}{subsection.14.6.1}%
-\contentsline {subsection}{\numberline {14.6.2}概率输出怎样表达未来的不确定性}{185}{subsection.14.6.2}%
-\contentsline {subsection}{\numberline {14.6.3}异常评分：把新观测与正常模式比较}{186}{subsection.14.6.3}%
-\contentsline {subsection}{\numberline {14.6.4}时间边界与工业验证}{187}{subsection.14.6.4}%
-\contentsline {paragraph}{滚动预测的完整设置。}{187}{paragraph*.157}%
-\contentsline {paragraph}{从预测到异常告警。}{187}{paragraph*.158}%
-\contentsline {section}{\numberline {14.7}回到设备监测：怎样验证历史表示有用}{188}{section.14.7}%
-\contentsline {paragraph}{序列模型的基线与消融。}{188}{paragraph*.159}%
-\contentsline {paragraph}{不规则采样与时间间隔。}{188}{paragraph*.160}%
-\contentsline {paragraph}{多变量序列的因果边界。}{188}{paragraph*.161}%
-\contentsline {paragraph}{概率预测的评价。}{188}{paragraph*.162}%
-\contentsline {paragraph}{本章小结。}{189}{paragraph*.164}%
-\contentsline {chapter}{\numberline {第十五章\hspace {.3em}}视觉模型}{191}{chapter.15}%
-\contentsline {section}{\numberline {15.1}先确定任务：类别、位置还是边界}{191}{section.15.1}%
-\contentsline {section}{\numberline {15.2}图像分类：从局部卷积到 ResNet}{192}{section.15.2}%
-\contentsline {subsection}{\numberline {15.2.1}卷积如何从像素中提取特征}{192}{subsection.15.2.1}%
-\contentsline {paragraph}{一个窗口怎样变成一个输出。}{193}{paragraph*.166}%
-\contentsline {paragraph}{卷积的索引、参数与等变性。}{193}{paragraph*.167}%
-\contentsline {subsection}{\numberline {15.2.2}多层卷积如何形成整幅图的判断}{194}{subsection.15.2.2}%
-\contentsline {subsection}{\numberline {15.2.3}ResNet：网络加深以后怎样训练}{195}{subsection.15.2.3}%
-\contentsline {paragraph}{残差梯度不再只有单一路径。}{195}{paragraph*.169}%
-\contentsline {paragraph}{相加要求尺寸一致。}{196}{paragraph*.170}%
-\contentsline {subsection}{\numberline {15.2.4}从基本块到瓶颈块与轻量卷积}{196}{subsection.15.2.4}%
-\contentsline {section}{\numberline {15.3}ViT：用注意力联系不同图像区域}{196}{section.15.3}%
-\contentsline {subsection}{\numberline {15.3.1}从图像块到类别预测}{196}{subsection.15.3.1}%
-\contentsline {subsection}{\numberline {15.3.2}为什么引入窗口注意力与层级表示}{197}{subsection.15.3.2}%
-\contentsline {section}{\numberline {15.4}目标检测：以 Faster R-CNN 解释框级定位}{198}{section.15.4}%
-\contentsline {subsection}{\numberline {15.4.1}为什么先提议区域，再分类和修正位置}{198}{subsection.15.4.1}%
-\contentsline {subsection}{\numberline {15.4.2}框怎样匹配标签并参与训练}{199}{subsection.15.4.2}%
-\contentsline {paragraph}{从几何框到可训练的回归目标。}{199}{paragraph*.172}%
-\contentsline {subsection}{\numberline {15.4.3}推理怎样得到数量不固定的检测结果}{200}{subsection.15.4.3}%
-\contentsline {subsection}{\numberline {15.4.4}从两阶段到单阶段：省去逐候选识别}{201}{subsection.15.4.4}%
-\contentsline {paragraph}{焦点损失怎样改变梯度。}{201}{paragraph*.173}%
-\contentsline {subsection}{\numberline {15.4.5}FPN：让不同大小的缺陷使用不同尺度的特征}{202}{subsection.15.4.5}%
-\contentsline {section}{\numberline {15.5}图像分割：以 U-Net 解释像素级预测}{202}{section.15.5}%
-\contentsline {subsection}{\numberline {15.5.1}为什么解码器需要编码器的细节}{202}{subsection.15.5.1}%
-\contentsline {subsection}{\numberline {15.5.2}从概率图到掩码与训练损失}{203}{subsection.15.5.2}%
-\contentsline {paragraph}{像素似然、Dice与稀疏前景。}{204}{paragraph*.175}%
-\contentsline {subsection}{\numberline {15.5.3}U-Net 的改进与 Mask R-CNN 的实例输出}{205}{subsection.15.5.3}%
-\contentsline {section}{\numberline {15.6}回到质检任务：模型能解决什么，怎样验证}{205}{section.15.6}%
-\contentsline {subsection}{\numberline {15.6.1}细小缺陷与有限标注}{205}{subsection.15.6.1}%
-\contentsline {subsection}{\numberline {15.6.2}用独立数据检查类别、位置和边界}{206}{subsection.15.6.2}%
-\contentsline {paragraph}{本章小结。}{208}{paragraph*.177}%
-\contentsline {chapter}{\numberline {第十六章\hspace {.3em}}图上的神经网络}{209}{chapter.16}%
-\contentsline {section}{\numberline {16.1}先确定图表示什么、预测什么}{209}{section.16.1}%
-\contentsline {subsection}{\numberline {16.1.1}节点、边与节点特征}{209}{subsection.16.1.1}%
-\contentsline {subsection}{\numberline {16.1.2}节点、边与整图输出}{210}{subsection.16.1.2}%
-\contentsline {section}{\numberline {16.2}消息传递：一个节点怎样读取邻居}{211}{section.16.2}%
-\contentsline {subsection}{\numberline {16.2.1}从逐节点网络到邻域聚合}{211}{subsection.16.2.1}%
-\contentsline {subsection}{\numberline {16.2.2}节点编号变化时，输出怎样变化}{212}{subsection.16.2.2}%
-\contentsline {section}{\numberline {16.3}图卷积网络：把消息传递写成矩阵}{212}{section.16.3}%
-\contentsline {subsection}{\numberline {16.3.1}自环与对称归一化}{212}{subsection.16.3.1}%
-\contentsline {subsection}{\numberline {16.3.2}一个三节点路径的完整计算}{213}{subsection.16.3.2}%
-\contentsline {subsection}{\numberline {16.3.3}带权边、方向与自环尺度}{215}{subsection.16.3.3}%
-\contentsline {section}{\numberline {16.4}为什么称为图卷积：从频率滤波到局部传播}{215}{section.16.4}%
-\contentsline {subsection}{\numberline {16.4.1}图拉普拉斯如何定义频率}{216}{subsection.16.4.1}%
-\contentsline {subsection}{\numberline {16.4.2}多项式、一阶近似与重归一化}{216}{subsection.16.4.2}%
-\contentsline {section}{\numberline {16.5}固定邻域聚合留下的两个问题}{217}{section.16.5}%
-\contentsline {subsection}{\numberline {16.5.1}大图与新节点：邻域采样}{217}{subsection.16.5.1}%
-\contentsline {subsection}{\numberline {16.5.2}邻居作用不同：图注意力}{218}{subsection.16.5.2}%
-\contentsline {section}{\numberline {16.6}超图：多个节点共同参与的关系}{218}{section.16.6}%
-\contentsline {subsection}{\numberline {16.6.1}为什么成对连接可能丢失组信息}{218}{subsection.16.6.1}%
-\contentsline {subsection}{\numberline {16.6.2}从节点到超边，再从超边到节点}{220}{subsection.16.6.2}%
-\contentsline {subsection}{\numberline {16.6.3}三个节点、两条超边的手算}{220}{subsection.16.6.3}%
-\contentsline {subsection}{\numberline {16.6.4}超图拉普拉斯与成对传播的联系}{222}{subsection.16.6.4}%
-\contentsline {section}{\numberline {16.7}怎样训练，哪些信息允许进入图}{222}{section.16.7}%
-\contentsline {subsection}{\numberline {16.7.1}从节点表示到故障概率与训练损失}{222}{subsection.16.7.1}%
-\contentsline {subsection}{\numberline {16.7.2}传导设定与归纳设定}{223}{subsection.16.7.2}%
-\contentsline {section}{\numberline {16.8}传播何时失效，怎样检查}{224}{section.16.8}%
-\contentsline {subsection}{\numberline {16.8.1}同配关系与过平滑}{224}{subsection.16.8.1}%
-\contentsline {subsection}{\numberline {16.8.2}远处信息压缩与计算成本}{224}{subsection.16.8.2}%
-\contentsline {subsection}{\numberline {16.8.3}工业验证：图结构是否提供了新增信息}{225}{subsection.16.8.3}%
-\contentsline {chapter}{\numberline {第十七章\hspace {.3em}}语言大模型}{227}{chapter.17}%
-\contentsline {section}{\numberline {17.1}Token、表示与语言建模}{227}{section.17.1}%
-\contentsline {paragraph}{一段文本怎样产生训练标签。}{228}{paragraph*.184}%
-\contentsline {paragraph}{链式分解如何变成可计算的训练目标。}{229}{paragraph*.185}%
-\contentsline {section}{\numberline {17.2}预训练、对齐与推理}{230}{section.17.2}%
-\contentsline {paragraph}{预训练目标与困惑度。}{233}{paragraph*.189}%
-\contentsline {paragraph}{缩放、数据质量与模型容量。}{233}{paragraph*.190}%
-\contentsline {paragraph}{监督微调与参数高效适配。}{234}{paragraph*.191}%
-\contentsline {paragraph}{区分训练目标、可训练参数与当前提示。}{234}{paragraph*.192}%
-\contentsline {paragraph}{低秩更新的前向与反向计算。}{235}{paragraph*.193}%
-\contentsline {paragraph}{从偏好概率到直接偏好优化。}{235}{paragraph*.194}%
-\contentsline {paragraph}{偏好目标的一个数值检查。}{236}{paragraph*.195}%
-\contentsline {paragraph}{解码与生成控制。}{236}{paragraph*.196}%
-\contentsline {paragraph}{温度、序列概率与缓存的边界。}{237}{paragraph*.197}%
-\contentsline {section}{\numberline {17.3}检索、工具与安全边界}{238}{section.17.3}%
-\contentsline {paragraph}{检索增强生成。}{238}{paragraph*.198}%
-\contentsline {paragraph}{从一个问题走完检索链。}{238}{paragraph*.199}%
-\contentsline {paragraph}{检索得分、训练目标与证据边缘化。}{239}{paragraph*.200}%
-\contentsline {paragraph}{工具返回值不是模型自己算出的事实。}{240}{paragraph*.201}%
-\contentsline {paragraph}{工具调用与评测。}{240}{paragraph*.202}%
-\contentsline {paragraph}{幻觉、提示注入与安全边界。}{240}{paragraph*.203}%
-\contentsline {paragraph}{大模型评测矩阵。}{241}{paragraph*.204}%
-\contentsline {paragraph}{本章小结。}{242}{paragraph*.206}%
-\contentsline {chapter}{\numberline {第十八章\hspace {.3em}}多模态模型}{243}{chapter.18}%
-\contentsline {section}{\numberline {18.1}先确定任务：寻找匹配还是生成回答}{243}{section.18.1}%
-\contentsline {paragraph}{图文检索与零样本分类。}{243}{paragraph*.207}%
-\contentsline {paragraph}{图像描述与视觉问答。}{244}{paragraph*.208}%
-\contentsline {paragraph}{视觉指令跟随。}{244}{paragraph*.209}%
-\contentsline {section}{\numberline {18.2}CLIP：把图像和文本变成可比较的表示}{244}{section.18.2}%
-\contentsline {subsection}{\numberline {18.2.1}双塔为什么适合检索}{244}{subsection.18.2.1}%
-\contentsline {subsection}{\numberline {18.2.2}对称对比损失怎样使用配对索引}{246}{subsection.18.2.2}%
-\contentsline {subsection}{\numberline {18.2.3}两对样本：从内积算到损失}{247}{subsection.18.2.3}%
-\contentsline {subsection}{\numberline {18.2.4}训练之后怎样检索与分类}{247}{subsection.18.2.4}%
-\contentsline {section}{\numberline {18.3}BLIP-2：用少量查询连接视觉与语言}{248}{section.18.3}%
-\contentsline {subsection}{\numberline {18.3.1}为什么需要一个可训练的连接模块}{248}{subsection.18.3.1}%
-\contentsline {subsection}{\numberline {18.3.2}查询通过交叉注意力读取哪些信息}{249}{subsection.18.3.2}%
-\contentsline {paragraph}{两个查询读取三个位置的手算。}{250}{paragraph*.211}%
-\contentsline {subsection}{\numberline {18.3.3}两阶段训练分别解决什么问题}{251}{subsection.18.3.3}%
-\contentsline {paragraph}{第一阶段：从图像提取与文本有关的表示。}{251}{paragraph*.213}%
-\contentsline {paragraph}{第二阶段：让冻结语言模型利用视觉条件。}{251}{paragraph*.214}%
-\contentsline {paragraph}{冻结权重时，梯度在哪里停止。}{252}{paragraph*.215}%
-\contentsline {subsection}{\numberline {18.3.4}查询压缩带来什么收益与限制}{252}{subsection.18.3.4}%
-\contentsline {section}{\numberline {18.4}LLaVA：让视觉表示参与指令回答}{253}{section.18.4}%
-\contentsline {subsection}{\numberline {18.4.1}从线性投影到语言上下文}{253}{subsection.18.4.1}%
-\contentsline {subsection}{\numberline {18.4.2}两阶段训练怎样改变回答能力}{254}{subsection.18.4.2}%
-\contentsline {paragraph}{第一阶段：学习视觉与语言的连接。}{254}{paragraph*.217}%
-\contentsline {paragraph}{第二阶段：学习按视觉指令回答。}{254}{paragraph*.218}%
-\contentsline {subsection}{\numberline {18.4.3}同一张图为何能产生不同回答}{255}{subsection.18.4.3}%
-\contentsline {subsection}{\numberline {18.4.4}用相同维度比较 BLIP-2 与 LLaVA}{256}{subsection.18.4.4}%
-\contentsline {section}{\numberline {18.5}典型应用怎样验证}{256}{section.18.5}%
-\contentsline {subsection}{\numberline {18.5.1}先按输出形式选择评价对象}{256}{subsection.18.5.1}%
-\contentsline {subsection}{\numberline {18.5.2}工业迁移：从巡检照片到报告草稿}{257}{subsection.18.5.2}%
-\contentsline {chapter}{\numberline {第十九章\hspace {.3em}}深度生成模型}{259}{chapter.19}%
-\contentsline {section}{\numberline {19.1}生成任务与概率建模目标}{259}{section.19.1}%
-\contentsline {subsection}{\numberline {19.1.1}先确定要生成什么}{259}{subsection.19.1.1}%
-\contentsline {subsection}{\numberline {19.1.2}潜变量把随机性变成可采样结构}{260}{subsection.19.1.2}%
-\contentsline {section}{\numberline {19.2}VAE：用潜变量获得稳定采样}{260}{section.19.2}%
-\contentsline {subsection}{\numberline {19.2.1}为什么需要变分近似}{260}{subsection.19.2.1}%
-\contentsline {subsection}{\numberline {19.2.2}如何训练和采样}{261}{subsection.19.2.2}%
-\contentsline {subsection}{\numberline {19.2.3}VAE 的变体与典型问题}{262}{subsection.19.2.3}%
-\contentsline {section}{\numberline {19.3}GAN：追求逼真样本的对抗训练}{262}{section.19.3}%
-\contentsline {subsection}{\numberline {19.3.1}判别器如何提供训练信号}{262}{subsection.19.3.1}%
-\contentsline {subsection}{\numberline {19.3.2}逼真与覆盖为何会冲突}{263}{subsection.19.3.2}%
-\contentsline {section}{\numberline {19.4}扩散模型：逐步去噪成为当前主线}{263}{section.19.4}%
-\contentsline {subsection}{\numberline {19.4.1}从一次生成改为多步恢复}{263}{subsection.19.4.1}%
-\contentsline {subsection}{\numberline {19.4.2}噪声预测与反向采样}{263}{subsection.19.4.2}%
-\contentsline {subsection}{\numberline {19.4.3}条件控制与扩散模型的变体}{264}{subsection.19.4.3}%
-\contentsline {section}{\numberline {19.5}任务选择与验证边界}{265}{section.19.5}%
-\contentsline {paragraph}{本章小结。}{266}{paragraph*.223}%
-\contentsline {chapter}{\numberline {第二十章\hspace {.3em}}物理信息神经网络：从稀疏观测重建风场}{267}{chapter.20}%
-\contentsline {section}{\numberline {20.1}从函数拟合到受约束逆问题}{267}{section.20.1}%
-\contentsline {paragraph}{先读懂坐标、导数与残差。}{268}{paragraph*.224}%
-\contentsline {section}{\numberline {20.2}激光雷达实际观测了什么}{269}{section.20.2}%
-\contentsline {section}{\numberline {20.3}风场方程、尺度与物理假设}{271}{section.20.3}%
-\contentsline {section}{\numberline {20.4}网络、损失与训练过程}{273}{section.20.4}%
-\contentsline {paragraph}{一个可手算的微分训练例子。}{274}{paragraph*.226}%
-\contentsline {paragraph}{从残差到参数梯度。}{275}{paragraph*.227}%
-\contentsline {section}{\numberline {20.5}主要变体及其适用条件}{277}{section.20.5}%
-\contentsline {section}{\numberline {20.6}风电场案例的验证流程}{278}{section.20.6}%
-\contentsline {paragraph}{本章小结。}{281}{paragraph*.229}%
-\contentsline {part}{第五部分\hspace {1em}从学习方式看数据智能场景}{282}{part.5}%
-\contentsline {chapter}{\numberline {第二十一章\hspace {.3em}}预训练：构建可复用的数据表示}{284}{chapter.21}%
-\contentsline {section}{\numberline {21.1}预训练学到了什么}{285}{section.21.1}%
-\contentsline {paragraph}{表示、编码器和头分别是什么。}{285}{paragraph*.231}%
-\contentsline {section}{\numberline {21.2}监督预训练与重建式目标}{287}{section.21.2}%
-\contentsline {subsection}{\numberline {21.2.1}从条件似然理解重构为何产生平滑结果}{287}{subsection.21.2.1}%
-\contentsline {subsection}{\numberline {21.2.2}遮蔽任务与因果预测的边界}{288}{subsection.21.2.2}%
-\contentsline {section}{\numberline {21.3}对比学习：哪些样本应当接近}{290}{section.21.3}%
-\contentsline {paragraph}{把对比损失展开为一个分类问题。}{290}{paragraph*.232}%
-\contentsline {section}{\numberline {21.4}无负样本学习与表示坍缩}{292}{section.21.4}%
-\contentsline {paragraph}{停止梯度和统计约束究竟改变了什么。}{292}{paragraph*.233}%
-\contentsline {section}{\numberline {21.5}数据组织与领域继续预训练}{294}{section.21.5}%
-\contentsline {section}{\numberline {21.6}工业振动信号的完整学习任务设置}{295}{section.21.6}%
-\contentsline {paragraph}{本章小结。}{297}{paragraph*.235}%
-\contentsline {chapter}{\numberline {第二十二章\hspace {.3em}}迁移学习}{298}{chapter.22}%
-\contentsline {section}{\numberline {22.1}源域知识与目标域风险}{298}{section.22.1}%
-\contentsline {section}{\numberline {22.2}实例重加权与分布对齐}{300}{section.22.2}%
-\contentsline {paragraph}{重要性加权。}{300}{paragraph*.237}%
-\contentsline {paragraph}{先用两个工况手算权重。}{300}{paragraph*.238}%
-\contentsline {paragraph}{风险恒等式、密度比估计与方差。}{300}{paragraph*.239}%
-\contentsline {paragraph}{Maximum Mean Discrepancy (MMD) 与 Correlation Alignment (CORAL)。}{302}{paragraph*.240}%
-\contentsline {paragraph}{核均值差的实际计算。}{302}{paragraph*.241}%
-\contentsline {paragraph}{域对抗适配。}{303}{paragraph*.242}%
-\contentsline {paragraph}{域不可区分为何不是语义正确。}{303}{paragraph*.243}%
-\contentsline {section}{\numberline {22.3}预训练、微调与参数高效适配}{304}{section.22.3}%
-\contentsline {paragraph}{低秩更新的维度、梯度与容量。}{305}{paragraph*.244}%
-\contentsline {section}{\numberline {22.4}测试时适配与负迁移}{306}{section.22.4}%
-\contentsline {paragraph}{熵下降为什么会强化错误。}{306}{paragraph*.245}%
-\contentsline {paragraph}{本章小结。}{308}{paragraph*.247}%
-\contentsline {chapter}{\numberline {第二十三章\hspace {.3em}}持续学习}{309}{chapter.23}%
-\contentsline {section}{\numberline {23.1}数据流、任务边界与遗忘}{309}{section.23.1}%
-\contentsline {paragraph}{先分清一条样本、一个任务和一个阶段。}{310}{paragraph*.249}%
-\contentsline {paragraph}{为什么学新任务会影响旧任务。}{310}{paragraph*.250}%
-\contentsline {section}{\numberline {23.2}经验回放与梯度约束}{311}{section.23.2}%
-\contentsline {paragraph}{有限缓存如何近似历史风险。}{311}{paragraph*.251}%
-\contentsline {paragraph}{把回放公式执行一次。}{311}{paragraph*.252}%
-\contentsline {paragraph}{缓存无偏性与风险权重不是同一件事。}{311}{paragraph*.253}%
-\contentsline {paragraph}{梯度情景记忆（Gradient Episodic Memory，GEM）与 A-GEM。}{312}{paragraph*.254}%
-\contentsline {paragraph}{从约束优化推出投影及其步长限制。}{313}{paragraph*.255}%
-\contentsline {paragraph}{手算一次梯度投影。}{313}{paragraph*.256}%
-\contentsline {section}{\numberline {23.3}参数重要性与知识蒸馏}{314}{section.23.3}%
-\contentsline {paragraph}{Elastic Weight Consolidation (EWC) 及其在线变体。}{314}{paragraph*.257}%
-\contentsline {paragraph}{从贝叶斯递推到对角二次保护。}{314}{paragraph*.258}%
-\contentsline {paragraph}{参数重要性可以怎样直观核算。}{315}{paragraph*.259}%
-\contentsline {paragraph}{输出蒸馏与特征保持。}{315}{paragraph*.260}%
-\contentsline {paragraph}{蒸馏温度、梯度缩放与类增量缺口。}{316}{paragraph*.261}%
-\contentsline {paragraph}{蒸馏保留的是答案分布，不是参数副本。}{316}{paragraph*.262}%
-\contentsline {section}{\numberline {23.4}参数隔离、扩展与混合策略}{316}{section.23.4}%
-\contentsline {paragraph}{如何选择并调用被隔离的模块。}{317}{paragraph*.263}%
-\contentsline {section}{\numberline {23.5}评价矩阵与工业更新规则}{317}{section.23.5}%
-\contentsline {paragraph}{从完整矩阵读出最终指标。}{318}{paragraph*.264}%
-\contentsline {paragraph}{本章小结。}{319}{paragraph*.266}%
-\contentsline {chapter}{\numberline {第二十四章\hspace {.3em}}主动学习}{320}{chapter.24}%
-\contentsline {section}{\numberline {24.1}查询规则与标注预算}{321}{section.24.1}%
-\contentsline {paragraph}{一次查询究竟买到了什么。}{321}{paragraph*.268}%
-\contentsline {paragraph}{区分训练、选择和验收。}{322}{paragraph*.269}%
-\contentsline {section}{\numberline {24.2}不确定性、委员会与贝叶斯查询}{322}{section.24.2}%
-\contentsline {paragraph}{最小置信度、间隔与熵。}{322}{paragraph*.270}%
-\contentsline {paragraph}{何时这些分数等价，何时不等价。}{322}{paragraph*.271}%
-\contentsline {paragraph}{分数的数值和含义。}{322}{paragraph*.272}%
-\contentsline {paragraph}{委员会查询（Query-by-Committee）。}{323}{paragraph*.273}%
-\contentsline {paragraph}{Bayesian Active Learning by Disagreement (BALD) 与联合批量查询。}{323}{paragraph*.274}%
-\contentsline {paragraph}{先把两种平均分开计算。}{323}{paragraph*.275}%
-\contentsline {paragraph}{从后验信息增益推出 BALD。}{323}{paragraph*.276}%
-\contentsline {section}{\numberline {24.3}预期风险、梯度变化与多样性}{325}{section.24.3}%
-\contentsline {paragraph}{预期误差减少。}{325}{paragraph*.277}%
-\contentsline {paragraph}{怎样模拟还没拿到的标签。}{325}{paragraph*.278}%
-\contentsline {paragraph}{一次梯度更新能否预测风险收益。}{325}{paragraph*.279}%
-\contentsline {paragraph}{Core-set 与 BADGE。}{326}{paragraph*.280}%
-\contentsline {paragraph}{覆盖半径为什么有意义，又为什么不够。}{326}{paragraph*.281}%
-\contentsline {paragraph}{从覆盖与梯度各算一个小例子。}{327}{paragraph*.282}%
-\contentsline {paragraph}{梯度嵌入为何同时包含置信度与方向。}{327}{paragraph*.283}%
-\contentsline {section}{\numberline {24.4}成本、噪声与工业流式变体}{328}{section.24.4}%
-\contentsline {paragraph}{查询偏差与代表性监测。}{328}{paragraph*.284}%
-\contentsline {paragraph}{查询偏差与标注噪声的小例子。}{329}{paragraph*.285}%
-\contentsline {section}{\numberline {24.5}算法流程与验收}{329}{section.24.5}%
-\contentsline {paragraph}{本章小结。}{331}{paragraph*.287}%
-\contentsline {chapter}{\numberline {第二十五章\hspace {.3em}}联邦学习}{332}{chapter.25}%
-\contentsline {section}{\numberline {25.1}问题定义}{332}{section.25.1}%
-\contentsline {paragraph}{客户端不是一条样本。}{333}{paragraph*.289}%
-\contentsline {subsection}{\numberline {25.1.1}权重、抽样与集中式基线}{334}{subsection.25.1.1}%
-\contentsline {paragraph}{手算一轮聚合和一种掉线后果。}{334}{paragraph*.290}%
-\contentsline {section}{\numberline {25.2}联邦优化、隐私与系统约束}{335}{section.25.2}%
-\contentsline {paragraph}{非独立同分布与通信。}{335}{paragraph*.291}%
-\contentsline {paragraph}{评价与边界。}{335}{paragraph*.292}%
-\contentsline {paragraph}{FedAvg的本地更新。}{335}{paragraph*.294}%
-\contentsline {paragraph}{从本地多步展开看漂移来源。}{336}{paragraph*.295}%
-\contentsline {paragraph}{把漂移例子代入数字。}{337}{paragraph*.296}%
-\contentsline {paragraph}{隐私的三个层次。}{337}{paragraph*.297}%
-\contentsline {paragraph}{个性化联邦学习。}{337}{paragraph*.298}%
-\contentsline {paragraph}{个性化目标为什么需要耦合。}{337}{paragraph*.299}%
-\contentsline {paragraph}{通信和系统约束。}{338}{paragraph*.300}%
-\contentsline {paragraph}{压缩误差与误差反馈。}{338}{paragraph*.301}%
-\contentsline {paragraph}{压缩发送的是近似更新，残差不能丢。}{338}{paragraph*.302}%
-\contentsline {section}{\numberline {25.3}联邦诊断案例与验收}{338}{section.25.3}%
-\contentsline {paragraph}{一轮联邦训练的完整过程。}{339}{paragraph*.303}%
-\contentsline {paragraph}{客户端漂移与 FedProx。}{339}{paragraph*.305}%
-\contentsline {paragraph}{近端项不是直接把更新裁短。}{340}{paragraph*.306}%
-\contentsline {paragraph}{控制变量与 SCAFFOLD。}{340}{paragraph*.307}%
-\contentsline {paragraph}{控制变量为什么有减有加。}{341}{paragraph*.308}%
-\contentsline {paragraph}{差分隐私与隐私预算。}{341}{paragraph*.309}%
-\contentsline {paragraph}{用二维向量理解裁剪、噪声和保护单位。}{342}{paragraph*.310}%
-\contentsline {paragraph}{安全聚合与攻击面。}{342}{paragraph*.311}%
-\contentsline {paragraph}{安全聚合为何能只显露总和。}{342}{paragraph*.312}%
-\contentsline {paragraph}{掉线、异构与公平性。}{343}{paragraph*.313}%
-\contentsline {paragraph}{本章小结。}{344}{paragraph*.315}%
-\contentsline {chapter}{\numberline {第二十六章\hspace {.3em}}流形学习}{345}{chapter.26}%
-\contentsline {section}{\numberline {26.1}几何假设与邻域构造}{345}{section.26.1}%
-\contentsline {paragraph}{低维并不等于只留下少数传感器。}{346}{paragraph*.317}%
-\contentsline {section}{\numberline {26.2}线性基线与测地距离}{347}{section.26.2}%
-\contentsline {paragraph}{PCA 与核 PCA。}{347}{paragraph*.318}%
-\contentsline {paragraph}{PCA 的重构推导与尺度选择。}{347}{paragraph*.319}%
-\contentsline {paragraph}{PCA 的每个矩阵各做什么。}{347}{paragraph*.320}%
-\contentsline {paragraph}{核 PCA 的特征空间与新样本坐标。}{348}{paragraph*.321}%
-\contentsline {paragraph}{Isomap。}{348}{paragraph*.322}%
-\contentsline {paragraph}{沿图走与直接穿过去的差别。}{348}{paragraph*.323}%
-\contentsline {paragraph}{双中心化为什么把距离变成内积。}{349}{paragraph*.324}%
-\contentsline {section}{\numberline {26.3}局部重构与谱嵌入}{349}{section.26.3}%
-\contentsline {paragraph}{LLE。}{349}{paragraph*.325}%
-\contentsline {paragraph}{LLE 的两个约束优化如何求解。}{350}{paragraph*.326}%
-\contentsline {paragraph}{局部重构不是按邻居投票。}{350}{paragraph*.327}%
-\contentsline {paragraph}{拉普拉斯特征映射。}{351}{paragraph*.328}%
-\contentsline {paragraph}{从边上的差异到广义特征值。}{351}{paragraph*.329}%
-\contentsline {paragraph}{图平滑可以在三个节点上手算。}{351}{paragraph*.330}%
-\contentsline {paragraph}{扩散坐标与扩散距离。}{352}{paragraph*.331}%
-\contentsline {paragraph}{扩散为什么比较整行概率。}{352}{paragraph*.332}%
-\contentsline {section}{\numberline {26.4}概率邻域可视化}{352}{section.26.4}%
-\contentsline {paragraph}{t-SNE。}{352}{paragraph*.333}%
-\contentsline {paragraph}{t-SNE 的概率、熵与梯度。}{353}{paragraph*.334}%
-\contentsline {paragraph}{可视化概率不是分类概率。}{353}{paragraph*.335}%
-\contentsline {paragraph}{UMAP。}{354}{paragraph*.336}%
-\contentsline {paragraph}{UMAP 的局部尺度与吸引排斥。}{354}{paragraph*.337}%
-\contentsline {section}{\numberline {26.5}流形正则与工业验证}{355}{section.26.5}%
-\contentsline {paragraph}{图上的平滑如何影响一个未知标签。}{355}{paragraph*.338}%
-\contentsline {paragraph}{平方损失下把函数问题化为线性系统。}{355}{paragraph*.339}%
-\contentsline {paragraph}{本章小结。}{357}{paragraph*.341}%
-\contentsline {chapter}{\numberline {第二十七章\hspace {.3em}}元学习}{358}{chapter.27}%
-\contentsline {section}{\numberline {27.1}任务分布与双层目标}{358}{section.27.1}%
-\contentsline {paragraph}{样本、设备、任务与 episode 的具体对应。}{359}{paragraph*.343}%
-\contentsline {paragraph}{为什么必须在任务内划分支持与查询。}{360}{paragraph*.344}%
-\contentsline {section}{\numberline {27.2}度量与关系方法}{360}{section.27.2}%
-\contentsline {paragraph}{Matching Networks 与原型网络。}{360}{paragraph*.345}%
-\contentsline {paragraph}{手算一次原型适应与预测。}{361}{paragraph*.346}%
-\contentsline {paragraph}{均值原型、概率模型与反向传播。}{361}{paragraph*.347}%
-\contentsline {paragraph}{可学习关系与无标签查询的边界。}{362}{paragraph*.348}%
-\contentsline {section}{\numberline {27.3}梯度初始化与一阶变体}{362}{section.27.3}%
-\contentsline {paragraph}{MAML 的内外循环。}{362}{paragraph*.349}%
-\contentsline {paragraph}{一维数值看清为什么要再乘一次导数。}{363}{paragraph*.350}%
-\contentsline {paragraph}{多步链式法则与曲率直觉。}{363}{paragraph*.351}%
-\contentsline {paragraph}{一阶近似到底舍弃了什么。}{364}{paragraph*.352}%
-\contentsline {paragraph}{Meta-SGD、Almost No Inner Loop (ANIL) 与隐式梯度。}{365}{paragraph*.353}%
-\contentsline {paragraph}{隐式微分的驻点方程与数值误差。}{365}{paragraph*.354}%
-\contentsline {paragraph}{隐式解与一步适应不是同一个答案。}{366}{paragraph*.355}%
-\contentsline {section}{\numberline {27.4}学习更新规则与概率适应}{366}{section.27.4}%
-\contentsline {paragraph}{学习优化器与直接学参数的区别。}{366}{paragraph*.356}%
-\contentsline {paragraph}{学习优化器的状态展开。}{367}{paragraph*.357}%
-\contentsline {paragraph}{层次先验如何产生少样本适应。}{367}{paragraph*.358}%
-\contentsline {paragraph}{把概率适应缩成一次加权平均。}{368}{paragraph*.359}%
-\contentsline {paragraph}{记忆读取也是一种适应算子。}{369}{paragraph*.360}%
-\contentsline {paragraph}{一次读取的可核算结果。}{369}{paragraph*.361}%
-\contentsline {section}{\numberline {27.5}跨设备快速适应的完整设置}{369}{section.27.5}%
-\contentsline {paragraph}{任务内标签要与预测头同步。}{369}{paragraph*.362}%
-\contentsline {paragraph}{本章小结。}{371}{paragraph*.364}%
+\contentsline {section}{\numberline {1.1}向量、矩阵与基本运算}{3}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}对象与记号}{3}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}内积、范数与距离}{3}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}矩阵乘法与线性变换}{5}{subsection.1.1.3}%
+\contentsline {section}{\numberline {1.2}线性空间、秩、迹、逆与伪逆}{5}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}线性无关与秩}{5}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}迹与行列式}{6}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}逆与线性方程组}{6}{subsection.1.2.3}%
+\contentsline {subsection}{\numberline {1.2.4}穆尔--彭罗斯伪逆}{7}{subsection.1.2.4}%
+\contentsline {section}{\numberline {1.3}正交投影与正定性}{7}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}正交矩阵与投影}{7}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}二次型与正定矩阵}{8}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.3.3}分块矩阵与舒尔补}{9}{subsection.1.3.3}%
+\contentsline {section}{\numberline {1.4}矩阵分解}{9}{section.1.4}%
+\contentsline {subsection}{\numberline {1.4.1}LU 分解}{9}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {1.4.2}QR 分解}{10}{subsection.1.4.2}%
+\contentsline {subsection}{\numberline {1.4.3}特征分解}{10}{subsection.1.4.3}%
+\contentsline {subsection}{\numberline {1.4.4}奇异值分解}{11}{subsection.1.4.4}%
+\contentsline {subsection}{\numberline {1.4.5}Cholesky 与对称分解}{12}{subsection.1.4.5}%
+\contentsline {subsection}{\numberline {1.4.6}条件数与投影恒等式}{13}{subsection.1.4.6}%
+\contentsline {section}{\numberline {1.5}微积分工具}{13}{section.1.5}%
+\contentsline {subsection}{\numberline {1.5.1}导数、全微分与链式法则}{13}{subsection.1.5.1}%
+\contentsline {subsection}{\numberline {1.5.2}二阶导数与泰勒展开}{14}{subsection.1.5.2}%
+\contentsline {subsection}{\numberline {1.5.3}矩阵微分}{14}{subsection.1.5.3}%
+\contentsline {subsection}{\numberline {1.5.4}积分与变量替换}{15}{subsection.1.5.4}%
+\contentsline {section}{\numberline {1.6}概率空间、随机变量与分布}{15}{section.1.6}%
+\contentsline {subsection}{\numberline {1.6.1}事件与概率}{15}{subsection.1.6.1}%
+\contentsline {subsection}{\numberline {1.6.2}随机变量与分布函数}{16}{subsection.1.6.2}%
+\contentsline {subsection}{\numberline {1.6.3}联合、边缘、条件与独立}{17}{subsection.1.6.3}%
+\contentsline {section}{\numberline {1.7}期望、方差与协方差}{17}{section.1.7}%
+\contentsline {subsection}{\numberline {1.7.1}期望与矩}{17}{subsection.1.7.1}%
+\contentsline {subsection}{\numberline {1.7.2}方差与协方差}{18}{subsection.1.7.2}%
+\contentsline {subsection}{\numberline {1.7.3}条件期望与全方差}{19}{subsection.1.7.3}%
+\contentsline {section}{\numberline {1.8}常用概率分布}{19}{section.1.8}%
+\contentsline {subsection}{\numberline {1.8.1}离散分布}{19}{subsection.1.8.1}%
+\contentsline {subsection}{\numberline {1.8.2}连续分布}{20}{subsection.1.8.2}%
+\contentsline {subsection}{\numberline {1.8.3}正态分布}{21}{subsection.1.8.3}%
+\contentsline {section}{\numberline {1.9}全概率与贝叶斯公式}{22}{section.1.9}%
+\contentsline {subsection}{\numberline {1.9.1}事件形式}{22}{subsection.1.9.1}%
+\contentsline {subsection}{\numberline {1.9.2}密度形式}{23}{subsection.1.9.2}%
+\contentsline {section}{\numberline {1.10}信息量与分布差异}{23}{section.1.10}%
+\contentsline {subsection}{\numberline {1.10.1}熵、交叉熵与相对熵}{23}{subsection.1.10.1}%
+\contentsline {subsection}{\numberline {1.10.2}Wasserstein 距离}{24}{subsection.1.10.2}%
+\contentsline {section}{\numberline {1.11}期望与参数微分}{24}{section.1.11}%
+\contentsline {section}{\numberline {1.12}指数族分布}{25}{section.1.12}%
+\contentsline {subsection}{\numberline {1.12.1}基准测度、自然参数与归一化}{25}{subsection.1.12.1}%
+\contentsline {subsection}{\numberline {1.12.2}充分性与最小表示}{26}{subsection.1.12.2}%
+\contentsline {subsection}{\numberline {1.12.3}对数配分函数的导数}{26}{subsection.1.12.3}%
+\contentsline {subsection}{\numberline {1.12.4}得分与信息矩阵}{27}{subsection.1.12.4}%
+\contentsline {chapter}{\numberline {第二章\hspace {.3em}}机器学习究竟在学习什么}{28}{chapter.2}%
+\contentsline {section}{\numberline {2.1}学习对象：数据、任务与模型}{28}{section.2.1}%
+\contentsline {paragraph}{从数据到任务。}{28}{paragraph*.6}%
+\contentsline {paragraph}{把一个任务写成可核查的样本。}{29}{paragraph*.7}%
+\contentsline {paragraph}{模型、参数与预测。}{29}{paragraph*.8}%
+\contentsline {section}{\numberline {2.2}损失函数怎样规定训练目标}{30}{section.2.2}%
+\contentsline {paragraph}{从一次预测的误差到整个训练集的目标。}{30}{paragraph*.9}%
+\contentsline {paragraph}{经验风险与总体风险.}{32}{paragraph*.10}%
+\contentsline {section}{\numberline {2.3}归纳偏置}{33}{section.2.3}%
+\contentsline {paragraph}{惩罚形式与约束形式如何联系。}{34}{paragraph*.11}%
+\contentsline {section}{\numberline {2.4}任务的可学习性}{36}{section.2.4}%
+\contentsline {paragraph}{从训练到部署及反馈。}{38}{paragraph*.12}%
+\contentsline {section}{\numberline {2.5}从问题定义到模型计算}{38}{section.2.5}%
+\contentsline {chapter}{\numberline {第三章\hspace {.3em}}从一个简单模型开始：线性回归}{40}{chapter.3}%
+\contentsline {section}{\numberline {3.1}先固定数据和任务}{40}{section.3.1}%
+\contentsline {paragraph}{例：根据当前读数预测下一小时温度。}{41}{paragraph*.15}%
+\contentsline {paragraph}{模型结构与参数各是什么。}{41}{paragraph*.16}%
+\contentsline {paragraph}{基函数：先表示输入，再在线性空间中学习。}{42}{paragraph*.17}%
+\contentsline {section}{\numberline {3.2}第一种视角：确定性判别模型}{42}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}线性回归：直接输出一个数}{42}{subsection.3.2.1}%
+\contentsline {paragraph}{一个简单的手算例子。}{43}{paragraph*.18}%
+\contentsline {paragraph}{线性回归最小二乘的矩阵表示——正规方程。}{43}{paragraph*.19}%
+\contentsline {paragraph}{不可逆与病态：解是否唯一，与解是否稳定。}{44}{paragraph*.20}%
+\contentsline {paragraph}{为什么正规方程也是正交投影条件。}{45}{paragraph*.21}%
+\contentsline {subsection}{\numberline {3.2.2}实际计算：用矩阵分解解方程，而不是求逆}{45}{subsection.3.2.2}%
+\contentsline {paragraph}{Cholesky：适合已经形成的正规方程。}{46}{paragraph*.22}%
+\contentsline {paragraph}{QR：通常的最小二乘默认方法。}{46}{paragraph*.23}%
+\contentsline {paragraph}{SVD：处理病态或秩不足问题。}{47}{paragraph*.24}%
+\contentsline {paragraph}{大规模问题：迭代法。}{47}{paragraph*.25}%
+\contentsline {paragraph}{岭回归的数值实现。}{47}{paragraph*.26}%
+\contentsline {subsection}{\numberline {3.2.3}正则化：在拟合之外加入偏好}{48}{subsection.3.2.3}%
+\contentsline {paragraph}{Lasso：用$\ell _1$惩罚实现变量选择。}{49}{paragraph*.27}%
+\contentsline {paragraph}{Elastic Net：在稀疏与稳定之间折中。}{49}{paragraph*.28}%
+\contentsline {paragraph}{Group Lasso：按组进行结构化选择。}{49}{paragraph*.29}%
+\contentsline {paragraph}{非凸惩罚：减少过度收缩。}{50}{paragraph*.30}%
+\contentsline {paragraph}{约束式正则化与早停。}{50}{paragraph*.31}%
+\contentsline {section}{\numberline {3.3}第二种视角：输出有分布，参数取一个确定值}{51}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}概率回归：把线性输出作为均值}{51}{subsection.3.3.1}%
+\contentsline {paragraph}{噪声方差的无偏估计。}{54}{paragraph*.32}%
+\contentsline {section}{\numberline {3.4}第三种视角：参数也用分布表示}{55}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}先验与后验：不再只选一组权重}{55}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}最大后验估计：从后验中选一个点}{56}{subsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.4.3}完整后验：均值与方差都保留}{57}{subsection.3.4.3}%
+\contentsline {paragraph}{新数据怎样更新已有后验。}{58}{paragraph*.33}%
+\contentsline {subsection}{\numberline {3.4.4}后验预测：把参数不确定性带到新样本}{59}{subsection.3.4.4}%
+\contentsline {section}{\numberline {3.5}第四种视角：从核贝叶斯线性回归到高斯过程}{59}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}先在特征空间中做贝叶斯线性回归}{60}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}特征函数映射为何引出核函数}{60}{subsection.3.5.2}%
+\contentsline {subsection}{\numberline {3.5.3}从核贝叶斯线性回归引出高斯过程}{61}{subsection.3.5.3}%
+\contentsline {subsection}{\numberline {3.5.4}观测数据怎样更新函数}{62}{subsection.3.5.4}%
+\contentsline {subsection}{\numberline {3.5.5}高斯过程回归何时适合}{63}{subsection.3.5.5}%
+\contentsline {section}{\numberline {3.6}把上一章的概念逐项放回例子}{63}{section.3.6}%
+\contentsline {chapter}{\numberline {第四章\hspace {.3em}}模型的求解}{66}{chapter.4}%
+\contentsline {section}{\numberline {4.1}确定性参数模型：从目标到参数值}{67}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}先判断是否存在直接解}{67}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}梯度怎样给出局部改进方向}{67}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}链式法则与神经网络的梯度计算}{68}{subsection.4.1.3}%
+\contentsline {subsubsection}{\numberline {4.1.3.1}从一条计算链理解链式法则}{69}{subsubsection.4.1.3.1}%
+\contentsline {subsubsection}{\numberline {4.1.3.2}一个两层网络的完整计算}{69}{subsubsection.4.1.3.2}%
+\contentsline {subsubsection}{\numberline {4.1.3.3}多层网络怎样复用导数}{71}{subsubsection.4.1.3.3}%
+\contentsline {subsection}{\numberline {4.1.4}随机梯度、动量与自适应尺度}{72}{subsection.4.1.4}%
+\contentsline {subsection}{\numberline {4.1.5}启发式搜索求解模型参数}{73}{subsection.4.1.5}%
+\contentsline {paragraph}{遗传算法。}{73}{paragraph*.35}%
+\contentsline {paragraph}{模拟退火。}{74}{paragraph*.36}%
+\contentsline {paragraph}{粒子群优化。}{75}{paragraph*.37}%
+\contentsline {subsection}{\numberline {4.1.6}含隐变量的极大似然：EM算法}{77}{subsection.4.1.6}%
+\contentsline {subsubsection}{\numberline {4.1.6.1}为什么完整数据容易求解，观测数据却难求解}{77}{subsubsection.4.1.6.1}%
+\contentsline {subsubsection}{\numberline {4.1.6.2}怎样构造一个能逐步提高的下界}{78}{subsubsection.4.1.6.2}%
+\contentsline {subsubsection}{\numberline {4.1.6.3}由下界推导E步和M步}{79}{subsubsection.4.1.6.3}%
+\contentsline {subsubsection}{\numberline {4.1.6.4}为什么每轮更新不会降低观测似然}{80}{subsubsection.4.1.6.4}%
+\contentsline {subsubsection}{\numberline {4.1.6.5}哪些近似仍保留上述保证}{81}{subsubsection.4.1.6.5}%
+\contentsline {subsection}{\numberline {4.1.7}例子：一维高斯混合模型}{81}{subsection.4.1.7}%
+\contentsline {section}{\numberline {4.2}随机参数模型的求解}{82}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}后验分布：数据怎样更新参数的不确定性}{83}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}边际似然：模型整体怎样支持观测数据}{84}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}分布近似：从贝叶斯公式推导变分目标}{85}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}均值场近似怎样计算}{87}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}蒙特卡洛变分推断与随机梯度优化}{88}{subsection.4.2.5}%
+\contentsline {paragraph}{重参数化梯度}{88}{paragraph*.38}%
+\contentsline {paragraph}{得分函数梯度}{89}{paragraph*.39}%
+\contentsline {paragraph}{用随机梯度更新变分参数}{90}{paragraph*.40}%
+\contentsline {subsection}{\numberline {4.2.6}随机性近似：用后验样本计算期望}{91}{subsection.4.2.6}%
+\contentsline {section}{\numberline {4.3}选择求解方法时应问的问题}{92}{section.4.3}%
+\contentsline {section}{\numberline {4.4}本章小结}{93}{section.4.4}%
+\contentsline {chapter}{\numberline {第五章\hspace {.3em}}统计学习理论与模型选择}{94}{chapter.5}%
+\contentsline {section}{\numberline {5.1}假设空间与泛化约束}{94}{section.5.1}%
+\contentsline {paragraph}{假设空间。}{95}{paragraph*.43}%
+\contentsline {paragraph}{读概率界前先确定谁在随机变化。}{95}{paragraph*.44}%
+\contentsline {paragraph}{统一收敛的直观证明。}{96}{paragraph*.45}%
+\contentsline {paragraph}{从概率尾界到样本量。}{96}{paragraph*.46}%
+\contentsline {paragraph}{代入数字检验界的含义。}{97}{paragraph*.47}%
+\contentsline {paragraph}{结构风险最小化。}{97}{paragraph*.48}%
+\contentsline {paragraph}{复杂度惩罚如何随候选类分配。}{97}{paragraph*.49}%
+\contentsline {paragraph}{无限类需要什么替代量。}{98}{paragraph*.50}%
+\contentsline {section}{\numberline {5.2}模型选择、校准与不平衡}{98}{section.5.2}%
+\contentsline {paragraph}{模型选择与交叉验证。}{99}{paragraph*.51}%
+\contentsline {paragraph}{交叉验证估计的是哪个算法。}{99}{paragraph*.52}%
+\contentsline {paragraph}{一轮嵌套选择到底留下了什么。}{99}{paragraph*.53}%
+\contentsline {paragraph}{校准与决策。}{100}{paragraph*.54}%
+\contentsline {paragraph}{不平衡与置信区间。}{100}{paragraph*.55}%
+\contentsline {paragraph}{先读懂混淆矩阵，再读少数类指标。}{100}{paragraph*.56}%
+\contentsline {paragraph}{类别权重为何改变概率含义。}{100}{paragraph*.57}%
+\contentsline {paragraph}{区间与配对比较的抽样单位。}{101}{paragraph*.58}%
+\contentsline {paragraph}{置信区间的概率究竟修饰什么。}{102}{paragraph*.59}%
+\contentsline {section}{\numberline {5.3}从统计结论到实验设置}{102}{section.5.3}%
+\contentsline {paragraph}{数据泄漏清单。}{102}{paragraph*.60}%
+\contentsline {paragraph}{从固定函数到数据依赖的模型选择。}{102}{paragraph*.61}%
+\contentsline {paragraph}{容量不是参数数量的同义词。}{102}{paragraph*.62}%
+\contentsline {paragraph}{交叉验证的工程细节。}{103}{paragraph*.63}%
+\contentsline {paragraph}{不平衡、阈值与区间估计。}{103}{paragraph*.64}%
+\contentsline {paragraph}{校准的后处理。}{103}{paragraph*.65}%
+\contentsline {paragraph}{温度缩放的目标与边界。}{103}{paragraph*.66}%
+\contentsline {section}{\numberline {5.4}从统计量到决策}{104}{section.5.4}%
+\contentsline {paragraph}{效用与损失只差一个决策方向。}{104}{paragraph*.67}%
+\contentsline {section}{\numberline {5.5}本章小结}{106}{section.5.5}%
+\contentsline {part}{第二部分\hspace {1em}贝叶斯机器学习：用概率表达知识与不确定性}{107}{part.2}%
+\contentsline {chapter}{\numberline {第六章\hspace {.3em}}概率图模型}{109}{chapter.6}%
+\contentsline {section}{\numberline {6.1}从朴素贝叶斯理解有向图}{110}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}类别如何把多个观测联系起来}{110}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}有向无环图怎样定义分布}{111}{subsection.6.1.2}%
+\contentsline {subsection}{\numberline {6.1.3}用d-分离判断条件独立}{112}{subsection.6.1.3}%
+\contentsline {paragraph}{为什么观察碰撞节点会引入依赖。}{113}{paragraph*.72}%
+\contentsline {paragraph}{为什么必须检查所有路径。}{113}{paragraph*.73}%
+\contentsline {section}{\numberline {6.2}从已知类别到单个隐变量：高斯混合模型}{114}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}把类别变成需要推断的变量}{114}{subsection.6.2.1}%
+\contentsline {subsection}{\numberline {6.2.2}后验责任度与EM学习}{115}{subsection.6.2.2}%
+\contentsline {section}{\numberline {6.3}从单个隐变量到状态序列}{116}{section.6.3}%
+\contentsline {subsection}{\numberline {6.3.1}状态空间模型的结构假设}{116}{subsection.6.3.1}%
+\contentsline {subsection}{\numberline {6.3.2}链结构怎样支持递归推断}{117}{subsection.6.3.2}%
+\contentsline {subsection}{\numberline {6.3.3}线性高斯模型与卡尔曼滤波}{118}{subsection.6.3.3}%
+\contentsline {subsection}{\numberline {6.3.4}非线性、非高斯模型与粒子滤波}{119}{subsection.6.3.4}%
+\contentsline {subsection}{\numberline {6.3.5}有限离散状态与隐马尔可夫模型}{120}{subsection.6.3.5}%
+\contentsline {paragraph}{过滤、平滑与最优路径。}{121}{paragraph*.79}%
+\contentsline {paragraph}{两状态、两时刻的过滤手算。}{123}{paragraph*.80}%
+\contentsline {paragraph}{前向后向递推的推导与稳定实现。}{123}{paragraph*.81}%
+\contentsline {paragraph}{从隐状态推断到参数学习。}{124}{paragraph*.82}%
+\contentsline {paragraph}{EM为什么得到期望计数比。}{124}{paragraph*.83}%
+\contentsline {section}{\numberline {6.4}从生成模型到局部条件模型：MEMM}{125}{section.6.4}%
+\contentsline {subsection}{\numberline {6.4.1}为什么直接建模标签的条件分布}{125}{subsection.6.4.1}%
+\contentsline {paragraph}{最大熵为何导出softmax。}{126}{paragraph*.85}%
+\contentsline {section}{\numberline {6.5}无向图：分离、团分解与条件随机场}{127}{section.6.5}%
+\contentsline {subsection}{\numberline {6.5.1}无向图怎样表达条件独立}{127}{subsection.6.5.1}%
+\contentsline {subsection}{\numberline {6.5.2}从团与势函数构造联合分布}{128}{subsection.6.5.2}%
+\contentsline {subsection}{\numberline {6.5.3}从局部归一化改为全局归一化}{129}{subsection.6.5.3}%
+\contentsline {paragraph}{两条路径怎样体现全局归一化。}{131}{paragraph*.88}%
+\contentsline {paragraph}{配分函数、边缘概率与梯度的完整联系。}{131}{paragraph*.89}%
+\contentsline {subsection}{\numberline {6.5.4}从链到网格：空间相互作用}{132}{subsection.6.5.4}%
+\contentsline {paragraph}{MRF的局部更新与均值场。}{135}{paragraph*.92}%
+\contentsline {paragraph}{两个像素的能量可以全部列完。}{135}{paragraph*.93}%
+\contentsline {paragraph}{把图结构带回维护任务。}{136}{paragraph*.94}%
+\contentsline {section}{\numberline {6.6}无向图中的隐变量：玻尔兹曼机与RBM}{136}{section.6.6}%
+\contentsline {subsection}{\numberline {6.6.1}能量形式与指数族参数化}{136}{subsection.6.6.1}%
+\contentsline {subsection}{\numberline {6.6.2}玻尔兹曼机怎样引入隐变量}{137}{subsection.6.6.2}%
+\contentsline {subsection}{\numberline {6.6.3}受限玻尔兹曼机的二部图与能量}{138}{subsection.6.6.3}%
+\contentsline {subsection}{\numberline {6.6.4}为什么两层的条件分布容易计算}{139}{subsection.6.6.4}%
+\contentsline {subsection}{\numberline {6.6.5}可见分布与一个可枚举的例子}{139}{subsection.6.6.5}%
+\contentsline {subsection}{\numberline {6.6.6}最大似然为什么需要两类期望}{140}{subsection.6.6.6}%
+\contentsline {subsection}{\numberline {6.6.7}连续观测与适用边界}{141}{subsection.6.6.7}%
+\contentsline {section}{\numberline {6.7}用五个方面比较概率图模型}{142}{section.6.7}%
+\contentsline {subsection}{\numberline {6.7.1}因子图与消息传递的共同计算方式}{143}{subsection.6.7.1}%
+\contentsline {subsection}{\numberline {6.7.2}图模型与贝叶斯参数学习的区别}{144}{subsection.6.7.2}%
+\contentsline {paragraph}{不确定性的分解与校准。}{145}{paragraph*.101}%
+\contentsline {paragraph}{全方差公式的推导与估计。}{145}{paragraph*.102}%
+\contentsline {paragraph}{参数抽样与观测抽样要分两层。}{146}{paragraph*.103}%
+\contentsline {paragraph}{贝叶斯方法的常见误用。}{146}{paragraph*.104}%
+\contentsline {paragraph}{预测分布的蒙特卡洛近似。}{146}{paragraph*.105}%
+\contentsline {paragraph}{采样诊断。}{147}{paragraph*.106}%
+\contentsline {paragraph}{Effective Sample Size (ESS)是针对哪个估计量。}{147}{paragraph*.107}%
+\contentsline {paragraph}{先验敏感性分析。}{147}{paragraph*.108}%
+\contentsline {paragraph}{校准、覆盖率与风险。}{148}{paragraph*.109}%
+\contentsline {paragraph}{小样本故障率的后验决策。}{148}{paragraph*.110}%
+\contentsline {paragraph}{回归预测区间的覆盖实验。}{148}{paragraph*.111}%
+\contentsline {paragraph}{后验预测检查的操作步骤。}{149}{paragraph*.112}%
+\contentsline {paragraph}{本章小结。}{150}{paragraph*.114}%
+\contentsline {chapter}{\numberline {第七章\hspace {.3em}}参数化与非参数化模型}{151}{chapter.7}%
+\contentsline {section}{\numberline {7.1}两个概念}{151}{section.7.1}%
+\contentsline {paragraph}{近邻回归：由局部常数假设得到估计。}{152}{paragraph*.115}%
+\contentsline {paragraph}{近邻手算与“非参数”的含义。}{152}{paragraph*.116}%
+\contentsline {paragraph}{高斯过程示例。}{153}{figure.caption.119}%
+\contentsline {paragraph}{GP后验不是另一个需要记忆的公式。}{154}{paragraph*.120}%
+\contentsline {paragraph}{只有一个观测时，GP公式就是分数运算。}{155}{paragraph*.121}%
+\contentsline {section}{\numberline {7.2}核方法、函数空间与计算边界}{156}{section.7.2}%
+\contentsline {paragraph}{联系而非对立。}{156}{paragraph*.122}%
+\contentsline {paragraph}{参数模型中的先验结构。}{156}{paragraph*.123}%
+\contentsline {paragraph}{核方法的函数空间视角。}{156}{paragraph*.124}%
+\contentsline {paragraph}{什么相似性可以成为核。}{157}{paragraph*.125}%
+\contentsline {paragraph}{核岭回归的表示与系数求解。}{157}{paragraph*.127}%
+\contentsline {paragraph}{再生核空间先读作带长度规则的函数集合。}{158}{paragraph*.128}%
+\contentsline {paragraph}{从有限参数高斯先验得到核。}{158}{paragraph*.129}%
+\contentsline {paragraph}{核支持向量机的对偶来源。}{159}{paragraph*.130}%
+\contentsline {paragraph}{支持向量机中的松弛变量与成本参数。}{159}{paragraph*.131}%
+\contentsline {paragraph}{高斯过程的边际似然。}{160}{paragraph*.132}%
+\contentsline {paragraph}{边际似然的积分、导数与数值实现。}{160}{paragraph*.133}%
+\contentsline {paragraph}{行列式项不是独立的万能复杂度标尺。}{161}{paragraph*.134}%
+\contentsline {paragraph}{非参数模型的计算边界。}{161}{paragraph*.135}%
+\contentsline {paragraph}{诱导变量如何降低代价。}{161}{paragraph*.136}%
+\contentsline {paragraph}{诱导点不是额外测量点。}{162}{paragraph*.137}%
+\contentsline {paragraph}{随机特征的另一路近似。}{162}{paragraph*.138}%
+\contentsline {paragraph}{参数化与非参数化的混合。}{162}{paragraph*.139}%
+\contentsline {paragraph}{模型选择案例。}{163}{paragraph*.140}%
+\contentsline {paragraph}{本章小结。}{164}{paragraph*.142}%
+\contentsline {part}{第三部分\hspace {1em}深度学习模型}{165}{part.3}%
+\contentsline {chapter}{\numberline {第八章\hspace {.3em}}序列建模模型}{167}{chapter.8}%
+\contentsline {section}{\numberline {8.1}先固定任务与可用的历史}{168}{section.8.1}%
+\contentsline {subsection}{\numberline {8.1.1}预测未来与识别当前异常}{168}{subsection.8.1.1}%
+\contentsline {subsection}{\numberline {8.1.2}共享表示与不同的输出头}{168}{subsection.8.1.2}%
+\contentsline {section}{\numberline {8.2}RNN 与 LSTM：把历史逐步写入记忆}{169}{section.8.2}%
+\contentsline {subsection}{\numberline {8.2.1}RNN 的状态怎样形成预测}{169}{subsection.8.2.1}%
+\contentsline {subsection}{\numberline {8.2.2}LSTM：分开控制保留、写入与读出}{170}{subsection.8.2.2}%
+\contentsline {paragraph}{从单步导数到跨时间反向传播。}{171}{paragraph*.145}%
+\contentsline {subsection}{\numberline {8.2.3}GRU：用较少门控更新状态}{173}{subsection.8.2.3}%
+\contentsline {section}{\numberline {8.3}时间卷积网络：在固定范围内组合历史}{173}{section.8.3}%
+\contentsline {subsection}{\numberline {8.3.1}因果卷积怎样保留顺序}{173}{subsection.8.3.1}%
+\contentsline {subsection}{\numberline {8.3.2}空洞卷积怎样扩大感受野}{174}{subsection.8.3.2}%
+\contentsline {section}{\numberline {8.4}Transformer：按内容重新读取历史}{175}{section.8.4}%
+\contentsline {subsection}{\numberline {8.4.1}查询、键和值怎样完成一次读取}{175}{subsection.8.4.1}%
+\contentsline {paragraph}{注意力的逐位置解释。}{176}{paragraph*.149}%
+\contentsline {paragraph}{一次可以手算的读取。}{176}{paragraph*.150}%
+\contentsline {paragraph}{缩放、归一化与访问成本的推导。}{177}{paragraph*.151}%
+\contentsline {paragraph}{位置编码与因果遮罩。}{178}{paragraph*.152}%
+\contentsline {subsection}{\numberline {8.4.2}Transformer 编码块怎样接到预测头}{178}{subsection.8.4.2}%
+\contentsline {subsection}{\numberline {8.4.3}非平稳性与位置表示}{179}{subsection.8.4.3}%
+\contentsline {paragraph}{位置编码的选择。}{180}{paragraph*.154}%
+\contentsline {subsection}{\numberline {8.4.4}PatchTST：把局部时间片作为读取单位}{180}{subsection.8.4.4}%
+\contentsline {subsection}{\numberline {8.4.5}iTransformer：以变量标记表达传感器关系}{181}{subsection.8.4.5}%
+\contentsline {section}{\numberline {8.5}状态空间与 Mamba：选择性地保留长历史}{182}{section.8.5}%
+\contentsline {subsection}{\numberline {8.5.1}状态转移不自动等于概率估计}{182}{subsection.8.5.1}%
+\contentsline {paragraph}{卡尔曼滤波的两步更新。}{183}{paragraph*.157}%
+\contentsline {paragraph}{把滤波更新算成一个温度例子。}{183}{paragraph*.158}%
+\contentsline {paragraph}{由高斯条件化推导滤波增益。}{183}{paragraph*.159}%
+\contentsline {subsection}{\numberline {8.5.2}从固定状态空间到 Mamba 的选择性记忆}{184}{subsection.8.5.2}%
+\contentsline {paragraph}{连续动力学怎样成为离散记忆。}{184}{paragraph*.160}%
+\contentsline {paragraph}{输入依赖的步长、写入与读取。}{185}{paragraph*.161}%
+\contentsline {paragraph}{先手算两步，再理解扫描。}{186}{paragraph*.162}%
+\contentsline {paragraph}{为何能递推推理，也能并行训练。}{187}{paragraph*.163}%
+\contentsline {paragraph}{从选择性 SSM 到 Mamba 模块。}{187}{paragraph*.164}%
+\contentsline {paragraph}{与 Transformer 的计算和记忆取舍。}{188}{paragraph*.166}%
+\contentsline {paragraph}{工业实例：保留冲击还是保留工况。}{188}{paragraph*.167}%
+\contentsline {section}{\numberline {8.6}把历史表示接到预测与异常任务}{189}{section.8.6}%
+\contentsline {subsection}{\numberline {8.6.1}直接多步预测与递归预测}{189}{subsection.8.6.1}%
+\contentsline {subsection}{\numberline {8.6.2}概率输出怎样表达未来的不确定性}{190}{subsection.8.6.2}%
+\contentsline {subsection}{\numberline {8.6.3}异常评分：把新观测与正常模式比较}{191}{subsection.8.6.3}%
+\contentsline {subsection}{\numberline {8.6.4}时间边界与工业验证}{191}{subsection.8.6.4}%
+\contentsline {paragraph}{滚动预测的完整设置。}{191}{paragraph*.168}%
+\contentsline {paragraph}{从预测到异常告警。}{192}{paragraph*.169}%
+\contentsline {section}{\numberline {8.7}时序基础模型：先在大量序列上预训练}{192}{section.8.7}%
+\contentsline {subsection}{\numberline {8.7.1}把数值离散成词元：Chronos}{192}{subsection.8.7.1}%
+\contentsline {paragraph}{手算一次缩放与量化。}{193}{paragraph*.170}%
+\contentsline {subsection}{\numberline {8.7.2}片段解码、多变量与其他预训练目标}{194}{subsection.8.7.2}%
+\contentsline {subsection}{\numberline {8.7.3}零样本预测怎样接入设备监测}{195}{subsection.8.7.3}%
+\contentsline {section}{\numberline {8.8}回到设备监测：怎样验证历史表示有用}{195}{section.8.8}%
+\contentsline {paragraph}{基线与消融。}{195}{paragraph*.172}%
+\contentsline {paragraph}{时间间隔与特征的可用性。}{195}{paragraph*.173}%
+\contentsline {paragraph}{概率预测的评价。}{195}{paragraph*.174}%
+\contentsline {paragraph}{本章小结。}{196}{paragraph*.176}%
+\contentsline {chapter}{\numberline {第九章\hspace {.3em}}视觉模型}{198}{chapter.9}%
+\contentsline {section}{\numberline {9.1}先确定任务：类别、位置还是边界}{198}{section.9.1}%
+\contentsline {section}{\numberline {9.2}图像分类：从局部卷积到 ResNet}{200}{section.9.2}%
+\contentsline {subsection}{\numberline {9.2.1}卷积如何从像素中提取特征}{200}{subsection.9.2.1}%
+\contentsline {paragraph}{一个窗口怎样变成一个输出。}{200}{paragraph*.178}%
+\contentsline {paragraph}{卷积的索引、参数与等变性。}{200}{paragraph*.179}%
+\contentsline {subsection}{\numberline {9.2.2}多层卷积如何形成整幅图的判断}{201}{subsection.9.2.2}%
+\contentsline {subsection}{\numberline {9.2.3}ResNet：网络加深以后怎样训练}{202}{subsection.9.2.3}%
+\contentsline {paragraph}{残差梯度不再只有单一路径。}{203}{paragraph*.181}%
+\contentsline {paragraph}{相加要求尺寸一致。}{204}{paragraph*.182}%
+\contentsline {subsection}{\numberline {9.2.4}从基本块到瓶颈块与轻量卷积}{204}{subsection.9.2.4}%
+\contentsline {section}{\numberline {9.3}ViT：用注意力联系不同图像区域}{205}{section.9.3}%
+\contentsline {subsection}{\numberline {9.3.1}从图像块到类别预测}{205}{subsection.9.3.1}%
+\contentsline {subsection}{\numberline {9.3.2}空间特征为何会出现伪影：从 Register 到惰性聚合}{207}{subsection.9.3.2}%
+\contentsline {subsection}{\numberline {9.3.3}为什么引入窗口注意力与层级表示}{208}{subsection.9.3.3}%
+\contentsline {section}{\numberline {9.4}目标检测：以 Faster R-CNN 解释框级定位}{209}{section.9.4}%
+\contentsline {subsection}{\numberline {9.4.1}为什么先提议区域，再分类和修正位置}{209}{subsection.9.4.1}%
+\contentsline {subsection}{\numberline {9.4.2}框怎样匹配标签并参与训练}{210}{subsection.9.4.2}%
+\contentsline {paragraph}{从几何框到可训练的回归目标。}{211}{paragraph*.189}%
+\contentsline {subsection}{\numberline {9.4.3}推理怎样得到数量不固定的检测结果}{212}{subsection.9.4.3}%
+\contentsline {subsection}{\numberline {9.4.4}从两阶段到单阶段：省去逐候选识别}{213}{subsection.9.4.4}%
+\contentsline {paragraph}{焦点损失怎样改变梯度。}{213}{paragraph*.190}%
+\contentsline {subsection}{\numberline {9.4.5}FPN：让不同大小的缺陷使用不同尺度的特征}{213}{subsection.9.4.5}%
+\contentsline {section}{\numberline {9.5}图像分割：以 U-Net 解释像素级预测}{215}{section.9.5}%
+\contentsline {subsection}{\numberline {9.5.1}为什么解码器需要编码器的细节}{215}{subsection.9.5.1}%
+\contentsline {subsection}{\numberline {9.5.2}从概率图到掩码与训练损失}{218}{subsection.9.5.2}%
+\contentsline {paragraph}{像素似然、Dice与稀疏前景。}{218}{paragraph*.194}%
+\contentsline {subsection}{\numberline {9.5.3}U-Net 的改进与 Mask R-CNN 的实例输出}{219}{subsection.9.5.3}%
+\contentsline {section}{\numberline {9.6}少样本异常检测：用 DINOv2 特征比较正常图像块}{220}{section.9.6}%
+\contentsline {subsection}{\numberline {9.6.1}只有少量正常样本时要回答什么}{220}{subsection.9.6.1}%
+\contentsline {subsection}{\numberline {9.6.2}DINOv2 系列：无标签预训练的图像块特征}{220}{subsection.9.6.2}%
+\contentsline {subsection}{\numberline {9.6.3}以最近邻距离给图像块打分}{221}{subsection.9.6.3}%
+\contentsline {paragraph}{手算两个图像块的距离。}{221}{paragraph*.196}%
+\contentsline {subsection}{\numberline {9.6.4}适用边界与验证}{222}{subsection.9.6.4}%
+\contentsline {section}{\numberline {9.7}回到质检任务：模型能解决什么，怎样验证}{223}{section.9.7}%
+\contentsline {subsection}{\numberline {9.7.1}细小缺陷与有限标注}{223}{subsection.9.7.1}%
+\contentsline {subsection}{\numberline {9.7.2}用独立数据检查类别、位置和边界}{223}{subsection.9.7.2}%
+\contentsline {paragraph}{本章小结。}{225}{paragraph*.198}%
+\contentsline {chapter}{\numberline {第十章\hspace {.3em}}语言大模型}{226}{chapter.10}%
+\contentsline {section}{\numberline {10.1}Token、表示与语言建模}{227}{section.10.1}%
+\contentsline {paragraph}{一段文本怎样产生训练标签。}{227}{paragraph*.199}%
+\contentsline {paragraph}{链式分解如何变成可计算的训练目标。}{228}{paragraph*.200}%
+\contentsline {section}{\numberline {10.2}预训练、对齐与推理}{230}{section.10.2}%
+\contentsline {paragraph}{预训练目标与困惑度。}{233}{paragraph*.204}%
+\contentsline {paragraph}{缩放、数据质量与模型容量。}{233}{paragraph*.205}%
+\contentsline {paragraph}{监督微调与参数高效适配。}{233}{paragraph*.206}%
+\contentsline {paragraph}{区分训练目标、可训练参数与当前提示。}{234}{paragraph*.207}%
+\contentsline {paragraph}{低秩更新的前向与反向计算。}{234}{paragraph*.208}%
+\contentsline {paragraph}{从偏好概率到直接偏好优化。}{235}{paragraph*.209}%
+\contentsline {paragraph}{偏好目标的一个数值检查。}{236}{paragraph*.210}%
+\contentsline {paragraph}{解码与生成控制。}{236}{paragraph*.211}%
+\contentsline {paragraph}{温度、序列概率与缓存的边界。}{237}{paragraph*.212}%
+\contentsline {section}{\numberline {10.3}检索、工具与安全边界}{238}{section.10.3}%
+\contentsline {paragraph}{检索增强生成。}{238}{paragraph*.213}%
+\contentsline {paragraph}{从一个问题走完检索链。}{238}{paragraph*.214}%
+\contentsline {paragraph}{检索得分、训练目标与证据边缘化。}{239}{paragraph*.215}%
+\contentsline {paragraph}{工具返回值不是模型自己算出的事实。}{240}{paragraph*.216}%
+\contentsline {paragraph}{工具调用与评测。}{241}{paragraph*.217}%
+\contentsline {paragraph}{幻觉、提示注入与安全边界。}{241}{paragraph*.218}%
+\contentsline {paragraph}{大模型评测矩阵。}{241}{paragraph*.219}%
+\contentsline {paragraph}{本章小结。}{243}{paragraph*.221}%
+\contentsline {chapter}{\numberline {第十一章\hspace {.3em}}多模态模型}{244}{chapter.11}%
+\contentsline {section}{\numberline {11.1}先确定任务：寻找匹配还是生成回答}{244}{section.11.1}%
+\contentsline {paragraph}{图文检索与零样本分类。}{245}{paragraph*.222}%
+\contentsline {paragraph}{图像描述与视觉问答。}{245}{paragraph*.223}%
+\contentsline {paragraph}{视觉指令跟随。}{245}{paragraph*.224}%
+\contentsline {section}{\numberline {11.2}CLIP：把图像和文本变成可比较的表示}{246}{section.11.2}%
+\contentsline {subsection}{\numberline {11.2.1}双塔为什么适合检索}{246}{subsection.11.2.1}%
+\contentsline {subsection}{\numberline {11.2.2}对称对比损失怎样使用配对索引}{247}{subsection.11.2.2}%
+\contentsline {subsection}{\numberline {11.2.3}两对样本：从内积算到损失}{248}{subsection.11.2.3}%
+\contentsline {subsection}{\numberline {11.2.4}训练之后怎样检索与分类}{249}{subsection.11.2.4}%
+\contentsline {section}{\numberline {11.3}BLIP-2：用少量查询连接视觉与语言}{250}{section.11.3}%
+\contentsline {subsection}{\numberline {11.3.1}为什么需要一个可训练的连接模块}{250}{subsection.11.3.1}%
+\contentsline {subsection}{\numberline {11.3.2}查询通过交叉注意力读取哪些信息}{251}{subsection.11.3.2}%
+\contentsline {paragraph}{两个查询读取三个位置的手算。}{252}{paragraph*.226}%
+\contentsline {subsection}{\numberline {11.3.3}两阶段训练分别解决什么问题}{252}{subsection.11.3.3}%
+\contentsline {paragraph}{第一阶段：从图像提取与文本有关的表示。}{252}{paragraph*.228}%
+\contentsline {paragraph}{第二阶段：让冻结语言模型利用视觉条件。}{253}{paragraph*.229}%
+\contentsline {paragraph}{冻结权重时，梯度在哪里停止。}{254}{paragraph*.230}%
+\contentsline {subsection}{\numberline {11.3.4}查询压缩带来什么收益与限制}{255}{subsection.11.3.4}%
+\contentsline {section}{\numberline {11.4}LLaVA：让视觉表示参与指令回答}{255}{section.11.4}%
+\contentsline {subsection}{\numberline {11.4.1}从线性投影到语言上下文}{255}{subsection.11.4.1}%
+\contentsline {subsection}{\numberline {11.4.2}两阶段训练怎样改变回答能力}{256}{subsection.11.4.2}%
+\contentsline {paragraph}{第一阶段：学习视觉与语言的连接。}{256}{paragraph*.232}%
+\contentsline {paragraph}{第二阶段：学习按视觉指令回答。}{257}{paragraph*.233}%
+\contentsline {subsection}{\numberline {11.4.3}同一张图为何能产生不同回答}{257}{subsection.11.4.3}%
+\contentsline {subsection}{\numberline {11.4.4}用相同维度比较 BLIP-2 与 LLaVA}{258}{subsection.11.4.4}%
+\contentsline {section}{\numberline {11.5}典型应用怎样验证}{259}{section.11.5}%
+\contentsline {subsection}{\numberline {11.5.1}先按输出形式选择评价对象}{259}{subsection.11.5.1}%
+\contentsline {subsection}{\numberline {11.5.2}工业迁移：从巡检照片到报告草稿}{260}{subsection.11.5.2}%
+\contentsline {chapter}{\numberline {第十二章\hspace {.3em}}深度生成模型}{263}{chapter.12}%
+\contentsline {section}{\numberline {12.1}生成任务与概率建模目标}{263}{section.12.1}%
+\contentsline {subsection}{\numberline {12.1.1}先确定要生成什么}{263}{subsection.12.1.1}%
+\contentsline {subsection}{\numberline {12.1.2}潜变量把随机性变成可采样结构}{264}{subsection.12.1.2}%
+\contentsline {section}{\numberline {12.2}VAE：用潜变量获得稳定采样}{264}{section.12.2}%
+\contentsline {subsection}{\numberline {12.2.1}为什么需要变分近似}{264}{subsection.12.2.1}%
+\contentsline {subsection}{\numberline {12.2.2}如何训练和采样}{265}{subsection.12.2.2}%
+\contentsline {subsection}{\numberline {12.2.3}VAE 的变体与典型问题}{266}{subsection.12.2.3}%
+\contentsline {section}{\numberline {12.3}GAN：追求逼真样本的对抗训练}{267}{section.12.3}%
+\contentsline {subsection}{\numberline {12.3.1}判别器如何提供训练信号}{267}{subsection.12.3.1}%
+\contentsline {subsection}{\numberline {12.3.2}逼真与覆盖为何会冲突}{267}{subsection.12.3.2}%
+\contentsline {section}{\numberline {12.4}扩散模型：逐步去噪成为当前主线}{268}{section.12.4}%
+\contentsline {subsection}{\numberline {12.4.1}从一次生成改为多步恢复}{268}{subsection.12.4.1}%
+\contentsline {subsection}{\numberline {12.4.2}噪声预测与反向采样}{268}{subsection.12.4.2}%
+\contentsline {subsection}{\numberline {12.4.3}条件控制与扩散模型的变体}{269}{subsection.12.4.3}%
+\contentsline {section}{\numberline {12.5}任务选择与验证边界}{270}{section.12.5}%
+\contentsline {paragraph}{本章小结。}{271}{paragraph*.238}%
+\contentsline {chapter}{\numberline {第十三章\hspace {.3em}}物理信息神经网络与风场重建}{272}{chapter.13}%
+\contentsline {section}{\numberline {13.1}先用一个小例子理解 PINN}{273}{section.13.1}%
+\contentsline {subsection}{\numberline {13.1.1}网络表示的是一个可以查询的函数}{273}{subsection.13.1.1}%
+\contentsline {subsection}{\numberline {13.1.2}把方程变成可以计算的误差}{273}{subsection.13.1.2}%
+\contentsline {subsection}{\numberline {13.1.3}两次求导分别在做什么}{274}{subsection.13.1.3}%
+\contentsline {subsection}{\numberline {13.1.4}同一套流程可以用于哪些问题}{275}{subsection.13.1.4}%
+\contentsline {subsection}{\numberline {13.1.5}正问题、逆问题与本章的风场重建}{276}{subsection.13.1.5}%
+\contentsline {paragraph}{正问题：已知模型与条件，求物理场。}{276}{paragraph*.240}%
+\contentsline {paragraph}{逆问题：利用观测，推断未知场或参数。}{276}{paragraph*.241}%
+\contentsline {section}{\numberline {13.2}激光雷达给了我们什么数据}{276}{section.13.2}%
+\contentsline {subsection}{\numberline {13.2.1}径向速度是风速在波束方向上的投影}{276}{subsection.13.2.1}%
+\contentsline {subsection}{\numberline {13.2.2}一条训练样本包含哪些信息}{277}{subsection.13.2.2}%
+\contentsline {section}{\numberline {13.3}用流体方程描述风速怎样变化}{278}{section.13.3}%
+\contentsline {subsection}{\numberline {13.3.1}连续性方程：检查局部的流入和流出}{278}{subsection.13.3.1}%
+\contentsline {subsection}{\numberline {13.3.2}动量方程：联系速度变化、压力和黏性}{278}{subsection.13.3.2}%
+\contentsline {paragraph}{左边：为什么加速度要写成三项？}{279}{paragraph*.242}%
+\contentsline {paragraph}{右边第一项：压力差怎样推动空气？}{279}{paragraph*.244}%
+\contentsline {paragraph}{右边第二项：黏性为什么与速度的二阶导数有关？}{280}{paragraph*.245}%
+\contentsline {subsection}{\numberline {13.3.3}初值、边界与尺度}{281}{subsection.13.3.3}%
+\contentsline {section}{\numberline {13.4}把数据和方程放进同一次训练}{281}{section.13.4}%
+\contentsline {subsection}{\numberline {13.4.1}两条计算路径汇入一个损失}{281}{subsection.13.4.1}%
+\contentsline {subsection}{\numberline {13.4.2}数据损失检查预测与测量是否接近}{282}{subsection.13.4.2}%
+\contentsline {subsection}{\numberline {13.4.3}物理损失检查预测是否符合方程}{283}{subsection.13.4.3}%
+\contentsline {subsection}{\numberline {13.4.4}一次训练和一张风场图怎样得到}{283}{subsection.13.4.4}%
+\contentsline {section}{\numberline {13.5}论文案例：两束激光雷达怎样重建风机前方的风场}{284}{section.13.5}%
+\contentsline {subsection}{\numberline {13.5.1}先看任务、测点与参考风场}{284}{subsection.13.5.1}%
+\contentsline {subsection}{\numberline {13.5.2}网络为什么先输出流函数和压力}{286}{subsection.13.5.2}%
+\contentsline {subsection}{\numberline {13.5.3}两束观测怎样参与损失计算}{287}{subsection.13.5.3}%
+\contentsline {subsection}{\numberline {13.5.4}从风场图片看重建效果}{288}{subsection.13.5.4}%
+\contentsline {subsection}{\numberline {13.5.5}从重建时间窗走向短时预测}{290}{subsection.13.5.5}%
+\contentsline {section}{\numberline {13.6}PINN 的优化方向}{291}{section.13.6}%
+\contentsline {subsection}{\numberline {13.6.1}先看清训练卡在哪里}{292}{subsection.13.6.1}%
+\contentsline {subsection}{\numberline {13.6.2}统一变量尺度，并把配点放到合适的位置}{292}{subsection.13.6.2}%
+\contentsline {paragraph}{先处理尺度。}{292}{paragraph*.253}%
+\contentsline {paragraph}{让配点覆盖整个重建区域。}{292}{paragraph*.254}%
+\contentsline {subsection}{\numberline {13.6.3}平衡数据损失和物理损失}{293}{subsection.13.6.3}%
+\contentsline {subsection}{\numberline {13.6.4}采用课程训练，让任务由易到难}{294}{subsection.13.6.4}%
+\contentsline {subsection}{\numberline {13.6.5}缩短单次时间跨度，并按时间顺序学习}{295}{subsection.13.6.5}%
+\contentsline {paragraph}{时间分窗：每次重建一小段。}{295}{paragraph*.255}%
+\contentsline {paragraph}{因果加权：在一个窗口内先学好较早的时刻。}{295}{paragraph*.256}%
+\contentsline {subsection}{\numberline {13.6.6}改进网络对局部细节的表达}{296}{subsection.13.6.6}%
+\contentsline {paragraph}{傅里叶特征：给坐标增加不同频率的表示。}{296}{paragraph*.258}%
+\contentsline {paragraph}{随机权重分解：调整参数的组织方式。}{297}{paragraph*.259}%
+\contentsline {paragraph}{改进连接方式，并利用已知物理结构。}{297}{paragraph*.260}%
+\contentsline {subsection}{\numberline {13.6.7}用 XPINNs 把大区域拆成相互连接的子区域}{297}{subsection.13.6.7}%
+\contentsline {subsection}{\numberline {13.6.8}在风场重建中怎样安排这些改进}{299}{subsection.13.6.8}%
+\contentsline {paragraph}{本章小结。}{300}{paragraph*.263}%
+\contentsline {part}{第四部分\hspace {1em}从学习方式看数据智能场景}{301}{part.4}%
+\contentsline {chapter}{\numberline {第十四章\hspace {.3em}}预训练：构建可复用的数据表示}{303}{chapter.14}%
+\contentsline {section}{\numberline {14.1}预训练学到了什么}{304}{section.14.1}%
+\contentsline {paragraph}{表示、编码器和头分别是什么。}{304}{paragraph*.265}%
+\contentsline {section}{\numberline {14.2}监督预训练与重建式目标}{306}{section.14.2}%
+\contentsline {subsection}{\numberline {14.2.1}从条件似然理解重构为何产生平滑结果}{306}{subsection.14.2.1}%
+\contentsline {subsection}{\numberline {14.2.2}遮蔽任务与因果预测的边界}{307}{subsection.14.2.2}%
+\contentsline {section}{\numberline {14.3}对比学习：哪些样本应当接近}{309}{section.14.3}%
+\contentsline {paragraph}{把对比损失展开为一个分类问题。}{310}{paragraph*.266}%
+\contentsline {section}{\numberline {14.4}无负样本学习与表示坍缩}{311}{section.14.4}%
+\contentsline {paragraph}{停止梯度和统计约束究竟改变了什么。}{312}{paragraph*.267}%
+\contentsline {section}{\numberline {14.5}数据组织与领域继续预训练}{314}{section.14.5}%
+\contentsline {section}{\numberline {14.6}工业振动信号的完整学习任务设置}{315}{section.14.6}%
+\contentsline {paragraph}{本章小结。}{317}{paragraph*.269}%
+\contentsline {chapter}{\numberline {第十五章\hspace {.3em}}迁移学习}{318}{chapter.15}%
+\contentsline {section}{\numberline {15.1}源域知识与目标域风险}{319}{section.15.1}%
+\contentsline {section}{\numberline {15.2}实例重加权与分布对齐}{320}{section.15.2}%
+\contentsline {paragraph}{重要性加权。}{320}{paragraph*.271}%
+\contentsline {paragraph}{先用两个工况手算权重。}{320}{paragraph*.272}%
+\contentsline {paragraph}{风险恒等式、密度比估计与方差。}{321}{paragraph*.273}%
+\contentsline {paragraph}{Maximum Mean Discrepancy (MMD) 与 Correlation Alignment (CORAL)。}{322}{paragraph*.274}%
+\contentsline {paragraph}{核均值差的实际计算。}{323}{paragraph*.275}%
+\contentsline {paragraph}{域对抗适配。}{324}{paragraph*.276}%
+\contentsline {paragraph}{域不可区分为何不是语义正确。}{324}{paragraph*.277}%
+\contentsline {section}{\numberline {15.3}预训练、微调与参数高效适配}{325}{section.15.3}%
+\contentsline {paragraph}{低秩更新的维度、梯度与容量。}{326}{paragraph*.278}%
+\contentsline {section}{\numberline {15.4}测试时适配与负迁移}{327}{section.15.4}%
+\contentsline {paragraph}{熵下降为什么会强化错误。}{327}{paragraph*.279}%
+\contentsline {paragraph}{本章小结。}{329}{paragraph*.281}%
+\contentsline {chapter}{\numberline {第十六章\hspace {.3em}}持续学习}{330}{chapter.16}%
+\contentsline {section}{\numberline {16.1}数据流、任务边界与遗忘}{331}{section.16.1}%
+\contentsline {paragraph}{先分清一条样本、一个任务和一个阶段。}{331}{paragraph*.283}%
+\contentsline {paragraph}{为什么学新任务会影响旧任务。}{332}{paragraph*.284}%
+\contentsline {section}{\numberline {16.2}经验回放与梯度约束}{332}{section.16.2}%
+\contentsline {paragraph}{有限缓存如何近似历史风险。}{332}{paragraph*.285}%
+\contentsline {paragraph}{把回放公式执行一次。}{332}{paragraph*.286}%
+\contentsline {paragraph}{缓存无偏性与风险权重不是同一件事。}{333}{paragraph*.287}%
+\contentsline {paragraph}{梯度情景记忆（Gradient Episodic Memory，GEM）与 A-GEM。}{334}{paragraph*.288}%
+\contentsline {paragraph}{从约束优化推出投影及其步长限制。}{335}{paragraph*.290}%
+\contentsline {paragraph}{手算一次梯度投影。}{335}{paragraph*.291}%
+\contentsline {section}{\numberline {16.3}参数重要性与知识蒸馏}{336}{section.16.3}%
+\contentsline {paragraph}{Elastic Weight Consolidation (EWC) 及其在线变体。}{336}{paragraph*.292}%
+\contentsline {paragraph}{从贝叶斯递推到对角二次保护。}{336}{paragraph*.293}%
+\contentsline {paragraph}{参数重要性可以怎样直观核算。}{337}{paragraph*.294}%
+\contentsline {paragraph}{输出蒸馏与特征保持。}{338}{paragraph*.295}%
+\contentsline {paragraph}{蒸馏温度、梯度缩放与类增量缺口。}{338}{paragraph*.296}%
+\contentsline {paragraph}{蒸馏保留的是答案分布，不是参数副本。}{339}{paragraph*.297}%
+\contentsline {section}{\numberline {16.4}参数隔离、扩展与混合策略}{339}{section.16.4}%
+\contentsline {paragraph}{如何选择并调用被隔离的模块。}{339}{paragraph*.298}%
+\contentsline {section}{\numberline {16.5}评价矩阵与工业更新规则}{340}{section.16.5}%
+\contentsline {paragraph}{从完整矩阵读出最终指标。}{341}{paragraph*.299}%
+\contentsline {paragraph}{本章小结。}{342}{paragraph*.301}%
+\contentsline {chapter}{\numberline {第十七章\hspace {.3em}}主动学习}{343}{chapter.17}%
+\contentsline {section}{\numberline {17.1}查询规则与标注预算}{344}{section.17.1}%
+\contentsline {paragraph}{一次查询究竟买到了什么。}{344}{paragraph*.303}%
+\contentsline {paragraph}{区分训练、选择和验收。}{345}{paragraph*.304}%
+\contentsline {section}{\numberline {17.2}不确定性、委员会与贝叶斯查询}{345}{section.17.2}%
+\contentsline {paragraph}{最小置信度、间隔与熵。}{345}{paragraph*.305}%
+\contentsline {paragraph}{何时这些分数等价，何时不等价。}{345}{paragraph*.306}%
+\contentsline {paragraph}{分数的数值和含义。}{346}{paragraph*.307}%
+\contentsline {paragraph}{委员会查询（Query-by-Committee）。}{346}{paragraph*.308}%
+\contentsline {paragraph}{Bayesian Active Learning by Disagreement (BALD) 与联合批量查询。}{346}{paragraph*.309}%
+\contentsline {paragraph}{先把两种平均分开计算。}{346}{paragraph*.310}%
+\contentsline {paragraph}{从后验信息增益推出 BALD。}{347}{paragraph*.311}%
+\contentsline {section}{\numberline {17.3}预期风险、梯度变化与多样性}{348}{section.17.3}%
+\contentsline {paragraph}{预期误差减少。}{348}{paragraph*.312}%
+\contentsline {paragraph}{怎样模拟还没拿到的标签。}{348}{paragraph*.313}%
+\contentsline {paragraph}{一次梯度更新能否预测风险收益。}{349}{paragraph*.314}%
+\contentsline {paragraph}{Core-set 与 BADGE。}{349}{paragraph*.315}%
+\contentsline {paragraph}{覆盖半径为什么有意义，又为什么不够。}{350}{paragraph*.316}%
+\contentsline {paragraph}{从覆盖与梯度各算一个小例子。}{351}{paragraph*.317}%
+\contentsline {paragraph}{梯度嵌入为何同时包含置信度与方向。}{351}{paragraph*.318}%
+\contentsline {section}{\numberline {17.4}成本、噪声与工业流式变体}{352}{section.17.4}%
+\contentsline {paragraph}{查询偏差与代表性监测。}{353}{paragraph*.319}%
+\contentsline {paragraph}{查询偏差与标注噪声的小例子。}{353}{paragraph*.320}%
+\contentsline {section}{\numberline {17.5}算法流程与验收}{354}{section.17.5}%
+\contentsline {paragraph}{本章小结。}{355}{paragraph*.322}%
+\contentsline {chapter}{\numberline {第十八章\hspace {.3em}}联邦学习}{356}{chapter.18}%
+\contentsline {section}{\numberline {18.1}问题定义}{356}{section.18.1}%
+\contentsline {paragraph}{客户端不是一条样本。}{357}{paragraph*.324}%
+\contentsline {subsection}{\numberline {18.1.1}权重、抽样与集中式基线}{358}{subsection.18.1.1}%
+\contentsline {paragraph}{手算一轮聚合和一种掉线后果。}{359}{paragraph*.325}%
+\contentsline {section}{\numberline {18.2}联邦优化、隐私与系统约束}{359}{section.18.2}%
+\contentsline {paragraph}{非独立同分布与通信。}{359}{paragraph*.326}%
+\contentsline {paragraph}{评价与边界。}{360}{paragraph*.327}%
+\contentsline {paragraph}{FedAvg的本地更新。}{360}{paragraph*.329}%
+\contentsline {paragraph}{从本地多步展开看漂移来源。}{361}{paragraph*.330}%
+\contentsline {paragraph}{把漂移例子代入数字。}{361}{paragraph*.331}%
+\contentsline {paragraph}{隐私的三个层次。}{362}{paragraph*.332}%
+\contentsline {paragraph}{个性化联邦学习。}{362}{paragraph*.333}%
+\contentsline {paragraph}{个性化目标为什么需要耦合。}{362}{paragraph*.334}%
+\contentsline {paragraph}{通信和系统约束。}{363}{paragraph*.335}%
+\contentsline {paragraph}{压缩误差与误差反馈。}{363}{paragraph*.336}%
+\contentsline {paragraph}{压缩发送的是近似更新，残差不能丢。}{363}{paragraph*.337}%
+\contentsline {section}{\numberline {18.3}联邦诊断案例与验收}{363}{section.18.3}%
+\contentsline {paragraph}{一轮联邦训练的完整过程。}{364}{paragraph*.338}%
+\contentsline {paragraph}{客户端漂移与 FedProx。}{364}{paragraph*.340}%
+\contentsline {paragraph}{近端项不是直接把更新裁短。}{365}{paragraph*.341}%
+\contentsline {paragraph}{控制变量与 SCAFFOLD。}{365}{paragraph*.342}%
+\contentsline {paragraph}{控制变量为什么有减有加。}{366}{paragraph*.343}%
+\contentsline {paragraph}{差分隐私与隐私预算。}{366}{paragraph*.344}%
+\contentsline {paragraph}{用二维向量理解裁剪、噪声和保护单位。}{367}{paragraph*.345}%
+\contentsline {paragraph}{安全聚合与攻击面。}{367}{paragraph*.346}%
+\contentsline {paragraph}{安全聚合为何能只显露总和。}{367}{paragraph*.347}%
+\contentsline {paragraph}{掉线、异构与公平性。}{368}{paragraph*.348}%
+\contentsline {paragraph}{本章小结。}{369}{paragraph*.350}%
+\contentsline {chapter}{\numberline {第十九章\hspace {.3em}}流形学习}{371}{chapter.19}%
+\contentsline {section}{\numberline {19.1}几何假设与邻域构造}{371}{section.19.1}%
+\contentsline {paragraph}{低维并不等于只留下少数传感器。}{372}{paragraph*.352}%
+\contentsline {section}{\numberline {19.2}线性基线与测地距离}{373}{section.19.2}%
+\contentsline {paragraph}{PCA 与核 PCA。}{373}{paragraph*.353}%
+\contentsline {paragraph}{PCA 的重构推导与尺度选择。}{373}{paragraph*.354}%
+\contentsline {paragraph}{PCA 的每个矩阵各做什么。}{374}{paragraph*.355}%
+\contentsline {paragraph}{核 PCA 的特征空间与新样本坐标。}{374}{paragraph*.356}%
+\contentsline {paragraph}{Isomap。}{374}{paragraph*.357}%
+\contentsline {paragraph}{沿图走与直接穿过去的差别。}{375}{paragraph*.358}%
+\contentsline {paragraph}{双中心化为什么把距离变成内积。}{375}{paragraph*.359}%
+\contentsline {section}{\numberline {19.3}局部重构与谱嵌入}{376}{section.19.3}%
+\contentsline {paragraph}{LLE。}{376}{paragraph*.360}%
+\contentsline {paragraph}{LLE 的两个约束优化如何求解。}{376}{paragraph*.361}%
+\contentsline {paragraph}{局部重构不是按邻居投票。}{377}{paragraph*.362}%
+\contentsline {paragraph}{拉普拉斯特征映射。}{377}{paragraph*.363}%
+\contentsline {paragraph}{从边上的差异到广义特征值。}{377}{paragraph*.364}%
+\contentsline {paragraph}{图平滑可以在三个节点上手算。}{378}{paragraph*.365}%
+\contentsline {paragraph}{扩散坐标与扩散距离。}{378}{paragraph*.366}%
+\contentsline {paragraph}{扩散为什么比较整行概率。}{379}{paragraph*.367}%
+\contentsline {section}{\numberline {19.4}概率邻域可视化}{379}{section.19.4}%
+\contentsline {paragraph}{t-SNE。}{379}{paragraph*.368}%
+\contentsline {paragraph}{t-SNE 的概率、熵与梯度。}{379}{paragraph*.369}%
+\contentsline {paragraph}{可视化概率不是分类概率。}{380}{paragraph*.370}%
+\contentsline {paragraph}{UMAP。}{380}{paragraph*.371}%
+\contentsline {paragraph}{UMAP 的局部尺度与吸引排斥。}{381}{paragraph*.372}%
+\contentsline {section}{\numberline {19.5}流形正则与工业验证}{382}{section.19.5}%
+\contentsline {paragraph}{图上的平滑如何影响一个未知标签。}{382}{paragraph*.373}%
+\contentsline {paragraph}{平方损失下把函数问题化为线性系统。}{382}{paragraph*.374}%
+\contentsline {paragraph}{本章小结。}{384}{paragraph*.376}%
+\contentsline {chapter}{\numberline {第二十章\hspace {.3em}}元学习}{386}{chapter.20}%
+\contentsline {section}{\numberline {20.1}任务分布与双层目标}{386}{section.20.1}%
+\contentsline {paragraph}{样本、设备、任务与 episode 的具体对应。}{387}{paragraph*.378}%
+\contentsline {paragraph}{为什么必须在任务内划分支持与查询。}{388}{paragraph*.379}%
+\contentsline {section}{\numberline {20.2}度量与关系方法}{389}{section.20.2}%
+\contentsline {paragraph}{Matching Networks 与原型网络。}{389}{paragraph*.380}%
+\contentsline {paragraph}{手算一次原型适应与预测。}{389}{paragraph*.381}%
+\contentsline {paragraph}{均值原型、概率模型与反向传播。}{390}{paragraph*.382}%
+\contentsline {paragraph}{可学习关系与无标签查询的边界。}{391}{paragraph*.383}%
+\contentsline {section}{\numberline {20.3}梯度初始化与一阶变体}{391}{section.20.3}%
+\contentsline {paragraph}{MAML 的内外循环。}{391}{paragraph*.384}%
+\contentsline {paragraph}{一维数值看清为什么要再乘一次导数。}{392}{paragraph*.385}%
+\contentsline {paragraph}{多步链式法则与曲率直觉。}{392}{paragraph*.386}%
+\contentsline {paragraph}{一阶近似到底舍弃了什么。}{393}{paragraph*.387}%
+\contentsline {paragraph}{Meta-SGD、Almost No Inner Loop (ANIL) 与隐式梯度。}{394}{paragraph*.388}%
+\contentsline {paragraph}{隐式微分的驻点方程与数值误差。}{395}{paragraph*.389}%
+\contentsline {paragraph}{隐式解与一步适应不是同一个答案。}{395}{paragraph*.390}%
+\contentsline {section}{\numberline {20.4}学习更新规则与概率适应}{395}{section.20.4}%
+\contentsline {paragraph}{学习优化器与直接学参数的区别。}{396}{paragraph*.391}%
+\contentsline {paragraph}{学习优化器的状态展开。}{396}{paragraph*.392}%
+\contentsline {paragraph}{层次先验如何产生少样本适应。}{397}{paragraph*.393}%
+\contentsline {paragraph}{把概率适应缩成一次加权平均。}{397}{paragraph*.394}%
+\contentsline {paragraph}{记忆读取也是一种适应算子。}{398}{paragraph*.395}%
+\contentsline {paragraph}{一次读取的可核算结果。}{398}{paragraph*.396}%
+\contentsline {section}{\numberline {20.5}跨设备快速适应的完整设置}{399}{section.20.5}%
+\contentsline {paragraph}{任务内标签要与预测头同步。}{399}{paragraph*.397}%
+\contentsline {paragraph}{本章小结。}{400}{paragraph*.399}%

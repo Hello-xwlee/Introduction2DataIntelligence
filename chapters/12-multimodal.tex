@@ -1,13 +1,35 @@
 \chapter{多模态模型}
 \begin{quote}\small
-\textit{本章摘要。}本章从图文检索、零样本分类和图像问答的输入输出出发，深入解释三个代表性模型。CLIP 用双塔编码器和对称对比损失学习图文匹配。BLIP-2 用查询变换器从视觉特征中提取信息，连接冻结的语言模型进行条件生成。LLaVA 将视觉表示接入语言上下文，通过视觉指令微调学习按问题回答。各模型的结构、训练目标和推理过程分别展开，最后讨论它们在工业迁移中怎样验证。
+\textit{本章摘要。}本章从图文检索、零样本分类和图像问答的输入输出出发，深入解释三个代表性模型。CLIP 用双塔编码器和对称对比损失学习图文匹配。\mbox{BLIP-2} 用查询变换器从视觉特征中提取信息，连接冻结的语言模型进行条件生成。LLaVA 将视觉表示接入语言上下文，通过视觉指令微调学习按问题回答。在此基础上，本章把范围扩展到音频、视频和工业传感器数值序列，区分实体、时间、事件、语义与局部软对应，并讨论早期、中间和晚期融合及其验证边界。
 \end{quote}
 视觉章节说明了如何从图像预测类别、框和像素边界。上一章说明了语言模型如何根据前文生成后续词元。现在给出一张巡检照片和问题“表面有什么异常”，还需要让语言模型取得照片中的信息。给出一句“有细长裂纹的工件”，则可能只需要从图库中找出相关照片。这两项任务都使用图像和文本，但输出形式与训练数据不同。
 
-本章以图像与文本为主。先解释怎样比较二者，再解释怎样让图像成为语言生成的条件，最后解释怎样根据不同指令组织回答。阅读时需要用到内积、矩阵乘法、softmax、交叉熵和反向传播。视觉块表示与语言词元沿用前两章的定义。向量默认是列向量，将多个表示排成矩阵时，每行存放一个向量的转置。
+本章前半部分以图像与文本为主：先解释怎样比较二者，再解释怎样让图像成为语言生成的条件，然后解释怎样根据不同指令组织回答。后半部分把对齐与融合推广到音频、视频和工业传感器数值序列，重点讨论时序数据，最后说明这些任务怎样验证。阅读时需要用到内积、矩阵乘法、softmax、交叉熵和反向传播。视觉块表示与语言词元分别沿用视觉模型章和语言大模型章的定义。向量默认是列向量，将多个表示排成矩阵时，每行存放一个向量的转置。
 
 \section{先确定任务：寻找匹配还是生成回答}
 模态（modality）是信息的表现形式，例如图像、文本、音频和传感器序列。多模态模型处理两种或更多形式的输入，或者在不同形式之间建立对应。输入形式增加后，仍要先确定输出是什么。
+
+表\ref{tab:multimodal-observation-range}列出本章涉及的四类观测。表中的编码单位只是常见选择；同一段连续信号可以按时间点、固定窗口或数据驱动片段编码，具体选择要与任务时间尺度一致。
+
+\begin{table}[htbp]
+\centering
+\caption{多模态工业任务中的观测形式与数据组织}
+\label{tab:multimodal-observation-range}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}m{1.8cm}>{\raggedright\arraybackslash}m{3.0cm}>{\raggedright\arraybackslash}m{3.0cm}>{\raggedright\arraybackslash}m{4.3cm}@{}}
+\toprule
+观测形式 & 工业例子 & 常见编码单位 & 组织数据时要保留的信息 \\
+\midrule
+图像与文本 & 巡检照片、部件描述、工单 & 图像块、词元 & 拍摄对象与区域、文本来源、版本及配对依据 \\
+音频／声学 & 异响录音、声学监测 & 波形片段、时频特征片段 & 采样率、录音区间、设备来源与背景噪声 \\
+视频 & 设备动作、装配过程 & 帧、时空片段 & 帧序、片段起止时间和事件变化；音轨可作为另一路输入 \\
+传感器数值序列 & 温度、负载、振动、压力、工艺曲线 & 时间点、窗口、时间片（patch） & 单位、尺度、采样间隔、物理时长和缺失掩码 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+这里的“模态”按观测机制、信息含义和任务来组织，“序列”则描述数据的时间结构，两者不是互斥分类：音频和视频本身也是序列。三轴振动可看作同一测量机制下的多个通道，不必机械地算作三种模态；同一数值序列转成折线图、频谱图和文字摘要，也不会因此变成三份相互独立的现场证据。不同视图可以帮助模型提取不同结构，但评价时仍要追溯到共同的数据来源。
 
 \paragraph{图文检索与零样本分类。}
 图文检索可以输入一句描述，输出按相关程度排序的图像，也可以输入一张图像，输出相关文本。模型需要给候选组合打分。它不必逐词生成描述。零样本分类则把候选类别写成文本，例如“正常表面的照片”“有裂纹的表面的照片”“有划痕的表面的照片”，再选出与图像最匹配的类别描述。这要求图像表示与文本表示能在同一空间比较。
@@ -18,14 +40,25 @@
 \paragraph{视觉指令跟随。}
 用户还可能要求“只列出可见异常，不判断成因”或“按部件、现象、待确认信息三个字段回答”。模型既要读取图像，也要按指令选择内容和格式。视觉指令微调用这样的示范教模型响应请求。模型能回答位置问题，不等于具有经过验证的检测或分割能力。定位仍需按视觉章节的框或像素标注验收。
 
-接下来选择 CLIP、BLIP-2 和 LLaVA 作为里程碑模型。这是一条解释能力差异的顺序，各模型拥有各自的训练方案。CLIP 学习匹配分数，BLIP-2 建立视觉条件生成路径，LLaVA 进一步学习视觉指令响应。本章中的图文“对齐”指表示与配对关系的对应，与上一章通过指令或偏好调整回答行为的含义需要区分。
+接下来选择 CLIP、BLIP-2 和 LLaVA 作为里程碑模型。这是一条解释能力差异的顺序，各模型拥有各自的训练方案。CLIP 学习匹配分数，BLIP-2 建立视觉条件生成路径，LLaVA 进一步学习视觉指令响应。本章前半部分的图文“对齐”主要指表示与给定配对关系的对应；后文再把实体、物理时间、事件阶段、全局语义和局部软对应分开。它们也都不同于上一章通过指令或偏好调整回答行为的含义。
 
 % auxiliary-resource-guide
-本章末的辅助学习材料按三个模型组织，可在完成相应算例后对照阅读。
+本章末的辅助学习材料涵盖三个图文模型，以及对齐、融合与未预对齐序列的相关工作，可结合算例与工业输入边界对照阅读。
 
 \section{CLIP：把图像和文本变成可比较的表示}
 \subsection{双塔为什么适合检索}
-图文对比预训练（Contrastive Language--Image Pre-training，CLIP）用大量配对图像和文本学习共同表示空间\cite{radford2021clip}。训练文本可以是对图像内容的自然语言描述，无需先把所有内容限制成一套固定类别。共同空间要求两路输出可以用同一种内积比较，不要求像素和文字具有相同的原始格式。
+图文对比预训练（Contrastive Language--Image Pre-training，CLIP）用大量配对图像和文本学习共同表示空间。训练文本可以是对图像内容的自然语言描述，无需先把所有内容限制成一套固定类别。共同空间要求两路输出可以用同一种内积比较，不要求像素和文字具有相同的原始格式。
+
+图\ref{fig:multimodal-clip-overview}把训练和零样本使用放在同一张图中。左侧先分别编码一个批次的图像与文本，训练使对角线上配对组合的得分高于同一行、同一列的其他组合；图中$I_i$、$T_j$对应下文的单位向量$z_i^v$、$z_j^t$，格内$I_i\cdot T_j$对应内积$(z_i^v)^{\mathsf T}z_j^t$。右侧在推理时把类别名称写成文本，由同一个文本编码器形成分类器。右侧没有重新训练固定类别权重，类别描述和候选集合却仍会影响结果。
+
+\Needspace{.45\textheight}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.97\linewidth,height=0.34\textheight,keepaspectratio]{images/中文重绘/clip-cn.png}
+\caption[CLIP 的对比预训练与零样本分类]{CLIP 的对比预训练与零样本分类\protect\footnotemark}
+\label{fig:multimodal-clip-overview}
+\end{figure}
+\footnotetext{来源：Radford 等，\href{https://arxiv.org/abs/2103.00020v1}{\textit{Learning Transferable Visual Models From Natural Language Supervision}}，arXiv v1，2021，Figure~1，PDF 第 2 页。}
 
 设一个训练批次有$N$对样本$(v_i,t_i)$，其中$v_i$是第$i$幅图像，$t_i$是其配对文本，$i=1,\ldots,N$。视觉编码器$f_v$和文本编码器$f_t$各自处理输入，连同投影层输出$d$维表示：
 \begin{equation}
@@ -54,14 +87,14 @@ $\tau>0$是温度参数，控制得分差异进入 softmax 后的尺度，原始
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[x=1cm,y=1cm,every node/.style={font=\small}]
- \node[idi input,text width=1.3cm] (img) at (0,1.4) {$v_1,v_2$\\两幅图像};
- \node[idi input,text width=1.3cm] (txt) at (0,-0.3) {$t_1,t_2$\\配对描述};
- \node[idi process,text width=1.6cm] (ev) at (2.2,1.4) {$f_v$与归一化\\$Z_v$};
- \node[idi process,text width=1.6cm] (et) at (2.2,-0.3) {$f_t$与归一化\\$Z_t$};
+ \node[idi input,text width=1.3cm,align=flush center] (img) at (0,1.55) {$v_1,v_2$\\两幅\\图像};
+ \node[idi input,text width=1.3cm,align=flush center] (txt) at (0,-0.45) {$t_1,t_2$\\配对\\描述};
+ \node[idi process,text width=1.6cm,align=flush center] (ev) at (2.2,1.55) {$f_v$\\与归一化\\$Z_v$};
+ \node[idi process,text width=1.6cm,align=flush center] (et) at (2.2,-0.45) {$f_t$\\与归一化\\$Z_t$};
  \draw[idi arrow] (img)--(ev);
  \draw[idi arrow] (txt)--(et);
- \node at (5.35,2.05) {$S=Z_vZ_t^{\mathsf T}/\tau$};
- \node at (5.0,1.5) {$t_1$}; \node at (6.1,1.5) {$t_2$};
+ \node at (5.35,2.3) {$S=Z_vZ_t^{\mathsf T}/\tau$};
+ \node at (5.0,1.72) {$t_1$}; \node at (6.1,1.72) {$t_2$};
  \node at (4.25,0.95) {$v_1$}; \node at (4.25,-0.05) {$v_2$};
  \draw (4.5,-0.55) rectangle (6.65,1.45);
  \draw (5.55,-0.55)--(5.55,1.45);
@@ -77,7 +110,7 @@ $\tau>0$是温度参数，控制得分差异进入 softmax 后的尺度，原始
  \draw[idi arrow] (6.1,-0.7)--(6.1,-1.35);
  \node[anchor=east,font=\scriptsize] at (5.85,-1.05) {按列选图像};
 \end{tikzpicture}
-\caption{两对样本的 CLIP 计算。箭头表示表示计算或归一化方向，方框标出给定配对。表中数值采用正文的二维单位向量与$\tau=1$，不代表实际模型的实验结果。}
+\caption{两对样本的 CLIP 计算。箭头表示编码、归一化与计分的方向，方框标出给定配对。表中数值采用正文的二维单位向量与$\tau=1$，不代表实际模型的实验结果。}
 \label{fig:multimodal-dual-encoder}
 \end{figure}
 
@@ -108,7 +141,7 @@ $j,k$都是文本候选编号。softmax 沿行计算，各概率非负且和为�
 \begin{align}
  \ell_i&=-S_{ii}+\log\sum_{k=1}^N e^{S_{ik}},\\
  \frac{\partial\ell_i}{\partial S_{ij}}
- &=P_{v\to t}(j\mid i)-\mathbf1_{j=i}.
+ &=P_{v\to t}(j\mid i)-\mathbf1_{j=i}.\label{eq:multimodal-clip-score-gradient}
 \end{align}
 $\mathbf1_{j=i}$在$j=i$时为一，其他情况为零。若得分可独立调整，梯度下降会提高目标得分、降低其余得分。实际得分共享编码器参数，一次更新汇总所有行列的梯度，不能保证每个组合都单独按这个方向变化。
 
@@ -125,7 +158,12 @@ $\mathbf1_{j=i}$在$j=i$时为一，其他情况为零。若得分可独立调�
 \end{equation}
 第二行以及两列的正确配对概率相同。因此两方向平均损失都约为$-\log0.731=0.313$，对称损失也约为$0.313$。两个方向已经分开，softmax 仍不会在有限得分下输出概率一。
 
-保持表示不变，仅把$\tau$改为$0.5$，对角得分变为二，正确配对概率变为$e^2/(e^2+1)\approx0.881$，损失约为$0.127$。损失下降来自尺度改变，图文方向并未改善。温度因而不能脱离表示和任务指标单独评价。固定得分差时，小温度使概率更集中，也放大相似度梯度的尺度。它与上一章生成时调整词表分布的解码温度作用于不同对象。
+保持表示不变，仅把$\tau$改为$0.5$，对角得分变为二，正确配对概率变为$e^2/(e^2+1)\approx0.881$，损失约为$0.127$。损失下降来自尺度改变，图文方向并未改善。温度因而不能脱离表示和任务指标单独评价。固定未缩放的内积差时，减小温度通常使概率更集中。记未缩放的相似度为$c_{ij}=(z_i^v)^{\mathsf T}z_j^t$，由式\eqref{eq:multimodal-clip-score-gradient}与$S_{ij}=c_{ij}/\tau$得到
+\[
+ \frac{\partial\ell_i}{\partial c_{ij}}
+ =\frac{P_{v\to t}(j\mid i)-\mathbf1_{j=i}}{\tau}.
+\]
+梯度虽含$1/\tau$因子，softmax残差也随温度变化，因此总梯度未必更大。本例单行损失对正确配对相似度的梯度绝对值，在$\tau=1$和$0.5$时分别约为$0.269$和$0.238$。这里的训练温度与上一章生成时调整词表分布的解码温度作用于不同对象。
 
 若$N=1$且没有额外负样本，分子分母完全相同，两项损失都恒为零，无法提供对比分数梯度。较大的批次增加候选，但候选未必真的不匹配。例如两幅图都显示裂纹，两段文本都写“有裂纹的表面”，非对角组合也可能合理。这类实际匹配却被当成负例的组合称为假负例（false negative）。若数据存在多重匹配，应检查配对规则，并考虑将多个合理目标共同计入监督。
 
@@ -147,7 +185,18 @@ CLIP 将整幅图像和整段文本各汇成一个向量，适合大规模匹配
 \subsection{为什么需要一个可训练的连接模块}
 已有视觉编码器能产生区域特征，已有语言大模型能生成文字，但两者的表示宽度和训练任务不同。把视觉数表直接当成文本嵌入，没有理由让语言模型理解。若将两个大模型从头联合训练，更新参数和训练资源又会明显增加。
 
-第二代视觉语言预训练模型 BLIP-2（Bootstrapping Language-Image Pre-training，第二代）用一个较小的查询变换器（Querying Transformer，Q-Former）连接冻结的视觉编码器和语言模型\cite{li2023blip2}。冻结指训练时不更新指定权重。Q-Former 先学习从图像中提取与文本有关的信息，再学习把这些信息作为语言模型可以利用的条件输入。
+第二代视觉语言预训练模型 BLIP-2 用一个较小的查询变换器（Querying Transformer，Q-Former）连接冻结的视觉编码器和语言模型。冻结指训练时不更新指定权重。Q-Former 先学习从图像中提取与文本有关的信息，再学习把这些信息作为语言模型可以利用的条件输入。
+
+图\ref{fig:multimodal-blip2-overview}按训练顺序画出两阶段框架。第一阶段只在冻结视觉编码器与文本之间训练 Q-Former，尚未接入语言大模型；第二阶段才把查询输出投影给冻结语言模型。雪花表示冻结的预训练模块，Q-Former属于可训练连接部分；图中的“大语言模型（LLM）”即正文的语言大模型，“查询 Transformer”即查询变换器。“冻结”不等于该模块不参与前向计算；冻结语言模型仍需保留回到连接部分的输入梯度。
+
+\Needspace{.46\textheight}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.97\linewidth,height=0.43\textheight,keepaspectratio]{images/中文重绘/blip2-cn.png}
+\caption[BLIP-2 的两阶段预训练]{BLIP-2 的两阶段预训练\protect\footnotemark}
+\label{fig:multimodal-blip2-overview}
+\end{figure}
+\footnotetext{来源：Li 等，\href{https://arxiv.org/abs/2301.12597v3}{\textit{BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models}}，arXiv v3，2023，Figure~1，PDF 第 1 页。}
 
 设视觉编码器输出$H_v\in\R^{n_v\times d_v}$，其中$n_v$是视觉位置数，$d_v$是每个位置的特征宽度。沿用视觉章节的理解，这些位置可对应图像块，但特征已受编码器上下文影响，并非每行只含一个独立局部区域的信息。
 
@@ -185,17 +234,17 @@ $V$的三个标量是教学特征值，没有像素或毫米单位。第一行�
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[x=1cm,y=1cm]
- \node[idi input,text width=1.6cm] (v1) at (0,2.4) {位置1\\值$2$};
- \node[idi input,text width=1.6cm] (v2) at (0,0) {位置2\\值$4$};
- \node[idi input,text width=1.6cm] (v3) at (0,-2.4) {位置3\\值$10$};
- \node[idi state,text width=1.7cm] (q1) at (4.6,1.6) {查询1读取\\$O_1=4.5$};
- \node[idi state,text width=1.7cm] (q2) at (4.6,-1.6) {查询2读取\\$O_2=6$};
- \draw[idi arrow] (v1.east)--node[pos=0.67,above,font=\scriptsize] {$1/2$} (q1.west);
- \draw[idi arrow] (v2.east)--node[pos=0.7,above,font=\scriptsize] {$1/4$} (q1.west);
- \draw[idi arrow] (v3.east)--node[pos=0.7,above,font=\scriptsize] {$1/4$} (q1.west);
- \draw[idi arrow,dashed] (v1.east)--node[pos=0.35,below,font=\scriptsize] {$1/5$} (q2.west);
- \draw[idi arrow,dashed] (v2.east)--node[pos=0.68,below,font=\scriptsize] {$2/5$} (q2.west);
- \draw[idi arrow,dashed] (v3.east)--node[pos=0.67,below,font=\scriptsize] {$2/5$} (q2.west);
+ \node[idi input,text width=1.6cm,align=flush center] (v1) at (0,2.4) {位置1\\值$2$};
+ \node[idi input,text width=1.6cm,align=flush center] (v2) at (0,0) {位置2\\值$4$};
+ \node[idi input,text width=1.6cm,align=flush center] (v3) at (0,-2.4) {位置3\\值$10$};
+ \node[idi state,text width=1.9cm,align=flush center] (q1) at (4.6,1.6) {查询1读取\\$O_1=4.5$};
+ \node[idi state,text width=1.9cm,align=flush center] (q2) at (4.6,-1.6) {查询2读取\\$O_2=6$};
+ \draw[idi arrow] (v1.east)--node[pos=0.2,above,fill=white,inner sep=1pt,font=\scriptsize] {$1/2$} (q1.west);
+ \draw[idi arrow] (v2.east)--node[pos=0.2,above,fill=white,inner sep=1pt,font=\scriptsize] {$1/4$} (q1.west);
+ \draw[idi arrow] (v3.east)--node[pos=0.2,right,fill=white,inner sep=1pt,font=\scriptsize] {$1/4$} (q1.west);
+ \draw[idi arrow,dashed] (v1.east)--node[pos=0.2,right,fill=white,inner sep=1pt,font=\scriptsize] {$1/5$} (q2.west);
+ \draw[idi arrow,dashed] (v2.east)--node[pos=0.2,below,fill=white,inner sep=1pt,font=\scriptsize] {$2/5$} (q2.west);
+ \draw[idi arrow,dashed] (v3.east)--node[pos=0.2,below,fill=white,inner sep=1pt,font=\scriptsize] {$2/5$} (q2.west);
  \node[anchor=west,font=\small,align=left] at (6.05,0) {三个位置\\压成两个输出\\实线：查询1\\虚线：查询2};
 \end{tikzpicture}
 \caption{单头交叉注意力的数值读取。箭头表示值信息进入查询输出，实线和虚线区分两个查询的读取路径。权重由正文给定的查询与键计算，输出行数由查询数决定。}
@@ -230,7 +279,7 @@ $d_{\rm lm}$是语言模型嵌入宽度，$B$包含$m$个连续视觉条件向�
 \end{align}
 $B(v)$表示由该图像计算的视觉前缀，$q$是已知提示，$y_{<t}$是第$t$个目标词元之前的真实回答。$T\geq1$是计分回答词元数，可包含结束符，填充不计分。$y_t$取自语言模型词表。所有概率由带因果掩码的语言模型计算，回答位置可以读取视觉前缀、提示和此前回答。训练集目标由各样本的损失平均得到。
 
-这沿用上一章的下一词元预测。图文对比损失在有限候选间选择配对，式\eqref{eq:multimodal-generation-loss}在每一步的词表中预测目标词元。二者的候选、标签和输出都不同。生成损失降低只说明示范文字的预测改善，不直接证明每句话得到图像支持。
+上述生成损失沿用上一章的下一词元预测。图文对比损失在有限候选间选择配对，生成损失则按式\eqref{eq:multimodal-generation-loss}在每一步的词表中预测目标词元。二者的候选、标签和输出都不同。生成损失降低只说明示范文字的预测改善，不直接证明每句话得到图像支持。
 
 \paragraph{冻结权重时，梯度在哪里停止。}
 冻结语言模型参数$\theta_{\rm lm}$后，仍要计算它对视觉前缀的导数。令可训练连接部分的参数为$\phi$，链式法则为
@@ -250,9 +299,20 @@ $B(v)$表示由该图像计算的视觉前缀，$q$是已知提示，$y_{<t}$是
 
 推理时不给真实回答，也不更新参数。先计算图像特征、查询输出和视觉前缀，再给提示，例如“描述可见表面”，逐词生成文字。若接入的是以描述训练为主的模型，面对复杂格式指令或多轮问题可能表现不足。视觉条件可用与指令响应熟练是两项不同要求，下一节用 LLaVA 解释后一项怎样训练。
 
-\section{LLaVA：让视觉表示参与指令回答}
+\section{\texorpdfstring{\NoCaseChange{LLaVA}}{LLaVA}：让视觉表示参与指令回答}
 \subsection{从线性投影到语言上下文}
-大型语言与视觉助手（Large Language and Vision Assistant，LLaVA）通过视觉指令微调，把预训练视觉编码器与语言模型连接起来\cite{liu2023llava}。原始 LLaVA 用线性投影连接二者，没有使用 Q-Former 的查询压缩结构。图像描述用于初步连接，随后用包含问题、指令和示范回答的数据训练对话响应。
+大型语言与视觉助手（Large Language and Vision Assistant，LLaVA）通过视觉指令微调，把预训练视觉编码器与语言模型连接起来。原始 LLaVA 用线性投影连接二者，没有使用 Q-Former 的查询压缩结构。图像描述用于初步连接，随后用包含问题、指令和示范回答的数据训练对话响应。
+
+图\ref{fig:multimodal-llava-overview}展示原始网络的输入路径：视觉编码器先产生视觉特征，线性投影将其送入语言模型的嵌入宽度，文字指令从另一入口进入同一语言上下文。原图以$Z_v$表示视觉编码器特征、以$H_v$表示投影后的视觉词元；本章为保持前后公式一致，分别记作$H_v$和$B_v$。原图的投影矩阵$W$对应式\eqref{eq:multimodal-llava-projection}中的$W_C$：原文按列向量把投影写成左乘$W$，本章每行存放一个向量，改写为右乘，$W_C$相当于$W^{\mathsf T}$。图中的视觉连接器应按原始线性投影理解；后续版本采用的 MLP 是式\eqref{eq:multimodal-llava-mlp}单独说明的变体。
+
+\Needspace{.40\textheight}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.97\linewidth,height=0.35\textheight,keepaspectratio]{images/中文重绘/llava-cn.png}
+\caption[LLaVA 的视觉与语言连接]{LLaVA 的视觉与语言连接\protect\footnotemark}
+\label{fig:multimodal-llava-overview}
+\end{figure}
+\footnotetext{来源：Liu 等，\href{https://arxiv.org/abs/2304.08485v2}{\textit{Visual Instruction Tuning}}，arXiv v2，2023，Figure~1，PDF 第 4 页。}
 
 设视觉编码器仍输出$H_v\in\R^{n_v\times d_v}$。原始线性连接可写为
 \begin{equation}
@@ -292,13 +352,13 @@ $X_{\rm ctx}$包含视觉位置和文字位置，宽度统一为$d_{\rm lm}$。�
  \node at (1.35,0.8) {投影后的视觉位置};
  \node at (4.72,0.8) {提示词元};
  \node at (7.4,0.8) {回答目标};
- \node[idi process,text width=3.0cm] (pred) at (4.05,-2.1)
-  {根据已知上下文\\预测第一个回答词元};
+ \node[idi process,text width=3.0cm,align=flush center] (pred) at (4.05,-2.1)
+  {根据已知上下文\\预测第一个\\回答词元};
  \foreach \s in {v1,v2,v3,q1,q2}{
   \draw[idi arrow] (\s.south)--(pred.north);
  }
  \draw[idi arrow] (pred.east)-| (y1.south);
- \node[font=\scriptsize,align=center] at (7.35,-2.0)
+ \node[font=\scriptsize,align=left,anchor=west] at (6.95,-2.0)
   {$y_1,y_2$不作为\\本步可见输入};
 \end{tikzpicture}
 \caption{视觉指令回答的上下文与目标。$b_1,b_2,b_3$表示三行投影视觉向量，$q_1,q_2$表示简化提示词元。箭头表示本步可读取的信息和预测输出。$y_2$的虚线框表示未来目标，图中省略角色标记和内部注意力层。}
@@ -336,7 +396,7 @@ LLaVA 直接保留更多视觉位置，可能减少查询压缩造成的信息�
 \label{tab:multimodal-interaction}
 \small
 \setlength{\tabcolsep}{4pt}
-\begin{tabular}{@{}p{2.0cm}p{5.1cm}p{5.1cm}@{}}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}m{2.0cm}>{\raggedright\arraybackslash}m{5.1cm}>{\raggedright\arraybackslash}m{5.1cm}@{}}
 \toprule
 比较项 & BLIP-2 & 原始 LLaVA \\
 \midrule
@@ -349,6 +409,142 @@ LLaVA 直接保留更多视觉位置，可能减少查询压缩造成的信息�
 \bottomrule
 \end{tabular}
 \end{table}
+
+\section{从多路观测到对齐与融合}
+前面三个模型说明了怎样比较整图与整段文字、怎样用查询读取视觉位置，以及怎样把视觉位置接入语言上下文。真实工业任务还要先回答三个更基础的问题：记录来自哪个对象，记录描述哪个时刻或事件，以及它在决策时是否已经到达。只有这些关系明确后，共享表示或交叉注意力才有可解释的输入边界。
+
+\subsection{先确定同一对象、物理时间和事件}
+“对齐”不是一次矩阵运算，也不是所有任务都必须依次完成的固定流程。表\ref{tab:multimodal-alignment-levels}把五类常见问题并列放置；它们可以按任务选用，也可能同时存在。
+
+\begin{table}[H]
+\centering
+\caption{多路观测需要区分的五类对应问题}
+\label{tab:multimodal-alignment-levels}
+\small
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}m{2.0cm}>{\raggedright\arraybackslash}m{3.0cm}>{\raggedright\arraybackslash}m{3.4cm}>{\raggedright\arraybackslash}m{3.6cm}@{}}
+\toprule
+对应问题 & 要回答什么 & 可采用的依据或方法 & 不能自动得到什么 \\
+\midrule
+实体／对象对应 & 几路记录是否来自同一设备、部件或观测区域 & 设备与部件 ID、工单关联、必要的坐标标定 & ID 相同不保证时间相同，也不保证内容相关 \\
+物理时间对应 & 时钟、采样间隔、观测时刻与到达时刻怎样对应 & 时钟校准、共同时间窗、按需重采样或插值、缺失掩码 & 采样点对齐不等于事件相关，也不会增加未观测证据 \\
+事件／过程对应 & 不同响应速度下，哪些片段属于同一事件阶段 & 事件锚点、已知物理时滞；对可比较序列按需使用动态时间规整（DTW） & 不能把任意波形与稀疏文字交给同一距离就声称完成语义对应 \\
+全局语义表示对应 & 各路窗口是否表达相关状态 & 配对数据、各自编码器、投影与对比目标 & 同维向量或高相似度不保证物理同步和事实正确 \\
+局部软对应 & 一个查询应读取哪些位置或时间片 & 交叉注意力等任务相关交互 & 权重峰值不等于已确认的位置、时刻或因果贡献 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+另一种观察角度见图\ref{fig:multimodal-alignment-types}。左栏的离散对齐强调给定元素之间的对应；中栏处理没有现成分段的连续信号，需要先分段，或在连续表示之间建立弹性对应，按时间轴弹性对齐只是其中一种情形；右栏则让表示随上下文改变。它是综述对模型对齐问题的三栏组织，不是表\ref{tab:multimodal-alignment-levels}五类工业检查的缩写，也不能代替设备 ID、时钟校准、记录到达和在线可用性检查。
+
+\Needspace{.42\textheight}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth,height=0.31\textheight,keepaspectratio]{images/中文重绘/alignment-survey-cn.png}
+\caption[离散、连续与上下文化的对齐表示]{离散、连续与上下文化的对齐表示\protect\footnotemark}
+\label{fig:multimodal-alignment-types}
+\end{figure}
+\footnotetext{来源：Liang、Zadeh 与 Morency，\href{https://arxiv.org/abs/2209.03430v2}{\textit{Foundations and Trends in Multimodal Machine Learning: Principles, Challenges, and Open Questions}}，arXiv v2，2023，Figure~9，PDF 第 11 页；期刊版本发表于 2024 年。}
+
+工业数据还要区分事件时间$t_e$、观测或采集时间$t_o$、记录到达并可被系统查询的时间$t_a$，以及作出预测的决策时间$t_d$。图\ref{fig:multimodal-event-arrival}采用相对时间说明这一边界。工艺量和振动片段在决策前已经到达，可以进入本次输入；照片虽然在事件附近拍摄，却在决策后才到达，只能供后续更新或复核。图中从观测到到达的箭头表示传输和处理延迟，不表示观测导致了事件。
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm,every node/.style={font=\small}]
+ \draw[gray!55] (1.7,3.3)--(11.9,3.3);
+ \draw[gray!55] (1.7,2.15)--(11.9,2.15);
+ \draw[gray!55] (1.7,1.0)--(11.9,1.0);
+ \node[anchor=east] at (1.55,3.3) {工艺量};
+ \node[anchor=east] at (1.55,2.15) {振动片段};
+ \node[anchor=east] at (1.55,1.0) {巡检照片};
+ \draw[->,thick] (1.7,0.15)--(12.15,0.15);
+ \node[anchor=east,font=\scriptsize] at (12.15,-0.55) {相对时间};
+ \foreach \x/\lab in {3/-1,5/0,7/1,9/2,11/3}{
+  \draw (\x,0.08)--(\x,0.22);
+  \node[anchor=north] at (\x,0.02) {$\lab$};
+ }
+ \draw[dashed,thick] (5,0.45)--(5,4.15);
+ \node[align=center,anchor=south] at (5,4.15) {事件发生\\$t_e=0$};
+ \draw[thick] (9,0.45)--(9,4.15);
+ \node[align=center,anchor=south] at (9,4.15) {本次决策\\$t_d=2$};
+ \node[circle,draw,fill=blue!10,inner sep=2.5pt] (po) at (3.0,3.3) {$o$};
+ \node[rectangle,draw,fill=green!10,inner sep=2.5pt] (pa) at (3.7,3.3) {$a$};
+ \draw[idi arrow] (po)--(pa);
+ \node[anchor=west,font=\scriptsize,fill=white,inner sep=1pt] at (9.25,3.3) {已到达，可用};
+ \draw[blue!60!black,line width=3pt] (4.15,2.15)--(5.95,2.15);
+ \node[circle,draw,fill=blue!10,inner sep=2.5pt] (vo) at (5.95,2.15) {$o$};
+ \node[rectangle,draw,fill=green!10,inner sep=2.5pt] (va) at (7.35,2.15) {$a$};
+ \draw[idi arrow] (vo)--node[above,font=\scriptsize] {处理} (va);
+ \node[anchor=west,font=\scriptsize,fill=white,inner sep=1pt] at (9.25,2.15) {已到达，可用};
+ \node[circle,draw,fill=blue!10,inner sep=2.5pt] (io) at (6.15,1.0) {$o$};
+ \node[rectangle,draw,fill=red!8,inner sep=2.5pt] (ia) at (10.35,1.0) {$a$};
+ \draw[idi arrow] (io)--node[above,font=\scriptsize] {上传延迟} (ia);
+ \node[anchor=west,font=\scriptsize,fill=white,inner sep=1pt] at (10.65,1.0) {本次排除};
+ \node[circle,draw,fill=blue!10,inner sep=2.5pt] at (2.3,-0.85) {$o$};
+ \node[anchor=west,font=\scriptsize] at (2.55,-0.85) {观测或采集结束};
+ \node[rectangle,draw,fill=green!10,inner sep=2.5pt] at (6.1,-0.85) {$a$};
+ \node[anchor=west,font=\scriptsize] at (6.4,-0.85) {到达并可查询};
+\end{tikzpicture}
+\caption{事件时间、观测时间、到达时间与决策可用性的相对时间示意。振动粗线表示一个观测区间；图中数值用于解释信息边界，不是现场时延测量。}
+\label{fig:multimodal-event-arrival}
+\end{figure}
+
+重采样只能解决采样网格问题。假设所有读数都已经到达，且决策时刻不早于$t=2$。某波形窗口的摘要在$t=0,1,2$依次为$1,3,5$，温度只在$t=0,2$记录为$10,14$。线性插值得到
+\begin{equation}
+ \widetilde T(1)=10+(14-10)\frac{1-0}{2-0}=12,
+\end{equation}
+于是公共网格上的配对为$(1,10),(3,12),(5,14)$。这只完成了采样级对应；中间值$12$使用了$t=2$的读数，不能拿去模拟$t=1$时的在线决策。后文的具体时钟例子进一步检查照片和维修结论的实际到达时间，两者表达的是同一条信息边界，数值不在此重复。
+
+时钟偏差、采样率差异和真实物理响应滞后也要分开处理。校准时钟或插值可以修正记录方式，但温度对负载变化的迟滞、声学信号与磨损状态之间的响应差可能正是待建模信息，不能一律平移消除。动态时间规整（Dynamic Time Warping，DTW）在保持顺序的条件下寻找弹性匹配路径，适合比较语义一致、尺度可比且事件范围已经确定的序列\footnote{来源：Sakoe 与 Chiba，\href{https://doi.org/10.1109/TASSP.1978.1163055}{\textit{Dynamic Programming Algorithm Optimization for Spoken Word Recognition}}，1978。}；它不能直接把原始波形和一条稀疏文字记录变成可靠语义配对。
+
+\subsection{让时序进入共享表示或跨模态交互}
+数值序列进入多模态模型前，应保留数值、单位、实际时间戳或采样间隔、窗口覆盖时长和缺失掩码。若先变换到共同网格，模型仍需知道哪些值来自真实采样、哪些来自插值。时间位置编码可以表达顺序、间隔或相对事件位置，但它不能替代时钟与到达时间检查。
+
+可以沿用前文结构形成两条路径：
+\begin{enumerate}[leftmargin=*]
+\item \textbf{共享表示与检索。}时间序列编码器把带时间与缺失信息的窗口变成一个表示，再与配对的文字、照片或声学表示比较。这里可复用 CLIP 的对比思想，不必再推导同一损失。正样本应由设备、事件和合法时间窗共同确定；最近时间戳不一定对应同一状态。一个事件若有多个有效窗口、照片和描述，应将这些关系作为多正样本或组级监督处理，不能把其余有效记录机械地当作批内负例。
+\item \textbf{联合读取与任务输出。}各模态先分别编码，再用交叉注意力或轻量连接模块交互，最后连接故障分类、数值预测或描述任务头。接入相同嵌入宽度只是计算接口条件，任务相关对应仍要由配对、目标和留出验证建立。
+\end{enumerate}
+
+三个代表性工作可以帮助限定这两条路径。MulT 对未预先逐点对齐的多模态序列使用定向跨模态注意力，学习一种潜在交互\footnote{来源：Tsai 等，\href{https://aclanthology.org/P19-1656/}{\textit{Multimodal Transformer for Unaligned Multimodal Language Sequences}}，2019。}；它不负责校准设备时钟，也不证明注意力峰值就是物理事件。ImageBind 以图像配对为枢纽，把文本、音频、深度、热成像和惯性测量单元（IMU）等表示放入共同空间\footnote{来源：Girdhar 等，\href{https://arxiv.org/abs/2305.05665}{\textit{ImageBind: One Embedding Space To Bind Them All}}，2023。}；这说明共同空间可以扩展，不表示任意数据采集与监视控制（SCADA）系统记录、振动和检修文本已经自动对齐。VideoCLIP 用具有时间重叠依据的视频片段与文本构造对比预训练样本\footnote{来源：Xu 等，\href{https://aclanthology.org/2021.emnlp-main.544/}{\textit{VideoCLIP: Contrastive Pre-training for Zero-shot Video-Text Understanding}}，2021。}；它提示视频正样本要保留区间或事件依据，不能把整段文字无条件复制到每一帧。
+
+把同一数值序列改画成曲线、转成文字摘要或送入语言模型，是表示或接口设计。讨论互补收益时，应说明各路输入的原始来源、依赖关系、配对依据和评价协议。同一模态的不同相机或传感器也可能互补，不同模态则可能共享同一信息来源，观测机制不同不自动等于证据相互独立。
+
+\subsection{在何处融合、缺一路时怎样工作}
+对齐用于建立记录之间的合法对应，融合则利用这些记录形成输出。图\ref{fig:multimodal-fusion-types}保留综述中的通用“模态 A／B／C”：它们可以在具体任务中对应振动、声学和红外热像，但原图本身没有指定这些传感器。图中$f$表示特征提取或编码部分，$g$表示预测或组合部分；按综述对三种融合的描述，虚线框可理解为一起训练的范围：(a)中$f$只依据各模态输入构造融合特征，再单独训练$g$；(b)中$f_A$、$f_B$、$f_C$分别训练，$g$只组合它们的输出$y_A$、$y_B$、$y_C$；(c)中$f$与$g$在同一训练过程中联合优化。三幅子图区分的是融合发生的阶段与训练边界，不给出优劣排序。
+
+\Needspace{.70\textheight}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.78\linewidth,height=0.56\textheight,keepaspectratio]{images/中文重绘/fusion-survey-cn.png}
+\caption[早期、晚期与中间融合]{早期、晚期与中间融合\protect\footnotemark}
+\label{fig:multimodal-fusion-types}
+\end{figure}
+\footnotetext{来源：Gaw、Yousefi 与 Gahrooei，\href{https://www.afit.edu/BIOS/publications/Gawetal.2022_MultimodaldatafusionforsystemsimprovementAreview.pdf}{\textit{Multimodal Data Fusion for Systems Improvement: A Review}}，2022，Figure~1，PDF 第 4 页。}
+
+表\ref{tab:multimodal-fusion-choices}按深度模型中常见的实现方式归纳三种融合位置，侧重点与图\ref{fig:multimodal-fusion-types}按训练边界的划分不同；不同文献对“早期”“中间”的划分口径也不完全一致。早期融合也可以先做各自的特征提取，并不只指拼接原始数值；晚期融合则要求各分支输出可以组合，却未利用低层交互。
+
+\begin{table}[htbp]
+\centering
+\caption{三种融合位置的输入要求与边界}
+\label{tab:multimodal-fusion-choices}
+\footnotesize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}m{1.7cm}>{\raggedright\arraybackslash}m{3.4cm}>{\raggedright\arraybackslash}m{3.7cm}>{\raggedright\arraybackslash}m{3.4cm}@{}}
+\toprule
+融合位置 & 典型计算 & 对应与部署要求 & 主要边界 \\
+\midrule
+早期融合 & 对原始量或浅层特征重采样、缩放并拼接，再交给后续预测模型 & 常需要较细的样本级或窗口级时间对应；单位、尺度和缺失标记必须明确 & 能利用低层联合变化，但对错位、整路缺失和维度差异较敏感 \\
+中间融合 & 在联合训练中融合各路特征，常见做法是各自编码后用拼接、门控、交叉注意力等交换表示 & 可以保留不同采样粒度，仍需合法事件配对、掩码和共同任务监督 & 交互灵活但结构和训练成本更高，内部权重不自动构成解释 \\
+晚期融合 & 各分支先独立预测，再平均、加权或由组合器决策 & 分支输出语义与校准口径须可比较；较容易为缺失分支设计退化路径 & 易于复用单模态模型，但可能错过低层互补关系，组合器仍需独立验证 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\Needspace{11\baselineskip}
+\textbf{把时序对齐与融合连成一个样本。}沿用图\ref{fig:multimodal-event-arrival}，假设在$t_d=2$判断同一台设备是否异常。已经到达的工艺量和振动片段进入本次样本，迟到的照片标记为本次不可用。工艺量若重采样，只能使用决策前已到达的读数，并保留真实采样、插值和缺失标记；振动则可按固定物理时长分片。随后可以分别编码两路输入，用门控或交叉注意力进行中间融合，并与两个单模态模型及简单晚期组合比较。若模型不支持当前输入组合，应使用事先验证过的退化路径或请求复检。后来到达的照片只能用于下一次判断或事后复核，不能回填本次输入。这个教学例把可用性检查、时序表示和融合选择串在一起，不代表联合模型已经取得性能增益。
+
+没有一种融合位置保证多模态一定优于单模态。训练时随机遮掉局部片段、部署时整路传感器离线、记录尚未到达和已到达但质量变差，是四种不同状态；模型若声称支持其中一种，不能自动推广到其余三种。对缺失输入的掩码、分支跳过或拒绝输出也应作为模型行为明确测试。
 
 \section{典型应用怎样验证}
 \subsection{先按输出形式选择评价对象}
@@ -365,29 +561,61 @@ LLaVA 直接保留更多视觉位置，可能减少查询压缩造成的信息�
 
 验证集与测试集应按设备、生产批次或事件隔离。同一工件的近重复照片不能跨越训练与测试，提示、阈值和微调方案也不能在测试集上挑选。迁移时比较已有视觉分类器、CLIP 零样本结果和目标域微调结果，保持数据划分与标注定义一致，再记录可训练参数、视觉位置数和生成延迟。这样才能分辨收益来自新增监督、结构差异还是更多计算。
 
-外部文字也要明确来源。有效手册可以支持报告中的规程说明，模型仍需按上一章的检索方式确认版本和适用条件。维修结论可以成为事后监督，预测时尚未形成的结论不能放进输入。沿用原有时间例子：10:00诊断时，09:59:58拍摄但10:00:03才到达的照片不可用。10:30确认的类别可以作为历史样本标签，不能回填成10:00已知信息。
+外部文字也要明确来源。有效手册可以支持报告中的规程说明，模型仍需按上一章的检索方式确认版本和适用条件。维修结论可以成为事后监督，预测时尚未形成的结论不能放进输入。以一个具体时刻为例：10:00诊断时，09:59:58拍摄但10:00:03才到达的照片不可用。10:30确认的类别可以作为历史样本标签，不能回填成10:00已知信息。
 
 若额外接入振动或工艺曲线，需要为该联合任务提供对应数据和标签，图文预训练本身不建立传感器理解能力。假设一百个事件中图像分类答对八十个、振动分类答对七十五个，两个数不能推出融合会答对九十个。要逐事件比较错误是否互补，再与单模态和简单组合基线比较。照片缺失、模糊或两路信息冲突时还应分别测试，证据不足允许请求复检。
 
+\subsection{把缺失、噪声、迟到、冲突和代价分开评价}
+表\ref{tab:multimodal-evaluation-protocol}给出一个最小评价框架。它不要求所有任务使用相同指标，而是要求同一任务在相同标签定义和划分上比较。MultiBench 将预测表现、计算代价以及噪声与缺失鲁棒性分开组织\footnote{来源：Liang 等，\href{https://datasets-benchmarks-proceedings.neurips.cc/paper/2021/hash/37693cfc748049e45d87b8c7d8b9aacd-Abstract-round1.html}{\textit{MultiBench: Multiscale Benchmarks for Multimodal Representation Learning}}，2021。}；这里沿用这一分开评价的原则，不把其数据集直接当作工业验收标准。
+
+\begin{table}[H]
+\centering
+\caption{多模态工业任务的最小对照与扰动评价}
+\label{tab:multimodal-evaluation-protocol}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}m{2.4cm}>{\raggedright\arraybackslash}m{4.6cm}>{\raggedright\arraybackslash}m{4.9cm}@{}}
+\toprule
+评价维度 & 至少比较什么 & 需要记录或解释什么 \\
+\midrule
+基线与增量 & 各单模态模型、简单晚期组合、所选联合模型 & 标签、划分、输入时间窗和调参预算一致；新增监督与新增观测单列 \\
+缺失与质量 & 完整输入、逐路移除、现实缺失组合；模糊图像、背景噪声、漂移与缺失片段 & 区分训练时局部遮蔽、部署时整路缺失以及已到达但质量下降 \\
+时间与迟到 & 采样错位、记录迟到、陈旧照片和有依据的物理响应时滞 & 回放按到达时间释放输入；不能预先加载未来记录后只按事件时间切片 \\
+冲突与拒绝 & 两路一致、单路异常、相互冲突及证据不足 & 分别报告错误、校准、拒答或请求复检；不要只统计最终被系统接受的样本 \\
+代价与时延 & 单模态、简单组合与联合模型的采集、同步、训练和推理成本 & 参数量、峰值资源、端到端延迟和额外传感器维护成本；预训练摊销另行说明 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+检索任务仍评价配对与多重相关关系。数值预测评价误差，提供不确定性输出时再评价区间覆盖或概率校准；分类任务评价召回、误报和概率校准，问答任务评价证据支持、格式与拒答行为。鲁棒性结果要与干净输入表现并列，不能用“平均下降不大”掩盖某一路失效时的高风险子群。
+
 所有数值算例和问答示例用于解释机制，均不代表已完成的工业实验。报告草稿应保留图像来源与待确认信息，最终结论由独立证据和任务验收决定。
 
+\Needspace{.70\textheight}
 \section*{本章小结}
 CLIP 用配对索引训练两个独立编码器，在单位表示的共同空间中形成图文得分。对称损失同时训练图到文和文到图选择，推理只需编码和排序。它适合检索与零样本分类，缺少直接生成回答的路径。
 
-BLIP-2 让少量可学习查询通过交叉注意力读取视觉特征，再将查询输出投影为语言模型的条件。其两阶段训练先学习视觉语言表示，再连接冻结语言模型。冻结权重保留了输入梯度，查询压缩则引入信息容量与上下文成本的折中。
+BLIP-2 让少量可学习查询通过交叉注意力读取视觉特征，再将查询输出投影为语言模型的条件。其两阶段训练先学习视觉语言表示，再连接冻结语言模型。冻结语言模型时仍需保留其对视觉前缀的输入梯度，查询压缩则引入信息容量与上下文成本的折中。
 
 LLaVA 将视觉位置投影到语言嵌入宽度，通过描述数据学习连接，再通过视觉指令数据调整连接层和语言模型。原始线性投影与后续 MLP 需要区分。它可以根据问题组织回答，回答是否忠于图像、是否准确定位仍要独立验证。
 
+多路工业观测还要分别检查对象、物理时间、事件阶段、全局语义和局部软对应，并以记录到达时间约束在线输入。早期、中间和晚期融合在融合位置和训练边界上不同，对细粒度对应、整路缺失和部署成本的要求也不同。任务指标增益应在相同划分上与单模态及简单组合基线比较；若声称工业部署层面的综合收益，还需评价迟到、冲突、缺失和实际代价。
+
 本章的生成是在已知图像条件下产生文字。下一章转向图像、波形等数据的生成，研究怎样从随机变量或噪声出发构造新样本，并检查所学分布与真实数据的关系。
 
+\clearpage
 \section*{辅助学习材料}
+\markright{辅助学习材料}
 \begingroup
+\small
 \emergencystretch=3em
 \begin{itemize}[leftmargin=*]
-\item \textbf{CLIP 原始论文}\cite{radford2021clip}。对照双塔结构、批内对称损失和零样本分类，先重算本章两对样本，再查看论文中的真实配置与评价设置。
-\item \textbf{BLIP-2 原始论文}\cite{li2023blip2}。重点读 Q-Former、第一阶段三个目标的注意力掩码，以及第二阶段连接不同语言模型的方式。将论文中实际的查询数与本章教学维度区分。
-\item \textbf{Visual Instruction Tuning}\cite{liu2023llava}。对照原始线性连接、两阶段冻结范围和视觉指令数据构造。后续代码配置中的 MLP 不应反推成原始模型结构。
+\item \textbf{CLIP 原始论文}（Radford 等的\textit{Learning Transferable Visual Models From Natural Language Supervision}，2021）。对照双塔结构、批内对称损失和零样本分类，先重算本章两对样本，再查看论文中的真实配置与评价设置。\href{https://arxiv.org/abs/2103.00020v1}{论文入口}。
+\item \textbf{BLIP-2 原始论文}（Li 等的\textit{BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models}，2023）。重点读 Q-Former、第一阶段三个目标的注意力掩码，以及第二阶段连接不同语言模型的方式。将论文中实际的查询数与本章教学维度区分。\href{https://arxiv.org/abs/2301.12597v3}{论文入口}。
+\item \textbf{Visual Instruction Tuning}（Liu 等，2023，LLaVA 原始论文）。对照原始线性连接、两阶段冻结范围和视觉指令数据构造。后续代码配置中的 MLP 不应反推成原始模型结构。\href{https://arxiv.org/abs/2304.08485v2}{论文入口}。
 \item \textbf{Contrastive Representation Learning}（Lilian Weng，英文教程）。复习对比目标、温度与负样本选择，对照 CLIP 损失和假负例讨论。\href{https://lilianweng.github.io/posts/2021-05-31-contrastive/}{在线阅读}。
 \item \textbf{Natural language image search with a Dual Encoder}（Keras，英文代码教程）。追踪双编码器、投影和检索计算。示例与 CLIP 的具体训练配置不同，运行前核对依赖版本。\href{https://keras.io/examples/vision/nl\_image\_search/}{在线阅读}。
+\item \textbf{多模态对齐与融合综述}。Liang等的\textit{Foundations and Trends in Multimodal Machine Learning}提供图\ref{fig:multimodal-alignment-types}的三类对齐视角；Gaw等的\textit{Multimodal Data Fusion for Systems Improvement: A Review}比较图\ref{fig:multimodal-fusion-types}中的融合位置。对照模型交互与实体、时间及到达边界的区别。\href{https://arxiv.org/abs/2209.03430v2}{对齐综述}；\href{https://doi.org/10.1080/24725854.2021.1987593}{融合综述}。
+\item \textbf{未预对齐的多模态序列}。Tsai等的\textit{Multimodal Transformer for Unaligned Multimodal Language Sequences}用跨模态注意力建立序列间交互。结合本章时序输入讨论，区分模型学习的软对应与采集侧时间标定。\href{https://aclanthology.org/P19-1656/}{MulT论文入口}。
 \end{itemize}
 \endgroup

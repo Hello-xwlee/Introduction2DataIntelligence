@@ -1,7 +1,7 @@
 \chapter{图上的神经网络}
 \label{chap:graph-neural-networks}
 \begin{quote}\small
-\textit{本章摘要。}本章研究怎样把设备之间的连接和多个设备共同参与的关系用于预测。从图数据与预测对象开始，先建立消息传递的计算框架，再展开图卷积网络的节点更新、归一化、手算例子及谱滤波来源。固定聚合系数的局限引出邻域采样和图注意力。随后用关联矩阵表示超图，推导节点到超边再返回节点的超图卷积，并说明线性传播与成对图传播的联系。最后讨论表示退化、信息压缩、建图边界与工业验证。
+\textit{本章摘要。}本章研究怎样把设备之间的连接和多个设备共同参与的关系用于预测。从图数据、节点定义与预测对象开始，先区分设备、变量、时间步和变量--时间片等建图单位，再建立消息传递的计算框架。随后展开图卷积网络的节点更新、归一化、手算例子及谱滤波来源，固定聚合系数的局限引出邻域采样和图注意力。最后用关联矩阵表示超图，推导节点到超边再返回节点的超图卷积，说明线性传播与成对图传播的联系，并讨论表示退化、信息压缩、建图边界与工业验证。
 \end{quote}
 
 前面的序列模型利用时间顺序，视觉模型利用像素的空间邻域。设备系统还包含另一类结构：设备通过管路、电路或生产流程相连。预测某台泵的状态时，它自己的振动记录可能不足，还需要读取上游设备的运行状态。这里的邻近由连接关系决定，设备编号相邻不表示设备相连。
@@ -12,7 +12,7 @@
 
 \section{先确定图表示什么、预测什么}
 \subsection{节点、边与节点特征}
-图（graph）记为$G=(\mathcal V,\mathcal E)$，其中$\mathcal V$是节点集合，$\mathcal E$是边集合。设有$n$个节点。节点可以是一台设备、一只传感器或一个工序，但一次建模应明确节点对应的对象，不能在没有说明的情况下混用这些含义。边表示允许交换信息的关系，例如管路连接或工艺上的直接依赖。
+图（graph）记为$G=(\mathcal V,\mathcal E)$，其中$\mathcal V$是节点集合，$\mathcal E$是边集合。设有$n$个节点。节点是一次建模选定的基本单位，可以是一台设备、一只传感器、一个工序、一个测量变量、一个时间步或一个变量的时间片。物理传感器与测量变量未必一一对应：一台设备可以带有多只传感器，一只三轴振动传感器也可以产生三个测量通道。一次建模应明确节点对应的对象，不能在没有说明的情况下混用这些含义。边表示允许交换信息的关系，例如管路连接、工艺上的直接依赖或任务允许的时间联系。
 
 用邻接矩阵$A\in\R^{n\times n}$记录连接。本章按$A_{ij}$表示节点$j$向节点$i$提供信息，因此$(AX)_i=\sum_j A_{ij}X_j$读取的是节点$i$的输入邻居。无权图中，相连时$A_{ij}=1$，否则为零。除专门讨论有向图的段落外，以下GCN与谱推导假设$A=A^{\mathsf T}$、$A_{ij}\geq0$，原图无自环。记$\mathcal N(i)=\{j\ne i:A_{ij}>0\}$为邻居集合。
 
@@ -21,9 +21,89 @@
  X=\begin{bmatrix}\bm x_1^{\mathsf T}\\\vdots\\\bm x_n^{\mathsf T}\end{bmatrix}\in\R^{n\times d},\qquad H^{(0)}=X.
  \label{eq:graph-feature-matrix}
 \end{equation}
-这里$n$是设备数，$d$是每台设备的特征数。隐藏层特征矩阵$H^{(\ell)}\in\R^{n\times d_\ell}$的第$i$行记为$\bm h_i^{(\ell)\mathsf T}$，保持本书向量默认为列向量的约定。例如，温度、振动和负载经过训练集确定的标准化后可形成三维输入。不同物理单位的原始数值不宜未经处理就比较大小。
+一般情况下，$n$是节点数，$d$是每个节点的特征维数。隐藏层特征矩阵$H^{(\ell)}\in\R^{n\times d_\ell}$的第$i$行记为$\bm h_i^{(\ell)\mathsf T}$，保持本书向量默认为列向量的约定。本章后续以设备图为主要例子时，节点才对应设备。例如，设备的温度、振动和负载经过训练集确定的标准化后可形成三维输入。不同物理单位的原始数值不宜未经处理就比较大小。
 
-图\ref{fig:graph-topology-features}使用同一个三节点路径分别展示连接与特征。邻接矩阵记录谁与谁相连，特征矩阵记录每个节点上测到什么。改变节点特征不会自动改变连接，改变连接也不等于修改传感器读数。
+同一批工业观测可以按不同单位建图，表\ref{tab:graph-node-units}列出四种常见选择。以变量为节点时，图关系可以来自机理先验，也可以由训练数据学习；例如MTGNN用图学习模块刻画多变量时间序列中的变量关系\footnote{来源：Wu等，\href{https://arxiv.org/abs/2005.11650}{\textit{Connecting the Dots: Multivariate Time Series Forecasting with Graph Neural Networks}}，2020。}。学习到的统计边不自动等同于真实物理连接或因果关系。
+
+\begin{table}[htbp]
+\centering
+\caption{不同建图单位中的节点、特征与边}
+\label{tab:graph-node-units}
+\footnotesize
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}m{0.11\linewidth}>{\raggedright\arraybackslash}m{0.17\linewidth}>{\raggedright\arraybackslash}m{0.20\linewidth}>{\raggedright\arraybackslash}m{0.18\linewidth}>{\raggedright\arraybackslash}m{0.20\linewidth}@{}}
+\toprule
+建图单位 & 节点代表什么 & 节点特征 & 边可以表示什么 & 需要保留的边界 \\
+\midrule
+设备 & 一台泵、电机或其他设备 & 该设备多变量历史的摘要或序列编码 & 管路、电路或工序依赖 & 一台设备可带多只传感器和多个测量通道 \\
+变量 & 温度、转速、振动幅值等一个测量通道 & 该变量的一段历史或其表示 & 机理联系、统计依赖或学习关系 & 三轴传感器可产生多个变量；统计边不等于因果边 \\
+时间步 & 历史窗口内的一个时刻 & 该时刻的多变量观测 & 相邻时间、给定时滞或任务允许的历史联系 & 特征与连接均受预测时刻的信息边界约束 \\
+变量--时间片 & 某个变量的一段连续历史 & 该时间片的数值或嵌入 & 同变量跨片、异变量同片位或跨片位关系 & 节点数同时随变量数和时间片数变化 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+图\ref{fig:graph-node-units}把同一类设备、变量和历史观测画成四种具体节点，其中$T$、$v$、$\omega$、$I$分别表示温度、振动、转速和电流。各栏中的线段或箭头只说明该建图下允许的信息联系，不能把设备连接直接解释成变量因果关系，也不能把时间边自动套到设备图上。
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm]
+ \draw[rounded corners=3pt,gray!60] (-0.2,-0.2) rectangle (6.2,2.7);
+ \node[font=\small\bfseries] at (3,2.42) {设备节点};
+ \node[idi input,minimum width=2.15cm,minimum height=0.65cm,inner sep=3pt,font=\scriptsize] (dev-a) at (1.45,1.25) {泵A\\特征：$T,v$};
+ \node[idi input,minimum width=2.15cm,minimum height=0.65cm,inner sep=3pt,font=\scriptsize] (dev-b) at (4.75,1.25) {电机B\\特征：$\omega,I$};
+ \draw[thick] (dev-a)--node[above,font=\scriptsize]{传动连接}(dev-b);
+ \node[font=\scriptsize,align=center] at (3,0.35) {节点是物理设备；一台设备可含多个变量};
+
+ \draw[rounded corners=3pt,gray!60] (6.6,-0.2) rectangle (13,2.7);
+ \node[font=\small\bfseries] at (9.8,2.42) {变量节点};
+ \node[idi input,minimum width=1.55cm,minimum height=0.65cm,inner sep=3pt,font=\scriptsize] (var-t) at (7.7,1.25) {温度$T$\\历史窗口};
+ \node[idi input,minimum width=1.55cm,minimum height=0.65cm,inner sep=3pt,font=\scriptsize] (var-v) at (9.8,1.25) {振动$v$\\历史窗口};
+ \node[idi input,minimum width=1.55cm,minimum height=0.65cm,inner sep=3pt,font=\scriptsize] (var-w) at (11.9,1.25) {转速$\omega$\\历史窗口};
+ \draw[thick] (var-t)--(var-v); \draw[thick] (var-v)--(var-w);
+ \node[font=\scriptsize,align=center] at (9.8,0.35) {边：机理联系、统计依赖或学习关系};
+
+ \draw[rounded corners=3pt,gray!60] (-0.2,-3.65) rectangle (6.2,-0.55);
+ \node[font=\small\bfseries] at (3,-0.85) {时间步节点};
+ \node[idi state,minimum width=1.35cm,minimum height=0.65cm,inner sep=3pt,font=\scriptsize] (time-a) at (1.05,-2.05) {$t-2$\\$[T,v]$};
+ \node[idi state,minimum width=1.35cm,minimum height=0.65cm,inner sep=3pt,font=\scriptsize] (time-b) at (3,-2.05) {$t-1$\\$[T,v]$};
+ \node[idi state,minimum width=1.35cm,minimum height=0.65cm,inner sep=3pt,font=\scriptsize] (time-c) at (4.95,-2.05) {$t$\\$[T,v]$};
+ \draw[idi arrow] (time-a)--(time-b); \draw[idi arrow] (time-b)--(time-c);
+ \node[font=\scriptsize,align=center] at (3,-3.1) {节点特征是同一时刻的多变量观测};
+
+ \draw[rounded corners=3pt,gray!60] (6.6,-3.65) rectangle (13,-0.55);
+ \node[font=\small\bfseries] at (9.8,-0.85) {变量--时间片节点};
+ \node[idi process,minimum width=1.45cm,minimum height=0.55cm,inner sep=2pt,font=\scriptsize] (pt-a) at (8.25,-1.75) {$T_{1:4}$};
+ \node[idi process,minimum width=1.45cm,minimum height=0.55cm,inner sep=2pt,font=\scriptsize] (pt-b) at (11.35,-1.75) {$T_{5:8}$};
+ \node[idi process,minimum width=1.45cm,minimum height=0.55cm,inner sep=2pt,font=\scriptsize] (pv-a) at (8.25,-2.75) {$v_{1:4}$};
+ \node[idi process,minimum width=1.45cm,minimum height=0.55cm,inner sep=2pt,font=\scriptsize] (pv-b) at (11.35,-2.75) {$v_{5:8}$};
+ \draw[thick] (pt-a)--node[above,font=\scriptsize]{跨片}(pt-b);
+ \draw[thick] (pv-a)--(pv-b);
+ \draw[thick,dashed] (pt-a)--(pv-a); \draw[thick,dashed] (pt-b)--(pv-b);
+ \node[font=\scriptsize,align=center] at (9.8,-3.38) {实线：同变量；虚线：跨变量};
+\end{tikzpicture}
+\caption{同一批观测的四种节点定义。方框内给出一个节点包含的信息，连线含义随建图单位改变。}
+\label{fig:graph-node-units}
+\end{figure}
+
+\Needspace{15\baselineskip}
+\textbf{同一窗口怎样改变节点数与特征维数。}设一个历史窗口含三个时刻的温度与振动读数，各通道已按训练集统计量完成标准化。将这六个观测值按时间排列为$Y$，暂不再经过序列编码器，则两种初始特征矩阵为
+\[
+ Y=\begin{bmatrix}T_1&v_1\\T_2&v_2\\T_3&v_3\end{bmatrix},\qquad
+ \begin{aligned}
+  H_{\mathrm{time}}^{(0)}&=Y\in\R^{3\times2},\\
+  H_{\mathrm{var}}^{(0)}&=Y^{\mathsf T}\in\R^{2\times3}.
+ \end{aligned}
+\]
+以时间步为节点时，$n=3,d=2$，一个节点包含同一时刻的两个变量；以变量为节点时，$n=2,d=3$，一个节点包含该变量的三步历史。观测值没有改变，节点的含义与特征组织已经改变。两种图还需分别确定$3\times3$和$2\times2$的邻接矩阵，不能把特征转置当作已经完成建图。
+
+\Needspace{8\baselineskip}
+TimeFilter将每个变量的非重叠时间片嵌入为节点，形成“变量--时间片”图，并按时间片筛选时空依赖，其中“空间”指跨变量关系，不自动表示真实物理空间邻近\footnote{来源：Hu等，\href{https://proceedings.mlr.press/v267/hu25ac.html}{\textit{TimeFilter: Patch-Specific Spatial-Temporal Graph Filtration for Time Series Forecasting}}，2025。}。
+
+对窗口级未来预测，只要整个历史窗口在决策时刻前已经到达，就可以在窗口内部建立双向或无向联系，并非所有时间图都必须逐边单向。若任务要求在每个历史时刻在线输出，则时刻$t$的节点不能通过图读取$t$之后尚未到达的观测；约束对象是输出时刻可用的信息，而不是一条脱离任务的固定画边规则。
+
+下面仍以设备为节点，说明图结构与节点特征怎样进入计算。图\ref{fig:graph-topology-features}使用同一个三节点路径分别展示连接与特征。邻接矩阵记录谁与谁相连，特征矩阵记录每个节点上测到什么。改变节点特征不会自动改变连接，改变连接也不等于修改传感器读数。
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}
@@ -32,8 +112,8 @@
  \node[idi input] (v3) at (4,0) {设备3\\$x_3=3$};
  \draw[thick] (v1)--(v2); \draw[thick] (v2)--(v3);
  \node[align=center,font=\small] at (2,-1.3) {无向路径：线段表示连接\\数字为标准化后的教学特征};
- \node[align=center] at (8,0.3) {$A=\begin{bmatrix}0&1&0\\1&0&1\\0&1&0\end{bmatrix}$};
- \node[align=center] at (8,-1.2) {$X=\begin{bmatrix}1\\2\\3\end{bmatrix}$};
+ \node[align=center] at (7.5,0) {$A=\begin{bmatrix}0&1&0\\1&0&1\\0&1&0\end{bmatrix}$};
+ \node[align=center] at (10.5,0) {$X=\begin{bmatrix}1\\2\\3\end{bmatrix}$};
 \end{tikzpicture}
 \caption{图结构与节点特征是两类输入。矩阵的节点顺序均为1、2、3，本图尚未添加自环。}
 \label{fig:graph-topology-features}
@@ -42,20 +122,31 @@
 \subsection{节点、边与整图输出}
 同一张图可以支持不同任务。节点预测为每台设备输出故障概率。边预测为一对设备输出某种联系的概率，例如是否存在尚未记录的连接。图预测则为一套设备系统输出一个量，例如未来一小时的总能耗。它们分别需要节点标签、边标签和整图标签，不能用同一损失直接替换。
 
+图\ref{fig:graph-task-levels}从输出范围比较三类任务：节点级输出保留每个节点的结果，边级输出针对节点对，整图级输出则先把节点表示汇聚为一个图表示。该图只区分预测对象，不规定节点必须是设备、变量还是时间步；本章教学任务分别把它们对应为设备故障、设备联系与系统能耗。
+
+\Needspace{.40\textheight}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth,height=0.34\textheight,keepaspectratio]{images/中文重绘/graph-tasks-cn.png}
+\caption[节点级、边级与整图级任务]{节点级、边级与整图级任务\protect\footnotemark}
+\label{fig:graph-task-levels}
+\end{figure}
+\footnotetext{来源：Khemani等，\href{https://doi.org/10.1186/s40537-023-00876-4}{\textit{A Review of Graph Neural Networks: Concepts, Architectures, Techniques, Challenges, Datasets, Applications, and Future Directions}}，2024，Figure 16。此处只采用该图对预测对象的区分。}
+
 图神经网络（Graph Neural Network，GNN）是一类利用图结构学习表示的神经网络。图卷积网络（Graph Convolutional Network，GCN）是其中一种具体模型。GNN名称并不规定唯一的聚合公式，也不保证任意图上的预测都会改善。图中的边是否提供任务相关信息，要通过与只使用节点特征的模型比较来检验。
 
 \section{消息传递：一个节点怎样读取邻居}
 \subsection{从逐节点网络到邻域聚合}
-若对每个节点独立使用同一个多层感知机，输出只依赖$\bm x_i$。这能共享参数，却没有使用连接关系。要让上游状态影响当前预测，可以让节点$j$先生成传给节点$i$的消息，再由节点$i$汇总所有消息。消息传递神经网络（Message Passing Neural Network，MPNN）给出一种通用表达\cite{graphgilmer2017mpnn}：
+若对每个节点独立使用同一个多层感知机，输出只依赖$\bm x_i$。这能共享参数，却没有使用连接关系。要让上游状态影响当前预测，可以让节点$j$先生成传给节点$i$的消息，再由节点$i$汇总所有消息。消息传递神经网络（Message Passing Neural Network，MPNN）给出一种通用表达\footnote{来源：Gilmer等，\href{https://arxiv.org/abs/1704.01212}{\textit{Neural Message Passing for Quantum Chemistry}}，2017。}：
 \begin{align}
- \bm m_{i\leftarrow j}^{(\ell)}&=M_\ell(\bm h_i^{(\ell)},\bm h_j^{(\ell)},\bm e_{ij}),\\
+ \bm m_{i\leftarrow j}^{(\ell)}&=M_\ell(\bm h_i^{(\ell)},\bm h_j^{(\ell)},\bm e_{ij}),\label{eq:graph-message-function}\\
  \bm a_i^{(\ell)}&=\operatorname{AGG}_{j\in\mathcal N(i)}\bm m_{i\leftarrow j}^{(\ell)},\\
  \bm h_i^{(\ell+1)}&=U_\ell(\bm h_i^{(\ell)},\bm a_i^{(\ell)}).
  \label{eq:graph-message-passing}
 \end{align}
 $\bm e_{ij}$是边特征，例如流量或连接类型。$M_\ell$是消息函数，$\operatorname{AGG}$是聚合函数，$U_\ell$是更新函数。消息维度须一致才能相加，更新函数的输出为$d_{\ell+1}$维。这些函数可含可训练参数，同一层通常在节点间共享参数。
 
-邻居没有天然的排列顺序。求和、均值和逐分量最大值均不依赖输入排列，但保留的信息不同。例如标量邻居特征集合$\{1,3\}$与$\{2,2\}$的均值都为$2$，均值聚合无法仅凭这个结果区分它们。求和能反映数量，却也会随节点度数改变尺度。选择聚合函数是在规定哪些邻域差异会保留下来。
+邻居没有天然的排列顺序。求和、均值和逐分量最大值均不依赖输入排列，但保留的信息不同。例如标量邻居特征的多重集$\{1,3\}$与$\{2,2\}$的均值都为$2$，均值聚合无法仅凭这个结果区分它们，二者的和也同为$4$。求和能反映数量，例如$\{2\}$与$\{2,2\}$的均值相同而和不同，但求和也会随节点度数改变尺度。选择聚合函数是在规定哪些邻域差异会保留下来。
 
 一层读取一跳邻居，即沿一条边可到达的节点。堆叠两层后，节点可以间接读取两跳邻居。这个范围是信息可能到达的范围，不保证每个节点都对最终预测产生有效贡献。没有全局操作时，有限层局部消息传递也无法读取任意远处的信息。
 
@@ -95,7 +186,7 @@ $\bm e_{ij}$是边特征，例如流量或连接类型。$M_\ell$是消息函数
 \end{equation}
 $I_n$是$n$阶单位矩阵，$\widetilde d_i$是加自环后的加权度数。标准GCN通常取$\alpha=1$。非负边权与正自环使$\widetilde d_i>0$，孤立节点也能计算逆平方根。原图若已有自环，该操作是在其上额外增加$\alpha$，须按实际对角元素计算。
 
-直接求和会使高连接度节点累加更多信息。经典GCN使用对称归一化传播矩阵\cite{graphkipf2017gcn}：
+直接求和会使高连接度节点累加更多信息。经典GCN使用对称归一化传播矩阵\footnote{来源：Kipf与Welling，\href{https://arxiv.org/abs/1609.02907}{\textit{Semi-Supervised Classification with Graph Convolutional Networks}}，2017。}：
 \begin{equation}
  S=\widetilde D^{-1/2}\widetilde A\widetilde D^{-1/2},\qquad
  S_{ij}=\frac{\widetilde A_{ij}}{\sqrt{\widetilde d_i\widetilde d_j}}.
@@ -194,10 +285,13 @@ $S$在节点之间传播信息，$W^{(\ell)}$在特征通道之间进行可训�
 \subsection{图拉普拉斯如何定义频率}
 普通有限信号的循环卷积满足傅里叶变换后的逐频率相乘关系。图上没有一般的平移操作，可以用图拉普拉斯矩阵的特征向量建立信号基。暂用加自环前的无向非负图，并假设每个节点度数$d_i=\sum_jA_{ij}>0$，定义
 \begin{equation}
- D=\diag(d_1,\ldots,d_n),\qquad L_G=I_n-D^{-1/2}AD^{-1/2}=U\Lambda U^{\mathsf T}.
+ \begin{aligned}
+ D&=\diag(d_1,\ldots,d_n),\\
+ L_G&=I_n-D^{-1/2}AD^{-1/2}=U\Lambda U^{\mathsf T}.
+ \end{aligned}
  \label{eq:graph-laplacian}
 \end{equation}
-$L_G$是对称归一化图拉普拉斯矩阵，$U$的列为正交单位特征向量，$\Lambda=\diag(\lambda_1,\ldots,\lambda_n)$记录特征值，$U^{\mathsf T}U=I_n$。孤立节点可单独处理，不能在本式中直接取零度数的逆。
+$L_G$是对称归一化图拉普拉斯矩阵。$U$的列为正交单位特征向量，满足$U^{\mathsf T}U=I_n$；对角矩阵$\Lambda$记录特征值$\lambda_1,\ldots,\lambda_n$。孤立节点可单独处理，不能在本式中直接取零度数的逆。
 
 对标量节点信号$\bm x\in\R^n$，展开二次型得到
 \begin{align}
@@ -217,7 +311,7 @@ $L_G$是对称归一化图拉普拉斯矩阵，$U$的列为正交单位特征向
 $g_\theta(\lambda_k)$是滤波器对第$k$个模式的响应。计算先变换到图频率，再分别缩放，最后返回节点域。任意谱响应可能涉及全图，局部性还需要约束滤波器形式。
 
 \subsection{多项式、一阶近似与重归一化}
-直接特征分解成本较高。可以用拉普拉斯多项式近似滤波器，切比雪夫图滤波是一个代表\cite{graphdefferrard2016chebnet}：
+直接特征分解成本较高。可以用拉普拉斯多项式近似滤波器，切比雪夫图滤波是一个代表\footnote{来源：Defferrard、Bresson与Vandergheynst，\href{https://arxiv.org/abs/1606.09375}{\textit{Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering}}，2016。}：
 \begin{equation}
  g_\theta *_G\bm x\approx\sum_{k=0}^K\theta_kT_k(\overline L_G)\bm x,\qquad
  \overline L_G=\frac2{\lambda_{\max}}L_G-I_n.
@@ -243,31 +337,57 @@ $K$是多项式阶数，$\lambda_{\max}>0$为最大特征值，缩放使谱落�
 
 \section{固定邻域聚合留下的两个问题}
 \subsection{大图与新节点：邻域采样}
-整图GCN在一层中读取所有相关边。大图训练时，多层邻域展开可能带来较高存储成本。图采样与聚合方法（Graph Sample and Aggregate，GraphSAGE）通过学习共享邻域函数并采样邻居处理这一问题\cite{graphhamilton2017sage}。一种均值版本为
+整图GCN在一层中读取所有相关边。大图训练时，多层邻域展开可能带来较高存储成本。图采样与聚合方法（Graph Sample and Aggregate，GraphSAGE）通过学习共享邻域函数并采样邻居处理这一问题。一种均值版本为
 \begin{equation}
  \bm h_i^{(\ell+1)}=\sigma\!\left(B_\ell
  \begin{bmatrix}\bm h_i^{(\ell)}\\
  |\mathcal S_\ell(i)|^{-1}\sum_{j\in\mathcal S_\ell(i)}\bm h_j^{(\ell)}
  \end{bmatrix}+\bm b_\ell\right).
 \end{equation}
-$\mathcal S_\ell(i)\subseteq\mathcal N(i)$是本次采样的非空邻居集合，$B_\ell\in\R^{d_{\ell+1}\times2d_\ell}$将自身与邻居均值的拼接映射到输出。空邻域可约定聚合为零，并仍由自身通道更新。拼接保留了自身与邻居的来源区别。
+$\mathcal S_\ell(i)\subseteq\mathcal N(i)$是本次采样的邻居集合，$B_\ell\in\R^{d_{\ell+1}\times2d_\ell}$将自身与邻居均值的拼接映射到输出。上式只展示$\mathcal S_\ell(i)\ne\varnothing$的情形。若邻域为空，不能把零代入分母；应直接把邻居聚合定义为$\bm0\in\R^{d_\ell}$，再保留自身分支完成更新。拼接保留了自身与邻居的来源区别。
 
 均匀采样的均值可以估计完整邻居均值，但非线性更新与多层复合后的输出通常不是整图输出的无偏估计。采样降低单次计算量，同时引入随机性。推理应说明使用完整邻域还是采样，以及是否重复采样。
+
+图\ref{fig:graph-graphsage-original}先从目标节点向外采样多跳邻域，再按层从采样到的外层节点向目标节点汇总；图中$k=1$、$k=2$表示距目标节点一跳、两跳的采样范围，对应两层聚合。第三栏同时画出图上下文与节点标签，是原论文无监督目标和监督目标的示例；实际训练按可用监督选择目标，并非每次使用GraphSAGE都要同时预测二者。图中出现的节点是本次更新的计算依赖，不表示它们都具有预测标签，也不证明沿边存在因果影响。
+
+\Needspace{.40\textheight}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth,height=0.36\textheight,keepaspectratio]{images/中文重绘/graphsage-cn.png}
+\caption[GraphSAGE的邻域采样与逐层聚合]{GraphSAGE的邻域采样与逐层聚合\protect\footnotemark}
+\label{fig:graph-graphsage-original}
+\end{figure}
+\footnotetext{来源：Hamilton、Ying与Leskovec，\href{https://arxiv.org/abs/1706.02216v4}{\textit{Inductive Representation Learning on Large Graphs}}，2017，Figure 1（PDF第2页）。}
 
 共享函数可应用于新节点，前提是新节点具有兼容特征与可用关系。这称为归纳式使用。它不保证新工厂分布下的泛化。GCN同样可以在新图上使用共享参数，归纳或传导设定取决于数据与验证协议，不能仅按模型名字区分。
 
 \subsection{邻居作用不同：图注意力}
-GCN的系数由边权和度数决定。当同一设备的不同邻居在不同工况下作用不同，可以让特征参与聚合系数的计算。图注意力网络（Graph Attention Network，GAT）的一种单头形式为\cite{graphvelickovic2018gat}
+GCN的系数由边权和度数决定。当同一设备的不同邻居在不同工况下作用不同，可以让特征参与聚合系数的计算。图注意力网络（Graph Attention Network，GAT）的一种单头形式为
 \begin{align}
- \bm z_i&=B\bm h_i,\\
+ \bm z_i&=B\bm h_i,\label{eq:graph-attention-proj}\\
  e_{ij}&=\operatorname{LeakyReLU}\!\left(\bm a^{\mathsf T}[\bm z_i\Vert\bm z_j]\right),\\
- \beta_{ij}&=\frac{\exp(e_{ij})}{\sum_{k\in\mathcal N(i)\cup\{i\}}\exp(e_{ik})},\\
+ \beta_{ij}&=\frac{\exp(e_{ij})}{\sum_{k\in\mathcal N(i)\cup\{i\}}\exp(e_{ik})},\label{eq:graph-attention-coef}\\
  \bm h_i'&=\sigma\!\left(\sum_{j\in\mathcal N(i)\cup\{i\}}\beta_{ij}\bm z_j\right).
  \label{eq:graph-attention}
 \end{align}
-$B\in\R^{d'\times d_\ell}$与$\bm a\in\R^{2d'}$为可训练参数，$\Vert$表示拼接。带泄漏的整流函数$\operatorname{LeakyReLU}(u)=\max(u,\eta u)$使用固定$0<\eta<1$。归一化在接收节点$i$的邻域内完成，故$\sum_j\beta_{ij}=1$，但一般$\beta_{ij}\ne\beta_{ji}$，也不同于GCN的对称归一化。
+$B\in\R^{d'\times d_\ell}$与$\bm a\in\R^{2d'}$为可训练参数，$\Vert$表示拼接。带泄漏的整流函数使用固定$0<\eta<1$，定义为
+\[
+ \operatorname{LeakyReLU}(u)=\max(u,\eta u).
+\]
+归一化在接收节点$i$的邻域内完成，故$\sum_j\beta_{ij}=1$，但一般$\beta_{ij}\ne\beta_{ji}$，也不同于GCN的对称归一化。
 
-例如两个邻居的得分为$\log2$和$0$，系数为$2/3$和$1/3$。它们由输入与参数计算，随训练和样本改变。多头注意力用多组独立参数计算，再拼接或平均。注意力不会自动发现候选边以外的关系，权重大小也不能直接解释为故障原因。
+例如候选集合只含节点$i$自身和一个邻居，二者得分依次为$\log2$和$0$，对应系数为$2/3$和$1/3$。自身与邻居共同进入同一个softmax分母。它们由输入与参数计算，随训练和样本改变。多头注意力用多组独立参数计算，再拼接或平均。注意力不会自动发现候选边以外的关系，权重大小也不能直接解释为故障原因。
+
+图\ref{fig:graph-gat-original}左侧展开接收节点与邻居之间的注意力得分，softmax只在该接收节点的候选邻域内比较；原图中的$W$和$\alpha_{ij}$分别对应式\eqref{eq:graph-attention-proj}中的$B$和式\eqref{eq:graph-attention-coef}中的$\beta_{ij}$。右侧用$K=3$演示三组独立注意力头。隐藏层常拼接各头结果，输出层可以取平均。图中的颜色和线型用于区分注意力头，不表示权重大小，三个头也只是结构示例。
+
+\Needspace{.46\textheight}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth,height=0.40\textheight,keepaspectratio]{images/中文重绘/gat-cn.png}
+\caption[GAT的邻域注意力与多头聚合]{GAT的邻域注意力与多头聚合\protect\footnotemark}
+\label{fig:graph-gat-original}
+\end{figure}
+\footnotetext{来源：Veli\v{c}kovi\'{c}等，\href{https://arxiv.org/abs/1710.10903v3}{\textit{Graph Attention Networks}}，2018，Figure 1（PDF第4页）。}
 
 \section{超图：多个节点共同参与的关系}
 \subsection{为什么成对连接可能丢失组信息}
@@ -282,9 +402,13 @@ $B\in\R^{d'\times d_\ell}$与$\bm a\in\R^{2d'}$为可训练参数，$\Vert$表�
 \end{equation}
 第$i$行记录节点参加哪些组，第$r$列记录超边包含哪些节点。此处用$C$避免与隐藏特征矩阵$H^{(\ell)}$混淆。为每条超边指定正权重$\omega_r>0$，定义
 \begin{equation}
- \Omega=\diag(\omega_1,\ldots,\omega_m),\quad
- \delta_r=\sum_iC_{ir},\quad d_i^H=\sum_r\omega_rC_{ir},\quad
- D_e=\diag(\delta_r),\quad D_v=\diag(d_i^H).
+ \begin{aligned}
+ \Omega&=\diag(\omega_1,\ldots,\omega_m),&
+ \delta_r&=\sum_iC_{ir},&
+ d_i^H&=\sum_r\omega_rC_{ir},\\
+ D_e&=\diag(\delta_1,\ldots,\delta_m),&
+ D_v&=\diag(d_1^H,\ldots,d_n^H).
+ \end{aligned}
  \label{eq:graph-hyper-degrees}
 \end{equation}
 $\delta_r$是超边大小，$d_i^H$是节点参加的超边权重之和。以下假设没有空超边且每个节点至少参加一条超边，从而逆矩阵有定义。孤立节点可增加只含自身的单节点超边，或通过独立自身通道处理，不能直接计算零度数的逆。
@@ -321,7 +445,7 @@ $Q$每行是一条超边的特征。第一步除以组大小，避免大组仅�
 \end{equation}
 它表示节点$i$先以$\omega_r/d_i^H$选择一条自己参加的超边，再以$1/\delta_r$选择该超边中的节点$j$。因此各行系数和为一。该解释依赖正权重与上述覆盖条件。
 
-超图神经网络（Hypergraph Neural Network，HGNN）的经典对称归一化卷积采用\cite{graphzhou2006hypergraph,graphfeng2019hgnn}
+超图神经网络（Hypergraph Neural Network，HGNN）的经典对称归一化卷积采用\footnote{来源：Zhou、Huang与Sch\"olkopf，\href{https://proceedings.neurips.cc/paper_files/paper/2006/hash/dff8e9c2ac33381546d96deea9922999-Abstract.html}{\textit{Learning with Hypergraphs: Clustering, Classification, and Embedding}}，2006；Feng等，\href{https://arxiv.org/abs/1809.09401}{\textit{Hypergraph Neural Networks}}，2019。}
 \begin{equation}
  S_H=D_v^{-1/2}C\Omega D_e^{-1}C^{\mathsf T}D_v^{-1/2},\qquad
  H^{(\ell+1)}=\sigma\!\left(S_HH^{(\ell)}W^{(\ell)}\right).
@@ -428,14 +552,16 @@ $\|\cdot\|_F$为矩阵元素平方和的平方根。第一项是训练节点的�
 
 训练时梯度穿过传播、特征变换和输出头更新参数。给定固定图时，$A$或$C$不会因训练上述矩阵而自动改变。推理时固定参数，根据当前可用特征与图前向计算。多次预测形成训练样本时，还须按时间组织图快照与标签窗口。
 
-整图回归可先用$\bm r=n^{-1}\sum_i\bm h_i^{(L)}$汇聚，再用回归头输出一个量。均值会忽略节点数量，求和则保留规模影响，应按目标含义选择。边预测可用两端表示的拼接作为输入，若任务要求无向边概率，应使用对称打分或显式对称化。
+整图回归可先用$\bm r=n^{-1}\sum_i\bm h_i^{(L)}$汇聚，再用回归头输出一个量。均值读出不直接保留节点的多重性，求和读出对节点数量和表示总量更敏感；节点表示本身仍可能已经编码度数与拓扑，不能据此断言均值完全忽略图规模\footnote{相关讨论参见Xu等，\href{https://arxiv.org/abs/1810.00826}{\textit{How Powerful Are Graph Neural Networks?}}，2019。}。应按目标含义选择读出。边预测可用两端表示的拼接作为输入，若任务要求无向边概率，应使用对称打分或显式对称化。
+
+做边预测时，用于验证或测试的目标边以及预测时刻尚未发生的边，不能同时作为当次输入图中的已知连接，应在划分与构图时隔离。若训练目标是在当前已观测图上做重构，可以在明确的掩码、负采样和数据划分协议下使用其余训练边；这不等于要求把所有训练正边一概删除。
 
 \subsection{传导设定与归纳设定}
 传导式学习（transductive learning）可以在训练时使用同一张固定图中无标签测试节点的特征与连接，只对训练节点计损失。前提是这些无标签信息在部署设定中确实可用，且协议明确允许。测试标签始终不能进入传播或建图。
 
 归纳式学习（inductive learning）在测试时遇到训练阶段未见的节点或整张图，例如新工厂的设备系统。应完整留出这些设备或系统，而不是仅隐藏其标签。若目标是预测未来，训练阶段还不能读取未来节点观测、未来连接或未来共同工序。使用预测时已知的计划关系时，应与事后执行记录区分，并检验计划变更的影响。
 
-图可来自已知物理连接，也可来自特征相似度。后一种方式中的标准化、距离尺度、最近邻数量和相似度阈值应只由训练与验证决定。用全时间段相关性建图，再宣称模型能提前预测，会把未来信息引入输入。连接可以反映统计相关性，但相关边和注意力系数都不是因果关系的证明。
+图可来自已知物理连接，也可来自特征相似度。按本章的预处理约定，标准化统计量只在训练数据上拟合，固定后再应用于验证与测试数据；距离尺度、最近邻数量和相似度阈值可借验证集选择。用全时间段相关性建图，再宣称模型能提前预测，会把未来信息引入输入。连接可以反映统计相关性，但相关边和注意力系数都不是因果关系的证明。
 
 \section{传播何时失效，怎样检查}
 \subsection{同配关系与过平滑}
@@ -447,7 +573,7 @@ $\|\cdot\|_F$为矩阵元素平方和的平方根。第一项是训练节点的�
  Sq=q,\qquad \lim_{L\to\infty}S^L=qq^{\mathsf T}.
  \label{eq:graph-oversmoothing-limit}
 \end{equation}
-$q$是单位列向量。由$S$的特征分解，特征值$1$对应方向$q$，其余特征值绝对值小于$1$，反复乘方后消失，得到该极限。因此不同特征通道趋向同一个图结构方向，节点的可区分信息减少，称为过平滑（oversmoothing）。对称归一化下节点数值不一定相同，而可能与平方根度数成比例。非连通图应在各连通分量内分别理解，带参数和非线性的实际网络不能直接用此极限代替分析。
+$q$是单位列向量。由$S$的特征分解，特征值$1$对应方向$q$，其余特征值绝对值小于$1$，反复乘方后消失，得到该极限。因此不同特征通道趋向同一个图结构方向，节点的可区分信息减少，称为过平滑（oversmoothing）\footnote{相关理论分析参见Oono与Suzuki，\href{https://arxiv.org/abs/1905.10947}{\textit{Graph Neural Networks Exponentially Lose Expressive Power for Node Classification}}，2020。}。对称归一化下节点数值不一定相同，而可能与平方根度数成比例。非连通图应在各连通分量内分别理解，带参数和非线性的实际网络不能直接用此极限代替分析。
 
 可以用较浅传播、残差连接和保留初始特征缓解退化，但需在验证集检查，不能把残差当作无限堆层的保证。超图传播也会混合组内差异，式\eqref{eq:graph-hyper-example}已经展示了一步丢失差异的情况。
 
@@ -467,10 +593,14 @@ $q$是单位列向量。由$S$的特征分解，特征值$1$对应方向$q$，�
 
 图模型解决的是如何利用关系组织观测。它输出的风险仍需有效标签和现场验证支持。后续语言模型章节将转向手册与工单，研究怎样读取设备型号、适用条件和规程版本，这些文本证据不能由图传播自动补齐。
 
+\clearpage
 \section*{辅助学习材料}
+\markright{辅助学习材料}
 \begin{itemize}
  \item Kipf与Welling的\textit{Semi-Supervised Classification with Graph Convolutional Networks}：对照式\eqref{eq:graph-gcn-layer}与谱近似，区分一阶约束和重归一化替换。\href{https://arxiv.org/abs/1609.02907}{论文入口}。
- \item Gilmer等的\textit{Neural Message Passing for Quantum Chemistry}：对照式\eqref{eq:graph-message-passing}，区分消息函数、更新函数与整图读出。\href{https://arxiv.org/abs/1704.01212}{论文入口}。
- \item Hamilton等的\textit{Inductive Representation Learning on Large Graphs}与Veli\v{c}kovi\'{c}等的\textit{Graph Attention Networks}：分别阅读邻域采样和注意力系数，检查它们处理的不同问题。\href{https://arxiv.org/abs/1706.02216}{GraphSAGE论文入口}，\href{https://arxiv.org/abs/1710.10903}{GAT论文入口}。
+ \item Gilmer等的\textit{Neural Message Passing for Quantum Chemistry}：对照式\eqref{eq:graph-message-function}\allowbreak{}至\allowbreak{}式\eqref{eq:graph-message-passing}，区分消息函数、更新函数与整图读出。\href{https://arxiv.org/abs/1704.01212}{论文入口}。
+ \item Hamilton等的\textit{Inductive Representation Learning on Large Graphs}：阅读邻域采样与逐层聚合，检查采样怎样改变计算依赖。\href{https://arxiv.org/abs/1706.02216}{GraphSAGE论文入口}。
+ \item Veli\v{c}kovi\'{c}等的\textit{Graph Attention Networks}：阅读邻域softmax和多头聚合，检查注意力与固定归一化系数的区别。\href{https://arxiv.org/abs/1710.10903}{GAT论文入口}。
  \item Feng等的\textit{Hypergraph Neural Networks}：从关联矩阵逐项核对式\eqref{eq:graph-hyper-convolution}，再用式\eqref{eq:graph-hyper-clique}检查线性传播的成对图表示。\href{https://arxiv.org/abs/1809.09401}{论文入口}。
+ \item Wu等的\textit{Connecting the Dots: Multivariate Time Series Forecasting with Graph Neural Networks}：对照表\ref{tab:graph-node-units}的变量节点，检查一个节点怎样包含该变量的历史，以及学习关系与物理连接的区别。\href{https://arxiv.org/abs/2005.11650}{MTGNN论文入口}。
 \end{itemize}
